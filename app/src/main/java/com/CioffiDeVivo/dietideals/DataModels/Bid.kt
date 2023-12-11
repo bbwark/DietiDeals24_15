@@ -1,5 +1,8 @@
 package com.CioffiDeVivo.dietideals.DataModels
 
-class Bid(value: Int) {
-    val value = value
+import java.util.UUID
+
+class Bid(value: Int, userId: UUID) {
+    val value: Int = value
+    val userId: UUID = userId
 }

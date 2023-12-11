@@ -1,6 +1,9 @@
 package com.CioffiDeVivo.dietideals.DataModels
 
+import java.util.UUID
+
 class User(
+    id: UUID,
     name: String,
     email: String,
     password: String,
@@ -11,13 +14,14 @@ class User(
     phoneNumber: String = "",
     creditCards: Array<CreditCard> = arrayOf()
 ){
-    var name = name
-    var email = email
-    var password = password
-    var isSeller = isSeller
-    var bio = bio
-    var webLinks = webLinks
-    var address = address
-    var phoneNumber = phoneNumber
-    var creditCards = creditCards
+    val id: UUID = id
+    var name: String = name
+    var email: String = email
+    var password: String = password
+    var isSeller: Boolean = isSeller
+    var bio: String = bio
+    var webLinks: String = webLinks
+    var address: String = address
+    var phoneNumber: String = phoneNumber
+    var creditCards: Array<CreditCard> = creditCards
 }
