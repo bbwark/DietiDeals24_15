@@ -1553,7 +1553,7 @@ associating them to their use cases.</val>
 <ref refid="b731bb32-71b5-11ec-a409-f47b099bf663"/>
 </subject>
 <lifetime-length>
-<val>264.0</val>
+<val>314.0</val>
 </lifetime-length>
 </LifelineItem>
 <Interaction id="b73251a0-71b5-11ec-a409-f47b099bf663">
@@ -1613,7 +1613,7 @@ associating them to their use cases.</val>
 <ref refid="c20319f2-71b5-11ec-a409-f47b099bf663"/>
 </subject>
 <lifetime-length>
-<val>264.0</val>
+<val>314.0</val>
 </lifetime-length>
 </LifelineItem>
 <MessageItem id="e76cab04-71b5-11ec-a409-f47b099bf663">
@@ -2594,6 +2594,8 @@ existing classes or even new classes with specific responsibilities.</val>
 <ref refid="cd6ff74b-96bb-11ee-aa78-d45d64b8ca9a"/>
 <ref refid="d07139e8-96bb-11ee-bdc0-d45d64b8ca9a"/>
 <ref refid="dabb7322-96bb-11ee-86ba-d45d64b8ca9a"/>
+<ref refid="08c4525e-97cd-11ee-b66b-d45d64b8ca9a"/>
+<ref refid="0b71db3d-97cd-11ee-b8de-d45d64b8ca9a"/>
 </reflist>
 </ownedAttribute>
 <package>
@@ -2616,7 +2618,7 @@ existing classes or even new classes with specific responsibilities.</val>
 <val>110.0</val>
 </width>
 <height>
-<val>184.0</val>
+<val>220.0</val>
 </height>
 <diagram>
 <ref refid="c36bd2a2-96b9-11ee-9998-d45d64b8ca9a"/>
@@ -2937,7 +2939,7 @@ existing classes or even new classes with specific responsibilities.</val>
 <val>(1.0, 0.0, 0.0, 1.0, -884.6049167737178, -305.4906147660127)</val>
 </matrix>
 <points>
-<val>[(30.244086588675614, -78.89033112198337), (164.26294946610216, -78.89033112198337)]</val>
+<val>[(30.244086588675614, -59.5934308936387), (164.26294946610216, -78.89033112198337)]</val>
 </points>
 <head-connection>
 <ref refid="d15fff77-96b9-11ee-a34b-d45d64b8ca9a"/>
@@ -3022,7 +3024,7 @@ existing classes or even new classes with specific responsibilities.</val>
 <val>(1.0, 0.0, 0.0, 1.0, -901.0297308003065, -318.0047587862708)</val>
 </matrix>
 <points>
-<val>[(-8.331099384735694, 18.995211731179836), (-8.331099384735694, 123.47660183880055)]</val>
+<val>[(-8.331099384735694, 54.99521173117972), (-8.331099384735694, 123.47660183880055)]</val>
 </points>
 <head-connection>
 <ref refid="d15fff77-96b9-11ee-a34b-d45d64b8ca9a"/>
@@ -3107,7 +3109,7 @@ existing classes or even new classes with specific responsibilities.</val>
 <val>(1.0, 0.0, 0.0, 1.0, -1078.5741490877176, -377.44694288249644)</val>
 </matrix>
 <points>
-<val>[(10.836723855661518, -6.934003005499676), (114.21331890267528, -6.934003005499605)]</val>
+<val>[(10.836723855661518, -6.934003005499676), (114.21331890267528, 12.36289722284505)]</val>
 </points>
 <head-connection>
 <ref refid="fe2373cc-96bb-11ee-a47e-d45d64b8ca9a"/>
@@ -3341,5 +3343,21 @@ existing classes or even new classes with specific responsibilities.</val>
 <upperValue>
 <val>1</val>
 </upperValue>
+</Property>
+<Property id="08c4525e-97cd-11ee-b66b-d45d64b8ca9a">
+<class_>
+<ref refid="d15fff76-96b9-11ee-8809-d45d64b8ca9a"/>
+</class_>
+<name>
+<val>email</val>
+</name>
+</Property>
+<Property id="0b71db3d-97cd-11ee-b8de-d45d64b8ca9a">
+<class_>
+<ref refid="d15fff76-96b9-11ee-8809-d45d64b8ca9a"/>
+</class_>
+<name>
+<val>password</val>
+</name>
 </Property>
 </gaphor>
