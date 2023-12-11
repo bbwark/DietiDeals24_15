@@ -6,11 +6,11 @@ import java.util.UUID
 class Auction(
     id: UUID,
     bids: Array<Bid> = arrayOf(),
-    date: LocalDate,
+    endingDate: LocalDate,
     auctionType: AuctionType
 ){
     val id: UUID = id
     var bids: Array<Bid> = bids
-    var date: LocalDate = date
+    var endingDate: LocalDate = endingDate
     val auctionType: AuctionType = auctionType
 }
