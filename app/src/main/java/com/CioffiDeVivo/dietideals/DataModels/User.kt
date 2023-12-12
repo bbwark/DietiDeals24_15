@@ -8,6 +8,7 @@ class User(
     email: String,
     password: String,
     isSeller: Boolean = false,
+    favouriteAuctions: Array<Auction> = arrayOf(),
     bio: String?,
     webLinks: String?,
     address: String?,
@@ -19,6 +20,7 @@ class User(
     var email: String = email
     var password: String = password
     var isSeller: Boolean = isSeller
+    var favouriteAuctions: Array<Auction> = favouriteAuctions
     var bio: String? = bio
     var webLinks: String? = webLinks
     var address: String? = address
