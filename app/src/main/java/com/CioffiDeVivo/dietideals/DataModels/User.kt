@@ -9,10 +9,10 @@ class User(
     password: String,
     isSeller: Boolean = false,
     favouriteAuctions: Array<Auction> = arrayOf(),
-    bio: String?,
-    webLinks: String?,
-    address: String?,
-    phoneNumber: String?,
+    bio: String? = null,
+    webLinks: String? = null,
+    address: String? = null,
+    phoneNumber: String? = null,
     creditCards: Array<CreditCard> = arrayOf()
 ){
     val id: UUID = id
