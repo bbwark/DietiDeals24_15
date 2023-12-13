@@ -6,7 +6,7 @@ class Item(
     id: UUID,
     imagesUrl: Array<String> = arrayOf(),
     name: String,
-    description: String?
+    description: String? = null
 ) {
     val id: UUID = id
     var imagesUrl: Array<String> = imagesUrl
