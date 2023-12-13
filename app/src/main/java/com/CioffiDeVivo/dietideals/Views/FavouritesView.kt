@@ -38,7 +38,6 @@ fun FavouritesView(user: User) {
             tabs = listOf<String>("Active", "Finished"),
             onTabChange = {tabIndex = it} //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
-        Spacer(modifier = Modifier.height(5.dp))
         when (tabIndex) {
             0 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray()) //ActiveAuctions
             1 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray()) //FinishedAuctions
