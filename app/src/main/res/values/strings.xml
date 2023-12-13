@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DietiDeals</string>
+    <string name="ContinuewithEmail">Continue with Email</string>
+    <string name="ContinuewithGoogle">Continue with Google</string>
+    <string name="ContinuewithGit">Continue with Git</string>
+    <string name="ContinuewithFacebook">Continue with Facebook</string>
 </resources>
