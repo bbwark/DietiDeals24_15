@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.Components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -22,7 +23,7 @@ import java.util.UUID
 
 
 @Composable
-fun AuctionsList(auctions: Array<Auction>) {
+fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>) {
     LazyColumn {
         items(auctions) {auction ->
             AuctionsListElement(

@@ -3,7 +3,10 @@ package com.CioffiDeVivo.dietideals.Views
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -14,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.Components.AuctionsList
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
@@ -34,7 +38,7 @@ fun FavouritesView(user: User) {
             tabs = listOf<String>("Active", "Finished"),
             onTabChange = {tabIndex = it} //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
-
+        Spacer(modifier = Modifier.height(5.dp))
         when (tabIndex) {
             0 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray()) //ActiveAuctions
             1 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray()) //FinishedAuctions
@@ -47,7 +51,7 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
     TabRow(selectedTabIndex = selectedTabIndex) {
         tabs.forEachIndexed { index, title ->
             Tab(selected = selectedTabIndex == index, onClick = { onTabChange(index)}) {
-                Text(text = title)
+                Text(modifier = Modifier.padding(vertical = 10.dp), text = title)
             }
         }
     }

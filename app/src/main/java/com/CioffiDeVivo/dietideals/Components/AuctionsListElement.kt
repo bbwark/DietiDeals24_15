@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +24,9 @@ import java.util.UUID
 
 @Composable
 fun AuctionsListElement(modifier: Modifier = Modifier, auction: Auction) {
-    Row {
+    Row(verticalAlignment = Alignment.CenterVertically){
         iconPlaceholder()
-        Text(text = auction.item.name)
+        Text(modifier = Modifier.fillMaxWidth(), text = auction.item.name)
     }
 }
 
