@@ -3,7 +3,7 @@ package com.CioffiDeVivo.dietideals
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.CioffiDeVivo.dietideals.ui.HomeView
+import com.CioffiDeVivo.dietideals.Views.HomeView
 
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.ui
+package com.CioffiDeVivo.dietideals.Views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
