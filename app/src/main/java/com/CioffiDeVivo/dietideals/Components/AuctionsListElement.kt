@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
 
@@ -60,7 +59,5 @@ fun AuctionsListElementPreview() {
         endingDate = LocalDate.of(2025, 10, 15), 
         auctionType = AuctionType.Silent)
     
-    DietiDealsTheme {
-        AuctionsListElement(auction = testAuction)
-    }
+
 }

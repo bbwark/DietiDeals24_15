@@ -44,12 +44,7 @@ fun MakeaBid(){
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                "Last Bid:",
-                fontSize = 30.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Medium
-            )
+            MakeaBidEnglish()
             Spacer(modifier = Modifier.height(7.dp))
             Row {
                 Text(

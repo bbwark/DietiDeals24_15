@@ -3,16 +3,22 @@ package com.CioffiDeVivo.dietideals.Views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Clear
@@ -44,11 +50,13 @@ import com.CioffiDeVivo.dietideals.R
 import java.time.LocalDate
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateAuction(){
     var item: String by remember { mutableStateOf("Input") }
-    var showTypeofAuction by remember { mutableStateOf(false) }
+    var showComposableEnglishAuction by remember { mutableStateOf(false) }
+    var showComposableSilentAuction by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,12 +70,8 @@ fun CreateAuction(){
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Row (){
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Rounded.AddCircle, contentDescription = null)
-            }
-        }
-        Spacer(modifier = Modifier.height(40.dp))
+        ImagesOnCreateAuction()
+        Spacer(modifier = Modifier.height(30.dp))
         OutlinedTextField(
             value = item,
             onValueChange = { item = it },
@@ -83,31 +87,38 @@ fun CreateAuction(){
         Spacer(modifier = Modifier.size(15.dp))
         Row {
             ElevatedButton(
-                onClick = { },
+                onClick = {
+                          if (!showComposableSilentAuction){
+                              showComposableEnglishAuction = false
+                              showComposableSilentAuction = true
+                          }
+                },
                 modifier = Modifier.width(100.dp)
             ) {
                 Text("Silent")
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = { showTypeofAuction = true },
+                onClick = {
+                          if (!showComposableEnglishAuction){
+                              showComposableSilentAuction = false
+                              showComposableEnglishAuction = true
+                          }
+                },
                 modifier = Modifier.width(100.dp)
+
             ) {
                 Text("English")
             }
         }
         Spacer(modifier = Modifier.size(15.dp))
-        EnglishAuction()
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.size(width = 200.dp, height = 50.dp),
-        ) {
-            Text(
-                "Add Auction",
-                fontSize = 17.sp
-            )
+        if(showComposableEnglishAuction){
+            EnglishAuction()
         }
+        if (showComposableSilentAuction){
+            SilentAuction()
+        }
+
     }
 }
 
@@ -150,6 +161,16 @@ fun SilentAuction(){
             modifier = Modifier.width(150.dp)
 
         )
+        Spacer(modifier = Modifier.height(30.dp))
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.size(width = 200.dp, height = 50.dp),
+        ) {
+            Text(
+                "Add Auction",
+                fontSize = 17.sp
+            )
+        }
     }
     Spacer(modifier = Modifier.size(15.dp))
     OutlinedTextField(
@@ -231,4 +252,36 @@ fun EnglishAuction(){
             .width(320.dp)
             .height(200.dp)
     )
+    Spacer(modifier = Modifier.height(30.dp))
+    Button(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(width = 200.dp, height = 50.dp),
+    ) {
+        Text(
+            "Add Auction",
+            fontSize = 17.sp
+        )
+    }
+}
+
+@Composable
+fun ImagesOnCreateAuction(){
+    Row (
+        modifier = Modifier.width(300.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Box(modifier = Modifier, contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.placeholder),
+                contentDescription = null,
+                modifier = Modifier.size(width = 80.dp, height = 80.dp),
+                alpha = 0.5F
+            )
+            IconButton(
+                onClick = { /*TODO*/ },
+            ) {
+                Icon(Icons.Default.AddCircle, contentDescription = null)
+            }
+        }
+    }
 }

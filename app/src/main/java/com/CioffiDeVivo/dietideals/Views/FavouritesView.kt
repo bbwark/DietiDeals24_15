@@ -23,7 +23,6 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
 
@@ -116,7 +115,4 @@ fun FavouritesViewPreview(){
         favouriteAuctions = testAuctions
     )
 
-    DietiDealsTheme {
-        FavouritesView(user = testUser)
-    }
 }
