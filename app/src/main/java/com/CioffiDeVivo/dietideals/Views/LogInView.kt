@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.R
 
 @Composable
-fun LogIn() {
+fun LoginView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -154,5 +154,5 @@ fun LogIn() {
 @Preview(showBackground = true)
 @Composable
 fun LogInPreview(){
-    LogIn()
+    LoginView()
 }

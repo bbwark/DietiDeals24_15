@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.R
 
 @Composable
-fun Register() {
+fun RegisterView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -138,5 +138,5 @@ fun Register() {
 @Preview(showBackground = true)
 @Composable
 fun RegisterPreview(){
-    Register()
+    RegisterView()
 }
