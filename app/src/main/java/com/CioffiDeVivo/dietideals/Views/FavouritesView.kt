@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.Components.AuctionsList
+import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
@@ -70,7 +73,7 @@ fun FavouritesViewPreview(){
             ownerId = UUID.randomUUID(),
             item = testItem,
             bids = arrayOf(),
-            endingDate = LocalDate.of(2023, 12, 16),
+            endingDate = LocalDate.of(2024, 12, 16),
             auctionType = AuctionType.English
             ),
         Auction(
@@ -78,7 +81,7 @@ fun FavouritesViewPreview(){
             ownerId = UUID.randomUUID(),
             item = testItem,
             bids = arrayOf(),
-            endingDate = LocalDate.of(2023, 12, 17),
+            endingDate = LocalDate.of(2024, 12, 17),
             auctionType = AuctionType.English
         ),
         Auction(
@@ -86,7 +89,7 @@ fun FavouritesViewPreview(){
             ownerId = UUID.randomUUID(),
             item = testItem,
             bids = arrayOf(),
-            endingDate = LocalDate.of(2023, 12, 10),
+            endingDate = LocalDate.of(2024, 12, 10),
             auctionType = AuctionType.Silent
         ),
         Auction(
@@ -94,7 +97,7 @@ fun FavouritesViewPreview(){
             ownerId = UUID.randomUUID(),
             item = testItem,
             bids = arrayOf(),
-            endingDate = LocalDate.of(2023, 12, 9),
+            endingDate = LocalDate.of(2024, 12, 9),
             auctionType = AuctionType.Silent
         ),
         Auction(
@@ -102,7 +105,7 @@ fun FavouritesViewPreview(){
             ownerId = UUID.randomUUID(),
             item = testItem,
             bids = arrayOf(),
-            endingDate = LocalDate.of(2023, 12, 8),
+            endingDate = LocalDate.of(2024, 12, 8),
             auctionType = AuctionType.English
         )
     )

@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,4 +11,5 @@ import java.util.UUID
 
 class DietiDealsViewModel : ViewModel() {
     var user by mutableStateOf(User(UUID.randomUUID(), "usertest","emailtest","passwordtest"))
+    var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
 }

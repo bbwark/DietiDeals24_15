@@ -11,7 +11,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
 
@@ -23,7 +26,7 @@ data class BottomNavItem(
 )
 
 @Composable
-fun BottomNavBar(selectedNavBarItem: Int, onTabChange: (Int) -> Unit) {
+fun BottomNavBar(modifier: Modifier = Modifier, selectedNavBarItem: MutableState<Int>, navController: NavController) {
     val items = listOf<BottomNavItem>(
         BottomNavItem(
             title = "Home",
@@ -48,11 +51,18 @@ fun BottomNavBar(selectedNavBarItem: Int, onTabChange: (Int) -> Unit) {
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                selected = selectedNavBarItem == index,
-                onClick = { onTabChange(index) }, //Where the bar is used it has to be specified the behaviour (where to go and update the selected item)
+                selected = selectedNavBarItem.value == index,
+                onClick = {
+                    selectedNavBarItem.value = index
+                    when(index) {
+                        0 -> navController.navigate(Screen.Home.route)
+                        1 -> navController.navigate(Screen.Sell.route)
+                        2 -> navController.navigate(Screen.Account.route)
+                    }
+                },
                 icon = {
                     Icon(
-                        imageVector = if (index == selectedNavBarItem) {
+                        imageVector = if (index == selectedNavBarItem.value) {
                             item.selectedIcon
                         } else item.unselectedIcon,
                         contentDescription = item.title
