@@ -64,7 +64,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    FavouritesView(user = viewModel.user)
+                    FavouritesView(viewModel, navController)
                 }
             }
         }
