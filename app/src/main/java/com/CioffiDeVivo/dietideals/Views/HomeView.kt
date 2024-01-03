@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,8 +30,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
+import com.CioffiDeVivo.dietideals.DataModels.Auction
+import com.CioffiDeVivo.dietideals.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import java.time.LocalDate
+import java.util.UUID
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeView(){
     Column(horizontalAlignment = Alignment.End,
@@ -71,14 +82,15 @@ fun HomeView(){
         )
         Spacer(modifier = Modifier.height(50.dp))
         LatestAuctions()
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(35.dp))
         EndingAuctions()
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(35.dp))
         PartecipatedAuctions()
     }
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LatestAuctions(){
     Text(
@@ -87,21 +99,10 @@ fun LatestAuctions(){
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    Row(
-        modifier = Modifier
-            .width(330.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        ElevatedCard() {
-            Text("Test")
-            Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null
-            )
-        }
-    }
+    HomeViewAuctionsList(auctions = testAuctions)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EndingAuctions() {
     Text(
@@ -110,46 +111,81 @@ fun EndingAuctions() {
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    Row(
-        modifier = Modifier
-            .width(330.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        ElevatedCard() {
-            Text("Test")
-            Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null
-            )
-        }
-    }
+    HomeViewAuctionsList(auctions = testAuctions)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PartecipatedAuctions(){
     Text(
-        "Auctions you have participated in",
+        "Participated Auctions",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    Row(
-        modifier = Modifier
-            .width(330.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        ElevatedCard() {
-            Text("Test")
-            Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null
-            )
-        }
-    }
+    HomeViewAuctionsList(auctions = testAuctions)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
     HomeView()
 }
+
+
+
+
+//Test Auctions
+val testItem = Item(id = UUID.randomUUID(), imagesUrl = arrayOf("url"), name = "Test")
+@RequiresApi(Build.VERSION_CODES.O)
+val testAuctions: Array<Auction> = arrayOf(
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 16),
+        auctionType = AuctionType.English
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 17),
+        auctionType = AuctionType.English
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 10),
+        auctionType = AuctionType.Silent
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 9),
+        auctionType = AuctionType.Silent
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 8),
+        auctionType = AuctionType.English
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 8),
+        auctionType = AuctionType.English
+    )
+)
