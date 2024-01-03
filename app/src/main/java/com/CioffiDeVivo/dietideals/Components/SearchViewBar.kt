@@ -20,19 +20,22 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchViewBar(
     modifier: Modifier = Modifier,
-    state: MutableState<TextFieldValue>
+    viewModel: DietiDealsViewModel
 ) {
+    var state: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue(""))
 
     TextField(
         value = state.value,
         onValueChange = { value ->
             state.value = value
-            //add API Request here
+            //add API Request here or call to viewModel method that make API Request
             //it is possible to use a debounce modifier to delay the request of a fixed amount of time to optimize the number of the requests
         },
         modifier = modifier.fillMaxWidth(),
@@ -73,6 +76,5 @@ fun SearchViewBar(
 @Preview
 @Composable
 fun SearchViewBarPreview() {
-    var text: MutableState<TextFieldValue> = mutableStateOf(TextFieldValue("test"))
-    SearchViewBar(state = text)
+    SearchViewBar(viewModel = DietiDealsViewModel())
 }
