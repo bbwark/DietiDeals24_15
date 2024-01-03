@@ -15,16 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>) {
+fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navController: NavHostController, viewModel: DietiDealsViewModel) {
     LazyColumn {
         itemsIndexed(auctions) { index, item ->
             Column {
@@ -34,7 +39,10 @@ fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>) {
                       the top of the Composable, this way the list will have a small transparent offset
                       that disappears when you scroll down the list*/
                 }
-                AuctionsListElement(auction = item)
+                AuctionsListElement(modifier = Modifier.clickable {
+                    viewModel.selectedAuction = item
+                    //navController.navigate(Screen.Auction.route)
+                }, auction = item)
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
@@ -92,6 +100,6 @@ fun AuctionListPreview(){
     )
 
     DietiDealsTheme {
-        AuctionsList(auctions = testAuctions)
+        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = DietiDealsViewModel())
     }
 }

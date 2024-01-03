@@ -20,6 +20,7 @@ import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LoginView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
+import com.CioffiDeVivo.dietideals.Views.SearchView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +65,21 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    FavouritesView(user = viewModel.user)
+                    FavouritesView(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
+        composable(
+            route = Screen.Search.route
+        ) {
+            Scaffold(bottomBar = {
+                BottomNavBar(
+                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    navController = navController
+                )
+            }){
+                Box(modifier = Modifier.padding(it)) {
+                    SearchView(viewModel = viewModel, navController = navController)
                 }
             }
         }

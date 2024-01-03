@@ -20,19 +20,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.AuctionsList
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FavouritesView(user: User) {
+fun FavouritesView(viewModel: DietiDealsViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
 
     Column(Modifier.fillMaxSize()){
@@ -42,8 +45,8 @@ fun FavouritesView(user: User) {
             onTabChange = {tabIndex = it} //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
         when (tabIndex) {
-            0 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray()) //ActiveAuctions
-            1 -> AuctionsList(auctions = user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray()) //FinishedAuctions
+            0 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray(), navController = navController, viewModel = viewModel) //ActiveAuctions
+            1 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray(), navController = navController, viewModel = viewModel) //FinishedAuctions
         }
     }
 }
@@ -64,62 +67,7 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
 @Preview(showBackground = true)
 @Composable
 fun FavouritesViewPreview(){
-
-    val testItem = Item(id = UUID.randomUUID(), imagesUrl = arrayOf("url"), name = "Desktop Computer")
-
-    val testAuctions: Array<Auction> = arrayOf(
-        Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
-            item = testItem,
-            bids = arrayOf(),
-            endingDate = LocalDate.of(2024, 12, 16),
-            auctionType = AuctionType.English
-            ),
-        Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
-            item = testItem,
-            bids = arrayOf(),
-            endingDate = LocalDate.of(2024, 12, 17),
-            auctionType = AuctionType.English
-        ),
-        Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
-            item = testItem,
-            bids = arrayOf(),
-            endingDate = LocalDate.of(2024, 12, 10),
-            auctionType = AuctionType.Silent
-        ),
-        Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
-            item = testItem,
-            bids = arrayOf(),
-            endingDate = LocalDate.of(2024, 12, 9),
-            auctionType = AuctionType.Silent
-        ),
-        Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
-            item = testItem,
-            bids = arrayOf(),
-            endingDate = LocalDate.of(2024, 12, 8),
-            auctionType = AuctionType.English
-        )
-    )
-
-
-    val testUser = User(
-        id = UUID.randomUUID(),
-        name = "Pippo",
-        email = "pippopluto@paperopoli.pap",
-        password = "Pluto123",
-        favouriteAuctions = testAuctions
-    )
-
     DietiDealsTheme {
-        FavouritesView(user = testUser)
+        FavouritesView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
     }
 }
