@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material3.AlertDialog
@@ -53,7 +54,7 @@ import com.CioffiDeVivo.dietideals.R
 @Composable
 fun CreateAuction(){
     var viewModel = DietiDealsViewModel()
-    var item: String by remember { mutableStateOf("Input") }
+    var item: String by remember { mutableStateOf("") }
     viewModel.createAuctionComposableType = 0
 
     Column(
@@ -68,7 +69,13 @@ fun CreateAuction(){
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(30.dp))
-        ImagesOnCreateAuction()
+        Row (
+            modifier = Modifier.width(300.dp),
+
+        ){
+
+            AddingImagesOnCreateAuction()
+        }
         Spacer(modifier = Modifier.height(30.dp))
         OutlinedTextField(
             value = item,
@@ -259,22 +266,35 @@ fun EnglishAuction(){
 
 @Composable
 fun ImagesOnCreateAuction(){
-    Row (
-        modifier = Modifier.width(300.dp),
-        horizontalArrangement = Arrangement.Start
-    ){
-        Box(modifier = Modifier, contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null,
-                modifier = Modifier.size(width = 80.dp, height = 80.dp),
-                alpha = 0.5F
-            )
-            IconButton(
-                onClick = { /*TODO*/ },
-            ) {
-                Icon(Icons.Default.AddCircle, contentDescription = null)
-            }
+    Box(modifier = Modifier, contentAlignment = Alignment.TopEnd) {
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = null,
+            modifier = Modifier.size(width = 80.dp, height = 80.dp),
+            alpha = 0.5F
+        )
+        IconButton(
+            onClick = { /* On Click delete the image */ },
+        ) {
+            Icon(Icons.Default.Clear, contentDescription = null)
+        }
+    }
+}
+
+@Composable
+fun AddingImagesOnCreateAuction(){
+    Box(modifier = Modifier, contentAlignment = Alignment.Center) {
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = null,
+            modifier = Modifier.size(width = 80.dp, height = 80.dp),
+            alpha = 0.5F
+        )
+        IconButton(
+            onClick = { /* On Click add an image and another composable placeholder shows app for a
+                maximum of 3 images */ },
+        ) {
+            Icon(Icons.Default.AddCircle, contentDescription = null)
         }
     }
 }

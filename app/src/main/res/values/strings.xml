@@ -4,4 +4,8 @@
     <string name="ContinuewithGoogle">Continue with Google</string>
     <string name="ContinuewithGit">Continue with Git</string>
     <string name="ContinuewithFacebook">Continue with Facebook</string>
+    <string name="CreateAccount">Create Account</string>
+    <string name="LogIn">Log In</string>
+
+
 </resources>
