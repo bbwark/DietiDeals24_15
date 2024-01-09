@@ -2,8 +2,10 @@ package com.CioffiDeVivo.dietideals.DataModels
 
 class CreditCard(
     number: String,
+    expirationDate: String,
     cvv: String
 ) {
-    val number: String = number
-    val cvv: String = cvv
+    var number: String = number
+    var expirationDate: String = expirationDate
+    var cvv: String = cvv
 }

@@ -22,4 +22,5 @@ class DietiDealsViewModel : ViewModel() {
     var selectedAuction by mutableStateOf(Auction(UUID.randomUUID(), UUID.randomUUID(), Item(id = UUID.randomUUID(), name = ""), endingDate = LocalDate.now(), auctionType = AuctionType.English))
     var auctionSearchResult: Array<Auction> = arrayOf()
     var createAuctionComposableType by mutableIntStateOf(0)
+    var sellerShowComposables by mutableStateOf(false)
 }
