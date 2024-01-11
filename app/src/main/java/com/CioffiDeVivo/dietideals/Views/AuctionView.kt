@@ -16,6 +16,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +45,7 @@ import java.util.UUID
 fun AuctionView(auction: Auction, isOwner: Boolean) {
     val pagerState =
         rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalPager(state = pagerState) {
             Image(
                 painter = painterResource(id = R.drawable.placeholder),
@@ -70,7 +71,7 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
         ) {
             when (auction.auctionType) {
                 AuctionType.English -> EnglishAuctionBody(lastBid = tempBid) //temporary bid
-                AuctionType.Silent -> SilentAuctionBody(endingDate = auction.endingDate)
+                AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
             }
             if (isOwner) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -82,6 +83,11 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
                 )
             }
         }
+
+        Button(onClick = { /* Navigates to Make A Bid View */ }) {
+            Text(text = "Make a Bid", fontSize = 18.sp)
+        }
+
     }
 }
 
@@ -166,6 +172,7 @@ fun AuctionViewPreview() {
             UUID.randomUUID(),
             Item(id = UUID.randomUUID(), name = "Temporary Item"),
             endingDate = LocalDate.now().plusMonths(1),
+            expired = false,
             auctionType = AuctionType.English
         ),
         isOwner = false
