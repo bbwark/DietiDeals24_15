@@ -94,7 +94,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                     viewModel = viewModel)
             }){
                Box(modifier = Modifier.padding(it)) {
-                   //AuctionView(auction = )
+                   AuctionView(auction = viewModel.selectedAuction)
                }
             }
         }
