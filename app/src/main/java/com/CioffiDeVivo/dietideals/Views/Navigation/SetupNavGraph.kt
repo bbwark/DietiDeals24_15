@@ -14,8 +14,10 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LoginView
@@ -81,6 +83,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                 Box(modifier = Modifier.padding(it)) {
                     SearchView(viewModel = viewModel, navController = navController)
                 }
+            }
+        }
+        composable(
+            route = Screen.Auction.route
+        ) {
+            Scaffold(topBar = {
+                AuctionTopBar(
+                    navController = navController,
+                    viewModel = viewModel)
+            }){
+               Box(modifier = Modifier.padding(it)) {
+                   //AuctionView(auction = )
+               }
             }
         }
     }

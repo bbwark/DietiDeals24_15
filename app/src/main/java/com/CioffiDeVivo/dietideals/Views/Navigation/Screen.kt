@@ -8,4 +8,5 @@ sealed class Screen(val route: String) {
     object Register: Screen("register_view")
     object Favourites: Screen("favourites_view")
     object Search: Screen("search_view")
+    object Auction: Screen("auction_view")
 }
