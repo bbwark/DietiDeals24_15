@@ -42,8 +42,9 @@ import java.util.UUID
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AuctionView(auction: Auction, isOwner: Boolean) {
-    val pagerState = rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
-    Column(Modifier.fillMaxSize()){
+    val pagerState =
+        rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
+    Column(Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState) {
             Image(
                 painter = painterResource(id = R.drawable.placeholder),
@@ -61,10 +62,25 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
             auctionType = auction.auctionType
         )
 
-        val tempBid = Bid(UUID.randomUUID(), 100.30f, UUID.randomUUID(), ZonedDateTime.now().minusMinutes(10))
-        when (auction.auctionType){
-            AuctionType.English -> EnglishAuctionBody(lastBid = tempBid, isOwner = isOwner) //temporary bid
-            AuctionType.Silent -> SilentAuctionBody()
+        val tempBid =
+            Bid(UUID.randomUUID(), 100.30f, UUID.randomUUID(), ZonedDateTime.now().minusMinutes(10))
+        Row(
+            Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            when (auction.auctionType) {
+                AuctionType.English -> EnglishAuctionBody(lastBid = tempBid) //temporary bid
+                AuctionType.Silent -> SilentAuctionBody(endingDate = auction.endingDate)
+            }
+            if (isOwner) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "View bid history",
+                    Modifier.clickable { /* navigate to Bid History view */ },
+                    Color.Blue,
+                    fontSize = 12.sp
+                )
+            }
         }
     }
 }
@@ -82,8 +98,14 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
                 fontWeight = FontWeight(500)
             )
             Spacer(modifier = Modifier.size(3.dp))
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { /* open user info modal */ }){
-                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, modifier = Modifier.size(14.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { /* open user info modal */ }) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp)
+                )
                 Text(text = insertionistName, fontSize = 12.sp)
             }
         }
@@ -96,28 +118,42 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
 }
 
 @Composable
-fun EnglishAuctionBody(lastBid: Bid, isOwner: Boolean) {
-    Row(
-        Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Top
-    ) {
-        Column {
-            Text(text = lastBid.value.toString() + " EUR", fontSize = 32.sp, fontWeight = FontWeight(700))
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(text = "Remaining Time: ", fontSize = 12.sp)
-                Text(text = "50m", color = Color.Red, fontSize = 16.sp, fontWeight = FontWeight(400)) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
-            }
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        if(isOwner) {
-            Text(text = "View bid history", Modifier.clickable { /* navigate to Bid History view */ }, Color.Blue, fontSize = 12.sp)
+fun EnglishAuctionBody(lastBid: Bid) {
+    Column {
+        Text(
+            text = lastBid.value.toString() + " EUR",
+            fontSize = 32.sp,
+            fontWeight = FontWeight(700)
+        )
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(text = "Remaining Time: ", fontSize = 12.sp)
+            Text(
+                text = "50m",
+                color = Color.Red,
+                fontSize = 16.sp,
+                fontWeight = FontWeight(500)
+            ) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
         }
     }
 }
 
 @Composable
-fun SilentAuctionBody() {
-
+fun SilentAuctionBody(endingDate: LocalDate) {
+    Column {
+        Row(verticalAlignment = Alignment.Bottom){
+            Text(text = "Ending Date: ", fontSize = 12.sp)
+            Text(text = endingDate.toString(), fontWeight = FontWeight(500))
+        }
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(text = "Remaining Time: ", fontSize = 12.sp)
+            Text(
+                text = "50m",
+                color = Color.Red,
+                fontSize = 16.sp,
+                fontWeight = FontWeight(500)
+            ) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

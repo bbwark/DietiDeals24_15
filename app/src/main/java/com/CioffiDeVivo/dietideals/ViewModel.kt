@@ -20,6 +20,6 @@ import java.util.UUID
 class DietiDealsViewModel : ViewModel() {
     var user by mutableStateOf(User(UUID.randomUUID(), "usertest","emailtest","passwordtest"))
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
-    var selectedAuction by mutableStateOf(Auction(UUID.randomUUID(), UUID.randomUUID(), Item(id = UUID.randomUUID(), name = "Temporary Name"), endingDate = LocalDate.now().plusMonths(1), auctionType = AuctionType.English))
+    var selectedAuction by mutableStateOf(Auction(UUID.randomUUID(), UUID.randomUUID(), Item(id = UUID.randomUUID(), name = "Temporary Name"), endingDate = LocalDate.now().plusMonths(1), auctionType = AuctionType.Silent))
     var auctionSearchResult: Array<Auction> = arrayOf()
 }
