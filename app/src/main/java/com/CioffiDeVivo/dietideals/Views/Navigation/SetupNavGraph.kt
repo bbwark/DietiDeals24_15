@@ -92,9 +92,15 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                 AuctionTopBar(
                     navController = navController,
                     viewModel = viewModel)
-            }){
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }){
                Box(modifier = Modifier.padding(it)) {
-                   AuctionView(auction = viewModel.selectedAuction, true)
+                   AuctionView(auction = viewModel.selectedAuction, viewModel.auctionOpenByOwner) //temporary set isOwner
                }
             }
         }

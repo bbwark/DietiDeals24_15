@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +49,12 @@ import java.util.UUID
 fun AuctionView(auction: Auction, isOwner: Boolean) {
     val pagerState =
         rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         HorizontalPager(state = pagerState) {
             Image(
                 painter = painterResource(id = R.drawable.placeholder),
@@ -84,10 +93,15 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
             }
         }
 
-        Button(onClick = { /* Navigates to Make A Bid View */ }) {
-            Text(text = "Make a Bid", fontSize = 18.sp)
+        if (!isOwner) {
+            Spacer(modifier = Modifier.size(12.dp))
+            Button(onClick = { /* Navigates to Make A Bid View */ }) {
+                Text(text = "Make a Bid", fontSize = 18.sp)
+            }
+            Spacer(modifier = Modifier.size(12.dp))
         }
 
+        auction.item.description?.let { DescriptionAuctionItem(description = it) }
     }
 }
 
@@ -125,7 +139,7 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
 
 @Composable
 fun EnglishAuctionBody(lastBid: Bid) {
-    Column {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         Text(
             text = lastBid.value.toString() + " EUR",
             fontSize = 32.sp,
@@ -145,7 +159,7 @@ fun EnglishAuctionBody(lastBid: Bid) {
 
 @Composable
 fun SilentAuctionBody(endingDate: LocalDate) {
-    Column {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         Row(verticalAlignment = Alignment.Bottom){
             Text(text = "Ending Date: ", fontSize = 12.sp)
             Text(text = endingDate.toString(), fontWeight = FontWeight(500))
@@ -159,6 +173,17 @@ fun SilentAuctionBody(endingDate: LocalDate) {
                 fontWeight = FontWeight(500)
             ) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
         }
+    }
+}
+
+@Composable
+fun DescriptionAuctionItem(description: String) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(horizontal = 12.dp)) {
+        Text(text = "About this item", fontSize = 16.sp, fontWeight = FontWeight(600))
+        Spacer(modifier = Modifier.size(3.dp))
+        Text(text = description, fontSize = 12.sp)
     }
 }
 

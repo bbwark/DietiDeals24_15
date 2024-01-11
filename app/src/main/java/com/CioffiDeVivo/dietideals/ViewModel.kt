@@ -22,4 +22,5 @@ class DietiDealsViewModel : ViewModel() {
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
     var selectedAuction by mutableStateOf(Auction(UUID.randomUUID(), UUID.randomUUID(), Item(id = UUID.randomUUID(), name = "Temporary Name"), endingDate = LocalDate.now().plusMonths(1), expired = false, auctionType = AuctionType.English))
     var auctionSearchResult: Array<Auction> = arrayOf()
+    var auctionOpenByOwner by mutableStateOf(false)
 }
