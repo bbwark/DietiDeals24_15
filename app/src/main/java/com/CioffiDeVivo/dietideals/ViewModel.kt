@@ -21,7 +21,7 @@ import java.util.UUID
 class DietiDealsViewModel : ViewModel() {
     var user by mutableStateOf(
         User(
-            UUID.randomUUID(), "usertest", "emailtest", "passwordtest", creditCards = arrayOf(
+            UUID.randomUUID(), "Nametest Surnametest", "emailtest@test.com", "passwordtest", creditCards = arrayOf(
                 CreditCard("556666666666", "222", LocalDate.now().plusYears(1)),
                 CreditCard("456666666666", "222", LocalDate.now().plusYears(2)),
                 CreditCard("356666666666", "222", LocalDate.now().plusYears(2))
