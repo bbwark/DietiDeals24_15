@@ -31,7 +31,7 @@ fun SearchViewBar(
     modifier: Modifier = Modifier,
     viewModel: DietiDealsViewModel
 ) {
-    var state by remember { mutableStateOf("pippo") }
+    var state by remember { mutableStateOf("") }
 
     TextField(
         value = state,
@@ -47,10 +47,7 @@ fun SearchViewBar(
             }) {
                 Icon(
                     Icons.Default.ArrowBack,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .size(24.dp)
+                    contentDescription = ""
                 )
             }
         },
@@ -63,10 +60,7 @@ fun SearchViewBar(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(24.dp)
+                        contentDescription = ""
                     )
                 }
             }

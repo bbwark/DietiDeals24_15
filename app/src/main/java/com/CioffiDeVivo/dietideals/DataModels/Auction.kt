@@ -8,13 +8,15 @@ class Auction(
     ownerId: UUID,
     item: Item,
     bids: Array<Bid> = arrayOf(),
-    endingDate: LocalDate,
+    endingDate: LocalDate?,
+    expired: Boolean,
     auctionType: AuctionType
 ){
     val id: UUID = id
     val ownerId: UUID = ownerId
     val item: Item = item
     var bids: Array<Bid> = bids
-    var endingDate: LocalDate = endingDate
+    var endingDate: LocalDate? = endingDate
+    var expired: Boolean = expired
     val auctionType: AuctionType = auctionType
 }

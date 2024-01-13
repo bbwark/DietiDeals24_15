@@ -45,8 +45,8 @@ fun FavouritesView(viewModel: DietiDealsViewModel, navController: NavHostControl
             onTabChange = {tabIndex = it} //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
         when (tabIndex) {
-            0 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray(), navController = navController, viewModel = viewModel) //ActiveAuctions
-            1 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray(), navController = navController, viewModel = viewModel) //FinishedAuctions
+            0 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(), navController = navController, viewModel = viewModel) //ActiveAuctions
+            1 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.expired }.toTypedArray(), navController = navController, viewModel = viewModel) //FinishedAuctions
         }
     }
 }
