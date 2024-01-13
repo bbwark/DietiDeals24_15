@@ -16,12 +16,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,7 +69,7 @@ fun AccountViewTopBar(userName: String, userEmail: String) {
 }
 
 @Composable
-fun AccountViewButton(navController: NavHostController, destinationRoute: String, caption: String, icon: ImageVector) {
+fun AccountViewButton(navController: NavHostController, destinationRoute: String, caption: String, icon: ImageVector, showChevron: Boolean = true, destructiveAction: Boolean = false) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -83,12 +83,18 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = caption, fontSize = 18.sp, fontWeight = FontWeight(600))
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = Icons.Default.ChevronRight,
-            contentDescription = null
-        )
+        if(!destructiveAction) {
+            Text(text = caption, fontSize = 18.sp, fontWeight = FontWeight(600))
+        } else {
+            Text(text = caption, color = Color.Red, fontSize = 18.sp, fontWeight = FontWeight(600))
+        }
+        if (showChevron) {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null
+            )
+        }
     }
 }
 
