@@ -10,7 +10,6 @@ class User(
     isSeller: Boolean = false,
     favouriteAuctions: Array<Auction> = arrayOf(),
     bio: String? = null,
-    webLinks: String? = null,
     address: String? = null,
     phoneNumber: String? = null,
     creditCards: Array<CreditCard> = arrayOf()
@@ -22,7 +21,6 @@ class User(
     var isSeller: Boolean = isSeller
     var favouriteAuctions: Array<Auction> = favouriteAuctions
     var bio: String? = bio
-    var webLinks: String? = webLinks
     var address: String? = address
     var phoneNumber: String? = phoneNumber
     var creditCards: Array<CreditCard> = creditCards

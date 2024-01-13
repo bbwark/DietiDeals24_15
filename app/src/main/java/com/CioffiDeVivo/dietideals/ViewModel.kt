@@ -18,7 +18,7 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
-    var user by mutableStateOf(User(UUID.randomUUID(), "usertest","emailtest","passwordtest"))
+    var user by mutableStateOf(User(UUID.randomUUID(), "Nametest Surnametest","emailtest@test.com","passwordtest"))
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
     var selectedAuction by mutableStateOf(Auction(UUID.randomUUID(), UUID.randomUUID(), Item(id = UUID.randomUUID(), name = ""), endingDate = LocalDate.now(), auctionType = AuctionType.English))
     var auctionSearchResult: Array<Auction> = arrayOf()
