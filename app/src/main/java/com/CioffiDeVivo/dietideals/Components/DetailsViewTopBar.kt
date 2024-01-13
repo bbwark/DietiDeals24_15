@@ -43,7 +43,7 @@ fun DetailsViewTopBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview (showBackground = true)
 @Composable
-fun AccountDetailsTopBarPreview() {
+fun DetailsViewTopBarPreview() {
     DetailsViewTopBar(
         caption = "Manage Cards",
         destinationRoute = "Test",

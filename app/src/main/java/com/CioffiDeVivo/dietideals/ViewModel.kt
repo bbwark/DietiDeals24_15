@@ -36,6 +36,7 @@ class DietiDealsViewModel : ViewModel() {
             UUID.randomUUID(),
             Item(id = UUID.randomUUID(), name = ""),
             endingDate = LocalDate.now(),
+            expired = false,
             auctionType = AuctionType.English
         )
     )
