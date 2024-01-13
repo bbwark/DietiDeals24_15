@@ -36,22 +36,22 @@ fun SearchViewPreview() {
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
                 UUID.randomUUID(), name = "first"
-            ), endingDate = LocalDate.now(), auctionType = AuctionType.English
+            ), endingDate = LocalDate.now(), expired = false, auctionType = AuctionType.English
         ),
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
                 UUID.randomUUID(), name = "second"
-            ), endingDate = LocalDate.now().plusMonths(1), auctionType = AuctionType.English
+            ), endingDate = LocalDate.now().plusMonths(1), expired = false, auctionType = AuctionType.English
         ),
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
                 UUID.randomUUID(), name = "third"
-            ), endingDate = LocalDate.now().plusMonths(2), auctionType = AuctionType.English
+            ), endingDate = LocalDate.now().plusMonths(2), expired = false, auctionType = AuctionType.English
         ),
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
                 UUID.randomUUID(), name = "fourth"
-            ), endingDate = LocalDate.now().plusMonths(3), auctionType = AuctionType.English
+            ), endingDate = LocalDate.now().plusMonths(3), expired = false, auctionType = AuctionType.English
         )
     )
 

@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,15 +39,30 @@ import java.util.UUID
 fun FavouritesView(viewModel: DietiDealsViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
 
-    Column(Modifier.fillMaxSize()){
+    Column(Modifier.fillMaxSize()) {
         FavouriteTabRow(
             selectedTabIndex = tabIndex,
             tabs = listOf<String>("Active", "Finished"),
-            onTabChange = {tabIndex = it} //or onTabChange = {selectedTab -> tabIndex = selectedTab}
+            onTabChange = {
+                tabIndex = it
+            } //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
         when (tabIndex) {
-            0 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }.toTypedArray(), navController = navController, viewModel = viewModel) //ActiveAuctions
-            1 -> AuctionsList(auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isBefore(LocalDate.now().plusDays(1)) }.toTypedArray(), navController = navController, viewModel = viewModel) //FinishedAuctions
+            0 -> AuctionsList(
+                modifier = Modifier.fillMaxHeight(),
+                auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }
+                    .toTypedArray(),
+                navController = navController,
+                viewModel = viewModel
+            ) //ActiveAuctions
+            1 -> AuctionsList(
+                modifier = Modifier.fillMaxHeight(),
+                auctions = viewModel.user.favouriteAuctions.filter {
+                    it.endingDate.isBefore(LocalDate.now().plusDays(1))
+                }.toTypedArray(),
+                navController = navController,
+                viewModel = viewModel
+            ) //FinishedAuctions
         }
     }
 }
