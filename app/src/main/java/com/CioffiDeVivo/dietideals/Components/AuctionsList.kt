@@ -63,6 +63,7 @@ fun AuctionListPreview(){
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 16),
+            expired = false,
             auctionType = AuctionType.English
         ),
         Auction(
@@ -71,6 +72,7 @@ fun AuctionListPreview(){
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 17),
+            expired = false,
             auctionType = AuctionType.English
         ),
         Auction(
@@ -79,6 +81,7 @@ fun AuctionListPreview(){
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 10),
+            expired = false,
             auctionType = AuctionType.Silent
         ),
         Auction(
@@ -87,6 +90,7 @@ fun AuctionListPreview(){
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 9),
+            expired = false,
             auctionType = AuctionType.Silent
         ),
         Auction(
@@ -95,6 +99,7 @@ fun AuctionListPreview(){
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 8),
+            expired = false,
             auctionType = AuctionType.English
         )
     )

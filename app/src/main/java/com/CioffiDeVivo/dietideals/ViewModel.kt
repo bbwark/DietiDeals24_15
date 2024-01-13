@@ -29,6 +29,7 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
+
     var selectedAuction by mutableStateOf(
         Auction(
             UUID.randomUUID(),
@@ -39,4 +40,5 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
     var auctionSearchResult: Array<Auction> = arrayOf()
+    var auctionOpenByOwner by mutableStateOf(false)
 }
