@@ -49,17 +49,12 @@ fun FavouritesView(viewModel: DietiDealsViewModel, navController: NavHostControl
         )
         when (tabIndex) {
             0 -> AuctionsList(
-                modifier = Modifier.fillMaxHeight(),
-                auctions = viewModel.user.favouriteAuctions.filter { it.endingDate.isAfter(LocalDate.now()) }
-                    .toTypedArray(),
+                auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel
             ) //ActiveAuctions
             1 -> AuctionsList(
-                modifier = Modifier.fillMaxHeight(),
-                auctions = viewModel.user.favouriteAuctions.filter {
-                    it.endingDate.isBefore(LocalDate.now().plusDays(1))
-                }.toTypedArray(),
+                auctions = viewModel.user.favouriteAuctions.filter { it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel
             ) //FinishedAuctions
