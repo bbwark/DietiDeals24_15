@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -15,7 +16,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.md_theme_light_secondaryContainer
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -42,6 +50,45 @@ fun AccountView(viewModel: DietiDealsViewModel, navController: NavHostController
     ) {
         AccountViewTopBar(viewModel.user.name, viewModel.user.email)
         Spacer(modifier = Modifier.size(24.dp))
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.EditProfile.route,
+            caption = "Edit Profile",
+            icon = Icons.Default.Settings
+        )
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.EditContactInfo.route,
+            caption = "Change Contact Informations",
+            icon = Icons.Default.Mail
+        )
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.ManageCards.route,
+            caption = "Manage Cards",
+            icon = Icons.Default.CreditCard
+        )
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.Favourites.route,
+            caption = "Favourite Auctions",
+            icon = Icons.Default.Bookmark
+        )
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.Sell.route,
+            caption = "Your Auctions",
+            icon = Icons.Default.Sell,
+            onClick = { viewModel.selectedNavBarItem.value = 1 }
+        )
+        AccountViewButton(
+            navController = navController,
+            destinationRoute = Screen.Home.route,
+            caption = "Sign Out",
+            icon = Icons.Default.ExitToApp,
+            showChevron = false,
+            destructiveAction = true
+        )
     }
 }
 
@@ -68,13 +115,14 @@ fun AccountViewTopBar(userName: String, userEmail: String) {
     }
 }
 
+@SuppressLint("InvalidColorHexValue")
 @Composable
-fun AccountViewButton(navController: NavHostController, destinationRoute: String, caption: String, icon: ImageVector, showChevron: Boolean = true, destructiveAction: Boolean = false) {
+fun AccountViewButton(navController: NavHostController, destinationRoute: String, caption: String, icon: ImageVector, showChevron: Boolean = true, destructiveAction: Boolean = false, onClick: () -> Unit = {}) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 14.dp)
             .clickable { /* navigate to destination route view */ }
     ) {
         Icon(
@@ -86,7 +134,7 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
         if(!destructiveAction) {
             Text(text = caption, fontSize = 18.sp, fontWeight = FontWeight(600))
         } else {
-            Text(text = caption, color = Color.Red, fontSize = 18.sp, fontWeight = FontWeight(600))
+            Text(text = caption, color = Color(0xFFB60202), fontSize = 18.sp, fontWeight = FontWeight(600))
         }
         if (showChevron) {
             Spacer(modifier = Modifier.weight(1f))
