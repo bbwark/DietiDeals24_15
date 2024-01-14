@@ -56,12 +56,13 @@ fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>
         itemsIndexed(auctions){index, item->
             Row {
                 if(index == 0){
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(20.dp))
                 }
                 HomeViewAuctionListElement(
                     modifier = Modifier.clickable{/*TODO*/},
                     auction = item
                 )
+                Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }

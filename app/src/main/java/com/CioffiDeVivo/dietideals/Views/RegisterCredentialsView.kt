@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
@@ -43,15 +45,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
-
+import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterCredentialsView(){
-    var viewModel = DietiDealsViewModel()
+fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
     var email: String by remember { mutableStateOf("") }
     var name: String by remember { mutableStateOf("") }
     var surname: String by remember { mutableStateOf("") }
@@ -62,7 +63,9 @@ fun RegisterCredentialsView(){
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
@@ -143,6 +146,7 @@ fun RegisterCredentialsView(){
         if(isSellerButton){
             SellerAccountComposables()
         }
+        SellerAccountComposables()
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {  },
@@ -151,7 +155,7 @@ fun RegisterCredentialsView(){
             }else{
                 !isEnabled
             },
-            modifier = Modifier.size(width = 330.dp, height = 50.dp),
+            modifier = Modifier.size(width = 330.dp, height = 50.dp).pulsateClick(),
             content = {
                 Text(stringResource(R.string.CreateAccount), fontSize = 20.sp)
             }
@@ -160,6 +164,7 @@ fun RegisterCredentialsView(){
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
+            //If clicked isSeller on the user data class is true
             IconButton(onClick = {
                 isSellerButton = !isSellerButton
                 viewModel.sellerShowComposables = !viewModel.sellerShowComposables
@@ -191,11 +196,17 @@ fun RegisterCredentialsView(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SellerAccountComposables(){
-    //andress phone credit card
+fun SellerAccountComposables(
+
+){
     var address by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
-    var creditCard = CreditCard("","","")
+    var creditCardNumber by remember { mutableStateOf("") }
+    var crediCardDate by remember { mutableStateOf("") }
+    var creditCardCVV by remember { mutableStateOf("") }
+    var date by remember { mutableStateOf("Open date picker dialog") }
+    var showDatePicker by remember { mutableStateOf(false) }
+
     OutlinedTextField(
         value = address,
         onValueChange = { address = it },
@@ -231,15 +242,15 @@ fun SellerAccountComposables(){
         verticalAlignment = Alignment.CenterVertically
     ){
         OutlinedTextField(
-            value = creditCard.number,
-            onValueChange = { creditCard.number = it },
+            value = creditCardNumber,
+            onValueChange = { creditCardNumber = it },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
                 Icon(
                     Icons.Rounded.Clear,
                     contentDescription = null,
-                    modifier = Modifier.clickable{creditCard.number = ""}
+                    modifier = Modifier.clickable{creditCardNumber = ""}
                 )
             },
             modifier = Modifier.width(200.dp),
@@ -248,15 +259,15 @@ fun SellerAccountComposables(){
         Spacer(modifier = Modifier.width(10.dp))
         Column {
             OutlinedTextField(
-                value = creditCard.expirationDate,
-                onValueChange = { creditCard.expirationDate = it },
+                value = crediCardDate,
+                onValueChange = { crediCardDate = it },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 trailingIcon = {
                     Icon(
-                        //Fare calendario per mettere data scegliendola dal calendario
                         Icons.Rounded.CalendarMonth,
                         contentDescription = null,
+                        modifier = Modifier.clickable{ showDatePicker = true },
                     )
                 },
                 modifier = Modifier.size(width = 110.dp, height = 40.dp),
@@ -265,16 +276,23 @@ fun SellerAccountComposables(){
                     fontSize = 8.sp
                     ) },
             )
+            if(showDatePicker){
+                MyDatePickerDialog(
+                    onDateSelected = { date = it },
+                    onDismiss = { showDatePicker = false }
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = creditCard.cvv,
-                onValueChange = { creditCard.cvv = it },
+                value = creditCardCVV,
+                onValueChange = { creditCardCVV = it },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 trailingIcon = {
                     Icon(
                         Icons.Rounded.Clear,
                         contentDescription = null,
-                        modifier = Modifier.clickable{creditCard.cvv = ""}
+                        modifier = Modifier.clickable{creditCardCVV = ""}
                     )
                 },
                 modifier = Modifier.size(width = 110.dp, height = 40.dp),
@@ -284,13 +302,13 @@ fun SellerAccountComposables(){
                 ) },            )
         }
     }
-
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView()
+    RegisterCredentialsView(viewModel = DietiDealsViewModel())
 }
 

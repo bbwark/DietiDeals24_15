@@ -44,7 +44,9 @@ import java.util.UUID
 @Composable
 fun HomeView(){
     Column(horizontalAlignment = Alignment.End,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(18.dp))
         IconButton(onClick = { /*TODO*/ }) {
@@ -171,6 +173,22 @@ val testAuctions: Array<Auction> = arrayOf(
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 9),
         auctionType = AuctionType.Silent
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 8),
+        auctionType = AuctionType.English
+    ),
+    Auction(
+        id = UUID.randomUUID(),
+        ownerId = UUID.randomUUID(),
+        item = testItem,
+        bids = arrayOf(),
+        endingDate = LocalDate.of(2023, 12, 8),
+        auctionType = AuctionType.English
     ),
     Auction(
         id = UUID.randomUUID(),
