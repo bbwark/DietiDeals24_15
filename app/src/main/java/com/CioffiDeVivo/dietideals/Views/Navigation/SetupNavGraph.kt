@@ -48,12 +48,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.Login.route
         ) {
-            LoginView()
+            LoginView(viewModel)
         }
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView()
+            RegisterView(viewModel)
         }
         composable(
             route = Screen.Favourites.route

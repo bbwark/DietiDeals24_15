@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">DietiDeals</string>
-    <string name="ContinuewithEmail">Continue with Email</string>
-    <string name="ContinuewithGoogle">Continue with Google</string>
-    <string name="ContinuewithGit">Continue with Git</string>
-    <string name="ContinuewithFacebook">Continue with Facebook</string>
-    <string name="CreateAccount">Create Account</string>
-    <string name="LogIn">Log In</string>
-    <string name="CreateAuction">Create Auction</string>
-
-
+    <string name="continuewithEmail">Continue with Email</string>
+    <string name="continuewithGoogle">Continue with Google</string>
+    <string name="continuewithGit">Continue with Git</string>
+    <string name="continuewithFacebook">Continue with Facebook</string>
+    <string name="createAccount">Create Account</string>
+    <string name="logIn">Log In</string>
+    <string name="createAuction">Create Auction</string>
+    <string name="dietideals">DietiDeals</string>
+    <string name="welcome">Welcome</string>
+    <string name="logInAccount">Log into an Account</string>
+    <string name="lastBid">Last Bid</string>
+    <string name="minimumBid">Minimum Bid</string>
 </resources>

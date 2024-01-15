@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +16,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -38,75 +39,39 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogInCredentialsView(){
-    var email: String by remember { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var isEnabled by remember { mutableStateOf(true) }
+fun LogInCredentialsView(viewModel: DietiDealsViewModel){
+
+    val isEnabled by remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
         Spacer(modifier = Modifier.height(40.dp))
-        Text(
-            "Welcome",
-            fontSize = 30.sp,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            color = Color.DarkGray
-        )
+        ViewTitle(title = stringResource(id = R.string.welcome))
         Spacer(modifier = Modifier.height(30.dp))
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{email= ""}
-                )
-            },
-            modifier = Modifier.width(320.dp),
-            label = { Text("Email") },
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            singleLine = true,
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            trailingIcon = {
-                val image = if(passwordVisible){
-                    Icons.Filled.Visibility
-                }else{
-                    Icons.Filled.VisibilityOff
-                }
-                val description = if (passwordVisible) "Hide password" else "Show password"
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector  = image, description)
-                }
-            },
-            modifier = Modifier.width(320.dp),
-        )
+        LogInCredentialsComposables(viewModel.user)
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = { /*TODO*/ },
-            enabled = if(email.isNotEmpty() && password.isNotEmpty()){
+            enabled = if(viewModel.user.email.isNotEmpty() && viewModel.user.password.isNotEmpty()){
                                                                      isEnabled
                                                                      }else{
                                                                           !isEnabled
                                                                           },
-            modifier = Modifier.size(width = 330.dp, height = 50.dp),
+            modifier = Modifier
+                .size(width = 330.dp, height = 50.dp)
+                .pulsateClick(),
             content = {
-                Text(stringResource(R.string.LogIn), fontSize = 20.sp)
+                Text(stringResource(R.string.logIn), fontSize = 20.sp)
             }
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -131,8 +96,53 @@ fun LogInCredentialsView(){
     }
 }
 
+@Composable
+fun LogInCredentialsComposables(
+    user: User
+){
+
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
+    OutlinedTextField(
+        value = user.email,
+        onValueChange = { user.email = it },
+        singleLine = true,
+        trailingIcon = {
+            Icon(
+                Icons.Rounded.Clear,
+                contentDescription = null,
+                modifier = Modifier.clickable{user.email = ""}
+            )
+        },
+        modifier = Modifier.width(320.dp),
+        label = { Text("Email") },
+    )
+    Spacer(modifier = Modifier.height(10.dp))
+    OutlinedTextField(
+        value = user.password,
+        onValueChange = { user.password = it },
+        label = { Text("Password") },
+        singleLine = true,
+        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+            val image = if(passwordVisible){
+                Icons.Filled.Visibility
+            }else{
+                Icons.Filled.VisibilityOff
+            }
+            val description = if (passwordVisible) "Hide password" else "Show password"
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Icon(imageVector  = image, description)
+            }
+        },
+        modifier = Modifier.width(320.dp),
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun LogInCredentialsPreview(){
-    LogInCredentialsView()
+    LogInCredentialsView(viewModel = DietiDealsViewModel())
 }
