@@ -14,11 +14,16 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
+import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Views.AccountView
+import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LoginView
+import com.CioffiDeVivo.dietideals.Views.ManageCardsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 
@@ -77,9 +82,67 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                     selectedNavBarItem = viewModel.selectedNavBarItem,
                     navController = navController
                 )
-            }){
+            }) {
                 Box(modifier = Modifier.padding(it)) {
                     SearchView(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
+        composable(
+            route = Screen.Auction.route
+        ) {
+            Scaffold(topBar = {
+                AuctionTopBar(
+                    navController = navController,
+                    viewModel = viewModel
+                )
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
+                Box(modifier = Modifier.padding(it)) {
+                    AuctionView(
+                        auction = viewModel.selectedAuction,
+                        viewModel.auctionOpenByOwner
+                    )
+                }
+            }
+        }
+        composable(
+            route = Screen.Account.route
+        ) {
+            Scaffold(bottomBar = {
+                BottomNavBar(
+                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    navController = navController
+                )
+            }) {
+                Box(modifier = Modifier.padding(it)) {
+                    AccountView(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
+        composable(
+            route = Screen.ManageCards.route
+        ) {
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = "Manage Cards",
+                    destinationRoute = Screen.Account.route,
+                    navController = navController
+                )
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
+                Box(modifier = Modifier.padding(it)) {
+                    ManageCardsView(viewModel = viewModel)
                 }
             }
         }
