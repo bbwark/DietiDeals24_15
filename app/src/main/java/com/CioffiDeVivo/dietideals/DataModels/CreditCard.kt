@@ -1,11 +1,13 @@
 package com.CioffiDeVivo.dietideals.DataModels
 
+import java.time.LocalDate
+
 class CreditCard(
     number: String,
-    expirationDate: String,
-    cvv: String
+    cvv: String,
+    expirationDate: LocalDate
 ) {
-    var number: String = number
-    var expirationDate: String = expirationDate
-    var cvv: String = cvv
+    val number: String = number
+    val cvv: String = cvv
+    val expirationDate: LocalDate = expirationDate
 }
