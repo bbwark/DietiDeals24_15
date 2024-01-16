@@ -4,13 +4,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +22,6 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
-import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
@@ -44,6 +44,25 @@ fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navCon
                     //navController.navigate(Screen.Auction.route)
                 }, auction = item)
                 Spacer(modifier = Modifier.height(5.dp))
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>){
+    LazyRow{
+        itemsIndexed(auctions){index, item->
+            Row {
+                if(index == 0){
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
+                HomeViewAuctionListElement(
+                    modifier = Modifier.clickable{/*TODO*/},
+                    auction = item
+                )
+                Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }

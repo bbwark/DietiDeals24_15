@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.Views
+ package com.CioffiDeVivo.dietideals.Views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -44,7 +44,7 @@ fun RegisterView() {
         )
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { /**/ },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
                 Text(stringResource(R.string.ContinuewithEmail), fontSize = 20.sp)
