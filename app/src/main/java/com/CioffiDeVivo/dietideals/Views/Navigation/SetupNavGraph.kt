@@ -22,8 +22,11 @@ import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
+import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
 import com.CioffiDeVivo.dietideals.Views.LoginView
+import com.CioffiDeVivo.dietideals.Views.MakeABid
 import com.CioffiDeVivo.dietideals.Views.ManageCardsView
+import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 
@@ -36,6 +39,21 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         navController = navController,
         startDestination = Screen.Home.route
     ) {
+        composable(
+            route = Screen.CreateAuction.route
+        ){
+            RegisterCredentialsView(viewModel = DietiDealsViewModel())
+        }
+        composable(
+            route = Screen.LogInCredentials.route
+        ){
+            LogInCredentialsView(viewModel = DietiDealsViewModel())
+        }
+        composable(
+            route = Screen.MakeABid.route
+        ){
+            MakeABid(viewModel = DietiDealsViewModel())
+        }
         composable(
             route = Screen.Home.route
         ) {
@@ -58,7 +76,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView(viewModel)
+            RegisterView(viewModel = DietiDealsViewModel())
         }
         composable(
             route = Screen.Favourites.route
