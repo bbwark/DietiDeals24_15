@@ -21,6 +21,7 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
+    var creditCard by mutableStateOf(CreditCard("","",""))
     var user by mutableStateOf(
         User(
             UUID.randomUUID(), "Nametest Surnametest", "emailtest@test.com", "passwordtest", creditCards = arrayOf(
@@ -43,9 +44,6 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
     var auctionSearchResult: Array<Auction> = arrayOf()
-    var createAuctionComposableType by mutableIntStateOf(0)
     var sellerShowComposables by mutableStateOf(false)
     var auctionOpenByOwner by mutableStateOf(false)
 }
-
-

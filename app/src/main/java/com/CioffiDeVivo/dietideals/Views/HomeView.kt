@@ -2,9 +2,7 @@ package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,21 +21,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
-import com.CioffiDeVivo.dietideals.R
 import java.time.LocalDate
 import java.util.UUID
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -49,7 +46,10 @@ fun HomeView(){
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(18.dp))
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.pulsateClick()
+            ) {
             Icon(Icons.Rounded.Favorite, contentDescription = null)
         }
     }
@@ -58,14 +58,8 @@ fun HomeView(){
         modifier = Modifier.fillMaxSize()
     ) {
 
-        Spacer(
-            modifier = Modifier.height(40.dp))
-        Text(
-            "DietiDeals",
-            fontSize = 30.sp,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold
-        )
+        Spacer(modifier = Modifier.height(40.dp))
+        ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
             onClick = { /*TODO*/ },
