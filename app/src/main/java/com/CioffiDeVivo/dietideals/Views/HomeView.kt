@@ -40,7 +40,8 @@ import com.CioffiDeVivo.dietideals.R
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeView(){
-    Column(horizontalAlignment = Alignment.End,
+    Column(
+        horizontalAlignment = Alignment.End,
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -142,6 +143,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 16),
+        expired = false,
         auctionType = AuctionType.English
     ),
     Auction(
@@ -150,6 +152,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 17),
+        expired = false,
         auctionType = AuctionType.English
     ),
     Auction(
@@ -158,6 +161,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 10),
+        expired = false,
         auctionType = AuctionType.Silent
     ),
     Auction(
@@ -166,6 +170,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 9),
+        expired = false,
         auctionType = AuctionType.Silent
     ),
     Auction(
@@ -174,6 +179,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 8),
+        expired = false,
         auctionType = AuctionType.English
     ),
     Auction(
@@ -182,6 +188,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 8),
+        expired = false,
         auctionType = AuctionType.English
     ),
     Auction(
@@ -190,6 +197,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 8),
+        expired = false,
         auctionType = AuctionType.English
     ),
     Auction(
@@ -198,6 +206,7 @@ val testAuctions: Array<Auction> = arrayOf(
         item = testItem,
         bids = arrayOf(),
         endingDate = LocalDate.of(2023, 12, 8),
+        expired = false,
         auctionType = AuctionType.English
     )
 )

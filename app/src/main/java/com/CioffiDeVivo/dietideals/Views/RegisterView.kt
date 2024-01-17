@@ -1,5 +1,6 @@
  package com.CioffiDeVivo.dietideals.Views
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -24,12 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
-@Composable
-fun RegisterView(viewModel: DietiDealsViewModel) {
+ @Composable
+fun RegisterView(viewModel: DietiDealsViewModel, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -40,21 +44,20 @@ fun RegisterView(viewModel: DietiDealsViewModel) {
         Spacer(modifier = Modifier.height(450.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      navController.navigate(Screen.RegisterCredentials.route)
+            },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
                 Text(stringResource(R.string.continuewithEmail), fontSize = 20.sp)
             }
         )
-        Spacer(
-            modifier = Modifier.height(5.dp)
+        Spacer(modifier = Modifier.height(5.dp))
+        Text("or",
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium
         )
-        Text(
-            "or", fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium
-        )
-        Spacer(
-            modifier = Modifier.height(5.dp)
-        )
+        Spacer(modifier = Modifier.height(5.dp))
         ExternalButtons()
     }
 }
@@ -62,7 +65,7 @@ fun RegisterView(viewModel: DietiDealsViewModel) {
 @Composable
 fun ExternalButtons(){
     OutlinedButton(
-        onClick = { /*TODO*/ },
+        onClick = {},
         modifier = Modifier.size(width = 330.dp, height = 50.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
@@ -140,5 +143,5 @@ fun ExternalButtons(){
 @Preview(showBackground = true)
 @Composable
 fun RegisterPreview(){
-    RegisterView(viewModel = DietiDealsViewModel())
+    RegisterView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }

@@ -20,12 +20,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
 @Composable
-fun LoginView(viewModel: DietiDealsViewModel) {
+fun LoginView(viewModel: DietiDealsViewModel, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -37,7 +40,9 @@ fun LoginView(viewModel: DietiDealsViewModel) {
         Spacer(modifier = Modifier.height(450.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      navController.navigate(Screen.LogInCredentials.route)
+            },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
                 Text(stringResource(R.string.continuewithEmail), fontSize = 20.sp)
@@ -73,5 +78,5 @@ fun LoginView(viewModel: DietiDealsViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun LogInPreview(){
-    LoginView(viewModel = DietiDealsViewModel())
+    LoginView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }

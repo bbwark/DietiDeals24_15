@@ -44,6 +44,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
@@ -54,7 +57,7 @@ import com.CioffiDeVivo.dietideals.DataModels.User
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
+fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavController){
 
     val isEnabled by remember { mutableStateOf(true) }
     var isSellerButton by remember { mutableStateOf(false) }
@@ -206,6 +209,7 @@ fun SellerAccountComposables(
 
     var date by remember { mutableStateOf("Open date picker dialog") }
     var showDatePicker by remember { mutableStateOf(false) }
+    var expirationDate by remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = user.address.toString(),
@@ -259,8 +263,8 @@ fun SellerAccountComposables(
         Spacer(modifier = Modifier.width(10.dp))
         Column {
             OutlinedTextField(
-                value = creditCard.expirationDate,
-                onValueChange = { creditCard.expirationDate = it },
+                value = expirationDate,
+                onValueChange = { expirationDate = it },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 trailingIcon = {
@@ -311,6 +315,6 @@ fun SellerAccountComposables(
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = DietiDealsViewModel())
+    RegisterCredentialsView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }
 

@@ -20,6 +20,7 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
+import com.CioffiDeVivo.dietideals.Views.CreateAuction
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
@@ -42,17 +43,22 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.CreateAuction.route
         ){
-            RegisterCredentialsView(viewModel = DietiDealsViewModel())
+            CreateAuction(viewModel = viewModel, navController = navController)
+        }
+        composable(
+            route = Screen.RegisterCredentials.route
+        ){
+            RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
         ){
-            LogInCredentialsView(viewModel = DietiDealsViewModel())
+            LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.MakeABid.route
         ){
-            MakeABid(viewModel = DietiDealsViewModel())
+            MakeABid(viewModel = viewModel)
         }
         composable(
             route = Screen.Home.route
@@ -71,12 +77,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.Login.route
         ) {
-            LoginView(viewModel)
+            LoginView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView(viewModel = DietiDealsViewModel())
+            RegisterView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Favourites.route
