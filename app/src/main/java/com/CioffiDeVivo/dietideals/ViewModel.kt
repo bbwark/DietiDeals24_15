@@ -21,7 +21,7 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
-    var creditCard by mutableStateOf(CreditCard("","",""))
+    var creditCard by mutableStateOf(CreditCard("","", LocalDate.now()))
     var user by mutableStateOf(
         User(
             UUID.randomUUID(), "Nametest Surnametest", "emailtest@test.com", "passwordtest", creditCards = arrayOf(

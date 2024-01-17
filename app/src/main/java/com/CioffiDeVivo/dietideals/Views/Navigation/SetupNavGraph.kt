@@ -20,10 +20,14 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
+import com.CioffiDeVivo.dietideals.Views.CreateAuction
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
+import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
 import com.CioffiDeVivo.dietideals.Views.LoginView
+import com.CioffiDeVivo.dietideals.Views.MakeABid
 import com.CioffiDeVivo.dietideals.Views.ManageCardsView
+import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 
@@ -36,6 +40,26 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         navController = navController,
         startDestination = Screen.Home.route
     ) {
+        composable(
+            route = Screen.CreateAuction.route
+        ){
+            CreateAuction(viewModel = viewModel, navController = navController)
+        }
+        composable(
+            route = Screen.RegisterCredentials.route
+        ){
+            RegisterCredentialsView(viewModel = viewModel, navController = navController)
+        }
+        composable(
+            route = Screen.LogInCredentials.route
+        ){
+            LogInCredentialsView(viewModel = viewModel, navController = navController)
+        }
+        composable(
+            route = Screen.MakeABid.route
+        ){
+            MakeABid(viewModel = viewModel)
+        }
         composable(
             route = Screen.Home.route
         ) {
@@ -53,12 +77,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.Login.route
         ) {
-            LoginView(viewModel)
+            LoginView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView(viewModel)
+            RegisterView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Favourites.route

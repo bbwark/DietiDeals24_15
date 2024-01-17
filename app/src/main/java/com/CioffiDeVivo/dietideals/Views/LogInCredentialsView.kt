@@ -39,6 +39,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.User
@@ -47,7 +49,7 @@ import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogInCredentialsView(viewModel: DietiDealsViewModel){
+fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavController){
 
     val isEnabled by remember { mutableStateOf(true) }
 
@@ -144,5 +146,5 @@ fun LogInCredentialsComposables(
 @Preview(showBackground = true)
 @Composable
 fun LogInCredentialsPreview(){
-    LogInCredentialsView(viewModel = DietiDealsViewModel())
+    LogInCredentialsView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }

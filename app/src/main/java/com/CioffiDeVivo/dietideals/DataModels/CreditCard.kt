@@ -7,7 +7,7 @@ class CreditCard(
     cvv: String,
     expirationDate: LocalDate
 ) {
-    val number: String = number
-    val cvv: String = cvv
-    val expirationDate: LocalDate = expirationDate
+    var number: String = number
+    var cvv: String = cvv
+    var expirationDate: LocalDate = expirationDate
 }

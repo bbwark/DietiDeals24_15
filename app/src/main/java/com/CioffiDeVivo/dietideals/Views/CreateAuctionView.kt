@@ -39,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
@@ -46,7 +48,7 @@ import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateAuction(viewModel: DietiDealsViewModel){
+fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
     var item: String by remember { mutableStateOf("") }
     var isTypeAuctionButton by remember { mutableIntStateOf(0) }
     val isEnabled by remember { mutableStateOf(true) }
@@ -133,7 +135,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel){
 @Preview(showBackground = true)
 @Composable
 fun CreateAuctionPreview(){
-    CreateAuction(viewModel = DietiDealsViewModel())
+    CreateAuction(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }
 
 @Composable
