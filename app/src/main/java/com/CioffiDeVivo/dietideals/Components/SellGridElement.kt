@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.Components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,21 +23,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 
 @Composable
-fun SellGridElement(auctionItemName: String, viewModel: DietiDealsViewModel, navController: NavHostController) { //it should receive also the compressed image
+fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, viewModel: DietiDealsViewModel, navController: NavHostController) { //it should receive also the compressed image
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        modifier = Modifier
+        modifier = modifier
+            .padding(horizontal = 8.dp, vertical = 12.dp)
             .size(width = 160.dp, height = 170.dp)
     ) {
         Column(
@@ -51,7 +55,9 @@ fun SellGridElement(auctionItemName: String, viewModel: DietiDealsViewModel, nav
             Image(
                 painter = painterResource(id = R.drawable.placeholder),
                 contentDescription = null,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { /*navigate to auction*/ },
                 contentScale = ContentScale.Fit
             )
         }
@@ -64,8 +70,11 @@ fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navContr
         Text(
             text = auctionItemName,
             modifier = Modifier
-                .padding(start = 3.dp)
-                .weight(1f),
+                .padding(start = 8.dp)
+                .weight(1f)
+                .clickable { /*navigate to auction*/ },
+            fontSize = 14.sp,
+            fontWeight = FontWeight(500),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
