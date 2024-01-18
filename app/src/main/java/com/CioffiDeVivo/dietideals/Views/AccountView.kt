@@ -123,7 +123,7 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 14.dp)
-            .clickable { /* navigate to destination route view */ }
+            .clickable { navController.navigate(destinationRoute)}
     ) {
         Icon(
             imageVector = icon,

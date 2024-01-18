@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
@@ -77,6 +78,7 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
         if(isSellerButton){
             SellerAccountComposables(viewModel.user, viewModel.creditCard)
         }
+        SellerAccountComposables(user = viewModel.user, creditCard = viewModel.creditCard)
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {  },
@@ -210,37 +212,10 @@ fun SellerAccountComposables(
     var date by remember { mutableStateOf("Open date picker dialog") }
     var showDatePicker by remember { mutableStateOf(false) }
     var expirationDate by remember { mutableStateOf("") }
+    var zipCode by remember { mutableStateOf("") }
+    var country by remember { mutableStateOf("") }
 
-    OutlinedTextField(
-        value = user.address.toString(),
-        onValueChange = { user.address = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{user.address = ""}
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Address") },
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = user.phoneNumber.toString(),
-        onValueChange = { user.phoneNumber = it },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{user.phoneNumber = ""}
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Phone Number") },
-    )
+    ContactInfo()
     Spacer(modifier = Modifier.height(10.dp))
     Row (
         verticalAlignment = Alignment.CenterVertically
