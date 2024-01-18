@@ -21,6 +21,8 @@ import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.CreateAuction
+import com.CioffiDeVivo.dietideals.Views.EditContactInfoView
+import com.CioffiDeVivo.dietideals.Views.EditProfile
 import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
@@ -40,6 +42,34 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         navController = navController,
         startDestination = Screen.Home.route
     ) {
+        composable(
+            route = Screen.EditProfile.route
+        ) {
+            Scaffold(bottomBar = {
+                BottomNavBar(
+                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    navController = navController
+                )
+            }) {
+                Box(modifier = Modifier.padding(it)) {
+                    EditProfile(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
+        composable(
+            route = Screen.EditContactInfo.route
+        ) {
+            Scaffold(bottomBar = {
+                BottomNavBar(
+                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    navController = navController
+                )
+            }) {
+                Box(modifier = Modifier.padding(it)) {
+                    EditContactInfoView(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
         composable(
             route = Screen.CreateAuction.route
         ){
