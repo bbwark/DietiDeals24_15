@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.CreateAuction
@@ -34,7 +36,6 @@ import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewModel) {
@@ -45,12 +46,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.EditProfile.route
         ) {
-            Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.editProfile),
+                    destinationRoute = Screen.Account.route,
                     navController = navController
                 )
-            }) {
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
                 Box(modifier = Modifier.padding(it)) {
                     EditProfile(viewModel = viewModel, navController = navController)
                 }
@@ -59,12 +67,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.EditContactInfo.route
         ) {
-            Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.contactInfo),
+                    destinationRoute = Screen.Account.route,
                     navController = navController
                 )
-            }) {
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
                 Box(modifier = Modifier.padding(it)) {
                     EditContactInfoView(viewModel = viewModel, navController = navController)
                 }
@@ -72,22 +87,22 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         }
         composable(
             route = Screen.CreateAuction.route
-        ){
+        ) {
             CreateAuction(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.RegisterCredentials.route
-        ){
+        ) {
             RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
-        ){
+        ) {
             LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.MakeABid.route
-        ){
+        ) {
             MakeABid(viewModel = viewModel)
         }
         composable(
@@ -184,7 +199,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         ) {
             Scaffold(topBar = {
                 DetailsViewTopBar(
-                    caption = "Manage Cards",
+                    caption = stringResource(id = R.string.manageCards),
                     destinationRoute = Screen.Account.route,
                     navController = navController
                 )

@@ -38,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
@@ -52,9 +51,6 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavController){
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-        ViewTitle(title = stringResource(id = R.string.editProfile))
-        Spacer(modifier = Modifier.height(40.dp))
         EditProfileComposable()
     }
 }
