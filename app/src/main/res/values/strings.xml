@@ -16,4 +16,5 @@
     <string name="editProfile">Edit Profile</string>
     <string name="saveChanges">Save Changes</string>
     <string name="manageCards">Manage Cards</string>
+    <string name="sellView">Your Auctions</string>
 </resources>

@@ -22,9 +22,6 @@ import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 @Composable
 fun ManageCardsView(viewModel: DietiDealsViewModel) {
     Box {
-        FloatingAddButton(viewModel = viewModel) {
-            // Add New Card
-        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -40,6 +37,9 @@ fun ManageCardsView(viewModel: DietiDealsViewModel) {
                     HorizontalDivider()
                 }
             })
+        FloatingAddButton(viewModel = viewModel) {
+            // Add New Card
+        }
     }
 }
 
