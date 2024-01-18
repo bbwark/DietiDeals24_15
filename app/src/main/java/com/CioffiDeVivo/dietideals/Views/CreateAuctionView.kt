@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
@@ -49,9 +50,9 @@ import com.CioffiDeVivo.dietideals.R
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
+
     var item: String by remember { mutableStateOf("") }
     var isTypeAuctionButton by remember { mutableIntStateOf(0) }
-    val isEnabled by remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,11 +116,6 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
 
         Button(
             onClick = {  },
-            enabled = if( item.isNotEmpty() ){
-                isEnabled
-            }else{
-                !isEnabled
-            },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -140,9 +136,10 @@ fun CreateAuctionPreview(){
 
 @Composable
 fun SilentAuction(){
+
     var minAccepted: String by remember { mutableStateOf("Input") }
     var endingDate: String by remember { mutableStateOf("Input") }
-    var description: String by remember { mutableStateOf("Input") }
+
     Row {
         OutlinedTextField(
             value = minAccepted,
@@ -182,29 +179,17 @@ fun SilentAuction(){
         }
     }
     Spacer(modifier = Modifier.size(15.dp))
-    OutlinedTextField(
-        value = description,
-        onValueChange = { description = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{description = ""}
-            )},
-        label = { Text("Item Name") },
-        modifier = Modifier
-            .width(320.dp)
-            .height(200.dp)
-    )
+    DescriptionTextfield(maxDescriptionCharacters = 200)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnglishAuction(){
+
     var minStep: String by remember { mutableStateOf("Input") }
     var endingDate: String by remember { mutableStateOf("Input") }
     var interval: String by remember { mutableStateOf("Input") }
-    var description: String by remember { mutableStateOf("Input") }
+
     Row {
         OutlinedTextField(
             value = minStep,
@@ -247,20 +232,7 @@ fun EnglishAuction(){
         label = { Text("Ending Date") },
     )
     Spacer(modifier = Modifier.size(15.dp))
-    OutlinedTextField(
-        value = description,
-        onValueChange = { description = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{description = ""}
-            )},
-        label = { Text("Description") },
-        modifier = Modifier
-            .width(320.dp)
-            .height(200.dp)
-    )
+    DescriptionTextfield(maxDescriptionCharacters = 200)
     Spacer(modifier = Modifier.height(30.dp))
     Button(
         onClick = { /*TODO*/ },
