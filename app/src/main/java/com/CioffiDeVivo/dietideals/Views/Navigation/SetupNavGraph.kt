@@ -88,7 +88,17 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.CreateAuction.route
         ) {
-            CreateAuction(viewModel = viewModel, navController = navController)
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.createAuction),
+                    destinationRoute = Screen.Sell.route,
+                    navController = navController
+                )
+            }) {
+                Box(modifier = Modifier.padding(it)) {
+                    CreateAuction(viewModel = viewModel, navController = navController)
+                }
+            }
         }
         composable(
             route = Screen.RegisterCredentials.route
