@@ -21,10 +21,14 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
-    var creditCard by mutableStateOf(CreditCard("","", LocalDate.now()))
+    var creditCard by mutableStateOf(CreditCard("", "", LocalDate.now()))
     var user by mutableStateOf(
         User(
-            UUID.randomUUID(), "Nametest Surnametest", "emailtest@test.com", "passwordtest", creditCards = arrayOf(
+            UUID.randomUUID(),
+            "Nametest Surnametest",
+            "emailtest@test.com",
+            "passwordtest",
+            creditCards = arrayOf(
                 CreditCard("556666666666", "222", LocalDate.now().plusYears(1)),
                 CreditCard("456666666666", "222", LocalDate.now().plusYears(2)),
                 CreditCard("356666666666", "222", LocalDate.now().plusYears(2))
@@ -44,6 +48,32 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
     var auctionSearchResult: Array<Auction> = arrayOf()
+    var auctionCreatedByUser: Array<Auction> = arrayOf(
+        Auction(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            Item(id = UUID.randomUUID(), name = "First Auction"),
+            endingDate = LocalDate.now().plusMonths(2),
+            expired = false,
+            auctionType = AuctionType.English
+        ),
+        Auction(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            Item(id = UUID.randomUUID(), name = "Second Auction"),
+            endingDate = LocalDate.now().plusMonths(2),
+            expired = false,
+            auctionType = AuctionType.English
+        ),
+        Auction(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            Item(id = UUID.randomUUID(), name = "Third Auction"),
+            endingDate = LocalDate.now().plusMonths(2),
+            expired = false,
+            auctionType = AuctionType.English
+        )
+    )
     var sellerShowComposables by mutableStateOf(false)
     var auctionOpenByOwner by mutableStateOf(false)
 }
