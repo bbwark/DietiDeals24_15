@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -56,11 +58,13 @@ import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavController){
+fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
 
+    val usertest by viewModel.user1.collectAsState()
     val isEnabled by remember { mutableStateOf(true) }
     var isSellerButton by remember { mutableStateOf(false) }
 
@@ -73,12 +77,14 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        BuyerComposables()
+        BuyerComposables(
+            stringChanged = { viewModel.updateField(it) },
+            user = usertest
+        )
         Spacer(modifier = Modifier.height(10.dp))
         if(isSellerButton){
             SellerAccountComposables()
         }
-        SellerAccountComposables()
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {  },
@@ -129,21 +135,22 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
 
 @Composable
 fun BuyerComposables(
-
+    user: UserTest,
+    stringChanged: (String) -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
+
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        value = email,
-        onValueChange = { email = it },
+        value = user.email,
+        onValueChange = stringChanged,
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable { email = "" }
+                modifier = Modifier.clickable {  }
             )
         },
         modifier = Modifier.width(320.dp),
@@ -269,6 +276,6 @@ fun SellerAccountComposables(){
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    RegisterCredentialsView(viewModel = DietiDealsViewModel())
 }
 
