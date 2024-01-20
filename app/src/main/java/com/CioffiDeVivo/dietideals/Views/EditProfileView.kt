@@ -54,7 +54,7 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavController){
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EditProfileComposable()
+        EditProfileLayout()
     }
 }
 
