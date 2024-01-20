@@ -16,8 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
@@ -35,19 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
@@ -78,8 +68,11 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
         BuyerComposables(
-            stringChanged = { viewModel.updateField(it) },
-            user = usertest
+            user = usertest,
+            emailOnChange = { viewModel.updateEmailTextField(it) },
+            nameOnChange = { viewModel.updateNameTextField(it) },
+            surnameOnChange = { viewModel.updateSurnameTextField(it) },
+            viewModel = viewModel
         )
         Spacer(modifier = Modifier.height(10.dp))
         if(isSellerButton){
@@ -133,24 +126,26 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
     }
 }
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BuyerComposables(
     user: UserTest,
-    stringChanged: (String) -> Unit
+    emailOnChange: (String) -> Unit,
+    nameOnChange: (String) -> Unit,
+    surnameOnChange: (String) -> Unit,
+    viewModel: DietiDealsViewModel
 ) {
-
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = user.email,
-        onValueChange = stringChanged,
+        onValueChange = emailOnChange,
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.clickable { viewModel.cancelEmailTextField() }
             )
         },
         modifier = Modifier.width(320.dp),
@@ -158,14 +153,14 @@ fun BuyerComposables(
     )
     Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
-        value = name,
-        onValueChange = { name = it },
+        value = user.name,
+        onValueChange = nameOnChange,
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable { name = "" }
+                modifier = Modifier.clickable { viewModel.cancelNameTextField() }
             )
         },
         modifier = Modifier.width(320.dp),
@@ -173,14 +168,14 @@ fun BuyerComposables(
     )
     Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
-        value = surname,
-        onValueChange = { surname = it },
+        value = user.surname,
+        onValueChange = surnameOnChange,
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable { surname = "" }
+                modifier = Modifier.clickable { viewModel.cancelSurnameTextField() }
             )
         },
         modifier = Modifier.width(320.dp),

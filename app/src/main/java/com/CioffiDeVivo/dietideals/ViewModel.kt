@@ -24,13 +24,9 @@ import java.util.UUID
 class DietiDealsViewModel : ViewModel() {
 
     var creditCard by mutableStateOf(CreditCard("", "", LocalDate.now()))
-
-    var emailtest by mutableStateOf("")
-        private set
-
     private val _user1 = MutableStateFlow(UserTest())
     val user1: StateFlow<UserTest> = _user1.asStateFlow()
-
+    var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
         User(
             UUID.randomUUID(),
@@ -44,10 +40,7 @@ class DietiDealsViewModel : ViewModel() {
             )
         )
     )
-        private set
-
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
-
     var selectedAuction by mutableStateOf(
         Auction(
             UUID.randomUUID(),
@@ -85,17 +78,40 @@ class DietiDealsViewModel : ViewModel() {
             auctionType = AuctionType.English
         )
     )
-    var auctionOpenByOwner by mutableStateOf(false)
 
-    fun updateField(stringChanged: String){
-         _user1.update {currentState ->
-             currentState.copy(
-                 email = stringChanged
-             )
-         }
+    fun updateEmailTextField(stringEmailChanged: String){
+         _user1.value = _user1.value.copy(
+             email = stringEmailChanged
+         )
     }
 
-    fun cancelField(){
-        user.email = ""
+    fun updateNameTextField(stringNameChanged: String){
+        _user1.value = _user1.value.copy(
+            name = stringNameChanged
+        )
+    }
+
+    fun updateSurnameTextField(stringSurnameChanged: String){
+        _user1.value = _user1.value.copy(
+            surname = stringSurnameChanged
+        )
+    }
+
+    fun cancelEmailTextField(){
+        _user1.value = _user1.value.copy(
+            email = ""
+        )
+    }
+
+    fun cancelNameTextField(){
+        _user1.value = _user1.value.copy(
+            name = ""
+        )
+    }
+
+    fun cancelSurnameTextField(){
+        _user1.value = _user1.value.copy(
+            surname = ""
+        )
     }
 }
