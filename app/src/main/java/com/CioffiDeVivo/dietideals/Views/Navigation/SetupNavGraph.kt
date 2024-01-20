@@ -1,15 +1,24 @@
 package com.CioffiDeVivo.dietideals.Views.Navigation
 
 import android.annotation.SuppressLint
+import android.icu.text.CaseMap.Title
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,7 +26,9 @@ import androidx.navigation.compose.composable
 import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.CreateAuction
@@ -32,9 +43,9 @@ import com.CioffiDeVivo.dietideals.Views.ManageCardsView
 import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
+import com.CioffiDeVivo.dietideals.Views.SellView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewModel) {
@@ -45,12 +56,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.EditProfile.route
         ) {
-            Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.editProfile),
+                    destinationRoute = Screen.Account.route,
                     navController = navController
                 )
-            }) {
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
                 Box(modifier = Modifier.padding(it)) {
                     EditProfile(viewModel = viewModel, navController = navController)
                 }
@@ -59,12 +77,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.EditContactInfo.route
         ) {
-            Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.contactInfo),
+                    destinationRoute = Screen.Account.route,
                     navController = navController
                 )
-            }) {
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
                 Box(modifier = Modifier.padding(it)) {
                     EditContactInfoView(viewModel = viewModel, navController = navController)
                 }
@@ -72,22 +97,32 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         }
         composable(
             route = Screen.CreateAuction.route
-        ){
-            CreateAuction(viewModel = viewModel, navController = navController)
+        ) {
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.createAuction),
+                    destinationRoute = Screen.Sell.route,
+                    navController = navController
+                )
+            }) {
+                Box(modifier = Modifier.padding(it)) {
+                    CreateAuction(viewModel = viewModel, navController = navController)
+                }
+            }
         }
         composable(
             route = Screen.RegisterCredentials.route
-        ){
+        ) {
             RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
-        ){
+        ) {
             LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.MakeABid.route
-        ){
+        ) {
             MakeABid(viewModel = viewModel)
         }
         composable(
@@ -184,7 +219,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         ) {
             Scaffold(topBar = {
                 DetailsViewTopBar(
-                    caption = "Manage Cards",
+                    caption = stringResource(id = R.string.manageCards),
                     destinationRoute = Screen.Account.route,
                     navController = navController
                 )
@@ -197,6 +232,36 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     ManageCardsView(viewModel = viewModel)
+                }
+            }
+        }
+        composable(
+            route = Screen.Sell.route
+        ) {
+            Scaffold(
+                topBar = {
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.sellView),
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight(600)
+                        )
+                    }
+                },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }
+            ) {
+                Box(modifier = Modifier.padding(it)) {
+                    SellView(viewModel = viewModel, navController = navController)
                 }
             }
         }

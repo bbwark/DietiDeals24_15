@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,11 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
-import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
-import java.util.UUID
 
 @Composable
 fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavController){
@@ -35,9 +31,6 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavContro
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Spacer(modifier = Modifier.height(40.dp))
-        ViewTitle(title = stringResource(id = R.string.contactInfo))
-        Spacer(modifier = Modifier.height(40.dp))
         ContactInfo()
         Spacer(modifier = Modifier.height(40.dp))
         Button(onClick = { /*TODO*/ }) {
