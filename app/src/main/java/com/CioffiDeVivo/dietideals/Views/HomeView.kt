@@ -56,7 +56,9 @@ fun HomeView(){
     }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
 
         Spacer(modifier = Modifier.height(40.dp))

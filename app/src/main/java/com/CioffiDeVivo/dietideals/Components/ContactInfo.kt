@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowCircleDown
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowDropDownCircle
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -24,19 +27,20 @@ import java.util.UUID
 
 @Composable
 fun ContactInfo(){
+    var address by remember { mutableStateOf("") }
     var zipCode by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
-    var user = User(UUID.randomUUID(),"test","test","test")
+    var phoneNumber by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        value = user.address.toString(),
-        onValueChange = { user.address = it },
+        value = address,
+        onValueChange = { address = it },
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable{user.address = ""}
+                modifier = Modifier.clickable{ address = ""}
             )
         },
         modifier = Modifier.width(320.dp),
@@ -64,12 +68,13 @@ fun ContactInfo(){
             value = country,
             onValueChange = { country = it },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
                 Icon(
-                    Icons.Rounded.Clear,
+                    Icons.Rounded.ArrowCircleDown,
                     contentDescription = null,
-                    modifier = Modifier.clickable{country = ""}
+                    modifier = Modifier
+                        .clickable { /*Lista di paesi*/ }
+                        .pulsateClick()
                 )
             },
             modifier = Modifier.width(150.dp),
@@ -78,15 +83,15 @@ fun ContactInfo(){
     }
     Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
-        value = user.phoneNumber.toString(),
-        onValueChange = { user.phoneNumber = it },
+        value = phoneNumber,
+        onValueChange = { phoneNumber = it },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable{user.phoneNumber = ""}
+                modifier = Modifier.clickable{ phoneNumber = ""}
             )
         },
         modifier = Modifier.width(320.dp),

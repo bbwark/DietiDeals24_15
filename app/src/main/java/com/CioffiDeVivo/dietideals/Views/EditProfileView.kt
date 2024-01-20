@@ -38,6 +38,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
+import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
@@ -56,96 +59,28 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavController){
 }
 
 @Composable
-fun EditProfileComposable(){
-    var user = User(UUID.randomUUID(),"test","test","test")
-    var newPassword by remember{ mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var newpasswordVisible by remember { mutableStateOf(false) }
-    var description by remember { mutableStateOf("") }
-    val maxDescriptionCharacters = 100
+fun EditProfileLayout(){
+
+    var name by remember { mutableStateOf("") }
+
     OutlinedTextField(
-        value = user.name,
-        onValueChange = { user.name = it },
+        value = name,
+        onValueChange = { name = it },
         singleLine = true,
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable{user.name = ""}
+                modifier = Modifier.clickable{ name = "" }
             )
         },
         modifier = Modifier.width(320.dp),
-        label = { Text("name") },
+        label = { Text("Name") },
     )
     Spacer(modifier = Modifier.height(40.dp))
-    OutlinedTextField(
-        value = description,
-        onValueChange = {
-                        if(it.length <= maxDescriptionCharacters){
-                            description = it
-                        }
-        },
-        supportingText = {
-                         Text(
-                             text = "${description.length} / $maxDescriptionCharacters",
-                             modifier = Modifier.fillMaxWidth(),
-                             textAlign = TextAlign.End
-                         )
-        },
-        singleLine = false,
-        maxLines = 7,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{description = ""}
-            )
-        },
-        modifier = Modifier.size(320.dp,200.dp),
-        label = { Text("Description") },
-    )
+    DescriptionTextfield(maxDescriptionCharacters = 100)
     Spacer(modifier = Modifier.height(40.dp))
-    OutlinedTextField(
-        value = user.password,
-        onValueChange = { user.password = it },
-        label = { Text("Old Password") },
-        singleLine = true,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            val image = if(passwordVisible){
-                Icons.Filled.Visibility
-            }else{
-                Icons.Filled.VisibilityOff
-            }
-            val descriptionPass = if (passwordVisible) "Hide password" else "Show password"
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(imageVector  = image, descriptionPass)
-            }
-        },
-        modifier = Modifier.width(320.dp),
-    )
-    Spacer(modifier = Modifier.height(40.dp))
-    OutlinedTextField(
-        value = newPassword,
-        onValueChange = { newPassword = it },
-        label = { Text("New Password") },
-        singleLine = true,
-        visualTransformation = if (newpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            val image = if(newpasswordVisible){
-                Icons.Filled.Visibility
-            }else{
-                Icons.Filled.VisibilityOff
-            }
-            val descriptionNewPass = if (newpasswordVisible) "Hide password" else "Show password"
-            IconButton(onClick = { newpasswordVisible = !newpasswordVisible }) {
-                Icon(imageVector  = image, descriptionNewPass)
-            }
-        },
-        modifier = Modifier.width(320.dp),
-    )
+    PasswordsTextfields(true)
     Spacer(modifier = Modifier.height(40.dp))
     Button(onClick = { /*TODO*/ }) {
         Text(text = stringResource(id = R.string.saveChanges))
