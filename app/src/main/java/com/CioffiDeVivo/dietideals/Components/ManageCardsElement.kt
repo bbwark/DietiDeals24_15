@@ -8,11 +8,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
 
 @Composable
-fun ManageCardsElement(modifier: Modifier = Modifier, cardNumber: String, clickOnMore: () -> Unit) {
+fun ManageCardsElement(modifier: Modifier = Modifier, cardNumber: String, clickOnDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -45,13 +54,25 @@ fun ManageCardsElement(modifier: Modifier = Modifier, cardNumber: String, clickO
             }
         }
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = "x".repeat(cardNumber.length - 4).plus(cardNumber.takeLast(4)))
+        Text(text = "•".repeat(cardNumber.length - 4).plus(cardNumber.takeLast(4)))
         Spacer(modifier = Modifier.weight(1f))
-        IconButton(onClick = { clickOnMore() }) {
-            Icon(
-                imageVector = Icons.Default.MoreHoriz,
-                contentDescription = null
-            )
+        Box {
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Default.MoreHoriz,
+                    contentDescription = null
+                )
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text(text = "Delete") },
+                    onClick = { clickOnDelete() },
+                    leadingIcon = { Icon(Icons.Default.Delete, contentDescription = null) }
+                )
+            }
         }
     }
 }
@@ -69,5 +90,5 @@ fun CardCircuit(cardNumber: String): Int {
 @Preview(showBackground = true)
 @Composable
 fun ManageCardsElementPreview() {
-    ManageCardsElement(cardNumber = "5234567891234567", clickOnMore = {})
+    ManageCardsElement(cardNumber = "5234567891234567", clickOnDelete = {})
 }
