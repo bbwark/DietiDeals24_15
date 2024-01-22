@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -47,6 +49,7 @@ import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
+import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
@@ -67,12 +70,20 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        BuyerComposables(
-            user = usertest,
-            emailOnChange = { viewModel.updateEmailTextField(it) },
-            nameOnChange = { viewModel.updateNameTextField(it) },
-            surnameOnChange = { viewModel.updateSurnameTextField(it) },
-            viewModel = viewModel
+        InputTextField(
+            value = usertest.email,
+            onValueChanged = { viewModel.onAction(RegistrationEvent.EmailChanged(it)) },
+            label = "Email"
+        )
+        InputTextField(
+            value = usertest.name,
+            onValueChanged = { viewModel.onAction(RegistrationEvent.NameChanged(it)) },
+            label = "Name"
+        )
+        InputTextField(
+            value = usertest.surname,
+            onValueChanged = { viewModel.onAction(RegistrationEvent.SurnameChanged(it)) },
+            label = "Surname"
         )
         Spacer(modifier = Modifier.height(10.dp))
         if(isSellerButton){
@@ -126,61 +137,33 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
     }
 }
 
+@Composable
+fun InputTextField(
+    value: String,
+    onValueChanged: (String) -> Unit,
+    label: String,
+){
+    Column {
+        OutlinedTextField(
+            value = value,
+            onValueChange = {
+                onValueChanged(it)
+            },
+            label = { Text(label) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 50.dp, end = 50.dp)
+        )
+    }
+}
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BuyerComposables(
-    user: UserTest,
-    emailOnChange: (String) -> Unit,
-    nameOnChange: (String) -> Unit,
-    surnameOnChange: (String) -> Unit,
-    viewModel: DietiDealsViewModel
+
 ) {
 
-    OutlinedTextField(
-        value = user.email,
-        onValueChange = emailOnChange,
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { viewModel.cancelEmailTextField() }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Email") },
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = user.name,
-        onValueChange = nameOnChange,
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { viewModel.cancelNameTextField() }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Name") },
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = user.surname,
-        onValueChange = surnameOnChange,
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { viewModel.cancelSurnameTextField() }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Surname") },
-    )
     Spacer(modifier = Modifier.height(10.dp))
     PasswordsTextfields(isToChangePassword = false)
 }

@@ -11,6 +11,7 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +79,32 @@ class DietiDealsViewModel : ViewModel() {
             auctionType = AuctionType.English
         )
     )
+
+    fun onAction(registrationEvent: RegistrationEvent){
+        when(registrationEvent){
+            is RegistrationEvent.EmailChanged -> {
+                _user1.value = _user1.value.copy(
+                    email = registrationEvent.email
+                )
+            }
+            is RegistrationEvent.NameChanged -> {
+                _user1.value = _user1.value.copy(
+                    name = registrationEvent.name
+                )
+            }
+            is RegistrationEvent.SurnameChanged -> {
+                _user1.value = _user1.value.copy(
+                    surname = registrationEvent.surname
+                )
+            }
+            else -> {
+                validateUserRegistration()
+            }
+        }
+    }
+    fun validateUserRegistration(){
+
+    }
 
     fun updateEmailTextField(stringEmailChanged: String){
          _user1.value = _user1.value.copy(
