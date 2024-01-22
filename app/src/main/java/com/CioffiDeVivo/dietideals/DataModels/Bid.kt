@@ -6,11 +6,11 @@ import java.util.UUID
 class Bid(
     id: UUID,
     value: Float,
-    userId: UUID,
+    userId: Int,
     date: ZonedDateTime
 ) {
     val id: UUID = id
     val value: Float = value
-    val userId: UUID = userId
+    val userId: Int = userId
     val date: ZonedDateTime = date
 }

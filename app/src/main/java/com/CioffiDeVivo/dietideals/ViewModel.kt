@@ -12,10 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
@@ -42,11 +45,58 @@ class DietiDealsViewModel : ViewModel() {
             UUID.randomUUID(),
             UUID.randomUUID(),
             Item(id = UUID.randomUUID(), name = ""),
+            bids = arrayOf(
+                Bid(
+                    UUID.randomUUID(),
+                    11f,
+                    1,
+                    ZonedDateTime.now().minusDays(5)
+                ),
+                Bid(
+                    UUID.randomUUID(),
+                    12f,
+                    2,
+                    ZonedDateTime.now().minusDays(4)
+                ),
+                Bid(
+                    UUID.randomUUID(),
+                    13f,
+                    1,
+                    ZonedDateTime.now().minusDays(3)
+                ),
+                Bid(
+                    UUID.randomUUID(),
+                    14f,
+                    2,
+                    ZonedDateTime.now().minusDays(2)
+                ),
+                Bid(
+                    UUID.randomUUID(),
+                    15f,
+                    1,
+                    ZonedDateTime.now().minusDays(1)
+                ),
+                Bid(
+                    UUID.randomUUID(),
+                    16f,
+                    3,
+                    ZonedDateTime.now().minusDays(1)
+                ),
+            ),
             endingDate = LocalDate.now(),
             expired = false,
             auctionType = AuctionType.English
         )
     )
+    var selectedAuctionBidders: List<ObservedUser> = listOf(
+        ObservedUser(1,"Pippo", bio = "bio test 1"),
+        ObservedUser(2,"Paperino", bio = "bio test 2"),
+        ObservedUser(3,"Pluto", bio = "bio test 3"),
+
+    ) //need to write a function that takes all the users ID available in selectedAuction.bids and then make requests to the server based on those IDs to fill this list
+
+
+
     var auctionSearchResult: Array<Auction> = arrayOf()
     var auctionCreatedByUser: Array<Auction> = arrayOf(
         Auction(

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,12 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BidHistoryElement(
     bidderName: String,
+    bidValue: Float,
     onShowDetails: () -> Unit,
     onAcceptOffer: () -> Unit,
     onUserInfo: () -> Unit
@@ -42,6 +45,7 @@ fun BidHistoryElement(
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(text = bidderName)
+        Text(text = bidValue.toString(), modifier = Modifier.padding(horizontal = 6.dp), fontWeight = FontWeight(600))
         Spacer(modifier = Modifier.weight(1f))
         Box {
             IconButton(onClick = { expanded = true }) {
