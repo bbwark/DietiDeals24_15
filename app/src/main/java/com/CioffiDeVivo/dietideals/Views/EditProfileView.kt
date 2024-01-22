@@ -80,7 +80,7 @@ fun EditProfileLayout(){
     Spacer(modifier = Modifier.height(40.dp))
     DescriptionTextfield(maxDescriptionCharacters = 100)
     Spacer(modifier = Modifier.height(40.dp))
-    PasswordsTextfields(true)
+    //PasswordsTextfields(true)
     Spacer(modifier = Modifier.height(40.dp))
     Button(onClick = { /*TODO*/ }) {
         Text(text = stringResource(id = R.string.saveChanges))

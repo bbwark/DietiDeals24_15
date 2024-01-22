@@ -4,14 +4,16 @@ import java.util.UUID
 
 data class UserTest(
     val id: UUID = UUID.randomUUID(),
-    var name: String = "",
-    var surname: String = "",
-    var email: String = "",
-    var password: String = "",
-    var isSeller: Boolean = false,
-    var favouriteAuctions: Array<Auction> = arrayOf(),
-    var bio: String? = "",
-    var address: String? = "",
-    var phoneNumber: String? = "",
-    var creditCards: Array<CreditCard> = arrayOf()
+    val name: String = "",
+    val surname: String = "",
+    val email: String = "",
+    val password: String = "",
+    val isSeller: Boolean = false,
+    val favouriteAuctions: Array<Auction>? = arrayOf(),
+    val bio: String = "",
+    val address: String = "",
+    val zipCode: String = "",
+    val country: String = "",
+    val phoneNumber: String = "",
+    val creditCards: Array<CreditCardTest> = arrayOf()
 )

@@ -9,30 +9,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowCircleDown
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
+import com.CioffiDeVivo.dietideals.R
 
 @Composable
-fun ContactInfo(
-    user: UserTest,
-    addressOnChange: (String) -> Unit,
-    zipCodeOnChange: (String) -> Unit,
-    countryOnChange: (String) -> Unit,
-    phoneNumberOnChange: (String) -> Unit
+fun CreditCardFields(
+    creditCard: Array<CreditCardTest>,
+    numberOnChange: (String) -> Unit,
+    dateOnChange: (String) -> Unit,
+    cvvOnChange: (String) -> Unit,
+    ibanOnChange: (String) -> Unit
 ){
-
+    Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
-        value = user.address,
-        onValueChange = { addressOnChange(it) },
+        value = creditCard[0].creditCardNumber,
+        onValueChange = { numberOnChange(it) },
         singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         trailingIcon = {
             Icon(
                 Icons.Rounded.Clear,
@@ -40,16 +42,16 @@ fun ContactInfo(
                 modifier = Modifier.clickable{  }
             )
         },
+        label = { Text(stringResource(R.string.creditcard)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 30.dp, end = 30.dp),
-        label = { Text("Address") },
     )
     Spacer(modifier = Modifier.height(10.dp))
     Row {
         OutlinedTextField(
-            value = user.zipCode,
-            onValueChange = { zipCodeOnChange(it) },
+            value = creditCard[0].expirationDate,
+            onValueChange = { dateOnChange(it) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
@@ -60,42 +62,37 @@ fun ContactInfo(
                 )
             },
             modifier = Modifier.width(150.dp),
-            label = { Text("Zip Code") },
+            label = { Text(stringResource(R.string.expirationdate)) },
         )
         Spacer(modifier = Modifier.width(30.dp))
         OutlinedTextField(
-            value = user.country,
-            onValueChange = { countryOnChange(it) },
+            value = creditCard[0].cvv,
+            onValueChange = { cvvOnChange(it) },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
                 Icon(
-                    Icons.Rounded.ArrowCircleDown,
+                    Icons.Rounded.Clear,
                     contentDescription = null,
-                    modifier = Modifier
-                        .clickable { /*Lista di paesi*/ }
-                        .pulsateClick()
+                    modifier = Modifier.clickable{  }
                 )
             },
             modifier = Modifier.width(150.dp),
-            label = { Text("Country") },
+            label = { Text(stringResource(R.string.cvv)) },
+        )
+        OutlinedTextField(
+            value = creditCard[0].iban,
+            onValueChange = { ibanOnChange(it) },
+            singleLine = true,
+            trailingIcon = {
+                Icon(
+                    Icons.Rounded.Clear,
+                    contentDescription = null,
+                    modifier = Modifier.clickable{  }
+                )
+            },
+            modifier = Modifier.width(150.dp),
+            label = { Text(stringResource(R.string.cvv)) },
         )
     }
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = user.phoneNumber,
-        onValueChange = { phoneNumberOnChange(it) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{  }
-            )
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 30.dp, end = 30.dp),
-        label = { Text("Phone Number") },
-    )
 }

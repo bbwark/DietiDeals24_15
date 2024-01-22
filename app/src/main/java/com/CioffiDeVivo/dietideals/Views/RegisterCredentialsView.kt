@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,7 +22,6 @@ import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -40,24 +40,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
+import com.CioffiDeVivo.dietideals.Components.CreditCardFields
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.CreditCard
+import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
-import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
 
-    val usertest by viewModel.user1.collectAsState()
+    val userRegistrationState by viewModel.userState.collectAsState()
+    val userCreditCardState by viewModel.creditCardState.collectAsState()
     val isEnabled by remember { mutableStateOf(true) }
     var isSellerButton by remember { mutableStateOf(false) }
 
@@ -71,32 +70,44 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
         InputTextField(
-            value = usertest.email,
+            value = userRegistrationState.email,
             onValueChanged = { viewModel.onAction(RegistrationEvent.EmailChanged(it)) },
-            label = "Email"
+            label = stringResource(R.string.email)
         )
         InputTextField(
-            value = usertest.name,
+            value = userRegistrationState.name,
             onValueChanged = { viewModel.onAction(RegistrationEvent.NameChanged(it)) },
-            label = "Name"
+            label = stringResource(R.string.name)
         )
         InputTextField(
-            value = usertest.surname,
+            value = userRegistrationState.surname,
             onValueChanged = { viewModel.onAction(RegistrationEvent.SurnameChanged(it)) },
-            label = "Surname"
+            label = stringResource(R.string.surname)
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        PasswordsTextfields(
+            password = userRegistrationState.password,
+            passwordOnChange = { viewModel.onAction(RegistrationEvent.PasswordChanged(it)) },
+            isToChangePassword = false
+        )
         if(isSellerButton){
-            SellerAccountComposables()
+            ContactInfo(
+                user = userRegistrationState,
+                addressOnChange = { viewModel.onAction(RegistrationEvent.AddressChanged(it)) },
+                zipCodeOnChange = { viewModel.onAction(RegistrationEvent.ZipCodeChanged(it)) },
+                countryOnChange = { viewModel.onAction(RegistrationEvent.CountryChanged(it)) },
+                phoneNumberOnChange = { viewModel.onAction(RegistrationEvent.PhoneNumberChanged(it)) }
+            )
+            CreditCardFields(
+                creditCard = userRegistrationState.creditCards,
+                numberOnChange = {},
+                dateOnChange = {},
+                cvvOnChange = {},
+                ibanOnChange = {}
+            )
         }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {  },
-            enabled = if( viewModel.user.name.isNotEmpty() && viewModel.user.email.isNotEmpty() && viewModel.user.password.isNotEmpty()){
-                isEnabled
-            }else{
-                !isEnabled
-            },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -142,111 +153,28 @@ fun InputTextField(
     value: String,
     onValueChanged: (String) -> Unit,
     label: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ){
-    Column {
-        OutlinedTextField(
-            value = value,
-            onValueChange = {
-                onValueChanged(it)
-            },
-            label = { Text(label) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 50.dp, end = 50.dp)
-        )
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun BuyerComposables(
-
-) {
-
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onValueChanged(it) },
+        label = { Text(label) },
+        singleLine = true,
+        trailingIcon = {
+                       Icon(
+                           Icons.Rounded.Clear,
+                           contentDescription = null,
+                           modifier = Modifier.clickable {  }
+                       )
+        },
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp)
+    )
     Spacer(modifier = Modifier.height(10.dp))
-    PasswordsTextfields(isToChangePassword = false)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SellerAccountComposables(){
-
-    var creditCardNumber by remember { mutableStateOf("") }
-    var creditCardCvv by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("Open date picker dialog") }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var expirationDate by remember { mutableStateOf("") }
-
-
-    ContactInfo()
-    Spacer(modifier = Modifier.height(10.dp))
-    Row (
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        OutlinedTextField(
-            value = creditCardNumber,
-            onValueChange = { creditCardNumber = it },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{ creditCardNumber = ""}
-                )
-            },
-            modifier = Modifier.width(200.dp),
-            label = { Text("Credit Card") },
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Column {
-            OutlinedTextField(
-                value = expirationDate,
-                onValueChange = { expirationDate = it },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = {
-                    Icon(
-                        Icons.Rounded.CalendarMonth,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable { showDatePicker = true }
-                            .pulsateClick(),
-                    )
-                },
-                modifier = Modifier.size(width = 110.dp, height = 40.dp),
-                label = { Text(
-                    "MM/AA",
-                    fontSize = 8.sp
-                    ) },
-            )
-            if(showDatePicker){
-                MyDatePickerDialog(
-                    onDateSelected = { date = it },
-                    onDismiss = { showDatePicker = false }
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            OutlinedTextField(
-                value = creditCardCvv,
-                onValueChange = { creditCardCvv = it },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = {
-                    Icon(
-                        Icons.Rounded.Clear,
-                        contentDescription = null,
-                        modifier = Modifier.clickable{ creditCardCvv = ""}
-                    )
-                },
-                modifier = Modifier.size(width = 110.dp, height = 40.dp),
-                label = { Text(
-                    "CVV",
-                    fontSize = 8.sp
-                ) },            )
-        }
-    }
 }
 
 

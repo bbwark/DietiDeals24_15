@@ -31,7 +31,7 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavContro
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        ContactInfo()
+        //ContactInfo()
         Spacer(modifier = Modifier.height(40.dp))
         Button(onClick = { /*TODO*/ }) {
             Text(text = stringResource(id = R.string.saveChanges))

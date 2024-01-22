@@ -2,7 +2,9 @@ package com.CioffiDeVivo.dietideals.Components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -25,17 +27,18 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PasswordsTextfields(
+    password: String,
+    passwordOnChange: (String) -> Unit,
     isToChangePassword: Boolean
 ){
 
-    var password by remember{ mutableStateOf("") }
-    var newPassword by remember{ mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var newpasswordVisible by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = password,
-        onValueChange = { password = it },
+        onValueChange = { passwordOnChange(it) },
         label = {
             if (isToChangePassword){
                 Text(text = "Old Password")
@@ -68,9 +71,11 @@ fun PasswordsTextfields(
                 Icon(imageVector  = image, descriptionPass)
             }
         },
-        modifier = Modifier.width(320.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp)
     )
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
         value = newPassword,
         onValueChange = { newPassword = it },
@@ -104,6 +109,8 @@ fun PasswordsTextfields(
                 Icon(imageVector  = image, descriptionNewPass)
             }
         },
-        modifier = Modifier.width(320.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp)
     )
 }

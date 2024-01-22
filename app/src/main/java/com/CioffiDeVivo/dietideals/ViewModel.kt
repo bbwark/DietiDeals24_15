@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
+import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
@@ -24,9 +25,11 @@ import java.util.UUID
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
 
-    var creditCard by mutableStateOf(CreditCard("", "", LocalDate.now()))
-    private val _user1 = MutableStateFlow(UserTest())
-    val user1: StateFlow<UserTest> = _user1.asStateFlow()
+    private val _userState = MutableStateFlow(UserTest())
+    val userState: StateFlow<UserTest> = _userState.asStateFlow()
+    private val _creditCardState = MutableStateFlow(CreditCardTest())
+    val creditCardState: StateFlow<CreditCardTest> = _creditCardState.asStateFlow()
+
     var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
         User(
@@ -83,62 +86,52 @@ class DietiDealsViewModel : ViewModel() {
     fun onAction(registrationEvent: RegistrationEvent){
         when(registrationEvent){
             is RegistrationEvent.EmailChanged -> {
-                _user1.value = _user1.value.copy(
+                _userState.value = _userState.value.copy(
                     email = registrationEvent.email
                 )
             }
             is RegistrationEvent.NameChanged -> {
-                _user1.value = _user1.value.copy(
+                _userState.value = _userState.value.copy(
                     name = registrationEvent.name
                 )
             }
             is RegistrationEvent.SurnameChanged -> {
-                _user1.value = _user1.value.copy(
+                _userState.value = _userState.value.copy(
                     surname = registrationEvent.surname
                 )
             }
+            is RegistrationEvent.PasswordChanged -> {
+                _userState.value = _userState.value.copy(
+                    password = registrationEvent.password
+                )
+            }
+            is RegistrationEvent.AddressChanged -> {
+                _userState.value = _userState.value.copy(
+                    address = registrationEvent.address
+                )
+            }
+            is RegistrationEvent.ZipCodeChanged -> {
+                _userState.value = _userState.value.copy(
+                    zipCode = registrationEvent.zipCode
+                )
+            }
+            is RegistrationEvent.CountryChanged -> {
+                _userState.value = _userState.value.copy(
+                    country = registrationEvent.country
+                )
+            }
+            is RegistrationEvent.PhoneNumberChanged -> {
+                _userState.value = _userState.value.copy(
+                    phoneNumber = registrationEvent.phoneNumber
+                )
+            }
+
             else -> {
                 validateUserRegistration()
             }
         }
     }
     fun validateUserRegistration(){
-
-    }
-
-    fun updateEmailTextField(stringEmailChanged: String){
-         _user1.value = _user1.value.copy(
-             email = stringEmailChanged
-         )
-    }
-
-    fun updateNameTextField(stringNameChanged: String){
-        _user1.value = _user1.value.copy(
-            name = stringNameChanged
-        )
-    }
-
-    fun updateSurnameTextField(stringSurnameChanged: String){
-        _user1.value = _user1.value.copy(
-            surname = stringSurnameChanged
-        )
-    }
-
-    fun cancelEmailTextField(){
-        _user1.value = _user1.value.copy(
-            email = ""
-        )
-    }
-
-    fun cancelNameTextField(){
-        _user1.value = _user1.value.copy(
-            name = ""
-        )
-    }
-
-    fun cancelSurnameTextField(){
-        _user1.value = _user1.value.copy(
-            surname = ""
-        )
+        /*ToDO a validation for every camp*/
     }
 }
