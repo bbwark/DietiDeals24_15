@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,7 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -36,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,11 +41,9 @@ import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.CreditCardFields
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -71,31 +66,31 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
         Spacer(modifier = Modifier.height(30.dp))
         InputTextField(
             value = userRegistrationState.email,
-            onValueChanged = { viewModel.onAction(RegistrationEvent.EmailChanged(it)) },
+            onValueChanged = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
             label = stringResource(R.string.email)
         )
         InputTextField(
             value = userRegistrationState.name,
-            onValueChanged = { viewModel.onAction(RegistrationEvent.NameChanged(it)) },
+            onValueChanged = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
             label = stringResource(R.string.name)
         )
         InputTextField(
             value = userRegistrationState.surname,
-            onValueChanged = { viewModel.onAction(RegistrationEvent.SurnameChanged(it)) },
+            onValueChanged = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
             label = stringResource(R.string.surname)
         )
         PasswordsTextfields(
             password = userRegistrationState.password,
-            passwordOnChange = { viewModel.onAction(RegistrationEvent.PasswordChanged(it)) },
+            passwordOnChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
             isToChangePassword = false
         )
         if(isSellerButton){
             ContactInfo(
                 user = userRegistrationState,
-                addressOnChange = { viewModel.onAction(RegistrationEvent.AddressChanged(it)) },
-                zipCodeOnChange = { viewModel.onAction(RegistrationEvent.ZipCodeChanged(it)) },
-                countryOnChange = { viewModel.onAction(RegistrationEvent.CountryChanged(it)) },
-                phoneNumberOnChange = { viewModel.onAction(RegistrationEvent.PhoneNumberChanged(it)) }
+                addressOnChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
+                zipCodeOnChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
+                countryOnChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
+                phoneNumberOnChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) }
             )
             CreditCardFields(
                 creditCard = userRegistrationState.creditCards,

@@ -19,14 +19,16 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DescriptionTextfield(
+    description: String,
+    descriptionOnChange: (String) -> Unit,
     maxDescriptionCharacters: Int
 ){
-    var description by remember{ mutableStateOf("") }
+
     OutlinedTextField(
         value = description,
         onValueChange = {
             if(it.length <= maxDescriptionCharacters){
-                description = it
+                descriptionOnChange(it)
             }
         },
         supportingText = {
@@ -42,7 +44,7 @@ fun DescriptionTextfield(
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable{description = ""}
+                modifier = Modifier.clickable{}
             )
         },
         modifier = Modifier.size(320.dp,200.dp),

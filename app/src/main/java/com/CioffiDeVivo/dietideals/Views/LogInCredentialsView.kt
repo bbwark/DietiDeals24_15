@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.DataModels.LoginEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
@@ -51,6 +53,7 @@ import com.CioffiDeVivo.dietideals.R
 @Composable
 fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavController){
 
+    val userLoginState by viewModel.userState.collectAsState()
     val isEnabled by remember { mutableStateOf(true) }
 
     Column(
@@ -60,7 +63,16 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavContr
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.welcome))
         Spacer(modifier = Modifier.height(30.dp))
-        LogInCredentialsComposables(viewModel.user)
+        InputTextField(
+            value = userLoginState.email,
+            onValueChanged = { viewModel.loginAction(LoginEvent.EmailChanged(it)) },
+            label = stringResource(R.string.email)
+        )
+        InputTextField(
+            value = userLoginState.password,
+            onValueChanged = { viewModel.loginAction(LoginEvent.PasswordChanged(it)) },
+            label = stringResource(R.string.password)
+        )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = { /*TODO*/ },

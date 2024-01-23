@@ -174,7 +174,7 @@ fun SilentAuction(){
         }
     }
     Spacer(modifier = Modifier.size(15.dp))
-    DescriptionTextfield(maxDescriptionCharacters = 200)
+    //DescriptionTextfield(maxDescriptionCharacters = 200)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -227,7 +227,7 @@ fun EnglishAuction(){
         label = { Text("Ending Date") },
     )
     Spacer(modifier = Modifier.size(15.dp))
-    DescriptionTextfield(maxDescriptionCharacters = 200)
+    //DescriptionTextfield(maxDescriptionCharacters = 200)
     Spacer(modifier = Modifier.height(30.dp))
     Button(
         onClick = { /*TODO*/ },

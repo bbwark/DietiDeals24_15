@@ -11,14 +11,16 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
+import com.CioffiDeVivo.dietideals.DataModels.EditProfileEvent
 import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DataModels.LoginEvent
 import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 import java.util.UUID
 
@@ -83,7 +85,76 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
 
-    fun onAction(registrationEvent: RegistrationEvent){
+    fun editContactInfoAction(editContactInfoEvents: EditContactInfoEvents){
+        when(editContactInfoEvents){
+            is EditContactInfoEvents.AddressChanged -> {
+                _userState.value = _userState.value.copy(
+                    address = editContactInfoEvents.address
+                )
+            }
+            is EditContactInfoEvents.ZipCodeChanged -> {
+                _userState.value = _userState.value.copy(
+                    zipCode = editContactInfoEvents.zipcode
+                )
+            }
+            is EditContactInfoEvents.CountryChanged -> {
+                _userState.value = _userState.value.copy(
+                    country = editContactInfoEvents.country
+                )
+            }
+            is EditContactInfoEvents.PhoneNumberChanged -> {
+                _userState.value = _userState.value.copy(
+                    phoneNumber = editContactInfoEvents.phoneNumber
+                )
+            }
+            else -> {
+                validateEditContactInfo()
+            }
+        }
+    }
+
+    fun editProfileAction(editProfileEvent: EditProfileEvent){
+        when(editProfileEvent){
+            is EditProfileEvent.NameChanged -> {
+                _userState.value = _userState.value.copy(
+                    email = editProfileEvent.name
+                )
+            }
+            is EditProfileEvent.PasswordChanged -> {
+                _userState.value = _userState.value.copy(
+                    password = editProfileEvent.password
+                )
+            }
+            is EditProfileEvent.DescriptionChanged -> {
+                _userState.value = _userState.value.copy(
+                    bio = editProfileEvent.description
+                )
+            }
+            else -> {
+                validateEditProfile()
+            }
+        }
+    }
+
+    fun loginAction(loginEvent: LoginEvent){
+        when(loginEvent){
+            is LoginEvent.EmailChanged -> {
+                _userState.value = _userState.value.copy(
+                    email = loginEvent.email
+                )
+            }
+            is LoginEvent.PasswordChanged -> {
+                _userState.value = _userState.value.copy(
+                    password = loginEvent.password
+                )
+            }
+            else -> {
+                validateUserLogin()
+            }
+        }
+    }
+
+    fun registrationAction(registrationEvent: RegistrationEvent){
         when(registrationEvent){
             is RegistrationEvent.EmailChanged -> {
                 _userState.value = _userState.value.copy(
@@ -131,6 +202,19 @@ class DietiDealsViewModel : ViewModel() {
             }
         }
     }
+
+    fun validateEditContactInfo(){
+
+    }
+
+    fun validateEditProfile(){
+
+    }
+
+    fun validateUserLogin(){
+
+    }
+
     fun validateUserRegistration(){
         /*ToDO a validation for every camp*/
     }
