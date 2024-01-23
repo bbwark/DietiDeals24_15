@@ -45,7 +45,11 @@ fun BidHistoryElement(
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(text = bidderName)
-        Text(text = bidValue.toString(), modifier = Modifier.padding(horizontal = 6.dp), fontWeight = FontWeight(600))
+        Text(
+            text = bidValue.toString(),
+            modifier = Modifier.padding(horizontal = 6.dp),
+            fontWeight = FontWeight(600)
+        )
         Spacer(modifier = Modifier.weight(1f))
         Box {
             IconButton(onClick = { expanded = true }) {
@@ -58,9 +62,18 @@ fun BidHistoryElement(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                DropdownMenuItem(text = { Text(text = "Show Details") }, onClick = { onShowDetails() })
-                DropdownMenuItem(text = { Text(text = "Accept This Offer") }, onClick = { onAcceptOffer() })
-                DropdownMenuItem(text = { Text(text = "User Ifno") }, onClick = { onUserInfo() })
+                DropdownMenuItem(text = { Text(text = "Show Details") }, onClick = {
+                    expanded = false
+                    onShowDetails()
+                })
+                DropdownMenuItem(text = { Text(text = "Accept This Offer") }, onClick = {
+                    expanded = false
+                    onAcceptOffer()
+                })
+                DropdownMenuItem(text = { Text(text = "User Ifno") }, onClick = {
+                    expanded = false
+                    onUserInfo()
+                })
             }
         }
     }
