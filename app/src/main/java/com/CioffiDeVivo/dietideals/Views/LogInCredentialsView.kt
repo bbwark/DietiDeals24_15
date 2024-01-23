@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Clear
@@ -42,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.LoginEvent
@@ -66,12 +70,20 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavContr
         InputTextField(
             value = userLoginState.email,
             onValueChanged = { viewModel.loginAction(LoginEvent.EmailChanged(it)) },
-            label = stringResource(R.string.email)
+            label = stringResource(R.string.email),
+            trailingIcon = Icons.Filled.Clear,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp)
         )
         InputTextField(
             value = userLoginState.password,
             onValueChanged = { viewModel.loginAction(LoginEvent.PasswordChanged(it)) },
-            label = stringResource(R.string.password)
+            label = stringResource(R.string.password),
+            trailingIcon = Icons.Filled.Clear,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp)
         )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
@@ -108,50 +120,6 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavContr
             }
         }
     }
-}
-
-@Composable
-fun LogInCredentialsComposables(
-    user: User
-){
-
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-    OutlinedTextField(
-        value = user.email,
-        onValueChange = { user.email = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{user.email = ""}
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Email") },
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = user.password,
-        onValueChange = { user.password = it },
-        label = { Text("Password") },
-        singleLine = true,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            val image = if(passwordVisible){
-                Icons.Filled.Visibility
-            }else{
-                Icons.Filled.VisibilityOff
-            }
-            val description = if (passwordVisible) "Hide password" else "Show password"
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(imageVector  = image, description)
-            }
-        },
-        modifier = Modifier.width(320.dp),
-    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

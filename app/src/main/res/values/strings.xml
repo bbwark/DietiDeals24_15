@@ -29,4 +29,6 @@
     <string name="expirationdate">E. Date</string>
     <string name="cvv">CVV</string>
     <string name="phonenumber">Phone Number</string>
+    <string name="passcharacters">8-16 Characters</string>
+    <string name="areYouSeller">Are you a Seller?</string>
 </resources>

@@ -8,6 +8,7 @@ data class UserTest(
     val surname: String = "",
     val email: String = "",
     val password: String = "",
+    val newPassword: String = "",
     val isSeller: Boolean = false,
     val favouriteAuctions: Array<Auction>? = arrayOf(),
     val bio: String = "",

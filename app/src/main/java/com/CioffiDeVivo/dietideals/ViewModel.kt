@@ -176,6 +176,11 @@ class DietiDealsViewModel : ViewModel() {
                     password = registrationEvent.password
                 )
             }
+            is RegistrationEvent.NewPasswordChanged -> {
+                _userState.value = _userState.value.copy(
+                    newPassword = registrationEvent.newPassword
+                )
+            }
             is RegistrationEvent.AddressChanged -> {
                 _userState.value = _userState.value.copy(
                     address = registrationEvent.address
@@ -196,7 +201,31 @@ class DietiDealsViewModel : ViewModel() {
                     phoneNumber = registrationEvent.phoneNumber
                 )
             }
-
+            is RegistrationEvent.CreditCardNumberChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = registrationEvent.creditCardNumber
+                )
+            }
+            is RegistrationEvent.ExpirationDateChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = registrationEvent.expirationDate
+                )
+            }
+            is RegistrationEvent.CvvChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = registrationEvent.cvv
+                )
+            }
+            is RegistrationEvent.IbanChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = registrationEvent.iban
+                )
+            }
+            is RegistrationEvent.SellerChange -> {
+                _userState.value = _userState.value.copy(
+                    isSeller = registrationEvent.isSeller
+                )
+            }
             else -> {
                 validateUserRegistration()
             }

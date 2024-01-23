@@ -20,79 +20,41 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.modifierStandard
 
 @Composable
 fun CreditCardFields(
-    creditCard: Array<CreditCardTest>,
-    numberOnChange: (String) -> Unit,
-    dateOnChange: (String) -> Unit,
-    cvvOnChange: (String) -> Unit,
-    ibanOnChange: (String) -> Unit
+    creditCard: CreditCardTest,
+    onNumberChange: (String) -> Unit,
+    onDateChange: (String) -> Unit,
+    onCvvChange: (String) -> Unit,
+    onIbanChange: (String) -> Unit
 ){
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = creditCard[0].creditCardNumber,
-        onValueChange = { numberOnChange(it) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{  }
-            )
-        },
-        label = { Text(stringResource(R.string.creditcard)) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 30.dp, end = 30.dp),
+    InputTextField(
+        value = creditCard.creditCardNumber,
+        onValueChanged = { onNumberChange(it) },
+        label = stringResource(R.string.address),
+        modifier = modifierStandard
     )
-    Spacer(modifier = Modifier.height(10.dp))
     Row {
-        OutlinedTextField(
-            value = creditCard[0].expirationDate,
-            onValueChange = { dateOnChange(it) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{  }
-                )
-            },
-            modifier = Modifier.width(150.dp),
-            label = { Text(stringResource(R.string.expirationdate)) },
+        InputTextField(
+            value = creditCard.expirationDate,
+            onValueChanged = { onDateChange(it) },
+            label = stringResource(R.string.zipcode),
+            modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
-        OutlinedTextField(
-            value = creditCard[0].cvv,
-            onValueChange = { cvvOnChange(it) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{  }
-                )
-            },
-            modifier = Modifier.width(150.dp),
-            label = { Text(stringResource(R.string.cvv)) },
-        )
-        OutlinedTextField(
-            value = creditCard[0].iban,
-            onValueChange = { ibanOnChange(it) },
-            singleLine = true,
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{  }
-                )
-            },
-            modifier = Modifier.width(150.dp),
-            label = { Text(stringResource(R.string.cvv)) },
+        InputTextField(
+            value = creditCard.cvv,
+            onValueChanged = { onCvvChange(it) },
+            label = stringResource(R.string.country),
+            modifier = Modifier.width(150.dp)
         )
     }
+    InputTextField(
+        value = creditCard.iban,
+        onValueChanged = { onIbanChange(it) },
+        label = stringResource(R.string.phonenumber),
+        modifier = modifierStandard
+    )
 }
