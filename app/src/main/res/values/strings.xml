@@ -17,4 +17,5 @@
     <string name="saveChanges">Save Changes</string>
     <string name="manageCards">Manage Cards</string>
     <string name="sellView">Your Auctions</string>
+    <string name="bidHistory">Bid History</string>
 </resources>
