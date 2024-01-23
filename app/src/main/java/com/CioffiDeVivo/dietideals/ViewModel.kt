@@ -12,10 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
@@ -42,11 +45,21 @@ class DietiDealsViewModel : ViewModel() {
             UUID.randomUUID(),
             UUID.randomUUID(),
             Item(id = UUID.randomUUID(), name = ""),
+            bids = arrayOf(
+                Bid(
+                    UUID.randomUUID(),
+                    11f,
+                    UUID.randomUUID(),
+                    ZonedDateTime.now().minusDays(5)
+                )
+            ),
             endingDate = LocalDate.now(),
             expired = false,
             auctionType = AuctionType.English
         )
     )
+    var selectedAuctionBidders: List<ObservedUser> = listOf() //need to write a function that takes all the users ID available in selectedAuction.bids and then make requests to the server based on those IDs to fill this list
+
     var auctionSearchResult: Array<Auction> = arrayOf()
     var auctionCreatedByUser: Array<Auction> = arrayOf(
         Auction(

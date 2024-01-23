@@ -66,11 +66,10 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
 
 @Composable
 fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navController: NavHostController) {
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = auctionItemName,
             modifier = Modifier
-                .padding(start = 8.dp)
                 .weight(1f)
                 .clickable { /*navigate to auction*/ },
             fontSize = 14.sp,
@@ -78,12 +77,6 @@ fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navContr
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
-        IconButton(onClick = { /*Open a Menu that will allow to directly show bid history or other options*/ }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-        }
     }
 }
 

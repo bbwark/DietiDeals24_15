@@ -72,14 +72,12 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
             auctionType = auction.auctionType
         )
 
-        val tempBid =
-            Bid(UUID.randomUUID(), 100.30f, UUID.randomUUID(), ZonedDateTime.now().minusMinutes(10))
         Row(
             Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
             when (auction.auctionType) {
-                AuctionType.English -> EnglishAuctionBody(lastBid = tempBid) //temporary bid
+                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
                 AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
             }
             if (isOwner) {
@@ -138,13 +136,22 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
 }
 
 @Composable
-fun EnglishAuctionBody(lastBid: Bid) {
+fun EnglishAuctionBody(lastBid: Bid?) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-        Text(
-            text = lastBid.value.toString() + " EUR",
-            fontSize = 32.sp,
-            fontWeight = FontWeight(700)
-        )
+        if (lastBid != null) {
+            Text(
+                text = "${lastBid.value} EUR",
+                fontSize = 32.sp,
+                fontWeight = FontWeight(700)
+            )
+        } else {
+            Text(
+                text = "0 EUR",
+                fontSize = 32.sp,
+                fontWeight = FontWeight(700)
+            )
+
+        }
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = "Remaining Time: ", fontSize = 12.sp)
             Text(
