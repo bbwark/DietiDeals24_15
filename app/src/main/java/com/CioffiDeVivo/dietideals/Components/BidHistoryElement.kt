@@ -70,7 +70,7 @@ fun BidHistoryElement(
                     expanded = false
                     onAcceptOffer()
                 })
-                DropdownMenuItem(text = { Text(text = "User Ifno") }, onClick = {
+                DropdownMenuItem(text = { Text(text = "User Info") }, onClick = {
                     expanded = false
                     onUserInfo()
                 })

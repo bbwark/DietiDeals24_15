@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
+import com.CioffiDeVivo.dietideals.Components.userInfoBottomSheet
 import com.CioffiDeVivo.dietideals.DataModels.Bid
+import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -42,8 +44,8 @@ fun BidHistoryView(viewModel: DietiDealsViewModel) {
     var userInfo by remember { mutableStateOf(false) }
 
     var bidderName by remember { mutableStateOf("") }
-    var selectedBid by
-        remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, 1, ZonedDateTime.now())) }
+    var selectedBid by remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, 1, ZonedDateTime.now())) }
+    var selectedUser by remember { mutableStateOf(ObservedUser(1, "")) }
 
     Box {
         LazyColumn(
@@ -69,7 +71,10 @@ fun BidHistoryView(viewModel: DietiDealsViewModel) {
                                 selectedBid = item
                                 acceptOffer = true
                             },
-                            onUserInfo = { /* opens a sheet where user can read bidder's info */ }
+                            onUserInfo = {
+                                selectedUser = it
+                                userInfo = true
+                            }
                         )
                     }
                     HorizontalDivider()
@@ -92,7 +97,12 @@ fun BidHistoryView(viewModel: DietiDealsViewModel) {
                 }
             )
         }
-
+        if (userInfo) {
+            userInfoBottomSheet(
+                observedUser = selectedUser,
+                onDismissRequest = { userInfo = false }
+            )
+        }
     }
 }
 

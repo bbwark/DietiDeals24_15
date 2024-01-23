@@ -89,7 +89,7 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
     var selectedAuctionBidders: List<ObservedUser> = listOf(
-        ObservedUser(1,"Pippo", bio = "bio test 1"),
+        ObservedUser(1,"Pippo", true, "bio test 1"),
         ObservedUser(2,"Paperino", bio = "bio test 2"),
         ObservedUser(3,"Pluto", bio = "bio test 3"),
 
