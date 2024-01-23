@@ -44,8 +44,8 @@ fun BidHistoryView(viewModel: DietiDealsViewModel) {
     var userInfo by remember { mutableStateOf(false) }
 
     var bidderName by remember { mutableStateOf("") }
-    var selectedBid by remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, 1, ZonedDateTime.now())) }
-    var selectedUser by remember { mutableStateOf(ObservedUser(1, "")) }
+    var selectedBid by remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, UUID.randomUUID(), ZonedDateTime.now())) }
+    var selectedUser by remember { mutableStateOf(ObservedUser(UUID.randomUUID(), "")) }
 
     Box {
         LazyColumn(
