@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.ChevronRight
@@ -85,7 +86,7 @@ fun AccountView(viewModel: DietiDealsViewModel, navController: NavHostController
             navController = navController,
             destinationRoute = Screen.Home.route,
             caption = "Sign Out",
-            icon = Icons.Default.ExitToApp,
+            icon = Icons.AutoMirrored.Filled.ExitToApp,
             showChevron = false,
             destructiveAction = true
         )

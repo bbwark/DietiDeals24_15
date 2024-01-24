@@ -33,13 +33,11 @@ fun ManageCardsView(viewModel: DietiDealsViewModel) {
                     }
                     ManageCardsElement(
                         cardNumber = item.number,
-                        clickOnMore = {/* a menu where you can delete the card has to open */ })
+                        clickOnDelete = {/* delete the card from user's cards */ })
                     HorizontalDivider()
                 }
             })
-        FloatingAddButton(viewModel = viewModel) {
-            // Add New Card
-        }
+        FloatingAddButton(viewModel = viewModel) { /* Add New Card */ }
     }
 }
 

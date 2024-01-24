@@ -35,4 +35,5 @@
     <string name="minStep">Min.Step</string>
     <string name="interval">Interval</string>
     <string name="endingDate">End Date</string>
+    <string name="bidHistory">Bid History</string>
 </resources>

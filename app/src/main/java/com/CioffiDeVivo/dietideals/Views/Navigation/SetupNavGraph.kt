@@ -31,6 +31,7 @@ import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
+import com.CioffiDeVivo.dietideals.Views.BidHistoryView
 import com.CioffiDeVivo.dietideals.Views.CreateAuction
 import com.CioffiDeVivo.dietideals.Views.EditContactInfoView
 import com.CioffiDeVivo.dietideals.Views.EditProfile
@@ -262,6 +263,27 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
             ) {
                 Box(modifier = Modifier.padding(it)) {
                     SellView(viewModel = viewModel, navController = navController)
+                }
+            }
+        }
+        composable(
+            route = Screen.BidHistory.route
+        ) {
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(id = R.string.bidHistory),
+                    destinationRoute = Screen.Auction.route,
+                    navController = navController
+                )
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }) {
+                Box(modifier = Modifier.padding(it)) {
+                    BidHistoryView(viewModel = viewModel)
                 }
             }
         }
