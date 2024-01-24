@@ -1,9 +1,7 @@
 package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
-import android.text.TextUtils
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,19 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckBox
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -35,16 +25,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +39,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
+import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
 val modifierStandard: Modifier = Modifier
@@ -179,20 +162,10 @@ fun PersonalInformation(
         label = stringResource(R.string.surname),
         modifier = modifierStandard
     )
-    InputTextField(
-        value = user.password,
-        onValueChanged = { onPasswordChange(it) },
-        label = stringResource(R.string.password),
-        supportingText = stringResource(R.string.passcharacters),
-        visualTransformation = PasswordVisualTransformation(),
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = user.newPassword,
-        onValueChanged = { onNewPasswordChange(it) },
-        label = stringResource(R.string.rewritepassword),
-        visualTransformation = PasswordVisualTransformation(),
-        modifier = modifierStandard
+    PasswordsTextfields(
+        user = user,
+        onPasswordChange = onPasswordChange,
+        onNewPasswordChange = onNewPasswordChange
     )
 }
 

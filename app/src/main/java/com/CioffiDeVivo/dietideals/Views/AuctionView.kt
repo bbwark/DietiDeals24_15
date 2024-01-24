@@ -81,6 +81,9 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
             when (auction.auctionType) {
                 AuctionType.English -> EnglishAuctionBody(lastBid = tempBid) //temporary bid
                 AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
+                else ->{
+
+                }
             }
             if (isOwner) {
                 Spacer(modifier = Modifier.weight(1f))

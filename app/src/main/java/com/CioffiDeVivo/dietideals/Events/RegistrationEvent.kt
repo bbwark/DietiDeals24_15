@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.DataModels
+package com.CioffiDeVivo.dietideals.Events
 
 sealed class RegistrationEvent {
     data class EmailChanged(val email: String): RegistrationEvent()

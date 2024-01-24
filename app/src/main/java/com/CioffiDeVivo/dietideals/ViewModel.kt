@@ -8,15 +8,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.DataModels.Auction
+import com.CioffiDeVivo.dietideals.DataModels.AuctionTest
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
-import com.CioffiDeVivo.dietideals.DataModels.EditProfileEvent
+import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DataModels.LoginEvent
-import com.CioffiDeVivo.dietideals.DataModels.RegistrationEvent
+import com.CioffiDeVivo.dietideals.DataModels.ItemTest
+import com.CioffiDeVivo.dietideals.Events.LoginEvent
+import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +34,10 @@ class DietiDealsViewModel : ViewModel() {
     val userState: StateFlow<UserTest> = _userState.asStateFlow()
     private val _creditCardState = MutableStateFlow(CreditCardTest())
     val creditCardState: StateFlow<CreditCardTest> = _creditCardState.asStateFlow()
+    private val _auctionState = MutableStateFlow(AuctionTest())
+    val auctionState: StateFlow<AuctionTest> = _auctionState.asStateFlow()
+    private val _itemState = MutableStateFlow(ItemTest())
+    val itemState: StateFlow<ItemTest> = _itemState.asStateFlow()
 
     var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
@@ -85,6 +92,49 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
 
+    fun createAuctionAction(createAuctionEvents: CreateAuctionEvents){
+        when(createAuctionEvents){
+            is CreateAuctionEvents.ItemNameChanged -> {
+                _itemState.value = _itemState.value.copy(
+                    name = createAuctionEvents.itemName
+                )
+            }
+            is CreateAuctionEvents.AuctionTypeChanged -> {
+                _auctionState.value = _auctionState.value.copy(
+                    auctionType = createAuctionEvents.auctionType
+                )
+            }
+            is CreateAuctionEvents.DescriptionChanged -> {
+                _auctionState.value = _auctionState.value.copy(
+                    description = createAuctionEvents.description
+                )
+            }
+            is CreateAuctionEvents.MinStepChanged -> {
+                _auctionState.value = _auctionState.value.copy(
+                    minStep = createAuctionEvents.minStep
+                )
+            }
+            is CreateAuctionEvents.IntervalChanged -> {
+                _auctionState.value = _auctionState.value.copy(
+                    interval = createAuctionEvents.interval
+                )
+            }
+            is CreateAuctionEvents.EndingDateChanged -> {
+                _auctionState.value = _auctionState.value.copy(
+                    endingDate = createAuctionEvents.endingDate
+                )
+            }
+            is CreateAuctionEvents.MinAcceptedChanged ->{
+                _auctionState.value = _auctionState.value.copy(
+                    minAccepted = createAuctionEvents.minAccepted
+                )
+            }
+            else -> {
+                validateCreateAuction()
+            }
+        }
+    }
+
     fun editContactInfoAction(editContactInfoEvents: EditContactInfoEvents){
         when(editContactInfoEvents){
             is EditContactInfoEvents.AddressChanged -> {
@@ -123,6 +173,11 @@ class DietiDealsViewModel : ViewModel() {
             is EditProfileEvent.PasswordChanged -> {
                 _userState.value = _userState.value.copy(
                     password = editProfileEvent.password
+                )
+            }
+            is EditProfileEvent.NewPasswordChanged -> {
+                _userState.value = _userState.value.copy(
+                    newPassword = editProfileEvent.newPassword
                 )
             }
             is EditProfileEvent.DescriptionChanged -> {
@@ -230,6 +285,10 @@ class DietiDealsViewModel : ViewModel() {
                 validateUserRegistration()
             }
         }
+    }
+
+    fun validateCreateAuction(){
+
     }
 
     fun validateEditContactInfo(){

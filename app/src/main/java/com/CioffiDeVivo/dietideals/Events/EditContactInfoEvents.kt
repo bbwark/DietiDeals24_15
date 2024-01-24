@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Events
 
-import com.CioffiDeVivo.dietideals.DataModels.LoginEvent
-
 sealed class EditContactInfoEvents {
     data class AddressChanged(val address: String) : EditContactInfoEvents()
     data class ZipCodeChanged(val zipcode: String) : EditContactInfoEvents()

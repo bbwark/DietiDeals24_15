@@ -31,4 +31,8 @@
     <string name="phonenumber">Phone Number</string>
     <string name="passcharacters">8-16 Characters</string>
     <string name="areYouSeller">Are you a Seller?</string>
+    <string name="itemName">Item Name</string>
+    <string name="minStep">Min.Step</string>
+    <string name="interval">Interval</string>
+    <string name="endingDate">End Date</string>
 </resources>

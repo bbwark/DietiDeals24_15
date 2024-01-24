@@ -47,7 +47,7 @@ fun DescriptionTextfield(
                 modifier = Modifier.clickable{}
             )
         },
-        modifier = Modifier.size(320.dp,200.dp),
+        modifier = Modifier.size(330.dp,200.dp),
         label = { Text("Description") },
     )
 }
