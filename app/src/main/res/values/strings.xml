@@ -17,5 +17,23 @@
     <string name="saveChanges">Save Changes</string>
     <string name="manageCards">Manage Cards</string>
     <string name="sellView">Your Auctions</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="password">Password</string>
+    <string name="rewritepassword">Re-Write Password</string>
+    <string name="address">Address</string>
+    <string name="zipcode">Zip Code</string>
+    <string name="country">Country</string>
+    <string name="creditcard">Credit Card</string>
+    <string name="expirationdate">E. Date</string>
+    <string name="cvv">CVV</string>
+    <string name="phonenumber">Phone Number</string>
+    <string name="passcharacters">8-16 Characters</string>
+    <string name="areYouSeller">Are you a Seller?</string>
+    <string name="itemName">Item Name</string>
+    <string name="minStep">Min.Step</string>
+    <string name="interval">Interval</string>
+    <string name="endingDate">End Date</string>
     <string name="bidHistory">Bid History</string>
 </resources>

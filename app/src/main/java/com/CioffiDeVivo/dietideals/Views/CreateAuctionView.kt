@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
@@ -25,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,50 +42,54 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
+import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.DataModels.AuctionTest
+import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
+fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostController){
 
-    var item: String by remember { mutableStateOf("") }
-    var isTypeAuctionButton by remember { mutableIntStateOf(0) }
+    val createAuctionState by viewModel.auctionState.collectAsState()
+    val itemAuctionState by viewModel.itemState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
+        DetailsViewTopBar(
+            caption = stringResource(R.string.createAuction),
+            destinationRoute = "",
+            navController = navController
+        )
         Row (
             modifier = Modifier.width(300.dp),
-
+            horizontalArrangement = Arrangement.Center
         ){
-
             AddingImagesOnCreateAuction()
         }
         Spacer(modifier = Modifier.height(30.dp))
-        OutlinedTextField(
-            value = item,
-            onValueChange = { item = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{item = ""}
-                )},
-            modifier = Modifier.width(320.dp),
-            label = { Text("Item Name") },
+        InputTextField(
+            value = itemAuctionState.name,
+            onValueChanged = { viewModel.createAuctionAction(CreateAuctionEvents.ItemNameChanged(it)) },
+            label = stringResource(R.string.itemName),
+            modifier = modifierStandard
         )
         Spacer(modifier = Modifier.size(15.dp))
         Row {
             ElevatedButton(
-                onClick = {
-                    isTypeAuctionButton = 1
-                          },
+                onClick = { viewModel.createAuctionAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent)) },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -90,9 +98,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = {
-                    isTypeAuctionButton = 2
-                          },
+                onClick = { viewModel.createAuctionAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English)) },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -102,13 +108,25 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavController){
             }
         }
         Spacer(modifier = Modifier.size(15.dp))
-        if (isTypeAuctionButton == 1){
-            SilentAuction()
+        if(createAuctionState.auctionType == AuctionType.Silent){
+            SilentAuction(
+                auction = createAuctionState,
+                onMinAcceptedChange = { viewModel.createAuctionAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
+                onEndingDateChange = { viewModel.createAuctionAction(CreateAuctionEvents.EndingDateChanged(it)) },
+                onDescriptionChange = { viewModel.createAuctionAction(CreateAuctionEvents.DescriptionChanged(it)) }
+            )
+        } else if (createAuctionState.auctionType == AuctionType.English){
+            EnglishAuction(
+                auction = createAuctionState,
+                onDescriptionChange = { viewModel.createAuctionAction(CreateAuctionEvents.DescriptionChanged(it)) },
+                onMinStepChange = { viewModel.createAuctionAction(CreateAuctionEvents.MinStepChanged(it)) },
+                onIntervalChange = { viewModel.createAuctionAction(CreateAuctionEvents.IntervalChanged(it)) },
+                onEndingDateChange = { viewModel.createAuctionAction(CreateAuctionEvents.EndingDateChanged(it)) }
+            )
         }
-        else if (isTypeAuctionButton == 2){
-            EnglishAuction()
-        }
+        else{
 
+        }
         Button(
             onClick = {  },
             modifier = Modifier
@@ -129,116 +147,72 @@ fun CreateAuctionPreview(){
     CreateAuction(viewModel = DietiDealsViewModel(), navController = rememberNavController())
 }
 
+
 @Composable
-fun SilentAuction(){
-
-    var minAccepted: String by remember { mutableStateOf("Input") }
-    var endingDate: String by remember { mutableStateOf("Input") }
-
+fun SilentAuction(
+    auction: AuctionTest,
+    onMinAcceptedChange: (String) -> Unit,
+    onEndingDateChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit
+){
     Row {
-        OutlinedTextField(
-            value = minAccepted,
-            onValueChange = { minAccepted = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{minAccepted = ""}
-                )},
-            label = { Text("Min. Accepted") },
+        InputTextField(
+            value = auction.minAccepted,
+            onValueChanged = { onMinAcceptedChange(it) },
+            label = stringResource(R.string.minStep),
             modifier = Modifier.width(150.dp)
         )
-        Spacer(modifier = Modifier.size(20.dp))
-        OutlinedTextField(
-            value = endingDate,
-            onValueChange = { endingDate = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(Icons.Rounded.DateRange,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{endingDate = ""}
-                )},
-            label = { Text("Ending Date") },
+        Spacer(modifier = Modifier.width(30.dp))
+        InputTextField(
+            value = auction.endingDate,
+            onValueChanged = { onEndingDateChange(it) },
+            label = stringResource(R.string.endingDate),
             modifier = Modifier.width(150.dp)
-
         )
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.size(width = 200.dp, height = 50.dp),
-        ) {
-            Text(
-                "Add Auction",
-                fontSize = 17.sp
-            )
-        }
     }
-    Spacer(modifier = Modifier.size(15.dp))
-    DescriptionTextfield(maxDescriptionCharacters = 200)
+    DescriptionTextfield(
+        description = auction.description,
+        descriptionOnChange = { onDescriptionChange(it) },
+        maxDescriptionCharacters = 200
+    )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnglishAuction(){
-
-    var minStep: String by remember { mutableStateOf("Input") }
-    var endingDate: String by remember { mutableStateOf("Input") }
-    var interval: String by remember { mutableStateOf("Input") }
-
+fun EnglishAuction(
+    auction: AuctionTest,
+    onDescriptionChange: (String) -> Unit,
+    onMinStepChange: (String) -> Unit,
+    onIntervalChange: (String) -> Unit,
+    onEndingDateChange: (String) -> Unit,
+){
     Row {
-        OutlinedTextField(
-            value = minStep,
-            onValueChange = { minStep = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{minStep = ""}
-                )},
-            label = { Text("Min. Step") },
+        InputTextField(
+            value = auction.minStep,
+            onValueChanged = { onMinStepChange(it) },
+            label = stringResource(R.string.minStep),
             modifier = Modifier.width(150.dp)
         )
-        Spacer(modifier = Modifier.size(20.dp))
-        OutlinedTextField(
-            value = interval,
-            onValueChange = { interval = it },
-            singleLine = true,
-            trailingIcon = {
-                Icon(Icons.Rounded.DateRange,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{interval = ""}
-                )},
-            label = { Text("Interval") },
+        Spacer(modifier = Modifier.width(30.dp))
+        InputTextField(
+            value = auction.interval,
+            onValueChanged = { onIntervalChange(it) },
+            label = stringResource(R.string.interval),
             modifier = Modifier.width(150.dp)
-
         )
     }
-    Spacer(modifier = Modifier.size(15.dp))
-    OutlinedTextField(
-        value = endingDate,
-        onValueChange = { endingDate = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable{endingDate = ""}
-            )},
-        modifier = Modifier.width(320.dp),
-        label = { Text("Ending Date") },
+    InputTextField(
+        value = auction.endingDate,
+        onValueChanged = { onEndingDateChange(it) },
+        label = stringResource(R.string.endingDate),
+        modifier = modifierStandard
     )
-    Spacer(modifier = Modifier.size(15.dp))
-    DescriptionTextfield(maxDescriptionCharacters = 200)
-    Spacer(modifier = Modifier.height(30.dp))
-    Button(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(width = 200.dp, height = 50.dp),
-    ) {
-        Text(
-            "Add Auction",
-            fontSize = 17.sp
-        )
-    }
-
+    DescriptionTextfield(
+        description = auction.description,
+        descriptionOnChange = { onDescriptionChange(it) },
+        maxDescriptionCharacters = 200
+    )
 }
 
 @Composable

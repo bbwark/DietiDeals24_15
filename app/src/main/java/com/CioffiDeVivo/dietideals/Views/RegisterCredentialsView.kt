@@ -2,67 +2,55 @@ package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckBox
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.rounded.CalendarMonth
-import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
+import com.CioffiDeVivo.dietideals.Components.CreditCardFields
+import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.CreditCard
-import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
+import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
+val modifierStandard: Modifier = Modifier
+    .fillMaxWidth()
+    .padding(start = 30.dp, end = 30.dp)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavController){
+fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
 
-    val isEnabled by remember { mutableStateOf(true) }
-    var isSellerButton by remember { mutableStateOf(false) }
+    val userRegistrationState by viewModel.userState.collectAsState()
+    val userCreditCardState by viewModel.creditCardState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,20 +61,56 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        BuyerComposables()
-        Spacer(modifier = Modifier.height(10.dp))
-        if(isSellerButton){
-            SellerAccountComposables()
+        PersonalInformation(
+            user = userRegistrationState,
+            onEmailChange = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
+            onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
+            onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
+            onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
+            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Switch(
+                checked = userRegistrationState.isSeller,
+                onCheckedChange = { viewModel.registrationAction(RegistrationEvent.SellerChange(it)) },
+                thumbContent = {
+                    if (userRegistrationState.isSeller){
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                }
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(stringResource(R.string.areYouSeller))
         }
-        SellerAccountComposables()
+        if(userRegistrationState.isSeller){
+            ContactInfo(
+                user = userRegistrationState,
+                onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
+                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
+                onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
+                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) }
+            )
+            CreditCardFields(
+                creditCard = userCreditCardState,
+                onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
+                onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
+                onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
+                onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
+            )
+        }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {  },
-            enabled = if( viewModel.user.name.isNotEmpty() && viewModel.user.email.isNotEmpty() && viewModel.user.password.isNotEmpty()){
-                isEnabled
-            }else{
-                !isEnabled
-            },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -95,22 +119,6 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
             }
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            //If clicked isSeller on the user data class is true
-            IconButton(onClick = {
-                isSellerButton = !isSellerButton
-            }) {
-                val checkedBox = if(isSellerButton){
-                    Icons.Filled.CheckBox
-                }else{
-                    Icons.Filled.CheckBoxOutlineBlank
-                }
-                Icon(imageVector  = checkedBox, null)
-            }
-            Text("Do you want to create a Seller Account?")
-        }
         Row (
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -126,142 +134,39 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel, navController: NavCo
         }
     }
 }
-
 @Composable
-fun BuyerComposables(
+fun PersonalInformation(
+    user: UserTest,
+    onEmailChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
+    onSurnameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
 
-) {
-    var email by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
-
-    OutlinedTextField(
-        value = email,
-        onValueChange = { email = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { email = "" }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Email") },
+){
+    InputTextField(
+        value = user.email,
+        onValueChanged = { onEmailChange(it) },
+        label = stringResource(R.string.email),
+        modifier = modifierStandard
     )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = name,
-        onValueChange = { name = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { name = "" }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Name") },
+    InputTextField(
+        value = user.name,
+        onValueChanged = { onNameChange(it) },
+        label = stringResource(R.string.name),
+        modifier = modifierStandard
     )
-    Spacer(modifier = Modifier.height(10.dp))
-    OutlinedTextField(
-        value = surname,
-        onValueChange = { surname = it },
-        singleLine = true,
-        trailingIcon = {
-            Icon(
-                Icons.Rounded.Clear,
-                contentDescription = null,
-                modifier = Modifier.clickable { surname = "" }
-            )
-        },
-        modifier = Modifier.width(320.dp),
-        label = { Text("Surname") },
+    InputTextField(
+        value = user.surname,
+        onValueChanged = { onSurnameChange(it) },
+        label = stringResource(R.string.surname),
+        modifier = modifierStandard
     )
-    Spacer(modifier = Modifier.height(10.dp))
-    PasswordsTextfields(isToChangePassword = false)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SellerAccountComposables(){
-
-    var creditCardNumber by remember { mutableStateOf("") }
-    var creditCardCvv by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("Open date picker dialog") }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var expirationDate by remember { mutableStateOf("") }
-
-
-    ContactInfo()
-    Spacer(modifier = Modifier.height(10.dp))
-    Row (
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        OutlinedTextField(
-            value = creditCardNumber,
-            onValueChange = { creditCardNumber = it },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                Icon(
-                    Icons.Rounded.Clear,
-                    contentDescription = null,
-                    modifier = Modifier.clickable{ creditCardNumber = ""}
-                )
-            },
-            modifier = Modifier.width(200.dp),
-            label = { Text("Credit Card") },
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Column {
-            OutlinedTextField(
-                value = expirationDate,
-                onValueChange = { expirationDate = it },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = {
-                    Icon(
-                        Icons.Rounded.CalendarMonth,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable { showDatePicker = true }
-                            .pulsateClick(),
-                    )
-                },
-                modifier = Modifier.size(width = 110.dp, height = 40.dp),
-                label = { Text(
-                    "MM/AA",
-                    fontSize = 8.sp
-                    ) },
-            )
-            if(showDatePicker){
-                MyDatePickerDialog(
-                    onDateSelected = { date = it },
-                    onDismiss = { showDatePicker = false }
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            OutlinedTextField(
-                value = creditCardCvv,
-                onValueChange = { creditCardCvv = it },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = {
-                    Icon(
-                        Icons.Rounded.Clear,
-                        contentDescription = null,
-                        modifier = Modifier.clickable{ creditCardCvv = ""}
-                    )
-                },
-                modifier = Modifier.size(width = 110.dp, height = 40.dp),
-                label = { Text(
-                    "CVV",
-                    fontSize = 8.sp
-                ) },            )
-        }
-    }
+    PasswordsTextfields(
+        user = user,
+        onPasswordChange = onPasswordChange,
+        onNewPasswordChange = onNewPasswordChange
+    )
 }
 
 
@@ -269,6 +174,6 @@ fun SellerAccountComposables(){
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    RegisterCredentialsView(viewModel = DietiDealsViewModel())
 }
 
