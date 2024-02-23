@@ -10,7 +10,8 @@ class Auction(
     bids: Array<Bid> = arrayOf(),
     endingDate: LocalDate?,
     expired: Boolean,
-    auctionType: AuctionType
+    auctionType: AuctionType,
+    auctionCategory: AuctionCategory = AuctionCategory.Other
 ){
     val id: UUID = id
     val ownerId: UUID = ownerId
@@ -19,4 +20,5 @@ class Auction(
     var endingDate: LocalDate? = endingDate
     var expired: Boolean = expired
     val auctionType: AuctionType = auctionType
+    val auctionCategory: AuctionCategory = auctionCategory
 }
