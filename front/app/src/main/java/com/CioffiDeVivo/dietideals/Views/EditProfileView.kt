@@ -52,6 +52,7 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
             onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
             label = stringResource(R.string.name),
             trailingIcon = Icons.Filled.Clear,
+            onDelete = {},
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))

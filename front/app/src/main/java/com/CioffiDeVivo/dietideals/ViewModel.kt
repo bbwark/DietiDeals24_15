@@ -106,6 +106,54 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
 
+    fun deleteOnRegistration(registrationEvent: RegistrationEvent){
+        when(registrationEvent){
+            is RegistrationEvent.EmailChanged -> {
+                _userState.value = _userState.value.copy(
+                    email = ""
+                )
+            }
+            is RegistrationEvent.NameChanged -> {
+                _userState.value = _userState.value.copy(
+                    name = ""
+                )
+            }
+            is RegistrationEvent.SurnameChanged -> {
+                _userState.value = _userState.value.copy(
+                    surname = ""
+                )
+            }
+            is RegistrationEvent.AddressChanged -> {
+                _userState.value = _userState.value.copy(
+                    address = ""
+                )
+            }
+            is RegistrationEvent.ZipCodeChanged -> {
+                _userState.value = _userState.value.copy(
+                    zipCode = ""
+                )
+            }
+            is RegistrationEvent.PhoneNumberChanged -> {
+                _userState.value = _userState.value.copy(
+                    phoneNumber = ""
+                )
+            }
+            is RegistrationEvent.CreditCardNumberChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = ""
+                )
+            }
+            is RegistrationEvent.IbanChanged -> {
+                _creditCardState.value = _creditCardState.value.copy(
+                    creditCardNumber = ""
+                )
+            }
+            else -> {
+                validateUserRegistration()
+            }
+        }
+    }
+
     fun createAuctionAction(createAuctionEvents: CreateAuctionEvents){
         when(createAuctionEvents){
             is CreateAuctionEvents.ItemNameChanged -> {
