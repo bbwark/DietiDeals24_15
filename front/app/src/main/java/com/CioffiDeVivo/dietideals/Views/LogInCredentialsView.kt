@@ -99,6 +99,7 @@ fun LoginInputs(
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         trailingIcon = Icons.Filled.Clear,
+        onDelete = {},
         modifier = modifierStandard
     )
     InputTextField(
@@ -106,6 +107,7 @@ fun LoginInputs(
         onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
         trailingIcon = Icons.Filled.Clear,
+        onDelete = {},
         modifier = modifierStandard
     )
 }

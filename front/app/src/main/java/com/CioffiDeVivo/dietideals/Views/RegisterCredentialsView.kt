@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.CreditCardFields
 import com.CioffiDeVivo.dietideals.Components.InputTextField
@@ -68,6 +69,9 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
             onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
             onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
             onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+            onDeleteEmail = { viewModel.deleteOnRegistration(RegistrationEvent.EmailChanged(it)) },
+            onDeleteName = { viewModel.deleteOnRegistration(RegistrationEvent.NameChanged(it)) },
+            onDeleteSurname = { viewModel.deleteOnRegistration(RegistrationEvent.SurnameChanged(it)) }
         )
         Row(
             modifier = Modifier
@@ -98,7 +102,10 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
                 onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
                 onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
                 onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
-                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) }
+                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
+                onDeleteAddress = { viewModel.deleteOnRegistration(RegistrationEvent.AddressChanged(it)) },
+                onDeleteZipCode = { viewModel.deleteOnRegistration(RegistrationEvent.ZipCodeChanged(it)) },
+                onDeletePhoneNumber = { viewModel.deleteOnRegistration(RegistrationEvent.PhoneNumberChanged(it)) },
             )
             CreditCardFields(
                 creditCard = userCreditCardState,
@@ -106,6 +113,8 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
                 onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
                 onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
                 onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
+                onDeleteCardNumber = { viewModel.deleteOnRegistration(RegistrationEvent.CreditCardNumberChanged(it)) },
+                onDeleteIban = { viewModel.deleteOnRegistration(RegistrationEvent.IbanChanged(it)) }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
@@ -142,24 +151,30 @@ fun PersonalInformation(
     onSurnameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNewPasswordChange: (String) -> Unit,
+    onDeleteEmail: (String) -> Unit,
+    onDeleteName: (String) -> Unit,
+    onDeleteSurname: (String) -> Unit,
 
 ){
     InputTextField(
         value = user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
+        onDelete = { onDeleteEmail(it) },
         modifier = modifierStandard
     )
     InputTextField(
         value = user.name,
         onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
+        onDelete = { onDeleteName(it) },
         modifier = modifierStandard
     )
     InputTextField(
         value = user.surname,
         onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
+        onDelete = { onDeleteSurname(it) },
         modifier = modifierStandard
     )
     PasswordsTextfields(

@@ -39,15 +39,19 @@ fun PasswordsTextfields(
         value = user.password,
         onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
+        trailingIcon = Icons.Filled.VisibilityOff,
         supportingText = stringResource(R.string.passcharacters),
         visualTransformation = PasswordVisualTransformation(),
+        onDelete = {},
         modifier = modifierStandard
     )
     InputTextField(
         value = user.newPassword,
         onValueChanged = { onNewPasswordChange(it) },
         label = stringResource(R.string.rewritepassword),
+        trailingIcon = Icons.Filled.VisibilityOff,
         visualTransformation = PasswordVisualTransformation(),
+        onDelete = {},
         modifier = modifierStandard
     )
 }

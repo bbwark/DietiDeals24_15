@@ -52,7 +52,7 @@ import com.CioffiDeVivo.dietideals.Views.SellView
 fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CreateAuction.route
+        startDestination = Screen.RegisterCredentials.route
     ) {
         composable(
             route = Screen.EditProfile.route

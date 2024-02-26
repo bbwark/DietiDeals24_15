@@ -84,6 +84,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             value = itemAuctionState.name,
             onValueChanged = { viewModel.createAuctionAction(CreateAuctionEvents.ItemNameChanged(it)) },
             label = stringResource(R.string.itemName),
+            onDelete = {},
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.size(15.dp))
@@ -160,6 +161,7 @@ fun SilentAuction(
             value = auction.minAccepted,
             onValueChanged = { onMinAcceptedChange(it) },
             label = stringResource(R.string.minStep),
+            onDelete = {},
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -167,6 +169,7 @@ fun SilentAuction(
             value = auction.endingDate,
             onValueChanged = { onEndingDateChange(it) },
             label = stringResource(R.string.endingDate),
+            onDelete = {},
             modifier = Modifier.width(150.dp)
         )
     }
@@ -192,6 +195,7 @@ fun EnglishAuction(
             value = auction.minStep,
             onValueChanged = { onMinStepChange(it) },
             label = stringResource(R.string.minStep),
+            onDelete = {},
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -199,6 +203,7 @@ fun EnglishAuction(
             value = auction.interval,
             onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
+            onDelete = {},
             modifier = Modifier.width(150.dp)
         )
     }
@@ -206,6 +211,7 @@ fun EnglishAuction(
         value = auction.endingDate,
         onValueChanged = { onEndingDateChange(it) },
         label = stringResource(R.string.endingDate),
+        onDelete = {},
         modifier = modifierStandard
     )
     DescriptionTextfield(
