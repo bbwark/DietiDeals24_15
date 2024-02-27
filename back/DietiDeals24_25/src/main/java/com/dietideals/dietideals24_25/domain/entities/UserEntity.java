@@ -32,7 +32,7 @@ public class UserEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "auction_id")
-    private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<AuctionEntity>();
+    private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     private Optional<String> bio;
 
@@ -40,8 +40,8 @@ public class UserEntity {
 
     private Optional<String> phoneNumber;
 
-    /*
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "number")
-    private ArrayList<CreditCard> creditCards = new ArrayList<CreditCard>();*/
+    @JoinColumn(name = "card_number")
+    private ArrayList<CreditCardEntity> creditCards = new ArrayList<>();
 }

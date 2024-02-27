@@ -1,6 +1,7 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
 import com.dietideals.dietideals24_25.domain.entities.AuctionEntity;
+import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class UserDto {
 
     private Boolean isSeller;
 
-    private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<AuctionEntity>();
+    private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     private Optional<String> bio;
 
@@ -34,6 +35,5 @@ public class UserDto {
 
     private Optional<String> phoneNumber;
 
-    /*
-    private ArrayList<CreditCard> creditCards = new ArrayList<CreditCard>();*/
+    private ArrayList<CreditCardEntity> creditCards = new ArrayList<>();
 }

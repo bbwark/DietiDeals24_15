@@ -1,6 +1,8 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
 import com.dietideals.dietideals24_25.domain.AuctionType;
+import com.dietideals.dietideals24_25.domain.entities.BidEntity;
+import com.dietideals.dietideals24_25.domain.entities.ItemEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,11 +24,10 @@ public class AuctionDto {
 
     private UserEntity owner;
 
-    /*
-    private Item item;*/
 
-    /*
-    private Array<Bid> bids = new ArrayList<Bid>();*/
+    private ItemEntity item;
+
+    private ArrayList<BidEntity> bids = new ArrayList<>();
 
     private Optional<LocalDate> endingDate;
 
