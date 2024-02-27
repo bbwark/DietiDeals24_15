@@ -26,9 +26,9 @@ import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -106,7 +106,185 @@ class DietiDealsViewModel : ViewModel() {
         )
     )
 
-    fun deleteOnRegistration(registrationEvent: RegistrationEvent){
+    /*Update & Delete for User*/
+
+    fun updateName(name: String){
+        _userState.value = _userState.value.copy(
+            name = name
+        )
+    }
+
+    fun deleteName(){
+        _userState.value = _userState.value.copy(
+            name = ""
+        )
+    }
+
+    fun updateSurname(surname: String){
+        _userState.value = _userState.value.copy(
+            surname = surname
+        )
+    }
+
+    fun deleteSurname(){
+        _userState.value = _userState.value.copy(
+            surname = ""
+        )
+    }
+
+    fun updateEmail(email: String){
+        _userState.value = _userState.value.copy(
+            email = email
+        )
+    }
+
+    fun deleteEmail(){
+        _userState.value = _userState.value.copy(
+            email = ""
+        )
+    }
+
+    fun updatePassword(password: String){
+        _userState.value = _userState.value.copy(
+            password = password
+        )
+    }
+
+    fun deletePassword(){
+        _userState.value = _userState.value.copy(
+            password = ""
+        )
+    }
+
+    fun updateNewPassword(newPassword: String){
+        _userState.value = _userState.value.copy(
+            newPassword = newPassword
+        )
+    }
+
+    fun deleteNewPassword(){
+        _userState.value = _userState.value.copy(
+            newPassword = ""
+        )
+    }
+
+    fun updateIsSeller(isSeller: Boolean){
+        _userState.value = _userState.value.copy(
+            isSeller = !isSeller
+        )
+    }
+
+    fun updateBio(bio: String){
+        _userState.value = _userState.value.copy(
+            bio = bio
+        )
+    }
+
+    fun deleteBio(){
+        _userState.value = _userState.value.copy(
+            bio = ""
+        )
+    }
+
+    fun updateAddress(address: String){
+        _userState.value = _userState.value.copy(
+            address = address
+        )
+    }
+
+    fun deleteAddress(){
+        _userState.value = _userState.value.copy(
+            address = ""
+        )
+    }
+
+    fun updateZipCode(zipCode: String){
+        _userState.value = _userState.value.copy(
+            zipCode = zipCode
+        )
+    }
+
+    fun deleteZipCode(){
+        _userState.value = _userState.value.copy(
+            zipCode = ""
+        )
+    }
+
+    fun updateCountry(country: String){
+        _userState.value = _userState.value.copy(
+            country = country
+        )
+    }
+
+    fun deleteCountry(){
+        _userState.value = _userState.value.copy(
+            country = ""
+        )
+    }
+
+    fun updatePhoneNumber(phoneNumber: String){
+        _userState.value = _userState.value.copy(
+            phoneNumber = phoneNumber
+        )
+    }
+
+    fun deletePhoneNumber(){
+        _userState.value = _userState.value.copy(
+            phoneNumber = ""
+        )
+    }
+
+    /* Update & Delete CreditCard */
+
+    fun updateCreditCardNumber(creditCardNumber: String){
+        _creditCardState.value = _creditCardState.value.copy(
+            creditCardNumber = creditCardNumber
+        )
+    }
+
+    fun deleteCreditCardNumber(){
+        _creditCardState.value = _creditCardState.value.copy(
+            creditCardNumber = ""
+        )
+    }
+
+    fun updateExpirationDate(expirationDate: String){
+        _creditCardState.value = _creditCardState.value.copy(
+            expirationDate = expirationDate
+        )
+    }
+
+    fun deleteExpirationDate(){
+        _creditCardState.value = _creditCardState.value.copy(
+            expirationDate = ""
+        )
+    }
+
+    fun updateCvv(cvv: String){
+        _creditCardState.value = _creditCardState.value.copy(
+            cvv = cvv
+        )
+    }
+
+    fun deleteCvv(){
+        _creditCardState.value = _creditCardState.value.copy(
+            cvv = ""
+        )
+    }
+
+    fun updateIban(iban: String){
+        _creditCardState.value = _creditCardState.value.copy(
+            iban = iban
+        )
+    }
+
+    fun deleteIban(){
+        _creditCardState.value = _creditCardState.value.copy(
+            iban = ""
+        )
+    }
+
+    fun deleteFieldAction(registrationEvent: RegistrationEvent){
         when(registrationEvent){
             is RegistrationEvent.EmailChanged -> {
                 _userState.value = _userState.value.copy(
@@ -121,11 +299,6 @@ class DietiDealsViewModel : ViewModel() {
             is RegistrationEvent.SurnameChanged -> {
                 _userState.value = _userState.value.copy(
                     surname = ""
-                )
-            }
-            is RegistrationEvent.AddressChanged -> {
-                _userState.value = _userState.value.copy(
-                    address = ""
                 )
             }
             is RegistrationEvent.ZipCodeChanged -> {

@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
@@ -49,8 +48,10 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
             onAddressChange = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) },
             onZipCodeChange = { viewModel.editContactInfoAction(EditContactInfoEvents.ZipCodeChanged(it)) },
             onCountryChange = { viewModel.editContactInfoAction(EditContactInfoEvents.CountryChanged(it)) },
-            onPhoneNumberChange = { viewModel.editContactInfoAction(EditContactInfoEvents.PhoneNumberChanged(it)) }
-        )
+            onPhoneNumberChange = { viewModel.editContactInfoAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
+            onDeleteAddress = { viewModel.deleteAddress() },
+            onDeleteZipCode = {  },
+        ) { }
         Spacer(modifier = Modifier.height(40.dp))
         Button(onClick = { /*TODO*/ }) {
             Text(text = stringResource(id = R.string.saveChanges))
