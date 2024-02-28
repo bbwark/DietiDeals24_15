@@ -32,7 +32,7 @@ fun ManageCardsView(viewModel: DietiDealsViewModel) {
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                     ManageCardsElement(
-                        cardNumber = item.number,
+                        cardNumber = item.creditCardNumber,
                         clickOnDelete = {/* delete the card from user's cards */ })
                     HorizontalDivider()
                 }
