@@ -19,8 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +29,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.DataModels.Auction
@@ -40,7 +37,6 @@ import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
 import java.time.LocalDate
-import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)

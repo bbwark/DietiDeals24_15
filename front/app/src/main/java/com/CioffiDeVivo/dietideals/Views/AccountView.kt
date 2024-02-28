@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material.icons.filled.Settings

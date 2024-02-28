@@ -40,7 +40,6 @@ import com.CioffiDeVivo.dietideals.R
 fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavHostController){
 
     val userLoginState by viewModel.userState.collectAsState()
-    val isEnabled by remember { mutableStateOf(true) }
 
     DetailsViewTopBar(
         caption = stringResource(R.string.welcome),

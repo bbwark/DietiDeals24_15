@@ -26,7 +26,7 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
-import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 
@@ -84,7 +84,10 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
             supportingText = ""
         )
         Spacer(modifier = Modifier.height(40.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.pulsateClick()
+        ) {
             Text(text = stringResource(id = R.string.saveChanges))
         }
     }

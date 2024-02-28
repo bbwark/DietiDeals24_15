@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,7 @@ import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userInfoBottomSheet(observedUser: ObservedUser, onDismissRequest: () -> Unit) {
+fun UserInfoBottomSheet(observedUser: ObservedUser, onDismissRequest: () -> Unit) {
     ModalBottomSheet(onDismissRequest = { onDismissRequest() }) {
         Box(Modifier.fillMaxWidth().heightIn(min = 500.dp)) {
             Column(modifier = Modifier.padding(14.dp)) {

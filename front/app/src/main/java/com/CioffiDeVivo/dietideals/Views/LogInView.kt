@@ -13,7 +13,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
@@ -43,7 +43,9 @@ fun LoginView(viewModel: DietiDealsViewModel, navController: NavController) {
             onClick = {
                       navController.navigate(Screen.LogInCredentials.route)
             },
-            modifier = Modifier.size(width = 330.dp, height = 50.dp),
+            modifier = Modifier
+                .size(width = 330.dp, height = 50.dp)
+                .pulsateClick(),
             content = {
                 Text(stringResource(R.string.continuewithEmail), fontSize = 20.sp)
             }
