@@ -22,8 +22,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
-import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -54,7 +54,10 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
             onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
         )
         Spacer(modifier = Modifier.height(40.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.pulsateClick()
+        ) {
             Text(text = stringResource(id = R.string.saveChanges))
         }
     }
