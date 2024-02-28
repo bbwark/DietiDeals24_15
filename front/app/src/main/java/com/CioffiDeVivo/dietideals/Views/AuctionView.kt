@@ -98,7 +98,7 @@ fun AuctionView(auction: Auction, isOwner: Boolean) {
             Spacer(modifier = Modifier.size(12.dp))
         }
 
-        auction.item.description?.let { DescriptionAuctionItem(description = it) }
+        auction.description.let { DescriptionAuctionItem(description = it) }
     }
 }
 
