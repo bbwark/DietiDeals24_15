@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
+import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.LoginEvent
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
@@ -54,8 +55,9 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavHostC
         Spacer(modifier = Modifier.height(30.dp))
         LoginInputs(
             user = userLoginState,
-            onEmailChange = { viewModel.loginAction(LoginEvent.EmailChanged(it)) },
-            onPasswordChange = { viewModel.loginAction(LoginEvent.PasswordChanged(it)) }
+            onEmailChange = { viewModel.updateEmail(it) },
+            onPasswordChange = { viewModel.updatePassword(it) },
+            onDeleteEmail = { viewModel.deleteEmail() }
         )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
@@ -92,23 +94,22 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavHostC
 fun LoginInputs(
     user: UserTest,
     onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit
+    onPasswordChange: (String) -> Unit,
+    onDeleteEmail: (String) -> Unit
 ){
     InputTextField(
         value = user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         trailingIcon = Icons.Filled.Clear,
-        onDelete = {},
+        onDelete = { onDeleteEmail(it) },
         modifier = modifierStandard
     )
-    InputTextField(
-        value = user.password,
-        onValueChanged = { onPasswordChange(it) },
+    PasswordsTextfields(
+        user = user,
+        onPasswordChange = onPasswordChange,
         label = stringResource(R.string.password),
-        trailingIcon = Icons.Filled.Clear,
-        onDelete = {},
-        modifier = modifierStandard
+        supportingText = ""
     )
 }
 

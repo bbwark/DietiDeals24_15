@@ -11,6 +11,7 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionTest
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Bid
+import com.CioffiDeVivo.dietideals.DataModels.BidTest
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
@@ -42,6 +43,8 @@ class DietiDealsViewModel : ViewModel() {
     val auctionState: StateFlow<AuctionTest> = _auctionState.asStateFlow()
     private val _itemState = MutableStateFlow(ItemTest())
     val itemState: StateFlow<ItemTest> = _itemState.asStateFlow()
+    private val _bidState = MutableStateFlow(BidTest())
+    val bidState: StateFlow<BidTest> = _bidState.asStateFlow()
 
     var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
@@ -150,27 +153,15 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun deletePassword(){
-        _userState.value = _userState.value.copy(
-            password = ""
-        )
-    }
-
     fun updateNewPassword(newPassword: String){
         _userState.value = _userState.value.copy(
             newPassword = newPassword
         )
     }
 
-    fun deleteNewPassword(){
+    fun updateIsSeller(){
         _userState.value = _userState.value.copy(
-            newPassword = ""
-        )
-    }
-
-    fun updateIsSeller(isSeller: Boolean){
-        _userState.value = _userState.value.copy(
-            isSeller = !isSeller
+            isSeller = !_userState.value.isSeller
         )
     }
 
@@ -213,12 +204,6 @@ class DietiDealsViewModel : ViewModel() {
     fun updateCountry(country: String){
         _userState.value = _userState.value.copy(
             country = country
-        )
-    }
-
-    fun deleteCountry(){
-        _userState.value = _userState.value.copy(
-            country = ""
         )
     }
 
@@ -281,6 +266,94 @@ class DietiDealsViewModel : ViewModel() {
     fun deleteIban(){
         _creditCardState.value = _creditCardState.value.copy(
             iban = ""
+        )
+    }
+
+    /* Update & Delete Item */
+
+    fun updateItemName(itemName: String){
+        _itemState.value = _itemState.value.copy(
+            name = itemName
+        )
+    }
+
+    fun deleteItemName(){
+        _itemState.value = _itemState.value.copy(
+            name = ""
+        )
+    }
+
+    /* Update & Delete Auction */
+
+    fun updateDescriptionAuction(description: String){
+        _auctionState.value = _auctionState.value.copy(
+            description = description
+        )
+    }
+
+    fun deleteDescriptionAuction(){
+        _auctionState.value = _auctionState.value.copy(
+            description = ""
+        )
+    }
+
+    fun updateEndingDate(endingDate: String){
+        _auctionState.value = _auctionState.value.copy(
+            endingDate = endingDate
+        )
+    }
+
+    fun deleteEndingDate(){
+        _auctionState.value = _auctionState.value.copy(
+            endingDate = ""
+        )
+    }
+
+    fun updateInterval(interval: String){
+        _auctionState.value = _auctionState.value.copy(
+            interval = interval
+        )
+    }
+
+    fun deleteInterval(){
+        _auctionState.value = _auctionState.value.copy(
+            interval = ""
+        )
+    }
+
+    fun updateMinStep(minStep: String){
+        _auctionState.value = _auctionState.value.copy(
+            minStep = minStep
+        )
+    }
+
+    fun deleteMinStep(){
+        _auctionState.value = _auctionState.value.copy(
+            minStep = ""
+        )
+    }
+
+    fun updateMinAccepted(minAccepted: String){
+        _auctionState.value = _auctionState.value.copy(
+            minAccepted = minAccepted
+        )
+    }
+
+    fun deleteMinAccepted(){
+        _auctionState.value = _auctionState.value.copy(
+            minAccepted = ""
+        )
+    }
+
+    fun updateAuctionTypeToEnglish(auctionType: AuctionType){
+        _auctionState.value = _auctionState.value.copy(
+            auctionType = AuctionType.English
+        )
+    }
+
+    fun updateAuctionTypeToSilent(auctionType: AuctionType){
+        _auctionState.value = _auctionState.value.copy(
+            auctionType = AuctionType.Silent
         )
     }
 

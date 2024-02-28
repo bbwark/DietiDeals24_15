@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.DateRange
@@ -82,15 +83,15 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
         Spacer(modifier = Modifier.height(30.dp))
         InputTextField(
             value = itemAuctionState.name,
-            onValueChanged = { viewModel.createAuctionAction(CreateAuctionEvents.ItemNameChanged(it)) },
+            onValueChanged = { viewModel.updateItemName(it) },
             label = stringResource(R.string.itemName),
-            onDelete = {},
+            onDelete = { viewModel.deleteItemName() },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.size(15.dp))
         Row {
             ElevatedButton(
-                onClick = { viewModel.createAuctionAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent)) },
+                onClick = { viewModel.updateAuctionTypeToSilent(createAuctionState.auctionType) },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -99,7 +100,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = { viewModel.createAuctionAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English)) },
+                onClick = { viewModel.updateAuctionTypeToEnglish(createAuctionState.auctionType) },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -109,20 +110,35 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             }
         }
         Spacer(modifier = Modifier.size(15.dp))
+        EnglishAuction(
+            auction = createAuctionState,
+            onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+            onMinStepChange = { viewModel.updateMinStep(it) },
+            onIntervalChange = { viewModel.updateInterval(it) },
+            onEndingDateChange = { viewModel.updateEndingDate(it) },
+            onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+            onDeleteInterval = { viewModel.deleteInterval() },
+            onDeleteMinStep = { viewModel.deleteMinStep() }
+        )
         if(createAuctionState.auctionType == AuctionType.Silent){
             SilentAuction(
                 auction = createAuctionState,
-                onMinAcceptedChange = { viewModel.createAuctionAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
-                onEndingDateChange = { viewModel.createAuctionAction(CreateAuctionEvents.EndingDateChanged(it)) },
-                onDescriptionChange = { viewModel.createAuctionAction(CreateAuctionEvents.DescriptionChanged(it)) }
+                onMinAcceptedChange = { viewModel.updateMinAccepted(it) },
+                onEndingDateChange = { viewModel.updateEndingDate(it) },
+                onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+                onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                onDeleteMinAccepted = { viewModel.deleteMinAccepted() }
             )
         } else if (createAuctionState.auctionType == AuctionType.English){
             EnglishAuction(
                 auction = createAuctionState,
-                onDescriptionChange = { viewModel.createAuctionAction(CreateAuctionEvents.DescriptionChanged(it)) },
-                onMinStepChange = { viewModel.createAuctionAction(CreateAuctionEvents.MinStepChanged(it)) },
-                onIntervalChange = { viewModel.createAuctionAction(CreateAuctionEvents.IntervalChanged(it)) },
-                onEndingDateChange = { viewModel.createAuctionAction(CreateAuctionEvents.EndingDateChanged(it)) }
+                onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+                onMinStepChange = { viewModel.updateMinStep(it) },
+                onIntervalChange = { viewModel.updateInterval(it) },
+                onEndingDateChange = { viewModel.updateEndingDate(it) },
+                onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                onDeleteInterval = { viewModel.deleteInterval() },
+                onDeleteMinStep = { viewModel.deleteMinStep() }
             )
         }
         else{
@@ -154,14 +170,16 @@ fun SilentAuction(
     auction: AuctionTest,
     onMinAcceptedChange: (String) -> Unit,
     onEndingDateChange: (String) -> Unit,
-    onDescriptionChange: (String) -> Unit
+    onDescriptionChange: (String) -> Unit,
+    onDeleteDescription: (String) -> Unit,
+    onDeleteMinAccepted: (String) -> Unit
 ){
     Row {
         InputTextField(
             value = auction.minAccepted,
             onValueChanged = { onMinAcceptedChange(it) },
             label = stringResource(R.string.minStep),
-            onDelete = {},
+            onDelete = { onDeleteMinAccepted(it) },
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -169,19 +187,20 @@ fun SilentAuction(
             value = auction.endingDate,
             onValueChanged = { onEndingDateChange(it) },
             label = stringResource(R.string.endingDate),
-            onDelete = {},
+            trailingIcon = Icons.Filled.CalendarMonth,
+            onDelete = {  },
             modifier = Modifier.width(150.dp)
         )
     }
     DescriptionTextfield(
         description = auction.description,
         descriptionOnChange = { onDescriptionChange(it) },
-        maxDescriptionCharacters = 200
+        maxDescriptionCharacters = 200,
+        onDeleteDescription = { onDeleteDescription(it) }
     )
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnglishAuction(
     auction: AuctionTest,
@@ -189,13 +208,16 @@ fun EnglishAuction(
     onMinStepChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
     onEndingDateChange: (String) -> Unit,
+    onDeleteDescription: (String) -> Unit,
+    onDeleteMinStep: (String) -> Unit,
+    onDeleteInterval: (String) -> Unit,
 ){
     Row {
         InputTextField(
             value = auction.minStep,
             onValueChanged = { onMinStepChange(it) },
             label = stringResource(R.string.minStep),
-            onDelete = {},
+            onDelete = { onDeleteMinStep(it) },
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -203,7 +225,7 @@ fun EnglishAuction(
             value = auction.interval,
             onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
-            onDelete = {},
+            onDelete = { onDeleteInterval(it) },
             modifier = Modifier.width(150.dp)
         )
     }
@@ -211,13 +233,15 @@ fun EnglishAuction(
         value = auction.endingDate,
         onValueChanged = { onEndingDateChange(it) },
         label = stringResource(R.string.endingDate),
-        onDelete = {},
+        trailingIcon = Icons.Filled.CalendarMonth,
+        onDelete = {  },
         modifier = modifierStandard
     )
     DescriptionTextfield(
         description = auction.description,
         descriptionOnChange = { onDescriptionChange(it) },
-        maxDescriptionCharacters = 200
+        maxDescriptionCharacters = 200,
+        onDeleteDescription = { onDeleteDescription(it) }
     )
 }
 
