@@ -39,7 +39,6 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
 val modifierStandard: Modifier = Modifier
@@ -81,7 +80,7 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
         ) {
             Switch(
                 checked = userRegistrationState.isSeller,
-                onCheckedChange = { viewModel.updateIsSeller(it) },
+                onCheckedChange = { viewModel.updateIsSeller() },
                 thumbContent = {
                     if (userRegistrationState.isSeller){
                         Icon(
@@ -179,7 +178,14 @@ fun PersonalInformation(
     PasswordsTextfields(
         user = user,
         onPasswordChange = onPasswordChange,
-        onNewPasswordChange = onNewPasswordChange
+        label = stringResource(R.string.password),
+        supportingText = stringResource( R.string.passcharacters)
+    )
+    PasswordsTextfields(
+        user = user,
+        onPasswordChange = onPasswordChange,
+        label = stringResource(R.string.rewritepassword),
+        supportingText = "",
     )
 }
 
