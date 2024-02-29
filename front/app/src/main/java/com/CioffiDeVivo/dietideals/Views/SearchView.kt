@@ -5,6 +5,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -21,9 +25,10 @@ import java.util.UUID
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController) {
+    var categoriesToHide = remember { mutableStateOf(mutableSetOf<String>()) }
     Column(Modifier.fillMaxSize()) {
-        SearchViewBar(viewModel = viewModel)
-        AuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
+        SearchViewBar(categoriesToHide = categoriesToHide, viewModel = viewModel)
+        AuctionsList(auctions = viewModel.auctionSearchResult, categoriesToHide = categoriesToHide, navController = navController, viewModel = viewModel)
     }
 }
 
