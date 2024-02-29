@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -66,7 +67,9 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
 
 @Composable
 fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navController: NavHostController) {
-    Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = auctionItemName,
             modifier = Modifier
@@ -77,6 +80,9 @@ fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navContr
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
+        IconButton(onClick = { /*restapi to make delete of the auction*/ }, modifier = Modifier.size(20.dp)) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "")
+        }
     }
 }
 
