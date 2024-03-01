@@ -31,7 +31,7 @@ fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController)
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    var viewModel = DietiDealsViewModel()
+    val viewModel = DietiDealsViewModel()
     viewModel.auctionSearchResult = arrayOf(
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
