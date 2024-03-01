@@ -27,9 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
-import com.CioffiDeVivo.dietideals.Components.userInfoBottomSheet
+import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
@@ -98,7 +97,7 @@ fun BidHistoryView(viewModel: DietiDealsViewModel) {
             )
         }
         if (userInfo) {
-            userInfoBottomSheet(
+            UserInfoBottomSheet(
                 observedUser = selectedUser,
                 onDismissRequest = { userInfo = false }
             )

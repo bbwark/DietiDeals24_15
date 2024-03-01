@@ -52,7 +52,7 @@ fun iconPlaceholder() {
 
 @Composable
 fun HomeViewAuctionListElement(modifier: Modifier = Modifier, auction: Auction){
-    ElevatedCard() {
+    ElevatedCard(modifier = Modifier.pulsateClick()) {
         Text(text = auction.item.name)
         // We have to implement an image system so we can delete this placeholder for testing
         Image(

@@ -23,6 +23,7 @@ fun InputTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     trailingIcon: ImageVector = Icons.Filled.Clear,
     supportingText: String = "",
+    onDelete: (String) -> Unit,
     modifier: Modifier
 ){
     OutlinedTextField(
@@ -36,7 +37,7 @@ fun InputTextField(
             Icon(
                 trailingIcon,
                 contentDescription = null,
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.clickable { onDelete(value) }
             )
         },
         keyboardOptions = keyboardOptions,
