@@ -8,20 +8,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionTest
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Bid
-import com.CioffiDeVivo.dietideals.DataModels.BidTest
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
-import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
 import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DataModels.ItemTest
 import com.CioffiDeVivo.dietideals.Events.LoginEvent
 import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
 import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,16 +29,20 @@ import java.util.UUID
 @RequiresApi(Build.VERSION_CODES.O)
 class DietiDealsViewModel : ViewModel() {
 
-    private val _userState = MutableStateFlow(UserTest())
-    val userState: StateFlow<UserTest> = _userState.asStateFlow()
-    private val _creditCardState = MutableStateFlow(CreditCardTest())
-    val creditCardState: StateFlow<CreditCardTest> = _creditCardState.asStateFlow()
-    private val _auctionState = MutableStateFlow(AuctionTest())
-    val auctionState: StateFlow<AuctionTest> = _auctionState.asStateFlow()
-    private val _itemState = MutableStateFlow(ItemTest())
-    val itemState: StateFlow<ItemTest> = _itemState.asStateFlow()
-    private val _bidState = MutableStateFlow(BidTest())
-    val bidState: StateFlow<BidTest> = _bidState.asStateFlow()
+    private val _userState = MutableStateFlow(User())
+    val userState: StateFlow<User> = _userState.asStateFlow()
+
+    private val _creditCardState = MutableStateFlow(CreditCard())
+    val creditCardState: StateFlow<CreditCard> = _creditCardState.asStateFlow()
+
+    private val _auctionState = MutableStateFlow(Auction())
+    val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
+
+    private val _itemState = MutableStateFlow(Item())
+    val itemState: StateFlow<Item> = _itemState.asStateFlow()
+
+    private val _bidState = MutableStateFlow(Bid())
+    val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
     var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
@@ -53,9 +52,9 @@ class DietiDealsViewModel : ViewModel() {
             "",
             "passwordtest",
             creditCards = arrayOf(
-                CreditCard("556666666666", "222", LocalDate.now().plusYears(1)),
-                CreditCard("456666666666", "222", LocalDate.now().plusYears(2)),
-                CreditCard("356666666666", "222", LocalDate.now().plusYears(2))
+                CreditCard("556666666666", LocalDate.now().plusYears(1),"222"),
+                CreditCard("456666666666", LocalDate.now().plusYears(2), "222"),
+                CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
             )
         )
     )
@@ -232,7 +231,7 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun updateExpirationDate(expirationDate: String){
+    fun updateExpirationDate(expirationDate: LocalDate){
         _creditCardState.value = _creditCardState.value.copy(
             expirationDate = expirationDate
         )
@@ -240,7 +239,7 @@ class DietiDealsViewModel : ViewModel() {
 
     fun deleteExpirationDate(){
         _creditCardState.value = _creditCardState.value.copy(
-            expirationDate = ""
+            expirationDate = LocalDate.now()
         )
     }
 
@@ -296,7 +295,7 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun updateEndingDate(endingDate: String){
+    fun updateEndingDate(endingDate: LocalDate){
         _auctionState.value = _auctionState.value.copy(
             endingDate = endingDate
         )
@@ -304,7 +303,7 @@ class DietiDealsViewModel : ViewModel() {
 
     fun deleteEndingDate(){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = ""
+            endingDate = LocalDate.now()
         )
     }
 
@@ -344,19 +343,19 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun updateAuctionTypeToEnglish(auctionType: AuctionType){
+    fun updateAuctionTypeToEnglish(){
         _auctionState.value = _auctionState.value.copy(
             auctionType = AuctionType.English
         )
     }
 
-    fun updateAuctionTypeToSilent(auctionType: AuctionType){
+    fun updateAuctionTypeToSilent(){
         _auctionState.value = _auctionState.value.copy(
             auctionType = AuctionType.Silent
         )
     }
 
-    fun deleteFieldAction(registrationEvent: RegistrationEvent){
+    /*fun deleteFieldAction(registrationEvent: RegistrationEvent){
         when(registrationEvent){
             is RegistrationEvent.EmailChanged -> {
                 _userState.value = _userState.value.copy(
@@ -592,7 +591,7 @@ class DietiDealsViewModel : ViewModel() {
                 validateUserRegistration()
             }
         }
-    }
+    }*/
 
     fun validateCreateAuction(){
 

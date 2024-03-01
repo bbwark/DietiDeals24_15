@@ -1,16 +1,13 @@
 package com.CioffiDeVivo.dietideals.DataModels
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class Bid(
-    id: UUID,
-    value: Float,
-    userId: UUID,
-    date: ZonedDateTime
-) {
-    val id: UUID = id
-    val value: Float = value
-    val userId: UUID = userId
-    val date: ZonedDateTime = date
-}
+data class Bid @RequiresApi(Build.VERSION_CODES.O) constructor(
+    val id: UUID = UUID.randomUUID(),
+    val value: Float = 0F,
+    val userId: UUID = UUID.randomUUID(),
+    val date: ZonedDateTime = ZonedDateTime.now()
+)

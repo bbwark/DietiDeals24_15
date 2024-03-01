@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DataModels.CreditCardTest
+import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
 
 @Composable
 fun CreditCardFields(
-    creditCard: CreditCardTest,
+    creditCard: CreditCard,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
     onCvvChange: (String) -> Unit,
@@ -30,7 +30,7 @@ fun CreditCardFields(
     )
     Row {
         InputTextField(
-            value = creditCard.expirationDate,
+            value = creditCard.expirationDate.toString(),
             onValueChanged = { onDateChange(it) },
             label = stringResource(R.string.expirationdate),
             onDelete = {},

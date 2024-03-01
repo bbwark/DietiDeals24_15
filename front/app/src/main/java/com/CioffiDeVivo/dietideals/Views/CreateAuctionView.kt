@@ -39,10 +39,11 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.AuctionTest
+import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -98,21 +99,11 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             }
         }
         Spacer(modifier = Modifier.size(15.dp))
-        EnglishAuction(
-            auction = createAuctionState,
-            onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-            onMinStepChange = { viewModel.updateMinStep(it) },
-            onIntervalChange = { viewModel.updateInterval(it) },
-            onEndingDateChange = { viewModel.updateEndingDate(it) },
-            onDeleteDescription = { viewModel.deleteDescriptionAuction() },
-            onDeleteInterval = { viewModel.deleteInterval() },
-            onDeleteMinStep = { viewModel.deleteMinStep() }
-        )
         if(createAuctionState.auctionType == AuctionType.Silent){
             SilentAuction(
                 auction = createAuctionState,
                 onMinAcceptedChange = { viewModel.updateMinAccepted(it) },
-                onEndingDateChange = { viewModel.updateEndingDate(it) },
+                onEndingDateChange = { viewModel.updateEndingDate(LocalDate.parse(it)) },
                 onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                 onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                 onDeleteMinAccepted = { viewModel.deleteMinAccepted() }
@@ -123,7 +114,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
                 onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                 onMinStepChange = { viewModel.updateMinStep(it) },
                 onIntervalChange = { viewModel.updateInterval(it) },
-                onEndingDateChange = { viewModel.updateEndingDate(it) },
+                onEndingDateChange = { viewModel.updateEndingDate(LocalDate.parse(it)) },
                 onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                 onDeleteInterval = { viewModel.deleteInterval() },
                 onDeleteMinStep = { viewModel.deleteMinStep() }
@@ -155,7 +146,7 @@ fun CreateAuctionPreview(){
 
 @Composable
 fun SilentAuction(
-    auction: AuctionTest,
+    auction: Auction,
     onMinAcceptedChange: (String) -> Unit,
     onEndingDateChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -172,7 +163,7 @@ fun SilentAuction(
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = auction.endingDate,
+            value = auction.endingDate.toString(),
             onValueChanged = { onEndingDateChange(it) },
             label = stringResource(R.string.endingDate),
             trailingIcon = Icons.Filled.CalendarMonth,
@@ -191,7 +182,7 @@ fun SilentAuction(
 
 @Composable
 fun EnglishAuction(
-    auction: AuctionTest,
+    auction: Auction,
     onDescriptionChange: (String) -> Unit,
     onMinStepChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
@@ -218,7 +209,7 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auction.endingDate,
+        value = auction.endingDate.toString(),
         onValueChanged = { onEndingDateChange(it) },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,

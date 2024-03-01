@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
 
 @Composable
 fun ContactInfo(
-    user: UserTest,
+    user: User,
     onAddressChange: (String) -> Unit,
     onZipCodeChange: (String) -> Unit,
     onCountryChange: (String) -> Unit,

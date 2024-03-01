@@ -16,8 +16,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,8 +28,7 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.Events.LoginEvent
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 
@@ -91,7 +88,7 @@ fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavHostC
 }
 @Composable
 fun LoginInputs(
-    user: UserTest,
+    user: User,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onDeleteEmail: (String) -> Unit
