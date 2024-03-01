@@ -2,26 +2,19 @@ package com.CioffiDeVivo.dietideals.DataModels
 
 import java.util.UUID
 
-class User(
-    id: UUID,
-    name: String,
-    email: String,
-    password: String,
-    isSeller: Boolean = false,
-    favouriteAuctions: Array<Auction> = arrayOf(),
-    bio: String? = null,
-    address: String? = null,
-    phoneNumber: String? = null,
-    creditCards: Array<CreditCard> = arrayOf()
-){
-    val id: UUID = id
-    var name: String = name
-    var email: String = email
-    var password: String = password
-    var isSeller: Boolean = isSeller
-    var favouriteAuctions: Array<Auction> = favouriteAuctions
-    var bio: String? = bio
-    var address: String? = address
-    var phoneNumber: String? = phoneNumber
-    var creditCards: Array<CreditCard> = creditCards
-}
+data class User(
+    val id: UUID = UUID.randomUUID(),
+    val name: String = "",
+    val surname: String = "",
+    val email: String = "",
+    val password: String = "",
+    val newPassword: String = "",
+    val isSeller: Boolean = false,
+    val favouriteAuctions: Array<Auction> = arrayOf(),
+    val bio: String = "",
+    val address: String = "",
+    val zipCode: String = "",
+    val country: String = "",
+    val phoneNumber: String = "",
+    val creditCards: Array<CreditCard> = arrayOf()
+)

@@ -18,20 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
-import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostController){
     
-    val userContactinfoState by viewModel.userState.collectAsState()
+    val userContactInfoState by viewModel.userState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -45,14 +44,20 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
             navController = navController
         )
         ContactInfo(
-            user = userContactinfoState,
-            onAddressChange = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) },
-            onZipCodeChange = { viewModel.editContactInfoAction(EditContactInfoEvents.ZipCodeChanged(it)) },
-            onCountryChange = { viewModel.editContactInfoAction(EditContactInfoEvents.CountryChanged(it)) },
-            onPhoneNumberChange = { viewModel.editContactInfoAction(EditContactInfoEvents.PhoneNumberChanged(it)) }
+            user = userContactInfoState,
+            onAddressChange = { viewModel.updateAddress(it) },
+            onZipCodeChange = { viewModel.updateZipCode(it) },
+            onCountryChange = { viewModel.updateCountry(it) },
+            onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
+            onDeleteAddress = { viewModel.deleteAddress() },
+            onDeleteZipCode = { viewModel.deleteZipCode() },
+            onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
         )
         Spacer(modifier = Modifier.height(40.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.pulsateClick()
+        ) {
             Text(text = stringResource(id = R.string.saveChanges))
         }
     }

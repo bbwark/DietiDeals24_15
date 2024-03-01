@@ -1,6 +1,5 @@
  package com.CioffiDeVivo.dietideals.Views
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -10,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
@@ -36,7 +38,9 @@ import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 fun RegisterView(viewModel: DietiDealsViewModel, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(
             modifier = Modifier.height(40.dp))
@@ -47,7 +51,9 @@ fun RegisterView(viewModel: DietiDealsViewModel, navController: NavController) {
             onClick = {
                       navController.navigate(Screen.RegisterCredentials.route)
             },
-            modifier = Modifier.size(width = 330.dp, height = 50.dp),
+            modifier = Modifier
+                .size(width = 330.dp, height = 50.dp)
+                .pulsateClick(),
             content = {
                 Text(stringResource(R.string.continuewithEmail), fontSize = 20.sp)
             }
@@ -66,7 +72,9 @@ fun RegisterView(viewModel: DietiDealsViewModel, navController: NavController) {
 fun ExternalButtons(){
     OutlinedButton(
         onClick = {},
-        modifier = Modifier.size(width = 330.dp, height = 50.dp),
+        modifier = Modifier
+            .size(width = 330.dp, height = 50.dp)
+            .pulsateClick(),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
             contentColor = Color.Black
@@ -89,35 +97,14 @@ fun ExternalButtons(){
     Spacer(
         modifier = Modifier.height(5.dp)
     )
-    OutlinedButton(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(width = 330.dp, height = 50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
-            contentColor = Color.Black
-        ),
-        content = {
-            Image(
-                painter = painterResource(id = R.drawable.logogit),
-                contentDescription = null,
-                modifier = Modifier.size(25.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-
-                stringResource(R.string.continuewithGit),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-        }
-    )
     Spacer(
         modifier = Modifier.height(5.dp)
     )
     OutlinedButton(
         onClick = { /*TODO*/ },
-        modifier = Modifier.size(width = 330.dp, height = 50.dp),
+        modifier = Modifier
+            .size(width = 330.dp, height = 50.dp)
+            .pulsateClick(),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
             contentColor = Color.Black
