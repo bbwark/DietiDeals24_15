@@ -10,12 +10,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
 
 @Composable
 fun PasswordsTextfields(
-    user: UserTest,
+    user: User,
     onPasswordChange: (String) -> Unit,
     label: String,
     supportingText: String

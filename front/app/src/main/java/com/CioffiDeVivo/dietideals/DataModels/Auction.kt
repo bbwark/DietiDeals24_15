@@ -1,24 +1,21 @@
 package com.CioffiDeVivo.dietideals.DataModels
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.util.UUID
 
-class Auction(
-    id: UUID,
-    ownerId: UUID,
-    item: Item,
-    bids: Array<Bid> = arrayOf(),
-    endingDate: LocalDate?,
-    expired: Boolean,
-    auctionType: AuctionType,
-    auctionCategory: AuctionCategory = AuctionCategory.Other
-){
-    val id: UUID = id
-    val ownerId: UUID = ownerId
-    val item: Item = item
-    var bids: Array<Bid> = bids
-    var endingDate: LocalDate? = endingDate
-    var expired: Boolean = expired
-    val auctionType: AuctionType = auctionType
-    val auctionCategory: AuctionCategory = auctionCategory
-}
+data class Auction @RequiresApi(Build.VERSION_CODES.O) constructor(
+    val id: UUID = UUID.randomUUID(),
+    val ownerId: UUID = UUID.randomUUID(),
+    val item: Item = Item(UUID.randomUUID(),""),
+    val description: String = "",
+    val bids: Array<Bid> = arrayOf(),
+    val endingDate: LocalDate? = LocalDate.now(),
+    val minStep: String = "",
+    val interval: String = "",
+    val expired: Boolean = false,
+    val minAccepted: String = "",
+    val auctionType: AuctionType = AuctionType.None,
+    val auctionCategory: AuctionCategory = AuctionCategory.Other
+)

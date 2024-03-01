@@ -50,7 +50,7 @@ fun MakeABid(viewModel: DietiDealsViewModel){
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        MakeaBidEnglish()
+        MakeABidEnglish()
         Spacer(modifier = Modifier.height(7.dp))
         Row {
             Text(
@@ -100,16 +100,16 @@ fun MakeABid(viewModel: DietiDealsViewModel){
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun MakeaBidPreview(){
+fun MakeABidPreview(){
     MakeABid(viewModel = DietiDealsViewModel())
 }
 
 @Composable
-fun MakeaBidEnglish() {
+fun MakeABidEnglish() {
     ViewTitle(title = stringResource(id = R.string.lastBid))
 }
 
 @Composable
-fun MakeaBidSilent(){
+fun MakeABidSilent(){
     ViewTitle(title = stringResource(id = R.string.minimumBid))
 }

@@ -39,7 +39,8 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.UserTest
+import com.CioffiDeVivo.dietideals.DataModels.User
+import java.time.LocalDate
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
@@ -110,7 +111,7 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
             CreditCardFields(
                 creditCard = userCreditCardState,
                 onNumberChange = { viewModel.updateCreditCardNumber(it) },
-                onDateChange = { viewModel.updateExpirationDate(it) },
+                onDateChange = { viewModel.updateExpirationDate(LocalDate.parse(it)) },
                 onCvvChange = { viewModel.updateCvv(it) },
                 onIbanChange = { viewModel.updateIban(it) },
                 onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
@@ -145,7 +146,7 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
 }
 @Composable
 fun PersonalInformation(
-    user: UserTest,
+    user: User,
     onEmailChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onSurnameChange: (String) -> Unit,
@@ -155,7 +156,7 @@ fun PersonalInformation(
     onDeleteName: (String) -> Unit,
     onDeleteSurname: (String) -> Unit,
 
-){
+    ){
     InputTextField(
         value = user.email,
         onValueChanged = { onEmailChange(it) },
