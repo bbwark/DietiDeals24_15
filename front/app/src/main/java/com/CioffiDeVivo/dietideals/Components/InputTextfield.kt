@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.ViewModel
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 
 @Composable
 fun InputTextField(
@@ -23,6 +25,7 @@ fun InputTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     trailingIcon: ImageVector = Icons.Filled.Clear,
     supportingText: String = "",
+    onDelete: (String) -> Unit,
     modifier: Modifier
 ){
     OutlinedTextField(
@@ -36,7 +39,7 @@ fun InputTextField(
             Icon(
                 trailingIcon,
                 contentDescription = null,
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.clickable { onDelete(value) }
             )
         },
         keyboardOptions = keyboardOptions,
