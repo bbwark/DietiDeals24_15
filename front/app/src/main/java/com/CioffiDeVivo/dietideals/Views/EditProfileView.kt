@@ -26,7 +26,7 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
-import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
+import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
 
@@ -49,25 +49,45 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
         )
         InputTextField(
             value = userEditState.name,
-            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
+            onValueChanged = { viewModel.updateName(it) },
             label = stringResource(R.string.name),
             trailingIcon = Icons.Filled.Clear,
+            onDelete = { viewModel.deleteName() },
+            modifier = modifierStandard
+        )
+        InputTextField(
+            value = userEditState.surname,
+            onValueChanged = { viewModel.updateSurname(it) },
+            label = stringResource(R.string.surname),
+            trailingIcon = Icons.Filled.Clear,
+            onDelete = { viewModel.deleteSurname() },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))
         DescriptionTextfield(
             description = userEditState.bio,
-            descriptionOnChange = { viewModel.editProfileAction(EditProfileEvent.DescriptionChanged(it)) },
-            maxDescriptionCharacters = 100
+            descriptionOnChange = { viewModel.updateBio(it) },
+            maxDescriptionCharacters = 100,
+            onDeleteDescription = { viewModel.deleteBio() }
         )
         Spacer(modifier = Modifier.height(40.dp))
         PasswordsTextfields(
             user = userEditState,
-            onPasswordChange = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) }
+            onPasswordChange = { viewModel.updatePassword(it) },
+            label = stringResource(R.string.password),
+            supportingText = stringResource(R.string.passcharacters)
+        )
+        PasswordsTextfields(
+            user = userEditState,
+            onPasswordChange = { viewModel.updateNewPassword(it) },
+            label = stringResource(R.string.rewritepassword),
+            supportingText = ""
         )
         Spacer(modifier = Modifier.height(40.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.pulsateClick()
+        ) {
             Text(text = stringResource(id = R.string.saveChanges))
         }
     }
