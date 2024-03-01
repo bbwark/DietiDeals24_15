@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.dp
 fun DescriptionTextfield(
     description: String,
     descriptionOnChange: (String) -> Unit,
-    maxDescriptionCharacters: Int
+    maxDescriptionCharacters: Int,
+    onDeleteDescription: (String) -> Unit
 ){
 
     OutlinedTextField(
@@ -44,7 +45,7 @@ fun DescriptionTextfield(
             Icon(
                 Icons.Rounded.Clear,
                 contentDescription = null,
-                modifier = Modifier.clickable{}
+                modifier = Modifier.clickable{ onDeleteDescription(description) }
             )
         },
         modifier = Modifier.size(330.dp,200.dp),

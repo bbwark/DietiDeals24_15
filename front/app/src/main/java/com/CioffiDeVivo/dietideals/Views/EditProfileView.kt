@@ -49,22 +49,39 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
         )
         InputTextField(
             value = userEditState.name,
-            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
+            onValueChanged = { viewModel.updateName(it) },
             label = stringResource(R.string.name),
             trailingIcon = Icons.Filled.Clear,
+            onDelete = { viewModel.deleteName() },
+            modifier = modifierStandard
+        )
+        InputTextField(
+            value = userEditState.surname,
+            onValueChanged = { viewModel.updateSurname(it) },
+            label = stringResource(R.string.surname),
+            trailingIcon = Icons.Filled.Clear,
+            onDelete = { viewModel.deleteSurname() },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))
         DescriptionTextfield(
             description = userEditState.bio,
-            descriptionOnChange = { viewModel.editProfileAction(EditProfileEvent.DescriptionChanged(it)) },
-            maxDescriptionCharacters = 100
+            descriptionOnChange = { viewModel.updateBio(it) },
+            maxDescriptionCharacters = 100,
+            onDeleteDescription = { viewModel.deleteBio() }
         )
         Spacer(modifier = Modifier.height(40.dp))
         PasswordsTextfields(
             user = userEditState,
-            onPasswordChange = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) }
+            onPasswordChange = { viewModel.updatePassword(it) },
+            label = stringResource(R.string.password),
+            supportingText = stringResource(R.string.passcharacters)
+        )
+        PasswordsTextfields(
+            user = userEditState,
+            onPasswordChange = { viewModel.updateNewPassword(it) },
+            label = stringResource(R.string.rewritepassword),
+            supportingText = ""
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(onClick = { /*TODO*/ }) {

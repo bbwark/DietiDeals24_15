@@ -39,7 +39,6 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.UserTest
 
 val modifierStandard: Modifier = Modifier
@@ -63,11 +62,14 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
         Spacer(modifier = Modifier.height(30.dp))
         PersonalInformation(
             user = userRegistrationState,
-            onEmailChange = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
-            onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
-            onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
-            onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+            onEmailChange = { viewModel.updateEmail(it)},
+            onNameChange = { viewModel.updateName(it) },
+            onSurnameChange = { viewModel.updateSurname(it) },
+            onPasswordChange = { viewModel.updatePassword(it) },
+            onNewPasswordChange = { viewModel.updateNewPassword(it) },
+            onDeleteEmail = { viewModel.deleteEmail() },
+            onDeleteName = { viewModel.deleteName() },
+            onDeleteSurname = { viewModel.deleteSurname() }
         )
         Row(
             modifier = Modifier
@@ -78,7 +80,7 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
         ) {
             Switch(
                 checked = userRegistrationState.isSeller,
-                onCheckedChange = { viewModel.registrationAction(RegistrationEvent.SellerChange(it)) },
+                onCheckedChange = { viewModel.updateIsSeller() },
                 thumbContent = {
                     if (userRegistrationState.isSeller){
                         Icon(
@@ -95,17 +97,22 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
         if(userRegistrationState.isSeller){
             ContactInfo(
                 user = userRegistrationState,
-                onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
-                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
-                onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
-                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) }
+                onAddressChange = { viewModel.updateAddress(it) },
+                onZipCodeChange = { viewModel.updateZipCode(it) },
+                onCountryChange = { viewModel.updateCountry(it) },
+                onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
+                onDeleteAddress = { viewModel.deleteAddress() },
+                onDeleteZipCode = { viewModel.deleteZipCode() },
+                onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
             )
             CreditCardFields(
                 creditCard = userCreditCardState,
-                onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
-                onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
-                onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
-                onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
+                onNumberChange = { viewModel.updateCreditCardNumber(it) },
+                onDateChange = { viewModel.updateExpirationDate(it) },
+                onCvvChange = { viewModel.updateCvv(it) },
+                onIbanChange = { viewModel.updateIban(it) },
+                onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
+                onDeleteIban = { viewModel.deleteIban() }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
@@ -142,30 +149,43 @@ fun PersonalInformation(
     onSurnameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNewPasswordChange: (String) -> Unit,
+    onDeleteEmail: (String) -> Unit,
+    onDeleteName: (String) -> Unit,
+    onDeleteSurname: (String) -> Unit,
 
 ){
     InputTextField(
         value = user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
+        onDelete = { onDeleteEmail(it) },
         modifier = modifierStandard
     )
     InputTextField(
         value = user.name,
         onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
+        onDelete = { onDeleteName(it) },
         modifier = modifierStandard
     )
     InputTextField(
         value = user.surname,
         onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
+        onDelete = { onDeleteSurname(it) },
         modifier = modifierStandard
     )
     PasswordsTextfields(
         user = user,
         onPasswordChange = onPasswordChange,
-        onNewPasswordChange = onNewPasswordChange
+        label = stringResource(R.string.password),
+        supportingText = stringResource( R.string.passcharacters)
+    )
+    PasswordsTextfields(
+        user = user,
+        onPasswordChange = onPasswordChange,
+        label = stringResource(R.string.rewritepassword),
+        supportingText = "",
     )
 }
 

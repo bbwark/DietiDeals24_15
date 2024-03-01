@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +38,12 @@ import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MakeABid(viewModel: DietiDealsViewModel){
 
     var bid by remember { mutableStateOf("Input") }
+    val userBidState by viewModel.bidState.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,

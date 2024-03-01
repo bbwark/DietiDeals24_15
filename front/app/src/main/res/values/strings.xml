@@ -36,4 +36,5 @@
     <string name="interval">Interval</string>
     <string name="endingDate">End Date</string>
     <string name="bidHistory">Bid History</string>
+    <string name="iban">IBAN</string>
 </resources>
