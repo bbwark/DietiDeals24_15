@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.lifecycle.ViewModel
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 
 @Composable
 fun InputTextField(

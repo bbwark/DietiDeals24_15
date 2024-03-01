@@ -86,7 +86,9 @@ fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = null,
-                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                            modifier = Modifier
+                                .size(SwitchDefaults.IconSize)
+                                .pulsateClick(),
                         )
                     }
                 }
@@ -183,7 +185,7 @@ fun PersonalInformation(
     )
     PasswordsTextfields(
         user = user,
-        onPasswordChange = onPasswordChange,
+        onPasswordChange = onNewPasswordChange,
         label = stringResource(R.string.rewritepassword),
         supportingText = "",
     )

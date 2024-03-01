@@ -27,7 +27,6 @@ import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.UUID
