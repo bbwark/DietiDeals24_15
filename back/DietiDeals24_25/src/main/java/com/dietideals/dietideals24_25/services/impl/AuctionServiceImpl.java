@@ -3,6 +3,8 @@ package com.dietideals.dietideals24_25.services.impl;
 import com.dietideals.dietideals24_25.domain.entities.AuctionEntity;
 import com.dietideals.dietideals24_25.repositories.AuctionRepository;
 import com.dietideals.dietideals24_25.services.AuctionService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,12 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public List<AuctionEntity> findByItemName(String itemName) {
         return auctionRepository.findByItemName(itemName);
+    }
+
+    @Override
+    public List<AuctionEntity> findRandomAuctions(UUID ownerId) {
+        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by("uuid"));
+        return auctionRepository.findRandomAuctions(ownerId, pageRequest);
     }
 
     @Override
