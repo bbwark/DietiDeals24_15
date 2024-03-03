@@ -24,7 +24,6 @@ public class AuctionDto {
 
     private UserEntity owner;
 
-
     private ItemEntity item;
 
     private ArrayList<BidEntity> bids = new ArrayList<>();
