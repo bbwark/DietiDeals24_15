@@ -18,14 +18,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity save(UserEntity userEntity) {
+    public UserEntity registerUser(UserEntity userEntity) {
         return userRepository.save(userEntity);
     }
-
+    @Override
+    public Boolean authenticateUser(String email, String password) {
+        Optional<UserEntity> userEntity = userRepository.findByEmailAndPassword(email, password);
+        return userEntity.isPresent();
+    }
     @Override
     public Optional<UserEntity> findById(UUID id) {
         return userRepository.findById(id);
     }
+    
 
     @Override
     public Boolean exists(UUID id) {

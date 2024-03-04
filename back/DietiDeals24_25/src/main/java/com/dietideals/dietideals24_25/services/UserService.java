@@ -9,8 +9,12 @@ import java.util.UUID;
 @Service
 public interface UserService {
 
-    UserEntity save(UserEntity userEntity);
+    UserEntity registerUser(UserEntity userEntity);
     Optional<UserEntity> findById(UUID id);
+
     Boolean exists(UUID id);
+    Boolean authenticateUser(String email, String password);
     void delete(UUID id);
+
+
 }
