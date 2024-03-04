@@ -26,7 +26,7 @@ public class UserController {
     @PostMapping(path = "/users")
     public UserDto createUser(@RequestBody UserDto user){
         UserEntity userEntity = userMapper.mapFrom(user);
-        UserEntity savedUserEntity = userService.save(userEntity);
+        UserEntity savedUserEntity = userService.registerUser(userEntity);
         return userMapper.mapTo(savedUserEntity);
     }
 
@@ -38,7 +38,7 @@ public class UserController {
 
         user.setId(id);
         UserEntity userEntity = userMapper.mapFrom(user);
-        UserEntity savedUserEntity = userService.save(userEntity);
+        UserEntity savedUserEntity = userService.registerUser(userEntity);
         return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
     }
 
@@ -49,6 +49,15 @@ public class UserController {
             UserDto userDto = userMapper.mapTo(userEntity);
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<String> authenticateUser(@RequestBody UserDto userDto ){
+        if(userService.authenticateUser(userDto.getEmail(), userDto.getPassword())){
+            return ResponseEntity.ok("Login Successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Email or Password");
+        }
     }
 
     @DeleteMapping(path = "/users/{id}")
