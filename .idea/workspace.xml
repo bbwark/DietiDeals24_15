@@ -10,12 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d535ca49-4a7c-4fe2-8d12-55272ad48ce6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/services/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/services/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/back/DietiDeals24_25/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,30 +41,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DietiDeals" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DietiDeals" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DietiDeals" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DietiDeals" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -73,14 +52,17 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -95,6 +77,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
@@ -107,6 +97,9 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
   }
@@ -116,7 +109,7 @@
       <recent name="C:\Users\PC\Desktop\Informatica\back" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.DietiDeals.app">
+  <component name="RunManager" selected="Spring Boot.DietiDeals2425Application">
     <configuration name="DietiDeals.app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="DietiDeals.app.main" />
       <option name="DEPLOY" value="true" />
@@ -208,7 +201,9 @@
       <option name="presentableId" value="Default" />
       <updated>1708709906969</updated>
       <workItem from="1708709908039" duration="1619000" />
-      <workItem from="1709562981454" duration="7277000" />
+      <workItem from="1709562981454" duration="9947000" />
+      <workItem from="1709579656437" duration="4212000" />
+      <workItem from="1709648528625" duration="22134000" />
     </task>
     <servers />
   </component>
