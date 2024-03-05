@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     public Optional<UserEntity> findById(UUID id) {
         return userRepository.findById(id);
     }
-    
 
     @Override
     public Boolean exists(UUID id) {

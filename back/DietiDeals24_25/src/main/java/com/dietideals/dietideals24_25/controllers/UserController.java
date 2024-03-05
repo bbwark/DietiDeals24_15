@@ -6,6 +6,9 @@ import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -31,13 +34,13 @@ public class UserController {
     }
 
     @PutMapping(path = "/users/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto user){
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto){
         if(!userService.exists(id)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        user.setId(id);
-        UserEntity userEntity = userMapper.mapFrom(user);
+        userDto.setId(id);
+        UserEntity userEntity = userMapper.mapFrom(userDto);
         UserEntity savedUserEntity = userService.registerUser(userEntity);
         return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
     }
@@ -60,8 +63,23 @@ public class UserController {
         }
     }
 
+    @GetMapping("/loginSuccesful")
+    public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken ){
+        UUID id = oAuth2AuthenticationToken.getPrincipal().getAttribute("id");
+        Optional<UserEntity> userEntity = userService.findById(id);
+        if(userEntity.isPresent()){
+            return "Benvenuto";
+        } else {
+            return "Utente non trovato";
+        }
+    }
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @DeleteMapping(path = "/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") UUID id){
+    public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
