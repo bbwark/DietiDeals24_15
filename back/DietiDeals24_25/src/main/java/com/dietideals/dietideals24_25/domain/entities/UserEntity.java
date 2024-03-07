@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.domain.entities;
 
+import com.dietideals.dietideals24_25.domain.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -19,11 +21,13 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "user_id")
+    private Integer id;
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -34,14 +38,30 @@ public class UserEntity {
     @JoinColumn(name = "auction_id")
     private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
-    private Optional<String> bio;
+    private String bio;
 
-    private Optional<String> address;
+    private String address;
 
-    private Optional<String> phoneNumber;
+    private String phoneNumber;
 
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "card_number")
     private ArrayList<CreditCardEntity> creditCards = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role_junction",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    private Set<Role> authorities;
+
+    public UserEntity(Integer id, String email, String password, Set<Role> authorities) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
 }
