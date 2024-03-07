@@ -22,7 +22,6 @@ public class BidEntity {
 
     private Float value;
 
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UUID userId;
 
