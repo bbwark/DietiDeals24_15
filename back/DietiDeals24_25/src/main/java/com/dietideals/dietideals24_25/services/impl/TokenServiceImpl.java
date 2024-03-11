@@ -1,6 +1,5 @@
 package com.dietideals.dietideals24_25.services.impl;
 
-import com.nimbusds.jwt.JWTClaimsSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,17 +13,19 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 @Service
-public class TokenService {
+public class TokenServiceImpl {
 
+    @Autowired
     private JwtEncoder jwtEncoder;
 
+    @Autowired
     private JwtDecoder jwtDecoder;
 
     public String generateJwt(Authentication authentication){
 
         Instant now = Instant.now();
 
-        String scope =authentication.getAuthorities().stream()
+        String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
 

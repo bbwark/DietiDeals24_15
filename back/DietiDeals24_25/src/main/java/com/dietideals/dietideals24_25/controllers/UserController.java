@@ -6,6 +6,9 @@ import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,8 +29,8 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String helloUserController(){
-        return "User access level";
+    public String helloUser(){
+        return "Hello user";
     }
 
     @PostMapping(path = "/users")
@@ -67,21 +70,24 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/loginSuccesful")
-//    public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken ){
-//        UUID id = oAuth2AuthenticationToken.getPrincipal().getAttribute("id");
-//        Optional<UserEntity> userEntity = userService.findById(id);
-//        if(userEntity.isPresent()){
-//            return "Benvenuto";
-//        } else {
-//            return "Utente non trovato";
-//        }
+    @GetMapping("/loginSuccesful")
+    public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken ){
+        UUID id = oAuth2AuthenticationToken.getPrincipal().getAttribute("id");
+        Optional<UserEntity> userEntity = userService.findById(id);
+        if(userEntity.isPresent()){
+            return "Benvenuto";
+        } else {
+            return "Utente non trovato";
+        }
+    }
+
+//    @GetMapping("/oauth")
+//    public UserEntity getUser(@AuthenticationPrincipal OAuth2User principal){
+//        String email = principal.getAttribute("email");
+//        String name = principal.getAttribute("name");
+//        return userService.registerOrLoginUserOAuth2(email, name);
 //    }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
 
     @DeleteMapping(path = "/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id){

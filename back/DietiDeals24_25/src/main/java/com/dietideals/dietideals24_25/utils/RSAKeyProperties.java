@@ -7,8 +7,8 @@ import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-@Data
 @Component
+@Data
 public class RSAKeyProperties {
 
     private RSAPublicKey publicKey;
@@ -19,6 +19,5 @@ public class RSAKeyProperties {
         this.publicKey = (RSAPublicKey) pair.getPublic();
         this.privateKey = (RSAPrivateKey) pair.getPrivate();
     }
-
 
 }

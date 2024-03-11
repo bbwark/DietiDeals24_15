@@ -1,6 +1,5 @@
 package com.dietideals.dietideals24_25.config;
 
-import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.utils.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -26,6 +25,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 public class SecurityConfig {
 
@@ -36,15 +36,28 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return new ProviderManager(daoAuthenticationProvider);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests( authorize-> {
-                    authorize.requestMatchers("/auth/**").permitAll();
-                    authorize.anyRequest().authenticated();
+                .authorizeHttpRequests( auth -> {
+                    auth.requestMatchers("/auth/**").permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
@@ -60,15 +73,4 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwkSource);
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(UserService userService){
-        DaoAuthenticationProvider daoAuthenticationProvider= new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userService);
-        return new ProviderManager(daoAuthenticationProvider);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 }

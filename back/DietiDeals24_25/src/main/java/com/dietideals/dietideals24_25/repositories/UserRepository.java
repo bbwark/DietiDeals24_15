@@ -1,10 +1,9 @@
 package com.dietideals.dietideals24_25.repositories;
 
+import com.dietideals.dietideals24_25.domain.entities.ApplicationUser;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,6 +16,5 @@ public interface UserRepository extends CrudRepository<UserEntity, UUID> {
     Optional<UserEntity> findByEmailAndPassword(String email, String password);
 
     @Query("SELECT u FROM UserEntity u WHERE u.email = ?1")
-    Optional<UserDetails> findByEmail(String email);
-
+    Optional<UserEntity> findByEmail(String email);
 }
