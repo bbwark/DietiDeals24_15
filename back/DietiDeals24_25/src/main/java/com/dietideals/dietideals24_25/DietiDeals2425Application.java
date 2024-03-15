@@ -1,8 +1,8 @@
 package com.dietideals.dietideals24_25;
 
-import com.dietideals.dietideals24_25.domain.entities.ApplicationUser;
+import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.domain.entities.Role;
-import com.dietideals.dietideals24_25.repositories.ApplicationUserRepository;
+import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.repositories.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,17 +22,11 @@ public class DietiDeals2425Application{
     }
 
     @Bean
-    CommandLineRunner run(RoleRepository roleRepository, ApplicationUserRepository applicationUserRepository, PasswordEncoder passwordEncoder){
+    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
         return args -> {
-            if(roleRepository.findByAuthority("ADMIN").isPresent()) return;
-            Role adminRole = roleRepository.save(new Role("ADMIN"));
+            roleRepository.save(new Role("ADMIN"));
             roleRepository.save(new Role("USER"));
 
-            Set<Role> roles = new HashSet<>();
-            roles.add(adminRole);
-
-            ApplicationUser admin = new ApplicationUser(UUID.randomUUID(), "admin", passwordEncoder.encode("pass"), roles);
-            applicationUserRepository.save(admin);
         };
     }
 

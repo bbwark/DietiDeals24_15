@@ -1,9 +1,6 @@
 package com.dietideals.dietideals24_25.services;
 
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
-import org.apache.catalina.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

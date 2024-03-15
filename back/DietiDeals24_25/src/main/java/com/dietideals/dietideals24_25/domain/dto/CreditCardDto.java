@@ -15,7 +15,7 @@ public class CreditCardDto {
 
     private String expirationDate;
 
-    private String cvv;
+    private Integer cvv;
 
     private String iban;
 

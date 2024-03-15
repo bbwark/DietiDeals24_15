@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,13 +28,17 @@ public class UserDto {
 
     private Boolean isSeller;
 
-    private ArrayList<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
+    private List<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     private Optional<String> bio;
 
     private Optional<String> address;
 
+    private Optional<Integer> zipcode;
+
+    private Optional<String> country;
+
     private Optional<String> phoneNumber;
 
-    private ArrayList<CreditCardEntity> creditCards = new ArrayList<>();
+    private List<CreditCardEntity> creditCards = new ArrayList<>();
 }
