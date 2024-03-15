@@ -1,6 +1,5 @@
 package com.dietideals.dietideals24_25.repositories;
 
-import com.dietideals.dietideals24_25.domain.entities.ApplicationUser;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

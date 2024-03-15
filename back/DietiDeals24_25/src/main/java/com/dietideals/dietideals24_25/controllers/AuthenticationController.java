@@ -1,10 +1,10 @@
 package com.dietideals.dietideals24_25.controllers;
 
 import com.dietideals.dietideals24_25.domain.dto.LoginDto;
+import com.dietideals.dietideals24_25.domain.dto.LoginRequest;
 import com.dietideals.dietideals24_25.domain.dto.RegistrationDto;
-import com.dietideals.dietideals24_25.domain.entities.ApplicationUser;
+import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.services.impl.AuthenticationServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,17 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class AuthenticationController {
 
-    @Autowired
     private AuthenticationServiceImpl authenticationService;
 
+    public AuthenticationController(AuthenticationServiceImpl authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
     @PostMapping("/register")
-    public ApplicationUser registerUser(@RequestBody RegistrationDto registrationDto){
-        return authenticationService.registerUser(registrationDto.getUsername(), registrationDto.getPassword());
+    public UserEntity registerUserBuyer(@RequestBody RegistrationDto registrationDto){
+        return authenticationService.registerUserBuyer(registrationDto.getEmail(), registrationDto.getName(), registrationDto.getSurname(), registrationDto.getPassword(), registrationDto.getAddress(), registrationDto.getZipCode(), registrationDto.getCountry(), registrationDto.getPhoneNumber(), registrationDto.getCreditCards());
     }
 
     @PostMapping("/login")
-    public LoginDto loginUser(@RequestBody RegistrationDto registrationDto){
-        return authenticationService.loginUser(registrationDto.getUsername(), registrationDto.getPassword());
+    public LoginDto loginUser(@RequestBody LoginRequest loginRequest) {
+        return authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
     }
 
 }
