@@ -80,7 +80,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
         Spacer(modifier = Modifier.size(15.dp))
         Row {
             ElevatedButton(
-                onClick = { viewModel.updateAuctionTypeToSilent(createAuctionState.auctionType) },
+                onClick = { viewModel.updateAuctionTypeToSilent() },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -89,7 +89,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = { viewModel.updateAuctionTypeToEnglish(createAuctionState.auctionType) },
+                onClick = { viewModel.updateAuctionTypeToEnglish() },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
