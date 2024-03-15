@@ -6,7 +6,9 @@ import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -59,14 +61,6 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/use")
-    public ResponseEntity<String> authenticateUser(@RequestBody UserDto userDto ){
-        if(userService.authenticateUser(userDto.getEmail(), userDto.getPassword())){
-            return ResponseEntity.ok("Login Successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Email or Password");
-        }
-    }
 
     @GetMapping("/loginSuccesful")
     public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken ){

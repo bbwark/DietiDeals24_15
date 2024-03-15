@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 //    @Override
 //    public UserEntity registerOrLoginUserOAuth2(String email, String name){
-//        UserEntity userEntity = userRepository.findByEmail(email);
+//        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
 //        if(userEntity == null){
 //            userEntity = new UserEntity();
 //            userEntity.setEmail(email);
