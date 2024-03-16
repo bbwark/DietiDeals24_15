@@ -11,12 +11,12 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
 public class UserController {
 
     private UserService userService;
@@ -28,9 +28,9 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping("/")
-    public String helloUser(){
-        return "Hello user";
+    @GetMapping("/google")
+    public ResponseEntity<?> getOAuthUser(@AuthenticationPrincipal OAuth2User oAuth2User){
+        return ResponseEntity.ok(oAuth2User.getAttributes());
     }
 
     @PostMapping(path = "/users")
@@ -73,12 +73,6 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/oauth")
-//    public UserEntity getUser(@AuthenticationPrincipal OAuth2User principal){
-//        String email = principal.getAttribute("email");
-//        String name = principal.getAttribute("name");
-//        return userService.registerOrLoginUserOAuth2(email, name);
-//    }
 
 
     @DeleteMapping(path = "/users/{id}")
