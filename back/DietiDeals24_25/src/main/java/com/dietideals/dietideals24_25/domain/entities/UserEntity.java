@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -95,6 +94,13 @@ public class UserEntity implements UserDetails {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.creditCards = creditCards;
+    }
+
+    public UserEntity(UUID id, String email, String name, Set<Role> authorities) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.authorities = authorities;
     }
 
 

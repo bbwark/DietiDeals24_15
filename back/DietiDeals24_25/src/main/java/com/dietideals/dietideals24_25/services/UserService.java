@@ -14,6 +14,5 @@ public interface UserService{
     Boolean exists(UUID id);
     Boolean authenticateUser(String email, String password);
     void delete(UUID id);
-//    UserEntity registerOrLoginUserOAuth2(String email, String name);
 
 }
