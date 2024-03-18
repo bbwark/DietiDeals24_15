@@ -16,11 +16,14 @@ import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.utils.DateUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -309,15 +312,18 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun updateEndingDate(endingDate: LocalDate){
+    fun updateEndingDate(endingDate: Long){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = endingDate
+            endingDate = Instant
+                .ofEpochMilli(endingDate)
+                .atZone(ZoneId.of("UTC"))
+                .toLocalDate()
         )
     }
 
     fun deleteEndingDate(){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = LocalDate.now()
+            endingDate = null
         )
     }
 
