@@ -28,10 +28,8 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -39,7 +37,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,7 +52,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.InputTextField
-import com.CioffiDeVivo.dietideals.Components.MyDatePickerDialog
+import com.CioffiDeVivo.dietideals.Components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
@@ -64,9 +61,6 @@ import com.CioffiDeVivo.dietideals.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -74,8 +68,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostController){
 
-    var date = remember { mutableStateOf(LocalDate.now()) }
-    var showDatePicker = remember { mutableStateOf(false) }
+    val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val itemAuctionState by viewModel.itemState.collectAsState()
     val permissionState = rememberPermissionState(
@@ -84,8 +77,6 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
     SideEffect {
         permissionState.launchPermissionRequest()
     }
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -96,17 +87,6 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
         AddingImagesOnCreateAuction(viewModel = viewModel)
 
         Spacer(modifier = Modifier.height(30.dp))
-
-
-//        if (showDatePicker){
-//            MyDatePickerDialog(
-//                onDateSelected = { date = it },
-//                onDismiss = { showDatePicker = false }
-//            )
-//        }
-
-
-
 
         InputTextField(
             value = itemAuctionState.name,
@@ -154,10 +134,10 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onMinStepChange = { viewModel.updateMinStep(it) },
                     onIntervalChange = { viewModel.updateInterval(it) },
-                    onEndingDateChange = {  },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                     onDeleteInterval = { viewModel.deleteInterval() },
-                    onDeleteMinStep = { viewModel.deleteMinStep() }
+                    onDeleteMinStep = { viewModel.deleteMinStep() },
+                    onCalendarClick = { showDatePicker.value = true }
                 )
             }
             else -> {
@@ -165,7 +145,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             }
         }
         if(showDatePicker.value){
-            MyDatePickerDialog(
+            CustomDatePickerDialog(
                 onAccept = {
                     showDatePicker.value = false
                     if (it != null){
@@ -235,16 +215,18 @@ fun SilentAuction(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EnglishAuction(
     auction: Auction,
     onDescriptionChange: (String) -> Unit,
     onMinStepChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
-    onEndingDateChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
     onDeleteMinStep: (String) -> Unit,
     onDeleteInterval: (String) -> Unit,
+    onCalendarClick: () -> Unit
+
 ){
     Row {
         InputTextField(
@@ -264,11 +246,12 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auction.endingDate.toString(),
+        value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
         onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
-        onDelete = {  },
+        onDelete = { onCalendarClick() },
+        readOnly = true,
         modifier = modifierStandard
     )
     DescriptionTextfield(
