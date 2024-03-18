@@ -72,7 +72,7 @@ fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>
 @Composable
 fun AuctionListPreview(){
 
-    val testItem = Item(id = UUID.randomUUID(), imagesUrl = arrayOf("url"), name = "Desktop Computer")
+    val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer")
 
     val testAuctions: Array<Auction> = arrayOf(
         Auction(

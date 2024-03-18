@@ -47,7 +47,7 @@ val modifierStandard: Modifier = Modifier
     .padding(start = 30.dp, end = 30.dp)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: DietiDealsViewModel,){
+fun RegisterCredentialsView(viewModel: DietiDealsViewModel){
 
     val userRegistrationState by viewModel.userState.collectAsState()
     val userCreditCardState by viewModel.creditCardState.collectAsState()
