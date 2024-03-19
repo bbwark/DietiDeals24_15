@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,12 +22,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Euro
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,12 +46,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
@@ -58,6 +67,7 @@ import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.ui.theme.md_theme_dark_background
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -99,15 +109,26 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
         Row {
             ElevatedButton(
                 onClick = { viewModel.updateAuctionTypeToSilent() },
+                colors = if (createAuctionState.auctionType == AuctionType.Silent){
+                    ButtonDefaults.buttonColors()
+                }else{
+                     ButtonDefaults.elevatedButtonColors()
+                     },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
+
             ) {
                 Text("Silent")
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
                 onClick = { viewModel.updateAuctionTypeToEnglish() },
+                colors = if (createAuctionState.auctionType == AuctionType.English){
+                    ButtonDefaults.buttonColors()
+                }else{
+                    ButtonDefaults.elevatedButtonColors()
+                },
                 modifier = Modifier
                     .width(100.dp)
                     .pulsateClick()
@@ -121,22 +142,14 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             AuctionType.Silent -> {
                 SilentAuction(
                     auction = createAuctionState,
-                    onMinAcceptedChange = { viewModel.updateMinAccepted(it) },
-                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
-                    onDeleteMinAccepted = { viewModel.deleteMinAccepted() },
+                    viewModel,
                     onCalendarClick = { showDatePicker.value = true }
                 )
             }
             AuctionType.English -> {
                 EnglishAuction(
                     auction = createAuctionState,
-                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                    onMinStepChange = { viewModel.updateMinStep(it) },
-                    onIntervalChange = { viewModel.updateInterval(it) },
-                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
-                    onDeleteInterval = { viewModel.deleteInterval() },
-                    onDeleteMinStep = { viewModel.deleteMinStep() },
+                    viewModel,
                     onCalendarClick = { showDatePicker.value = true }
                 )
             }
@@ -156,7 +169,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             )
         }
         Button(
-            onClick = {  },
+            onClick = { /*ADD AUCTION*/ },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -180,19 +193,18 @@ fun CreateAuctionPreview(){
 @Composable
 fun SilentAuction(
     auction: Auction,
-    onMinAcceptedChange: (String) -> Unit,
-    onDescriptionChange: (String) -> Unit,
-    onDeleteDescription: (String) -> Unit,
-    onDeleteMinAccepted: (String) -> Unit,
+    viewModel: DietiDealsViewModel,
     onCalendarClick: () -> Unit
 ){
     Row {
         InputTextField(
             value = auction.minAccepted,
-            onValueChanged = { onMinAcceptedChange(it) },
+            onValueChanged = { viewModel.updateMinAccepted(it) },
             label = stringResource(R.string.minStep),
-            onDelete = { onDeleteMinAccepted(it) },
-            modifier = Modifier.width(150.dp)
+            onDelete = { viewModel.deleteMinAccepted() },
+            modifier = Modifier.width(150.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            trailingIcon = Icons.Filled.Euro
         )
         Spacer(modifier = Modifier.width(30.dp))
 
@@ -203,14 +215,14 @@ fun SilentAuction(
             onDelete = { onCalendarClick() },
             modifier = Modifier.width(150.dp),
             readOnly = true,
-            trailingIcon = Icons.Filled.CalendarMonth
+            trailingIcon = Icons.Filled.CalendarMonth,
         )
     }
     DescriptionTextfield(
         description = auction.description,
-        descriptionOnChange = { onDescriptionChange(it) },
+        descriptionOnChange = { viewModel.updateDescriptionAuction(it) },
         maxDescriptionCharacters = 200,
-        onDeleteDescription = { onDeleteDescription(it) }
+        onDeleteDescription = { viewModel.deleteDescriptionAuction() }
     )
 
 }
@@ -219,29 +231,26 @@ fun SilentAuction(
 @Composable
 fun EnglishAuction(
     auction: Auction,
-    onDescriptionChange: (String) -> Unit,
-    onMinStepChange: (String) -> Unit,
-    onIntervalChange: (String) -> Unit,
-    onDeleteDescription: (String) -> Unit,
-    onDeleteMinStep: (String) -> Unit,
-    onDeleteInterval: (String) -> Unit,
+    viewModel: DietiDealsViewModel,
     onCalendarClick: () -> Unit
 
 ){
     Row {
         InputTextField(
             value = auction.minStep,
-            onValueChanged = { onMinStepChange(it) },
+            onValueChanged = { viewModel.updateMinStep(it) },
             label = stringResource(R.string.minStep),
-            onDelete = { onDeleteMinStep(it) },
-            modifier = Modifier.width(150.dp)
+            onDelete = { viewModel.deleteMinStep() },
+            modifier = Modifier.width(150.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            trailingIcon = Icons.Filled.Euro
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
             value = auction.interval,
-            onValueChanged = { onIntervalChange(it) },
+            onValueChanged = { viewModel.updateInterval(it) },
             label = stringResource(R.string.interval),
-            onDelete = { onDeleteInterval(it) },
+            onDelete = { viewModel.deleteInterval() },
             modifier = Modifier.width(150.dp)
         )
     }
@@ -252,13 +261,13 @@ fun EnglishAuction(
         trailingIcon = Icons.Filled.CalendarMonth,
         onDelete = { onCalendarClick() },
         readOnly = true,
-        modifier = modifierStandard
+        modifier = Modifier.width(325.dp)
     )
     DescriptionTextfield(
         description = auction.description,
-        descriptionOnChange = { onDescriptionChange(it) },
+        descriptionOnChange = { viewModel.updateDescriptionAuction(it) },
         maxDescriptionCharacters = 200,
-        onDeleteDescription = { onDeleteDescription(it) }
+        onDeleteDescription = { viewModel.deleteDescriptionAuction() }
     )
 }
 
@@ -266,29 +275,37 @@ fun EnglishAuction(
 fun ImageItem(
     uri: Uri?,
     onClick: () -> Unit,
-    context: Context
+    context: Context,
+    iconButton: ImageVector = Icons.Filled.BrokenImage,
+    modifier: Modifier
 ){
+    val showDialog = remember { mutableStateOf(false) }
     Box {
         Image(
             painter = rememberAsyncImagePainter(uri),
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier
+            modifier = modifier
                 .size(width = 80.dp, height = 80.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .clickable { },
+                .clickable { showDialog.value = true },
 
             contentDescription = null
         )
         IconButton(
             onClick = {
-                      onClick()
-                Toast.makeText(context, "Image Removed", Toast.LENGTH_SHORT).show()
+                onClick()
             },
         ) {
-            Icon(Icons.Filled.BrokenImage, contentDescription = null, tint = Color.White)
+            Icon(iconButton, contentDescription = null, tint = Color.White)
         }
     }
     Spacer(modifier = Modifier.width(5.dp))
+    if(showDialog.value){
+        DialogImage(
+            uri = uri,
+            onDismissRequest = { showDialog.value = false }
+        )
+    }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -314,8 +331,14 @@ fun AddingImagesOnCreateAuction(viewModel: DietiDealsViewModel) {
             Spacer(modifier = Modifier.width(10.dp))
             ImageItem(
                 uri = uri,
-                onClick = { viewModel.deleteImageUri(index) },
-                context = context
+                onClick = {
+                    viewModel.deleteImageUri(index)
+                    Toast.makeText(context, "Image Removed", Toast.LENGTH_SHORT).show()
+                          },
+                context = context,
+                modifier = Modifier
+                    .size(width = 80.dp, height = 80.dp)
+                    .clip(RoundedCornerShape(10.dp))
             )
         }
     }
@@ -335,5 +358,27 @@ fun AddingImagesOnCreateAuction(viewModel: DietiDealsViewModel) {
         Text(text = "Add Image")
     }
 }
+
+@Composable
+fun DialogImage(
+    uri: Uri?,
+    onDismissRequest: () -> Unit
+){
+    Dialog(
+        onDismissRequest = { onDismissRequest() }
+    ) {
+        ImageItem(
+            uri = uri,
+            onClick = { onDismissRequest() },
+            context = LocalContext.current,
+            modifier = Modifier
+                .size(width = 200.dp, height = 200.dp)
+                .clip(RoundedCornerShape(10.dp)),
+        )
+    }
+}
+
+
+
 
 
