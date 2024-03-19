@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Euro
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -34,15 +35,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MakeABid(viewModel: DietiDealsViewModel){
+fun MakeABidSilent(viewModel: DietiDealsViewModel){
 
-    var bid by remember { mutableStateOf("Input") }
+    var bid by remember { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
 
     Column(
@@ -50,11 +52,11 @@ fun MakeABid(viewModel: DietiDealsViewModel){
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        MakeABidEnglish()
+        ViewTitle(title = stringResource(R.string.minimumBid))
         Spacer(modifier = Modifier.height(7.dp))
         Row {
             Text(
-                "Placeholder",
+                "Placeholder", //Get Latest Bid
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
@@ -70,21 +72,29 @@ fun MakeABid(viewModel: DietiDealsViewModel){
         Spacer(modifier = Modifier.height(50.dp))
         OutlinedTextField(
             value = bid,
-            onValueChange = { bid = it },
+            onValueChange = {
+                bid = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+                viewModel.updateBidValue(it)
+            },
             singleLine = true,
             trailingIcon = {
-                Icon(Icons.Rounded.Clear,
+                Icon(
+                    Icons.Filled.Euro,
                     contentDescription = null,
-                    modifier = Modifier.clickable{bid = ""}
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = BidInputVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier.width(250.dp),
             label = { Text("Your Bid") },
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { /*Navigate on The Auction View - Post the Bid*/ },
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
@@ -94,22 +104,11 @@ fun MakeABid(viewModel: DietiDealsViewModel){
             )
         }
     }
-
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun MakeABidPreview(){
-    MakeABid(viewModel = DietiDealsViewModel())
-}
-
-@Composable
-fun MakeABidEnglish() {
-    ViewTitle(title = stringResource(id = R.string.lastBid))
-}
-
-@Composable
-fun MakeABidSilent(){
-    ViewTitle(title = stringResource(id = R.string.minimumBid))
+fun MakeABidSilentPreview(){
+    MakeABidSilent(viewModel = DietiDealsViewModel())
 }

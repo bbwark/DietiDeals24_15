@@ -203,7 +203,7 @@ fun SilentAuction(
             label = stringResource(R.string.minStep),
             onDelete = { viewModel.deleteMinAccepted() },
             modifier = Modifier.width(150.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             trailingIcon = Icons.Filled.Euro
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -242,7 +242,7 @@ fun EnglishAuction(
             label = stringResource(R.string.minStep),
             onDelete = { viewModel.deleteMinStep() },
             modifier = Modifier.width(150.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             trailingIcon = Icons.Filled.Euro
         )
         Spacer(modifier = Modifier.width(30.dp))
