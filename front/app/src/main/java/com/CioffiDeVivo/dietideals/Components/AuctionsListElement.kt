@@ -70,7 +70,7 @@ fun AuctionsListElementPreview() {
     val testAuction = Auction(
         id = UUID.randomUUID(), 
         ownerId = UUID.randomUUID(),
-        item = Item(id = UUID.randomUUID(), imagesUrl = arrayOf("url"), name = "Desktop Computer"),
+        item = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer"),
         endingDate = LocalDate.of(2025, 10, 15),
         expired = false,
         auctionType = AuctionType.Silent)

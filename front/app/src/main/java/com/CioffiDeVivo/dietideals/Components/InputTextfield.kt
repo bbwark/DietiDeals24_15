@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 fun InputTextField(
     value: String,
     onValueChanged: (String) -> Unit,
+    readOnly: Boolean = false,
     label: String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -31,6 +32,7 @@ fun InputTextField(
         onValueChange = { onValueChanged(it) },
         label = { Text(label) },
         visualTransformation = visualTransformation,
+        readOnly = readOnly,
         singleLine = true,
         supportingText = { Text(supportingText) },
         trailingIcon = {

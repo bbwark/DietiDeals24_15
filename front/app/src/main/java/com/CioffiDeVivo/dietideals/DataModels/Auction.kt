@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.util.UUID
 
-data class Auction @RequiresApi(Build.VERSION_CODES.O) constructor(
+data class Auction (
     val id: UUID = UUID.randomUUID(),
     val ownerId: UUID = UUID.randomUUID(),
     val item: Item = Item(UUID.randomUUID(),""),
