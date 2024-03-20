@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
@@ -7,22 +8,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
-import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.Events.LoginEvent
-import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
-import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
+import com.CioffiDeVivo.dietideals.utils.DateUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -281,6 +282,22 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
+    fun updateImagesUri(imagesUri: Uri?){
+        val updatedImagesUri = _itemState.value.imagesUri.toMutableList()
+        updatedImagesUri += imagesUri
+        _itemState.value = _itemState.value.copy(
+            imagesUri  = updatedImagesUri.distinct()
+        )
+    }
+
+    fun deleteImageUri(index: Int){
+        val updatedImagesUri = _itemState.value.imagesUri.toMutableList()
+        updatedImagesUri.removeAt(index)
+        _itemState.value = _itemState.value.copy(
+            imagesUri = updatedImagesUri.distinct()
+        )
+    }
+
     /* Update & Delete Auction */
 
     fun updateDescriptionAuction(description: String){
@@ -295,15 +312,18 @@ class DietiDealsViewModel : ViewModel() {
         )
     }
 
-    fun updateEndingDate(endingDate: LocalDate){
+    fun updateEndingDate(endingDate: Long){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = endingDate
+            endingDate = Instant
+                .ofEpochMilli(endingDate)
+                .atZone(ZoneId.of("UTC"))
+                .toLocalDate()
         )
     }
 
     fun deleteEndingDate(){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = LocalDate.now()
+            endingDate = null
         )
     }
 
