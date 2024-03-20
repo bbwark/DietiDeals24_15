@@ -38,7 +38,7 @@ public class AuctionEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<BidEntity> bids = new ArrayList<>();
 
-    private Optional<LocalDate> endingDate;
+    private LocalDate endingDate;
 
     private Boolean expired;
 
