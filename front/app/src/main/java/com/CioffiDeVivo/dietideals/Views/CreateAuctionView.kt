@@ -35,6 +35,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +52,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.InputTextField
+import com.CioffiDeVivo.dietideals.Components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
@@ -58,13 +61,14 @@ import com.CioffiDeVivo.dietideals.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostController){
 
+    val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val itemAuctionState by viewModel.itemState.collectAsState()
     val permissionState = rememberPermissionState(
@@ -73,8 +77,6 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
     SideEffect {
         permissionState.launchPermissionRequest()
     }
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -85,6 +87,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
         AddingImagesOnCreateAuction(viewModel = viewModel)
 
         Spacer(modifier = Modifier.height(30.dp))
+
         InputTextField(
             value = itemAuctionState.name,
             onValueChanged = { viewModel.updateItemName(it) },
@@ -119,10 +122,10 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
                 SilentAuction(
                     auction = createAuctionState,
                     onMinAcceptedChange = { viewModel.updateMinAccepted(it) },
-                    onEndingDateChange = { viewModel.updateEndingDate(LocalDate.parse(it)) },
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
-                    onDeleteMinAccepted = { viewModel.deleteMinAccepted() }
+                    onDeleteMinAccepted = { viewModel.deleteMinAccepted() },
+                    onCalendarClick = { showDatePicker.value = true }
                 )
             }
             AuctionType.English -> {
@@ -131,15 +134,26 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onMinStepChange = { viewModel.updateMinStep(it) },
                     onIntervalChange = { viewModel.updateInterval(it) },
-                    onEndingDateChange = { viewModel.updateEndingDate(LocalDate.parse(it)) },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                     onDeleteInterval = { viewModel.deleteInterval() },
-                    onDeleteMinStep = { viewModel.deleteMinStep() }
+                    onDeleteMinStep = { viewModel.deleteMinStep() },
+                    onCalendarClick = { showDatePicker.value = true }
                 )
             }
             else -> {
 
             }
+        }
+        if(showDatePicker.value){
+            CustomDatePickerDialog(
+                onAccept = {
+                    showDatePicker.value = false
+                    if (it != null){
+                        viewModel.updateEndingDate(it)
+                    }
+                },
+                onCancel = { showDatePicker.value = false }
+            )
         }
         Button(
             onClick = {  },
@@ -162,14 +176,15 @@ fun CreateAuctionPreview(){
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SilentAuction(
     auction: Auction,
     onMinAcceptedChange: (String) -> Unit,
-    onEndingDateChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
-    onDeleteMinAccepted: (String) -> Unit
+    onDeleteMinAccepted: (String) -> Unit,
+    onCalendarClick: () -> Unit
 ){
     Row {
         InputTextField(
@@ -180,13 +195,15 @@ fun SilentAuction(
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
+
         InputTextField(
-            value = auction.endingDate.toString(),
-            onValueChanged = { onEndingDateChange(it) },
+            value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            onValueChanged = { },
             label = stringResource(R.string.endingDate),
-            trailingIcon = Icons.Filled.CalendarMonth,
-            onDelete = {  },
-            modifier = Modifier.width(150.dp)
+            onDelete = { onCalendarClick() },
+            modifier = Modifier.width(150.dp),
+            readOnly = true,
+            trailingIcon = Icons.Filled.CalendarMonth
         )
     }
     DescriptionTextfield(
@@ -198,16 +215,18 @@ fun SilentAuction(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EnglishAuction(
     auction: Auction,
     onDescriptionChange: (String) -> Unit,
     onMinStepChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
-    onEndingDateChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
     onDeleteMinStep: (String) -> Unit,
     onDeleteInterval: (String) -> Unit,
+    onCalendarClick: () -> Unit
+
 ){
     Row {
         InputTextField(
@@ -227,11 +246,12 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auction.endingDate.toString(),
-        onValueChanged = { onEndingDateChange(it) },
+        value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
-        onDelete = {  },
+        onDelete = { onCalendarClick() },
+        readOnly = true,
         modifier = modifierStandard
     )
     DescriptionTextfield(
@@ -315,8 +335,5 @@ fun AddingImagesOnCreateAuction(viewModel: DietiDealsViewModel) {
         Text(text = "Add Image")
     }
 }
-
-
-
 
 
