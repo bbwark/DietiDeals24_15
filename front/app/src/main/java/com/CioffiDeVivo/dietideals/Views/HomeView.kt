@@ -135,7 +135,7 @@ fun HomeViewPreview(){
 
 
 //Test Auctions
-val testItem = Item(id = UUID.randomUUID(), imagesUrl = arrayOf("url"), name = "Test")
+val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Test")
 @RequiresApi(Build.VERSION_CODES.O)
 val testAuctions: Array<Auction> = arrayOf(
     Auction(
