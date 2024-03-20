@@ -21,8 +21,14 @@ public class CreditCardEntity {
 
     private String expirationDate;
 
-    private String cvv;
+    private Integer cvv;
 
     private String iban;
+
+    public CreditCardEntity(String creditCardNumber, String expirationDate, Integer cvv){
+        this.creditCardNumber = creditCardNumber;
+        this.expirationDate = expirationDate;
+        this.cvv = cvv;
+    }
 
 }

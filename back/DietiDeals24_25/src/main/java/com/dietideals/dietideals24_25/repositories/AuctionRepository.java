@@ -12,10 +12,10 @@ import java.util.UUID;
 
 @Repository
 public interface AuctionRepository extends CrudRepository<AuctionEntity, UUID> {
-    @Query("SELECT a FROM auctions a WHERE lower(a.item.name) LIKE lower(concat('%', :itemName,'%'))") //TODO: check if works
+    @Query("SELECT a FROM AuctionEntity a WHERE lower(a.item.name) LIKE lower(concat('%', :itemName,'%'))") //TODO: check if works
     List<AuctionEntity> findByItemName(@Param("itemName") String itemName);
 
-    @Query("SELECT a FROM Auction a WHERE a.owner.uuid != :ownerUuid")
+    @Query("SELECT a FROM AuctionEntity a WHERE a.owner.id != :ownerUuid")
     List<AuctionEntity> findRandomAuctions(@Param("ownerUuid") UUID ownerUuid, Pageable pageable);
 
 }
