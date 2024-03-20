@@ -71,6 +71,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.credentials:credentials:1.3.0-alpha01")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation ("androidx.credentials:credentials-play-services-auth:<latest version>")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
 }

@@ -5,17 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class BidDto {
 
-    private String id;
+    private UUID id;
 
     private Float value;
 
-    private String userId;
+    private UUID userId;
 
     private String date;
 
