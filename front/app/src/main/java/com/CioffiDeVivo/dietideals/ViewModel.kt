@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Bid
@@ -16,11 +15,9 @@ import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.DataModels.Item
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.utils.DateUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -372,6 +369,20 @@ class DietiDealsViewModel : ViewModel() {
     fun updateAuctionTypeToSilent(){
         _auctionState.value = _auctionState.value.copy(
             auctionType = AuctionType.Silent
+        )
+    }
+
+    /* Update & Delete Bid */
+
+    fun updateBidValue(value: String){
+        _bidState.value = _bidState.value.copy(
+            value = value.toFloat()
+        )
+    }
+
+    fun deleteBidValue(){
+        _bidState.value = _bidState.value.copy(
+            value = 0.0f
         )
     }
 
