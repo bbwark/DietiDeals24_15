@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.AuctionsList
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FavouritesView(viewModel: DietiDealsViewModel, navController: NavHostController) {
+fun FavouritesView(viewModel: MainViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
 
     Column(Modifier.fillMaxSize()) {
@@ -67,6 +67,6 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
 @Composable
 fun FavouritesViewPreview(){
     DietiDealsTheme {
-        FavouritesView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+        FavouritesView(viewModel = MainViewModel(), navController = rememberNavController())
     }
 }

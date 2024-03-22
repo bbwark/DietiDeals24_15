@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals
+package com.CioffiDeVivo.dietideals.viewmodel
 
 import android.net.Uri
 import android.os.Build
@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
-class DietiDealsViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
 
     private val _userState = MutableStateFlow(User())
     val userState: StateFlow<User> = _userState.asStateFlow()

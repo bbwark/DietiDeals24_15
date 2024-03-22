@@ -31,13 +31,13 @@ import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.DataModels.Bid
 import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BidHistoryView(viewModel: DietiDealsViewModel) {
+fun BidHistoryView(viewModel: MainViewModel) {
     var showDetails by remember { mutableStateOf(false) }
     var acceptOffer by remember { mutableStateOf(false) }
     var userInfo by remember { mutableStateOf(false) }
@@ -178,5 +178,5 @@ fun acceptOfferDialog(
 @Preview(showBackground = true)
 @Composable
 fun BidHistoryViewPreview() {
-    BidHistoryView(viewModel = DietiDealsViewModel())
+    BidHistoryView(viewModel = MainViewModel())
 }

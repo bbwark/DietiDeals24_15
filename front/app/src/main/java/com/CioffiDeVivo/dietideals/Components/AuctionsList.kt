@@ -20,7 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
@@ -28,7 +28,7 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navController: NavHostController, viewModel: DietiDealsViewModel) {
+fun AuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navController: NavHostController, viewModel: MainViewModel) {
     LazyColumn {
         itemsIndexed(auctions) { index, item ->
             Column {
@@ -123,6 +123,6 @@ fun AuctionListPreview(){
     )
 
     DietiDealsTheme {
-        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = DietiDealsViewModel())
+        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = MainViewModel())
     }
 }

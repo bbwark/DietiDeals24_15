@@ -23,12 +23,12 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostController){
+fun EditContactInfoView(viewModel: MainViewModel, navController: NavHostController){
     
     val userContactInfoState by viewModel.userState.collectAsState()
 
@@ -67,5 +67,5 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
 @Preview(showBackground = true)
 @Composable
 fun EditContactInfoPreview(){
-    EditContactInfoView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    EditContactInfoView(viewModel = MainViewModel(), navController = rememberNavController())
 }

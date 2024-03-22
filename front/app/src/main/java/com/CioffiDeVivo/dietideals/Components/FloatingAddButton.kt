@@ -11,10 +11,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 
 @Composable
-fun FloatingAddButton(viewModel: DietiDealsViewModel, onClick: () -> Unit) {
+fun FloatingAddButton(viewModel: MainViewModel, onClick: () -> Unit) {
     Column {
         Spacer(modifier = Modifier.weight(1f))
         Row {

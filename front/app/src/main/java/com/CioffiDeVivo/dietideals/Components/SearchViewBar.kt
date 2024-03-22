@@ -18,13 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun SearchViewBar(
     modifier: Modifier = Modifier,
-    viewModel: DietiDealsViewModel
+    viewModel: MainViewModel
 ) {
     var state by remember { mutableStateOf("") }
 
@@ -70,5 +70,5 @@ fun SearchViewBar(
 @Preview
 @Composable
 fun SearchViewBarPreview() {
-    SearchViewBar(viewModel = DietiDealsViewModel())
+    SearchViewBar(viewModel = MainViewModel())
 }

@@ -16,11 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.ManageCardsElement
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ManageCardsView(viewModel: DietiDealsViewModel) {
+fun ManageCardsView(viewModel: MainViewModel) {
     Box {
         LazyColumn(
             modifier = Modifier
@@ -45,5 +45,5 @@ fun ManageCardsView(viewModel: DietiDealsViewModel) {
 @Preview (showBackground = true)
 @Composable
 fun ManageCardsViewPreview() {
-    ManageCardsView(viewModel = DietiDealsViewModel())
+    ManageCardsView(viewModel = MainViewModel())
 }

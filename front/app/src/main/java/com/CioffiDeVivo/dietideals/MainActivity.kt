@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Views.Navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +29,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    var dietiDealsViewModel = DietiDealsViewModel()
-                    SetupNavGraph(navController = navController, viewModel = dietiDealsViewModel)
+                    var mainViewModel = MainViewModel()
+                    SetupNavGraph(navController = navController, viewModel = mainViewModel, viewModel2 = RegistrationViewModel())
                 }
             }
         }

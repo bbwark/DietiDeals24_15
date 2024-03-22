@@ -29,12 +29,12 @@ import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.DataModels.User
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogInCredentialsView(viewModel: DietiDealsViewModel, navController: NavHostController){
+fun LogInCredentialsView(viewModel: MainViewModel, navController: NavHostController){
 
     val userLoginState by viewModel.userState.collectAsState()
 
@@ -98,7 +98,7 @@ fun LoginInputs(
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         trailingIcon = Icons.Filled.Clear,
-        onDelete = { onDeleteEmail(it) },
+        onTrailingIconClick = { onDeleteEmail(it) },
         modifier = modifierStandard
     )
     PasswordsTextfields(
@@ -113,5 +113,5 @@ fun LoginInputs(
 @Preview(showBackground = true)
 @Composable
 fun LogInCredentialsPreview(){
-    LogInCredentialsView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    LogInCredentialsView(viewModel = MainViewModel(), navController = rememberNavController())
 }

@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,14 +33,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MakeABidEnglish(viewModel: DietiDealsViewModel){
+fun MakeABidEnglish(viewModel: MainViewModel){
 
     var bid by remember { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
@@ -112,5 +109,5 @@ fun MakeABidEnglish(viewModel: DietiDealsViewModel){
 @Preview(showBackground = true)
 @Composable
 fun MakeABidEnglishPreview(){
-    MakeABidEnglish(viewModel = DietiDealsViewModel())
+    MakeABidEnglish(viewModel = MainViewModel())
 }
