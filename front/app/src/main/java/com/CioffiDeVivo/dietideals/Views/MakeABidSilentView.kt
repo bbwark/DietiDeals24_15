@@ -2,7 +2,6 @@ package com.CioffiDeVivo.dietideals.Views
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Euro
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -36,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MakeABidSilent(viewModel: DietiDealsViewModel){
+fun MakeABidSilent(viewModel: MainViewModel){
 
     var bid by remember { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
@@ -110,5 +108,5 @@ fun MakeABidSilent(viewModel: DietiDealsViewModel){
 @Preview(showBackground = true)
 @Composable
 fun MakeABidSilentPreview(){
-    MakeABidSilent(viewModel = DietiDealsViewModel())
+    MakeABidSilent(viewModel = MainViewModel())
 }

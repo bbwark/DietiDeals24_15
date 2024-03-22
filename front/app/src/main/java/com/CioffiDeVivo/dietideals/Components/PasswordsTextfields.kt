@@ -29,7 +29,7 @@ fun PasswordsTextfields(
         visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         supportingText = supportingText,
-        onDelete = { passwordVisible = !passwordVisible },
+        onTrailingIconClick = { passwordVisible = !passwordVisible },
         modifier = modifierStandard
     )
 

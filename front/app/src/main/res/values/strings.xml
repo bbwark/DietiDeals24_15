@@ -37,4 +37,6 @@
     <string name="endingDate">End Date</string>
     <string name="bidHistory">Bid History</string>
     <string name="iban">IBAN</string>
+    <string name="error_fieldEmpty">The field cannot be empty</string>
+    <string name="emailExample">Example@Example.com</string>
 </resources>

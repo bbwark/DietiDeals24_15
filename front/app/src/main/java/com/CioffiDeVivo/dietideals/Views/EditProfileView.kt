@@ -27,12 +27,12 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController){
+fun EditProfile(viewModel: MainViewModel, navController: NavHostController){
 
     val userEditState by viewModel.userState.collectAsState()
 
@@ -52,7 +52,7 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
             onValueChanged = { viewModel.updateName(it) },
             label = stringResource(R.string.name),
             trailingIcon = Icons.Filled.Clear,
-            onDelete = { viewModel.deleteName() },
+            onTrailingIconClick = { viewModel.deleteName() },
             modifier = modifierStandard
         )
         InputTextField(
@@ -60,7 +60,7 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
             onValueChanged = { viewModel.updateSurname(it) },
             label = stringResource(R.string.surname),
             trailingIcon = Icons.Filled.Clear,
-            onDelete = { viewModel.deleteSurname() },
+            onTrailingIconClick = { viewModel.deleteSurname() },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))
@@ -98,5 +98,5 @@ fun EditProfile(viewModel: DietiDealsViewModel, navController: NavHostController
 @Preview(showBackground = true)
 @Composable
 fun EditProfilePreview(){
-    EditProfile(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    EditProfile(viewModel = MainViewModel(), navController = rememberNavController())
 }

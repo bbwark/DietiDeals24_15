@@ -14,13 +14,13 @@ import com.CioffiDeVivo.dietideals.Components.SearchViewBar
 import com.CioffiDeVivo.dietideals.DataModels.Auction
 import com.CioffiDeVivo.dietideals.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import java.time.LocalDate
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController) {
+fun SearchView(viewModel: MainViewModel, navController: NavHostController) {
     Column(Modifier.fillMaxSize()) {
         SearchViewBar(viewModel = viewModel)
         AuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
@@ -31,7 +31,7 @@ fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController)
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    val viewModel = DietiDealsViewModel()
+    val viewModel = MainViewModel()
     viewModel.auctionSearchResult = arrayOf(
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(

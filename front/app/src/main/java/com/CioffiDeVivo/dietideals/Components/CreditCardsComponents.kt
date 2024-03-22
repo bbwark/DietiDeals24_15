@@ -25,7 +25,7 @@ fun CreditCardFields(
         value = creditCard.creditCardNumber,
         onValueChanged = { onNumberChange(it) },
         label = stringResource(R.string.creditcard),
-        onDelete = { onDeleteCardNumber(it) },
+        onTrailingIconClick = { onDeleteCardNumber(it) },
         modifier = modifierStandard
     )
     Row {
@@ -33,7 +33,7 @@ fun CreditCardFields(
             value = creditCard.expirationDate.toString(),
             onValueChanged = { onDateChange(it) },
             label = stringResource(R.string.expirationdate),
-            onDelete = {},
+            onTrailingIconClick = {},
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
@@ -41,7 +41,7 @@ fun CreditCardFields(
             value = creditCard.cvv,
             onValueChanged = { onCvvChange(it) },
             label = stringResource(R.string.cvv),
-            onDelete = {},
+            onTrailingIconClick = {},
             modifier = Modifier.width(150.dp)
         )
     }
@@ -49,7 +49,7 @@ fun CreditCardFields(
         value = creditCard.iban,
         onValueChanged = { onIbanChange(it) },
         label = stringResource(R.string.iban),
-        onDelete = { onDeleteIban(it) },
+        onTrailingIconClick = { onDeleteIban(it) },
         modifier = modifierStandard
     )
 }

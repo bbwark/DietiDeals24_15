@@ -22,7 +22,7 @@ import androidx.navigation.compose.composable
 import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.AccountView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
@@ -41,14 +41,15 @@ import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
+import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewModel) {
+fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, viewModel2: RegistrationViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.MakeABidEnglish.route
+        startDestination = Screen.Register.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -110,7 +111,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(viewModel = viewModel)
+            RegisterCredentialsView(viewModel = viewModel, viewModel2 = viewModel2)
         }
         composable(
             route = Screen.LogInCredentials.route
