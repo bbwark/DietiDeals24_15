@@ -34,7 +34,8 @@ import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
 import com.CioffiDeVivo.dietideals.Views.LoginView
-import com.CioffiDeVivo.dietideals.Views.MakeABid
+import com.CioffiDeVivo.dietideals.Views.MakeABidEnglish
+import com.CioffiDeVivo.dietideals.Views.MakeABidSilent
 import com.CioffiDeVivo.dietideals.Views.ManageCardsView
 import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
@@ -47,7 +48,7 @@ import com.CioffiDeVivo.dietideals.Views.SellView
 fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CreateAuction.route
+        startDestination = Screen.MakeABidEnglish.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -117,9 +118,14 @@ fun SetupNavGraph(navController: NavHostController, viewModel: DietiDealsViewMod
             LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
-            route = Screen.MakeABid.route
+            route = Screen.MakeABidEnglish.route
         ) {
-            MakeABid(viewModel = viewModel)
+            MakeABidEnglish(viewModel = viewModel)
+        }
+        composable(
+            route = Screen.MakeABidSilent.route
+        ) {
+            MakeABidSilent(viewModel = viewModel)
         }
         composable(
             route = Screen.Home.route
