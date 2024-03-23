@@ -46,25 +46,20 @@ import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.CreditCardFields
 import com.CioffiDeVivo.dietideals.Components.InputTextField
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
-import java.time.LocalDate
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
     .padding(start = 30.dp, end = 30.dp)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: MainViewModel, viewModel2: RegistrationViewModel){
+fun RegisterCredentialsView(viewModel: RegistrationViewModel){
 
-    val userRegistrationState by viewModel.userState.collectAsState()
-    val userCreditCardState by viewModel.creditCardState.collectAsState()
-    val userRegistrationState2 by viewModel2.registrationState.collectAsState()
-    var showSellerComposable by rememberSaveable { mutableStateOf(false) }
+    val userRegistrationState by viewModel.userRegistrationState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +70,7 @@ fun RegisterCredentialsView(viewModel: MainViewModel, viewModel2: RegistrationVi
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        PersonalInformation(viewModel2)
+        PersonalInformation(viewModel)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,13 +79,10 @@ fun RegisterCredentialsView(viewModel: MainViewModel, viewModel2: RegistrationVi
             horizontalArrangement = Arrangement.Start
         ) {
             Switch(
-                checked = userRegistrationState2.isSeller,
-                onCheckedChange = {
-                    viewModel.updateIsSeller()
-                    showSellerComposable = !showSellerComposable
-                                  },
+                checked = userRegistrationState.isSeller,
+                onCheckedChange = { viewModel.registrationAction(RegistrationEvent.SellerChange(it)) },
                 thumbContent = {
-                    if (showSellerComposable){
+                    if (userRegistrationState.isSeller){
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = null,
@@ -104,30 +96,30 @@ fun RegisterCredentialsView(viewModel: MainViewModel, viewModel2: RegistrationVi
             Spacer(modifier = Modifier.width(10.dp))
             Text(stringResource(R.string.areYouSeller))
         }
-        if(showSellerComposable){
+        if(userRegistrationState.isSeller){
             ContactInfo(
-                user = userRegistrationState,
-                onAddressChange = { viewModel.updateAddress(it) },
-                onZipCodeChange = { viewModel.updateZipCode(it) },
-                onCountryChange = { viewModel.updateCountry(it) },
-                onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
+                userState = userRegistrationState,
+                onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
+                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
+                onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
+                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
                 onDeleteAddress = { viewModel.deleteAddress() },
                 onDeleteZipCode = { viewModel.deleteZipCode() },
                 onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
             )
             CreditCardFields(
-                creditCard = userCreditCardState,
-                onNumberChange = { viewModel.updateCreditCardNumber(it) },
-                onDateChange = { viewModel.updateExpirationDate(LocalDate.parse(it)) },
-                onCvvChange = { viewModel.updateCvv(it) },
-                onIbanChange = { viewModel.updateIban(it) },
+                userState = userRegistrationState,
+                onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
+                onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
+                onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
+                onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
                 onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
                 onDeleteIban = { viewModel.deleteIban() }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { viewModel2.registrationAction(RegistrationEvent.Submit) },
+            onClick = { viewModel.registrationAction(RegistrationEvent.Submit) },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -158,7 +150,7 @@ fun PersonalInformation(
     ){
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
-    val userRegistrationState by viewModel.registrationState.collectAsState()
+    val userRegistrationState by viewModel.userRegistrationState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
         viewModel.validationEvent.collect { event ->
@@ -230,6 +222,6 @@ fun PersonalInformation(
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = MainViewModel(), viewModel2 = RegistrationViewModel())
+    RegisterCredentialsView(viewModel = RegistrationViewModel())
 }
 

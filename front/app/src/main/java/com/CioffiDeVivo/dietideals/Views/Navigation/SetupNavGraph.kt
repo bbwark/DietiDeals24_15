@@ -111,7 +111,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(viewModel = viewModel, viewModel2 = viewModel2)
+            RegisterCredentialsView(viewModel = viewModel2)
         }
         composable(
             route = Screen.LogInCredentials.route

@@ -10,10 +10,11 @@ import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
+import com.CioffiDeVivo.dietideals.state.RegistrationState
 
 @Composable
 fun CreditCardFields(
-    creditCard: CreditCard,
+    userState: RegistrationState,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
     onCvvChange: (String) -> Unit,
@@ -22,33 +23,41 @@ fun CreditCardFields(
     onDeleteIban: (String) -> Unit,
 ){
     InputTextField(
-        value = creditCard.creditCardNumber,
+        value = userState.creditCardNumber,
         onValueChanged = { onNumberChange(it) },
         label = stringResource(R.string.creditcard),
+        isError = userState.creditCardNumberErrorMsg != null,
+        supportingText = userState.creditCardNumberErrorMsg,
         onTrailingIconClick = { onDeleteCardNumber(it) },
         modifier = modifierStandard
     )
     Row {
         InputTextField(
-            value = creditCard.expirationDate.toString(),
+            value = userState.expirationDate,
             onValueChanged = { onDateChange(it) },
             label = stringResource(R.string.expirationdate),
+            isError = userState.expirationDateErrorMsg != null,
+            supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = {},
             modifier = Modifier.width(150.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = creditCard.cvv,
+            value = userState.cvv,
             onValueChanged = { onCvvChange(it) },
             label = stringResource(R.string.cvv),
+            isError = userState.cvvErrorMsg != null,
+            supportingText = userState.cvvErrorMsg,
             onTrailingIconClick = {},
             modifier = Modifier.width(150.dp)
         )
     }
     InputTextField(
-        value = creditCard.iban,
+        value = userState.iban,
         onValueChanged = { onIbanChange(it) },
         label = stringResource(R.string.iban),
+        isError = userState.ibanErrorMsg != null,
+        supportingText = userState.ibanErrorMsg,
         onTrailingIconClick = { onDeleteIban(it) },
         modifier = modifierStandard
     )
