@@ -6,7 +6,7 @@ const val passwordMinimumLength = 8
 const val phoneNumberMinimumLength = 7
 const val phoneNumberMaximumLength = 15
 const val creditCardNumberLength = 16
-const val cvvLength = 16
+const val cvvLength = 3
 const val ibanLength = 27
 
 class ValidateForms {
@@ -133,7 +133,7 @@ class ValidateForms {
         if(cvv.length != cvvLength){
             return ValidationResult(
                 positiveResult = false,
-                errorMessage = "Invalid Cvv"
+                errorMessage = "Invalid CVV"
             )
         }
         return ValidationResult(positiveResult = true)

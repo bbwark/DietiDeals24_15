@@ -28,5 +28,4 @@ data class RegistrationState(
     val cvvErrorMsg: String? = null,
     val iban: String = "",
     val ibanErrorMsg: String? = null,
-    val emptyField: String = "",
 )

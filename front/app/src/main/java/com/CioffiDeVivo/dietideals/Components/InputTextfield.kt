@@ -39,10 +39,11 @@ fun InputTextField(
         visualTransformation = visualTransformation,
         readOnly = readOnly,
         singleLine = true,
-        supportingText = { if(isError){
-            if (supportingText != null) {
-                Text(text = supportingText, color = Color.Red)
-            }
+        supportingText = {
+            if(isError){
+                if (supportingText != null) {
+                    Text(text = supportingText, color = Color.Red)
+                }
         } },
         trailingIcon = {
             Icon(
