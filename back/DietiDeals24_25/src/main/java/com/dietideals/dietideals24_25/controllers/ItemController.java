@@ -27,10 +27,11 @@ public class ItemController {
         return itemMapper.mapTo(savedItemEntity);
     }
 
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(path = "/items/{id}")
     public ResponseEntity deleteItem(@PathVariable("id") String id){
         itemService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

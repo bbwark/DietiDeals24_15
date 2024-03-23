@@ -5,8 +5,6 @@ import com.dietideals.dietideals24_25.repositories.BidRepository;
 import com.dietideals.dietideals24_25.services.BidService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class BidServiceImpl implements BidService {
     private BidRepository bidRepository;

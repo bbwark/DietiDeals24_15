@@ -27,9 +27,10 @@ public class BidController {
         return bidMapper.mapTo(savedBidEntity);
     }
 
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(path = "/bids/{id}")
     public ResponseEntity deleteBid(@PathVariable("id") String id){
         bidService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

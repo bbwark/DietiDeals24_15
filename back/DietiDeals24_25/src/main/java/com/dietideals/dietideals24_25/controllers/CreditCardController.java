@@ -27,9 +27,10 @@ public class CreditCardController {
         return creditCardMapper.mapTo(savedCreditCardEntity);
     }
 
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(path = "/credit_cards/{creditCardNumber}")
     public ResponseEntity deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber){
         creditCardService.delete(creditCardNumber);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
