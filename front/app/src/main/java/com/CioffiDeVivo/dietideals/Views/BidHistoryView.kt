@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
-import com.CioffiDeVivo.dietideals.DataModels.Bid
-import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
+import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
+import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import java.time.ZonedDateTime
 import java.util.UUID

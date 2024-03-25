@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Bid
-import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
 import java.time.LocalDate
 import java.util.UUID

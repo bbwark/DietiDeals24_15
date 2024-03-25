@@ -50,16 +50,30 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
-import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
+import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
     .padding(start = 30.dp, end = 30.dp)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(viewModel: RegistrationViewModel){
+fun RegisterCredentialsView(registerCredentialsViewModel: RegisterCredentialsViewModel){
 
-    val userRegistrationState by viewModel.userRegistrationState.collectAsState()
+    val userRegistrationState by registerCredentialsViewModel.userRegistrationState.collectAsState()
+    var isSeller by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+    LaunchedEffect(key1 = context){
+        registerCredentialsViewModel.validationRegistrationEvent.collect { event ->
+            when(event){
+                is ValidationState.Success -> {
+                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
+                }
+
+                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+            }
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +84,7 @@ fun RegisterCredentialsView(viewModel: RegistrationViewModel){
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        PersonalInformation(viewModel)
+        PersonalInformation(registerCredentialsViewModel)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,10 +93,13 @@ fun RegisterCredentialsView(viewModel: RegistrationViewModel){
             horizontalArrangement = Arrangement.Start
         ) {
             Switch(
-                checked = userRegistrationState.isSeller,
-                onCheckedChange = { viewModel.registrationAction(RegistrationEvent.SellerChange(it)) },
+                checked = isSeller,
+                onCheckedChange = {
+                    isSeller = it
+                    registerCredentialsViewModel.registrationAction(RegistrationEvent.SellerChange(it))
+                },
                 thumbContent = {
-                    if (userRegistrationState.isSeller){
+                    if (isSeller){
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = null,
@@ -96,30 +113,29 @@ fun RegisterCredentialsView(viewModel: RegistrationViewModel){
             Spacer(modifier = Modifier.width(10.dp))
             Text(stringResource(R.string.areYouSeller))
         }
-        if(userRegistrationState.isSeller){
+        if(isSeller){
             ContactInfo(
                 userState = userRegistrationState,
-                onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
-                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
-                onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
-                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
-                onDeleteAddress = { viewModel.deleteAddress() },
-                onDeleteZipCode = { viewModel.deleteZipCode() },
-                onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
+                onAddressChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
+                onZipCodeChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
+                onPhoneNumberChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
+                onDeleteAddress = { registerCredentialsViewModel.deleteAddress() },
+                onDeleteZipCode = { registerCredentialsViewModel.deleteZipCode() },
+                onDeletePhoneNumber = { registerCredentialsViewModel.deletePhoneNumber() }
             )
             CreditCardFields(
                 userState = userRegistrationState,
-                onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
-                onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
-                onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
-                onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
-                onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
-                onDeleteIban = { viewModel.deleteIban() }
+                onNumberChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
+                onDateChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
+                onCvvChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
+                onIbanChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
+                onDeleteCardNumber = { registerCredentialsViewModel.deleteCreditCardNumber() },
+                onDeleteIban = { registerCredentialsViewModel.deleteIban() }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { viewModel.registrationAction(RegistrationEvent.Submit) },
+            onClick = { registerCredentialsViewModel.registrationAction(RegistrationEvent.Submit) },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -145,24 +161,12 @@ fun RegisterCredentialsView(viewModel: RegistrationViewModel){
 }
 @Composable
 fun PersonalInformation(
-    viewModel: RegistrationViewModel
+    viewModel: RegisterCredentialsViewModel
 
     ){
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
     val userRegistrationState by viewModel.userRegistrationState.collectAsState()
-    val context = LocalContext.current
-    LaunchedEffect(key1 = context){
-        viewModel.validationEvent.collect { event ->
-            when(event){
-                is RegistrationViewModel.ValidationState.Success -> {
-                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
-                }
-
-                else -> {}
-            }
-        }
-    }
 
     InputTextField(
         value = userRegistrationState.email,
@@ -222,6 +226,6 @@ fun PersonalInformation(
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = RegistrationViewModel())
+    RegisterCredentialsView(registerCredentialsViewModel = RegisterCredentialsViewModel())
 }
 

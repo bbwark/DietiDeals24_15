@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.state
+package com.CioffiDeVivo.dietideals.viewmodel.state
 
 data class RegistrationState(
     val email:  String  = "",

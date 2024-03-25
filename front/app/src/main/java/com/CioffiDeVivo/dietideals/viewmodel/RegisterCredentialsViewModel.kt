@@ -2,10 +2,10 @@ package com.CioffiDeVivo.dietideals.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.DataModels.User
 import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
-import com.CioffiDeVivo.dietideals.domain.use_case.ValidateForms
-import com.CioffiDeVivo.dietideals.state.RegistrationState
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidateRegistrationForms
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel( private val validateForms: ValidateForms = ValidateForms() ) : ViewModel() {
+class RegisterCredentialsViewModel(private val validateRegistrationForms: ValidateRegistrationForms = ValidateRegistrationForms() ) : ViewModel() {
 
     private val _userRegistrationState = MutableStateFlow(RegistrationState())
     val userRegistrationState: StateFlow<RegistrationState> = _userRegistrationState.asStateFlow()
 
     private val validationEventChannel = Channel<ValidationState>()
-    val validationEvent = validationEventChannel.receiveAsFlow()
+    val validationRegistrationEvent = validationEventChannel.receiveAsFlow()
 
     fun registrationAction(registrationEvent: RegistrationEvent){
         when(registrationEvent){
@@ -39,7 +39,9 @@ class RegistrationViewModel( private val validateForms: ValidateForms = Validate
                 updateNewPassword(registrationEvent.newPassword)
             }
             is RegistrationEvent.SellerChange -> {
-                updateIsSeller(registrationEvent.isSeller)
+                _userRegistrationState.value = _userRegistrationState.value.copy(
+                    isSeller = registrationEvent.isSeller
+                )
             }
             is RegistrationEvent.AddressChanged -> {
                 updateAddress(registrationEvent.address)
@@ -73,19 +75,19 @@ class RegistrationViewModel( private val validateForms: ValidateForms = Validate
 
 
     private fun submitForm() {
-        val emailValidation = validateForms.validateEmail(userRegistrationState.value.email)
-        val nameValidation = validateForms.validateName(userRegistrationState.value.name)
-        val surnameValidation = validateForms.validateSurname(userRegistrationState.value.surname)
-        val passwordValidation = validateForms.validatePassword(userRegistrationState.value.password)
-        val newPasswordValidation = validateForms.validateNewPassword(userRegistrationState.value.password, userRegistrationState.value.newPassword)
-        val addressValidation = validateForms.validateAddress(userRegistrationState.value.address)
-        val zipCodeValidation = validateForms.validateZipCode(userRegistrationState.value.zipCode)
-        val countryValidation = validateForms.validateCountry(userRegistrationState.value.country)
-        val phoneNumberValidation = validateForms.validatePhoneNumber(userRegistrationState.value.phoneNumber)
-        val creditCardNumberValidation = validateForms.validateCreditCardNumber(userRegistrationState.value.creditCardNumber)
-        val expirationDateValidation = validateForms.validateExpirationDate(userRegistrationState.value.expirationDate)
-        val cvvValidation = validateForms.validateCvv(userRegistrationState.value.cvv)
-        val ibanValidation = validateForms.validateIban(userRegistrationState.value.iban)
+        val emailValidation = validateRegistrationForms.validateEmail(userRegistrationState.value.email)
+        val nameValidation = validateRegistrationForms.validateName(userRegistrationState.value.name)
+        val surnameValidation = validateRegistrationForms.validateSurname(userRegistrationState.value.surname)
+        val passwordValidation = validateRegistrationForms.validatePassword(userRegistrationState.value.password)
+        val newPasswordValidation = validateRegistrationForms.validateNewPassword(userRegistrationState.value.password, userRegistrationState.value.newPassword)
+        val addressValidation = validateRegistrationForms.validateAddress(userRegistrationState.value.address)
+        val zipCodeValidation = validateRegistrationForms.validateZipCode(userRegistrationState.value.zipCode)
+        val countryValidation = validateRegistrationForms.validateCountry(userRegistrationState.value.country)
+        val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(userRegistrationState.value.phoneNumber)
+        val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(userRegistrationState.value.creditCardNumber)
+        val expirationDateValidation = validateRegistrationForms.validateExpirationDate(userRegistrationState.value.expirationDate)
+        val cvvValidation = validateRegistrationForms.validateCvv(userRegistrationState.value.cvv)
+        val ibanValidation = validateRegistrationForms.validateIban(userRegistrationState.value.iban)
 
         val hasErrorNotSeller = listOf(
             emailValidation,
@@ -120,7 +122,8 @@ class RegistrationViewModel( private val validateForms: ValidateForms = Validate
                 newPasswordErrorMsg = newPasswordValidation.errorMessage
             )
             return
-        } else if (hasErrorSeller && userRegistrationState.value.isSeller){
+        }
+        if (hasErrorSeller && userRegistrationState.value.isSeller){
             _userRegistrationState.value = _userRegistrationState.value.copy(
                 emailErrorMsg = emailValidation.errorMessage,
                 nameErrorMsg = nameValidation.errorMessage,
@@ -141,13 +144,6 @@ class RegistrationViewModel( private val validateForms: ValidateForms = Validate
         viewModelScope.launch {
             validationEventChannel.send(ValidationState.Success)
         }
-    }
-
-    sealed class ValidationState {
-        object Loading:ValidationState()
-        object Success: ValidationState()
-        data class Error(val errorMessage:String):ValidationState()
-
     }
 
     /*Update & Delete for RegistrationState*/
@@ -200,9 +196,9 @@ class RegistrationViewModel( private val validateForms: ValidateForms = Validate
         )
     }
 
-    fun updateIsSeller(isSeller: Boolean){
+    fun updateIsSeller(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
-            isSeller = isSeller
+            isSeller = !_userRegistrationState.value.isSeller
         )
     }
 

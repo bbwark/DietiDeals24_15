@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import java.time.LocalDate
 import java.util.UUID
 import com.CioffiDeVivo.dietideals.Components.pulsateClick

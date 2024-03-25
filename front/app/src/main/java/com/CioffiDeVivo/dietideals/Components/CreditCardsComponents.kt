@@ -7,10 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DataModels.CreditCard
+import com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
-import com.CioffiDeVivo.dietideals.state.RegistrationState
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 @Composable
 fun CreditCardFields(
@@ -37,6 +37,7 @@ fun CreditCardFields(
             onValueChanged = { onDateChange(it) },
             label = stringResource(R.string.expirationdate),
             isError = userState.expirationDateErrorMsg != null,
+            placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = {},
             modifier = Modifier.width(150.dp)

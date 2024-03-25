@@ -25,7 +25,7 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.state.RegistrationState
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,7 +48,6 @@ fun EditContactInfoView(viewModel: MainViewModel, navController: NavHostControll
             userState = RegistrationState(),
             onAddressChange = { viewModel.updateAddress(it) },
             onZipCodeChange = { viewModel.updateZipCode(it) },
-            onCountryChange = { viewModel.updateCountry(it) },
             onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
             onDeleteAddress = { viewModel.deleteAddress() },
             onDeleteZipCode = { viewModel.deleteZipCode() },
