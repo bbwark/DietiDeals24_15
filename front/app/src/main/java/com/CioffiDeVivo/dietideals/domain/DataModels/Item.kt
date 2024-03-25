@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.DataModels
+package com.CioffiDeVivo.dietideals.domain.DataModels
 
 import android.net.Uri
 import java.util.UUID

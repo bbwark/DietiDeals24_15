@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Views.Navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     var mainViewModel = MainViewModel()
-                    SetupNavGraph(navController = navController, viewModel = mainViewModel, viewModel2 = RegistrationViewModel())
+                    SetupNavGraph(navController = navController, viewModel = mainViewModel, viewModel2 = RegisterCredentialsViewModel())
                 }
             }
         }

@@ -41,15 +41,16 @@ import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
-import com.CioffiDeVivo.dietideals.viewmodel.RegistrationViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, viewModel2: RegistrationViewModel) {
+fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, viewModel2: RegisterCredentialsViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Register.route
+        startDestination = Screen.CreateAuction.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -111,12 +112,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(viewModel = viewModel2)
+            RegisterCredentialsView(registerCredentialsViewModel = viewModel2)
         }
         composable(
             route = Screen.LogInCredentials.route
         ) {
-            LogInCredentialsView(viewModel = viewModel, navController = navController)
+            LogInCredentialsView(viewModel = LogInCredentialsViewModel(), navController = navController)
         }
         composable(
             route = Screen.MakeABidEnglish.route

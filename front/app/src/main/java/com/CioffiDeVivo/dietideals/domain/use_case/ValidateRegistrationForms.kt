@@ -9,9 +9,9 @@ const val creditCardNumberLength = 16
 const val cvvLength = 3
 const val ibanLength = 27
 
-class ValidateForms {
+open class ValidateRegistrationForms {
 
-    fun validateEmail(email: String): ValidationResult {
+    open fun validateEmail(email: String): ValidationResult {
         if (email.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -41,17 +41,23 @@ class ValidateForms {
         if (surname.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
-                errorMessage = "The field cannot be empty"
+                errorMessage = "Field cannot be empty"
             )
         }
         return ValidationResult(positiveResult = true)
     }
 
-    fun validatePassword(password: String): ValidationResult {
+    open fun validatePassword(password: String): ValidationResult {
         if (password.length < passwordMinimumLength) {
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "Password need at least 8 characters"
+            )
+        }
+        if(password.isBlank()){
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "Field cannot be empty"
             )
         }
         val passwordFormat = password.any { it.isDigit() } && password.any { it.isLetter() }

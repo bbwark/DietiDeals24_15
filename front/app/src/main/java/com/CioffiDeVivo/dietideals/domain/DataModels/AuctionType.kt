@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.DataModels
+package com.CioffiDeVivo.dietideals.domain.DataModels
 
 enum class AuctionType {
     English,
