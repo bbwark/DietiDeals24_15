@@ -27,7 +27,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateName(name: String): ValidationResult {
+    open fun validateName(name: String): ValidationResult {
         if (name.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -37,7 +37,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateSurname(surname: String): ValidationResult {
+    open fun validateSurname(surname: String): ValidationResult {
         if (surname.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -71,7 +71,7 @@ open class ValidateRegistrationForms {
 
     }
 
-    fun validateNewPassword(password: String, newPassword: String): ValidationResult {
+    open fun validateNewPassword(password: String, newPassword: String): ValidationResult {
         if (password != newPassword ) {
             return ValidationResult(
                 positiveResult = false,
