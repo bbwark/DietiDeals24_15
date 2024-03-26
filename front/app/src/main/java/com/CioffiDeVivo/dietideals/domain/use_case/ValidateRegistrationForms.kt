@@ -81,7 +81,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateAddress(address: String): ValidationResult{
+    open fun validateAddress(address: String): ValidationResult{
         if (address.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -91,7 +91,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateZipCode(zipCode: String): ValidationResult{
+    open fun validateZipCode(zipCode: String): ValidationResult{
         if (zipCode.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -101,7 +101,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateCountry(country: String): ValidationResult{
+    open fun validateCountry(country: String): ValidationResult{
         if (country.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
@@ -111,7 +111,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validatePhoneNumber(phoneNumber: String): ValidationResult{
+    open fun validatePhoneNumber(phoneNumber: String): ValidationResult{
         if(phoneNumber.length < phoneNumberMinimumLength || phoneNumber.length > phoneNumberMaximumLength){
             return ValidationResult(
                 positiveResult = false,
@@ -121,7 +121,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateCreditCardNumber(creditCardNumber: String): ValidationResult{
+    open fun validateCreditCardNumber(creditCardNumber: String): ValidationResult{
         if(creditCardNumber.length != creditCardNumberLength){
             return ValidationResult(
                 positiveResult = false,
@@ -131,11 +131,11 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateExpirationDate(expirationDate: String): ValidationResult{
+    open fun validateExpirationDate(expirationDate: String): ValidationResult{
         return  ValidationResult(positiveResult = true)
     }
 
-    fun validateCvv(cvv: String): ValidationResult{
+    open fun validateCvv(cvv: String): ValidationResult{
         if(cvv.length != cvvLength){
             return ValidationResult(
                 positiveResult = false,
@@ -145,7 +145,7 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateIban(iban: String): ValidationResult{
+    open fun validateIban(iban: String): ValidationResult{
         if(iban.length != ibanLength){
             return ValidationResult(
                 positiveResult = false,
