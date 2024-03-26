@@ -11,37 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d535ca49-4a7c-4fe2-8d12-55272ad48ce6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/AuctionsList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/AuctionsList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/AuctionsListElement.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/AuctionsListElement.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/ContactInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/ContactInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/CreditCardsComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/CreditCardsComponents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/InputTextfield.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/InputTextfield.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/PasswordsTextfields.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/PasswordsTextfields.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/UserInfoBottomSheet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/UserInfoBottomSheet.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/Auction.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/Auction.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/AuctionCategory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/AuctionCategory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/AuctionType.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/AuctionType.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/Bid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/Bid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/CreditCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/CreditCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/Item.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/Item.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/ObservedUser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/ObservedUser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/DataModels/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/User.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Events/CreateAuctionEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Events/CreateAuctionEvents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/AuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/AuctionView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/BidHistoryView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/BidHistoryView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/CreateAuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/CreateAuctionView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditContactInfoView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditContactInfoView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/HomeView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/HomeView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/LogInCredentialsView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/LogInCredentialsView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/SetupNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/SetupNavGraph.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/RegisterCredentialsView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/RegisterCredentialsView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SearchView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SearchView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/test.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateForms.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateRegistrationForms.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/state/RegistrationState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/state/RegistrationState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/MainViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegistrationViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegisterCredentialsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Events/EditProfileEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Events/EditProfileEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditProfileView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditProfileView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateRegistrationForms.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateRegistrationForms.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegisterCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegisterCredentialsViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,9 +74,9 @@
         <option value="Interface" />
         <option value="Enum" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin Data Class" />
         <option value="Kotlin File" />
         <option value="Class" />
+        <option value="Kotlin Data Class" />
         <option value="Kotlin Class" />
       </list>
     </option>

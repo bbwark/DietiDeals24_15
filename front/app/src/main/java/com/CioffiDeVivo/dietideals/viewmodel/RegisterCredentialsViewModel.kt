@@ -94,7 +94,7 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
             nameValidation,
             surnameValidation,
             passwordValidation,
-            newPasswordValidation,
+            newPasswordValidation
         ).any { !it.positiveResult }
 
         val hasErrorSeller = listOf(
