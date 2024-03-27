@@ -57,7 +57,7 @@ fun SellView(viewModel: MainViewModel, navController: NavHostController) {
             }
         }
         FloatingAddButton(viewModel = viewModel) {
-            //create a new Auction
+            //create a new Auction Navigation
         }
     }
 }

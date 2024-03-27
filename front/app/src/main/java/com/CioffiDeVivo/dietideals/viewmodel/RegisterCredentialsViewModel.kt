@@ -73,7 +73,6 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
         }
     }
 
-
     private fun submitForm() {
         val emailValidation = validateRegistrationForms.validateEmail(userRegistrationState.value.email)
         val nameValidation = validateRegistrationForms.validateName(userRegistrationState.value.name)
