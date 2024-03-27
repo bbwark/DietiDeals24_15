@@ -12,9 +12,8 @@
     <list default="true" id="d535ca49-4a7c-4fe2-8d12-55272ad48ce6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/modules/app/DietiDeals.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/DietiDeals.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/ContactInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Components/ContactInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditContactInfoView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/EditContactInfoView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateRegistrationForms.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/use_case/ValidateRegistrationForms.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SellView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SellView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegisterCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/RegisterCredentialsViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
