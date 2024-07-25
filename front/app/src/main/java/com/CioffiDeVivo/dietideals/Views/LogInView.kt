@@ -28,7 +28,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
 @Composable
-fun LoginView(viewModel: MainViewModel, navController: NavController) {
+fun LoginView(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -80,5 +80,5 @@ fun LoginView(viewModel: MainViewModel, navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun LogInPreview(){
-    LoginView(viewModel = MainViewModel(), navController = rememberNavController())
+    LoginView(navController = rememberNavController())
 }

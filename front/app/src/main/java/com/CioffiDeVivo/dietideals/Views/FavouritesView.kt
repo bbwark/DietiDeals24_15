@@ -19,12 +19,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.AuctionsList
+import com.CioffiDeVivo.dietideals.Components.AuctionsListFavored
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
+import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FavouritesView(viewModel: MainViewModel, navController: NavHostController) {
+fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
 
     Column(Modifier.fillMaxSize()) {
@@ -36,12 +39,12 @@ fun FavouritesView(viewModel: MainViewModel, navController: NavHostController) {
             } //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
         when (tabIndex) {
-            0 -> AuctionsList(
+            0 -> AuctionsListFavored(
                 auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel
             ) //ActiveAuctions
-            1 -> AuctionsList(
+            1 -> AuctionsListFavored(
                 auctions = viewModel.user.favouriteAuctions.filter { it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel
@@ -67,6 +70,6 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
 @Composable
 fun FavouritesViewPreview(){
     DietiDealsTheme {
-        FavouritesView(viewModel = MainViewModel(), navController = rememberNavController())
+        FavouritesView(viewModel = FavoritesViewModel(), navController = rememberNavController())
     }
 }

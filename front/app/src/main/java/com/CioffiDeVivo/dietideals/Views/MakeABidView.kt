@@ -33,14 +33,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
+import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MakeABidEnglish(viewModel: MainViewModel){
+fun MakeABid(viewModel: MakeABidViewModel){
 
     var bid by remember { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
@@ -50,11 +51,11 @@ fun MakeABidEnglish(viewModel: MainViewModel){
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        ViewTitle(title = stringResource(id = R.string.lastBid))
+        ViewTitle(title = stringResource(R.string.minimumBid)) //Differences id Silent or English
         Spacer(modifier = Modifier.height(7.dp))
         Row {
             Text(
-                "Placeholder", //Get Latest Bid
+                "Placeholder", //Get Latest Bid or Minimum Bid
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
@@ -102,12 +103,11 @@ fun MakeABidEnglish(viewModel: MainViewModel){
             )
         }
     }
-
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun MakeABidEnglishPreview(){
-    MakeABidEnglish(viewModel = MainViewModel())
+fun MakeABidSilentPreview(){
+    MakeABid(viewModel = MakeABidViewModel())
 }

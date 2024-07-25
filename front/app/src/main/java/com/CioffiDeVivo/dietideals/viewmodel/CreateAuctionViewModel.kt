@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
@@ -23,6 +24,8 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
 
     private val _auctionState = MutableStateFlow(CreateAuctionState())
     val auctionState: StateFlow<CreateAuctionState> = _auctionState.asStateFlow()
+    private val _itemState = MutableStateFlow(Item())
+    val itemState: StateFlow<Item> = _itemState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationCreateAuctionEvent = validationEventChannel.receiveAsFlow()
 

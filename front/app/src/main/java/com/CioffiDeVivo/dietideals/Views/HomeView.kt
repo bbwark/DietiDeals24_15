@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
@@ -35,10 +37,12 @@ import java.time.LocalDate
 import java.util.UUID
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeView(){
+fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -128,7 +132,7 @@ fun PartecipatedAuctions(){
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
-    HomeView()
+    HomeView(viewModel = HomeViewModel(), navController = rememberNavController())
 }
 
 

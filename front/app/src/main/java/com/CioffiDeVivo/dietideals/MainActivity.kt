@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     var mainViewModel = MainViewModel()
-                    SetupNavGraph(navController = navController, viewModel = mainViewModel, viewModel2 = RegisterCredentialsViewModel())
+                    SetupNavGraph(navController = navController, viewModel = mainViewModel, mainViewModel = mainViewModel)
                 }
             }
         }

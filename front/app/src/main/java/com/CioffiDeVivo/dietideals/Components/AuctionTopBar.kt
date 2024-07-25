@@ -65,6 +65,6 @@ fun AuctionTopBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun AuctionTopBar() {
+fun AuctionTopBarPreview() {
     AuctionTopBar(navController = rememberNavController(), viewModel = MainViewModel())
 }
