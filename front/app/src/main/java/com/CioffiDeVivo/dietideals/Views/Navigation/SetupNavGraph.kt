@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,20 +37,28 @@ import com.CioffiDeVivo.dietideals.Views.FavouritesView
 import com.CioffiDeVivo.dietideals.Views.HomeView
 import com.CioffiDeVivo.dietideals.Views.LogInCredentialsView
 import com.CioffiDeVivo.dietideals.Views.LoginView
-import com.CioffiDeVivo.dietideals.Views.MakeABidEnglish
-import com.CioffiDeVivo.dietideals.Views.MakeABidSilent
+import com.CioffiDeVivo.dietideals.Views.MakeABid
 import com.CioffiDeVivo.dietideals.Views.ManageCardsView
 import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
+import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, viewModel2: RegisterCredentialsViewModel) {
+fun SetupNavGraph(navController: NavHostController, viewModel: ViewModel, mainViewModel: MainViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screen.CreateAuction.route
@@ -64,12 +75,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    EditProfile(viewModel = viewModel, navController = navController)
+                    EditProfile(viewModel = EditProfileViewModel(), navController = navController)
                 }
             }
         }
@@ -85,12 +96,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    EditContactInfoView(viewModel = viewModel, navController = navController)
+                    EditContactInfoView(viewModel = EditContactInfoViewModel(), navController = navController)
                 }
             }
         }
@@ -105,14 +116,14 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    CreateAuction(viewModel = viewModel, navController = navController)
+                    CreateAuction(viewModel = MainViewModel(), navController = navController)
                 }
             }
         }
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(registerCredentialsViewModel = viewModel2)
+            RegisterCredentialsView(registerCredentialsViewModel = RegisterCredentialsViewModel())
         }
         composable(
             route = Screen.LogInCredentials.route
@@ -120,50 +131,45 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             LogInCredentialsView(viewModel = LogInCredentialsViewModel(), navController = navController)
         }
         composable(
-            route = Screen.MakeABidEnglish.route
+            route = Screen.MakeABid.route
         ) {
-            MakeABidEnglish(viewModel = viewModel)
-        }
-        composable(
-            route = Screen.MakeABidSilent.route
-        ) {
-            MakeABidSilent(viewModel = viewModel)
+            MakeABid(viewModel = MakeABidViewModel())
         }
         composable(
             route = Screen.Home.route
         ) {
             Scaffold(bottomBar = {
                 BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
                     navController = navController
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    HomeView()
+                    HomeView(viewModel = HomeViewModel(), navController = navController)
                 }
             }
         }
         composable(
             route = Screen.Login.route
         ) {
-            LoginView(viewModel = viewModel, navController = navController)
+            LoginView(navController = navController)
         }
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView(viewModel = viewModel, navController = navController)
+            RegisterView(navController = navController)
         }
         composable(
             route = Screen.Favourites.route
         ) {
             Scaffold(bottomBar = {
                 BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
                     navController = navController
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    FavouritesView(viewModel = viewModel, navController = navController)
+                    FavouritesView(viewModel = FavoritesViewModel(), navController = navController)
                 }
             }
         }
@@ -172,12 +178,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
         ) {
             Scaffold(bottomBar = {
                 BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
                     navController = navController
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    SearchView(viewModel = viewModel, navController = navController)
+                    SearchView(viewModel = SearchViewModel(), navController = navController)
                 }
             }
         }
@@ -187,19 +193,19 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             Scaffold(topBar = {
                 AuctionTopBar(
                     navController = navController,
-                    viewModel = viewModel
+                    viewModel = mainViewModel
                 )
             },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     AuctionView(
-                        auction = viewModel.selectedAuction,
-                        viewModel.auctionOpenByOwner
+                        auction = mainViewModel.selectedAuction,
+                        mainViewModel.auctionOpenByOwner
                     )
                 }
             }
@@ -209,12 +215,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
         ) {
             Scaffold(bottomBar = {
                 BottomNavBar(
-                    selectedNavBarItem = viewModel.selectedNavBarItem,
+                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
                     navController = navController
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    AccountView(viewModel = viewModel, navController = navController)
+                    AccountView(viewModel = AccountViewModel(), navController = navController)
                 }
             }
         }
@@ -230,12 +236,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    ManageCardsView(viewModel = viewModel)
+                    ManageCardsView(viewModel = ManageCardsViewModel())
                 }
             }
         }
@@ -259,13 +265,13 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
                 },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }
             ) {
                 Box(modifier = Modifier.padding(it)) {
-                    SellView(viewModel = viewModel, navController = navController)
+                    SellView(viewModel = SellViewModel(), navController = navController)
                 }
             }
         }
@@ -281,12 +287,12 @@ fun SetupNavGraph(navController: NavHostController, viewModel: MainViewModel, vi
             },
                 bottomBar = {
                     BottomNavBar(
-                        selectedNavBarItem = viewModel.selectedNavBarItem,
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
                         navController = navController
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    BidHistoryView(viewModel = viewModel)
+                    BidHistoryView(viewModel = MainViewModel())
                 }
             }
         }

@@ -35,7 +35,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
  @Composable
-fun RegisterView(viewModel: MainViewModel, navController: NavController) {
+fun RegisterView(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -130,5 +130,5 @@ fun ExternalButtons(){
 @Preview(showBackground = true)
 @Composable
 fun RegisterPreview(){
-    RegisterView(viewModel = MainViewModel(), navController = rememberNavController())
+    RegisterView(navController = rememberNavController())
 }

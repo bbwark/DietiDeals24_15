@@ -23,10 +23,11 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.SellGridElement
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SellView(viewModel: MainViewModel, navController: NavHostController) {
+fun SellView(viewModel: SellViewModel, navController: NavHostController) {
     Box {
         if (viewModel.auctionCreatedByUser.isNotEmpty()) {
             LazyVerticalGrid(
@@ -66,5 +67,5 @@ fun SellView(viewModel: MainViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {
-    SellView(viewModel = MainViewModel(), rememberNavController())
+    SellView(viewModel = SellViewModel(), rememberNavController())
 }
