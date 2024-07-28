@@ -1,6 +1,7 @@
 package com.dietideals.dietideals24_25.controllers;
 
 import com.dietideals.dietideals24_25.domain.dto.AuctionDto;
+import com.dietideals.dietideals24_25.domain.dto.AuctionNameDto;
 import com.dietideals.dietideals24_25.domain.entities.AuctionEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.AuctionService;
@@ -54,8 +55,16 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/auctions/item/{name}")
-    public List<AuctionDto> listAuctionsByItemName(@PathVariable("name") String itemName){
+    public List<AuctionNameDto> listAuctionsByItemName(@PathVariable("name") String itemName){
         List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
+        return auctions.stream()
+                .map(auction -> new AuctionNameDto(auction.getId(), auction.getItem().getName()))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/auctions/owner/{id}")
+    public List<AuctionDto> listRandomAuctions(@PathVariable("id") UUID ownerId){
+        List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
         return auctions.stream()
                 .map(auctionMapper::mapTo)
                 .collect(Collectors.toList());

@@ -28,12 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.GoogleButton
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
+ @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
  @Composable
 fun RegisterView(navController: NavController) {
     Column(
@@ -64,7 +66,7 @@ fun RegisterView(navController: NavController) {
             fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.height(5.dp))
-        ExternalButtons()
+        GoogleButton(navController)
     }
 }
 
@@ -125,6 +127,7 @@ fun ExternalButtons(){
         }
     )
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)

@@ -10,8 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,8 +68,10 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
 }
 
 @Composable
-fun CardHeader(auctionItemName: String, viewModel: SellViewModel, navController: NavHostController) {
-    Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navController: NavHostController) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = auctionItemName, //viewModel auction name
             modifier = Modifier
@@ -75,6 +82,9 @@ fun CardHeader(auctionItemName: String, viewModel: SellViewModel, navController:
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
+        IconButton(onClick = { /*restapi to make delete of the auction*/ }, modifier = Modifier.size(20.dp)) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "")
+        }
     }
 }
 
