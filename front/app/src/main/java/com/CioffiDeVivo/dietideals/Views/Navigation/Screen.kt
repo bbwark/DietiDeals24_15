@@ -14,8 +14,7 @@ sealed class Screen(val route: String) {
     object Auction: Screen("auction_view")
     object CreateAuction: Screen("create_auction_view")
     object LogInCredentials: Screen("login_credentials_view")
-    object MakeABidEnglish: Screen("make_bid_english_view")
     object RegisterCredentials: Screen("register_credentials_view")
     object BidHistory: Screen("bid_history_view")
-    object MakeABidSilent: Screen("make_bid_silent_view")
+    object MakeABid: Screen("make_bid_view")
 }

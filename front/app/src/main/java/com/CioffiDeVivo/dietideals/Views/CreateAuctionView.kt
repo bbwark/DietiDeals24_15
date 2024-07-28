@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +29,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Euro
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
@@ -49,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,11 +60,10 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.ui.theme.md_theme_dark_background
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -76,7 +72,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostController){
+fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
 
     val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
@@ -102,7 +98,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
             value = itemAuctionState.name,
             onValueChanged = { viewModel.updateItemName(it) },
             label = stringResource(R.string.itemName),
-            onDelete = { viewModel.deleteItemName() },
+            onTrailingIconClick = { viewModel.deleteItemName() },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.size(15.dp))
@@ -185,7 +181,7 @@ fun CreateAuction(viewModel: DietiDealsViewModel, navController: NavHostControll
 @Preview(showBackground = true)
 @Composable
 fun CreateAuctionPreview(){
-    CreateAuction(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    CreateAuction(viewModel = MainViewModel(), navController = rememberNavController())
 }
 
 
@@ -193,7 +189,7 @@ fun CreateAuctionPreview(){
 @Composable
 fun SilentAuction(
     auction: Auction,
-    viewModel: DietiDealsViewModel,
+    viewModel: MainViewModel,
     onCalendarClick: () -> Unit
 ){
     Row {
@@ -201,7 +197,7 @@ fun SilentAuction(
             value = auction.minAccepted,
             onValueChanged = { viewModel.updateMinAccepted(it) },
             label = stringResource(R.string.minStep),
-            onDelete = { viewModel.deleteMinAccepted() },
+            onTrailingIconClick = { viewModel.deleteMinAccepted() },
             modifier = Modifier.width(150.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             trailingIcon = Icons.Filled.Euro
@@ -212,7 +208,7 @@ fun SilentAuction(
             value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
             onValueChanged = { },
             label = stringResource(R.string.endingDate),
-            onDelete = { onCalendarClick() },
+            onTrailingIconClick = { onCalendarClick() },
             modifier = Modifier.width(150.dp),
             readOnly = true,
             trailingIcon = Icons.Filled.CalendarMonth,
@@ -231,7 +227,7 @@ fun SilentAuction(
 @Composable
 fun EnglishAuction(
     auction: Auction,
-    viewModel: DietiDealsViewModel,
+    viewModel: MainViewModel,
     onCalendarClick: () -> Unit
 
 ){
@@ -240,7 +236,7 @@ fun EnglishAuction(
             value = auction.minStep,
             onValueChanged = { viewModel.updateMinStep(it) },
             label = stringResource(R.string.minStep),
-            onDelete = { viewModel.deleteMinStep() },
+            onTrailingIconClick = { viewModel.deleteMinStep() },
             modifier = Modifier.width(150.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             trailingIcon = Icons.Filled.Euro
@@ -250,7 +246,7 @@ fun EnglishAuction(
             value = auction.interval,
             onValueChanged = { viewModel.updateInterval(it) },
             label = stringResource(R.string.interval),
-            onDelete = { viewModel.deleteInterval() },
+            onTrailingIconClick = { viewModel.deleteInterval() },
             modifier = Modifier.width(150.dp)
         )
     }
@@ -259,7 +255,7 @@ fun EnglishAuction(
         onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
-        onDelete = { onCalendarClick() },
+        onTrailingIconClick = { onCalendarClick() },
         readOnly = true,
         modifier = Modifier.width(325.dp)
     )
@@ -311,7 +307,7 @@ fun ImageItem(
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddingImagesOnCreateAuction(viewModel: DietiDealsViewModel) {
+fun AddingImagesOnCreateAuction(viewModel: MainViewModel) {
 
     val itemAuctionState by viewModel.itemState.collectAsState()
     val context = LocalContext.current

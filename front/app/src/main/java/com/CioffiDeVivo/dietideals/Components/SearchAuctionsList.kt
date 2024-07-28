@@ -19,11 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
+import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 import java.time.LocalDate
 import java.util.UUID
 
@@ -51,25 +53,6 @@ fun AuctionsList(
                     }, auction = auction)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>){
-    LazyRow{
-        itemsIndexed(auctions){index, item->
-            Row {
-                if(index == 0){
-                    Spacer(modifier = Modifier.width(20.dp))
-                }
-                HomeViewAuctionListElement(
-                    modifier = Modifier.clickable{/*TODO*/},
-                    auction = item
-                )
-                Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }
@@ -131,6 +114,6 @@ fun AuctionListPreview(){
     )
 
     DietiDealsTheme {
-        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = DietiDealsViewModel())
+        SearchAuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = SearchViewModel())
     }
 }

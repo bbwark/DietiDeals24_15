@@ -13,22 +13,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.AuctionsList
+import com.CioffiDeVivo.dietideals.Components.SearchAuctionsList
 import com.CioffiDeVivo.dietideals.Components.SearchViewBar
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Item
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 import java.time.LocalDate
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
+<<<<<<< HEAD
+fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
+    val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
+    
+    Column(Modifier.fillMaxSize()) {
+        SearchViewBar(viewModel = viewModel)
+        SearchAuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
+=======
 fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController) {
     var categoriesToHide = remember { mutableStateOf(mutableSetOf<String>()) }
     Column(Modifier.fillMaxSize()) {
         SearchViewBar(categoriesToHide = categoriesToHide, viewModel = viewModel)
         AuctionsList(auctions = viewModel.auctionSearchResult, categoriesToHide = categoriesToHide, navController = navController, viewModel = viewModel)
+>>>>>>> main
     }
 }
 
@@ -36,7 +46,7 @@ fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController)
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    val viewModel = DietiDealsViewModel()
+    val viewModel = MainViewModel()
     viewModel.auctionSearchResult = arrayOf(
         Auction(
             UUID.randomUUID(), UUID.randomUUID(), item = Item(
@@ -60,5 +70,5 @@ fun SearchViewPreview() {
         )
     )
 
-    SearchView(viewModel = viewModel, navController = rememberNavController())
+    SearchView(viewModel = SearchViewModel(), navController = rememberNavController())
 }

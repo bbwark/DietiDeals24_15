@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +24,8 @@ import com.CioffiDeVivo.dietideals.DietiDealsViewModel
 fun AuctionTopBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: DietiDealsViewModel) {
+    viewModel: MainViewModel
+) {
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
@@ -64,6 +65,6 @@ fun AuctionTopBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun AuctionTopBar() {
-    AuctionTopBar(navController = rememberNavController(), viewModel = DietiDealsViewModel())
+fun AuctionTopBarPreview() {
+    AuctionTopBar(navController = rememberNavController(), viewModel = MainViewModel())
 }

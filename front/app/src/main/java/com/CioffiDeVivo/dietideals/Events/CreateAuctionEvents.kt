@@ -1,12 +1,15 @@
 package com.CioffiDeVivo.dietideals.Events
 
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionCategory
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 
 sealed class CreateAuctionEvents {
 
     data class ItemNameChanged(val itemName: String): CreateAuctionEvents()
 
     data class AuctionTypeChanged(val auctionType: AuctionType): CreateAuctionEvents()
+
+    data class AuctionCategoryChanged(val auctionCategory: AuctionCategory): CreateAuctionEvents()
 
     data class IntervalChanged(val interval: String): CreateAuctionEvents()
 

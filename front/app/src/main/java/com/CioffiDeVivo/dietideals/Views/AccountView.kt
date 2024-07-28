@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,13 +38,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.md_theme_light_secondaryContainer
+import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AccountView(viewModel: DietiDealsViewModel, navController: NavHostController) {
+fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
+
+    val userState by viewModel.userState.collectAsState()
+    val auctionState by viewModel.auctionState.collectAsState()
+
     Column(
         Modifier
             .fillMaxSize()
@@ -150,5 +157,5 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
 @Preview (showBackground = true)
 @Composable
 fun AccountViewPreview() {
-    AccountView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    AccountView(viewModel = AccountViewModel(), navController = rememberNavController())
 }

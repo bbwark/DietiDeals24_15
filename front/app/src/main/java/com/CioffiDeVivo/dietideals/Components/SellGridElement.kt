@@ -29,13 +29,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @Composable
-fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, viewModel: DietiDealsViewModel, navController: NavHostController) { //it should receive also the compressed image
+fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, viewModel: SellViewModel, navController: NavHostController) { //it should receive also the compressed image
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -43,13 +45,14 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .size(width = 160.dp, height = 170.dp)
+            .clickable { /*navigate to auction view*/ } //navigate to the correct Auction thanks to viewModel
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CardHeader(
-                auctionItemName = auctionItemName,
+                auctionItemName = auctionItemName, //viewModel auction name
                 viewModel = viewModel,
                 navController = navController
             )
@@ -57,8 +60,7 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
                 painter = painterResource(id = R.drawable.placeholder),
                 contentDescription = null,
                 modifier = Modifier
-                    .weight(1f)
-                    .clickable { /*navigate to auction*/ },
+                    .weight(1f),
                 contentScale = ContentScale.Fit
             )
         }
@@ -71,10 +73,10 @@ fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navContr
         .fillMaxWidth()
         .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
-            text = auctionItemName,
+            text = auctionItemName, //viewModel auction name
             modifier = Modifier
                 .weight(1f)
-                .clickable { /*navigate to auction*/ },
+                .clickable { /*navigate to auction*/ }, //navigate to the correct Auction thanks to viewModel
             fontSize = 14.sp,
             fontWeight = FontWeight(500),
             overflow = TextOverflow.Ellipsis,
@@ -92,7 +94,7 @@ fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navContr
 fun SellGridElementPreview() {
     SellGridElement(
         auctionItemName = "Auction Item Name Placeholder",
-        viewModel = DietiDealsViewModel(),
+        viewModel = SellViewModel(),
         navController = rememberNavController()
     )
 }

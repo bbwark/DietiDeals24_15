@@ -18,6 +18,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,19 +28,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import java.time.LocalDate
 import java.util.UUID
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeView(){
+fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
+    val userState by viewModel.userState.collectAsState()
+    val auctionsState by viewModel.auctionsState.collectAsState()
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -79,135 +87,75 @@ fun HomeView(){
             }
         )
         Spacer(modifier = Modifier.height(50.dp))
-        LatestAuctions()
+        LatestAuctions(viewModel, navController)
         Spacer(modifier = Modifier.height(35.dp))
-        EndingAuctions()
+        EndingAuctions(viewModel, navController)
         Spacer(modifier = Modifier.height(35.dp))
-        PartecipatedAuctions()
+        PartecipatedAuctions(viewModel, navController)
     }
 
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LatestAuctions(){
+fun LatestAuctions(
+    viewModel: HomeViewModel,
+    navController: NavHostController,
+){
     Text(
         "Latest Auctions",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(auctions = testAuctions)
+    HomeViewAuctionsList(
+        auctions = viewModel.testLatestAuctions,
+        viewModel = viewModel,
+        navController = navController
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EndingAuctions() {
+fun EndingAuctions(
+    viewModel: HomeViewModel,
+    navController: NavHostController,
+) {
     Text(
         "Ending Auctions",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(auctions = testAuctions)
+    HomeViewAuctionsList(
+        auctions = viewModel.testEndingAuctions,
+        viewModel = viewModel,
+        navController = navController
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PartecipatedAuctions(){
+fun PartecipatedAuctions(
+    viewModel: HomeViewModel,
+    navController: NavHostController,
+){
     Text(
         "Participated Auctions",
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
     )
     Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(auctions = testAuctions)
+    HomeViewAuctionsList(
+        auctions = viewModel.testPartecipatedAuctions,
+        viewModel = viewModel,
+        navController = navController
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
-    HomeView()
+    HomeView(viewModel = HomeViewModel(), navController = rememberNavController())
 }
-
-
-
-
-//Test Auctions
-val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Test")
-@RequiresApi(Build.VERSION_CODES.O)
-val testAuctions: Array<Auction> = arrayOf(
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 16),
-        expired = false,
-        auctionType = AuctionType.English
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 17),
-        expired = false,
-        auctionType = AuctionType.English
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 10),
-        expired = false,
-        auctionType = AuctionType.Silent
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 9),
-        expired = false,
-        auctionType = AuctionType.Silent
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 8),
-        expired = false,
-        auctionType = AuctionType.English
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 8),
-        expired = false,
-        auctionType = AuctionType.English
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 8),
-        expired = false,
-        auctionType = AuctionType.English
-    ),
-    Auction(
-        id = UUID.randomUUID(),
-        ownerId = UUID.randomUUID(),
-        item = testItem,
-        bids = arrayOf(),
-        endingDate = LocalDate.of(2023, 12, 8),
-        expired = false,
-        auctionType = AuctionType.English
-    )
-)

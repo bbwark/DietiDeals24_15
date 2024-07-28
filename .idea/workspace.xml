@@ -30,7 +30,13 @@
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/MakeABidView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/MakeABidEnglishView.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/Screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/Screen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/SetupNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/Navigation/SetupNavGraph.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/utils/DateUtils.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SearchView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SearchView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SellView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/Views/SellView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/CreditCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/DataModels/CreditCard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/FavoritesViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/FavoritesViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/HomeViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/SearchViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/SearchViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/SellViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/viewmodel/SellViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,8 +95,10 @@
       <list>
         <option value="Interface" />
         <option value="Enum" />
-        <option value="Class" />
+        <option value="Kotlin Interface" />
         <option value="Kotlin File" />
+        <option value="Class" />
+        <option value="Kotlin Data Class" />
         <option value="Kotlin Class" />
       </list>
     </option>
@@ -115,33 +123,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "MakeABid-Separation",
-    "last_opened_file_path": "C:/Users/PC/Desktop/spring-security-login-system",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "device.mirroring",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">
+    <![CDATA[{
+      "keyToString": {
+        "Downloaded.Files.Path.Enabled": "false",
+        "Repository.Attach.Annotations": "false",
+        "Repository.Attach.JavaDocs": "false",
+        "Repository.Attach.Sources": "false",
+        "RequestMappingsPanelOrder0": "0",
+        "RequestMappingsPanelOrder1": "1",
+        "RequestMappingsPanelWidth0": "75",
+        "RequestMappingsPanelWidth1": "75",
+        "RunOnceActivity.OpenProjectViewOnStart": "true",
+        "RunOnceActivity.ShowReadmeOnStart": "true",
+        "RunOnceActivity.cidr.known.project.marker": "true",
+        "WebServerToolWindowFactoryState": "false",
+        "cf.first.check.clang-format": "false",
+        "cidr.known.project.marker": "true",
+        "git-widget-placeholder": "MakeABid-Separation",
+        "last_opened_file_path": "C:/Users/PC/Desktop/spring-security-login-system",
+        "node.js.detected.package.eslint": "true",
+        "node.js.detected.package.tslint": "true",
+        "node.js.selected.package.eslint": "(autodetect)",
+        "node.js.selected.package.tslint": "(autodetect)",
+        "project.structure.last.edited": "Modules",
+        "project.structure.proportion": "0.0",
+        "project.structure.side.proportion": "0.2",
+        "settings.editor.selected.configurable": "device.mirroring",
+        "vue.rearranger.settings.migration": "true"
+      }
+    }]]>
+  </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
@@ -172,13 +184,18 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\PC\Desktop\Informatica\front\app\src\main\java\com\CioffiDeVivo\dietideals\viewmodel" />
       <recent name="C:\Users\PC\Desktop\Informatica\back" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.CioffiDeVivo.dietideals.state" />
       <recent name="com.CioffiDeVivo.dietideals.utils" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.CioffiDeVivo.dietideals.domain.use_case" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -523,7 +540,7 @@
     </configuration>
       <RunAsTest>false</RunAsTest>
       <method v="2" />
-    </configuration>
+    
     <configuration name="DietiDeals2425Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="DietiDeals24_25" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.dietideals.dietideals24_25.DietiDeals2425Application" />
@@ -606,5 +623,6 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
   </component>
 </project>

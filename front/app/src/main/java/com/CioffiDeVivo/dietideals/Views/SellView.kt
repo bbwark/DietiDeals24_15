@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,11 +24,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.SellGridElement
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SellView(viewModel: DietiDealsViewModel, navController: NavHostController) {
+fun SellView(viewModel: SellViewModel, navController: NavHostController) {
+    val userCreatedAuction by viewModel.userAuctionState.collectAsState()
     Box {
         if (viewModel.auctionCreatedByUser.isNotEmpty()) {
             LazyVerticalGrid(
@@ -34,6 +39,7 @@ fun SellView(viewModel: DietiDealsViewModel, navController: NavHostController) {
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 content = {
+                    //view model userCreatedAuction
                     itemsIndexed(viewModel.auctionCreatedByUser) { index, item ->
                         SellGridElement(
                             auctionItemName = item.item.name,
@@ -56,8 +62,10 @@ fun SellView(viewModel: DietiDealsViewModel, navController: NavHostController) {
                 )
             }
         }
-        FloatingAddButton(viewModel = viewModel) {
-            //create a new Auction
+        FloatingAddButton(
+            viewModel = viewModel
+        ) {
+            navController.navigate(Screen.CreateAuction.route)
         }
     }
 }
@@ -66,5 +74,5 @@ fun SellView(viewModel: DietiDealsViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {
-    SellView(viewModel = DietiDealsViewModel(), rememberNavController())
+    SellView(viewModel = SellViewModel(), rememberNavController())
 }
