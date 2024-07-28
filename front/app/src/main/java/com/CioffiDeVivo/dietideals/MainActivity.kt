@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.Components.GoogleButton
 import com.CioffiDeVivo.dietideals.Views.Navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
@@ -29,8 +30,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    val mainViewModel = MainViewModel()
-                    SetupNavGraph(navController = navController, mainViewModel = mainViewModel)
+                    val dietiDealsViewModel = DietiDealsViewModel()
+                    SetupNavGraph(navController = navController, viewModel = dietiDealsViewModel)
+
                 }
             }
         }

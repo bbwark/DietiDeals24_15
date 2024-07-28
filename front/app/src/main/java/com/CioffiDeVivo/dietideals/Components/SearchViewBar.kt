@@ -1,16 +1,17 @@
 package com.CioffiDeVivo.dietideals.Components
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,11 +23,11 @@ import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun SearchViewBar(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel
+    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()),
+    viewModel: DietiDealsViewModel
 ) {
     var state by remember { mutableStateOf("") }
 
@@ -43,23 +44,26 @@ fun SearchViewBar(
                 //pop navigation back to home
             }) {
                 Icon(
-                    Icons.Default.ArrowBack,
+                    Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = ""
                 )
             }
         },
         trailingIcon = {
-            if (state != "") {
-                IconButton(
-                    onClick = {
-                        state = ""// Remove text from TextField when you press the 'X' icon
+            Row {
+                if (state != "") {
+                    IconButton(
+                        onClick = {
+                            state = ""// Remove text from TextField when you press the 'X' icon
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = ""
+                        )
                     }
-                ) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = ""
-                    )
                 }
+                FilterButton(categoriesToHide)
             }
         },
         singleLine = true,
@@ -68,7 +72,6 @@ fun SearchViewBar(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun SearchViewBarPreview() {
