@@ -44,6 +44,8 @@ import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
@@ -58,10 +60,10 @@ import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetupNavGraph(navController: NavHostController, viewModel: ViewModel, mainViewModel: MainViewModel) {
+fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CreateAuction.route
+        startDestination = Screen.MakeABid.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -203,9 +205,11 @@ fun SetupNavGraph(navController: NavHostController, viewModel: ViewModel, mainVi
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
+                    //should not pass auction and boolean as parameters
                     AuctionView(
+                        viewModel = AuctionViewModel(),
                         auction = mainViewModel.selectedAuction,
-                        mainViewModel.auctionOpenByOwner
+                        isOwner = mainViewModel.auctionOpenByOwner
                     )
                 }
             }
@@ -292,7 +296,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: ViewModel, mainVi
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    BidHistoryView(viewModel = MainViewModel())
+                    BidHistoryView(viewModel = BidHistoryViewModel())
                 }
             }
         }

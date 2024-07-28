@@ -10,6 +10,8 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,14 +20,12 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
-class SearchViewModel: ViewModel() {
+class BidHistoryViewModel : ViewModel() {
 
-    private val _searchedAuctionState = MutableStateFlow<ArrayList<Auction>>(arrayListOf())
-    val searchedAuctionState : StateFlow<ArrayList<Auction>> = _searchedAuctionState.asStateFlow()
-    //Stato della parola nella Search. Soluzioni: Stato delle auctions e della parola nella seach, oppure altra variale di stato String.
-    //RESTAPI per la ricerca tramite keyword.
-
-    var auctionSearchResult: Array<Auction> = arrayOf()
+    private val _auctionState = MutableStateFlow(Auction())
+    val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
+    private val _bidState = MutableStateFlow(Bid())
+    val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
     var selectedAuction by mutableStateOf(
         Auction(
@@ -45,5 +45,5 @@ class SearchViewModel: ViewModel() {
             auctionType = AuctionType.English
         )
     )
-
+    var selectedAuctionBidders: List<ObservedUser> = listOf() //need to write a function that takes all the users ID available in selectedAuction.bids and then make requests to the server based on those IDs to fill this list
 }

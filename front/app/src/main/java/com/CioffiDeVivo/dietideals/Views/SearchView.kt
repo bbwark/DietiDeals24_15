@@ -5,11 +5,13 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.AuctionsList
+import com.CioffiDeVivo.dietideals.Components.SearchAuctionsList
 import com.CioffiDeVivo.dietideals.Components.SearchViewBar
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
@@ -22,9 +24,11 @@ import java.util.UUID
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
+    val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
+    
     Column(Modifier.fillMaxSize()) {
         SearchViewBar(viewModel = viewModel)
-        AuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
+        SearchAuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
     }
 }
 

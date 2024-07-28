@@ -16,6 +16,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,13 +32,14 @@ import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
+import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BidHistoryView(viewModel: MainViewModel) {
+fun BidHistoryView(viewModel: BidHistoryViewModel) {
     var showDetails by remember { mutableStateOf(false) }
     var acceptOffer by remember { mutableStateOf(false) }
     var userInfo by remember { mutableStateOf(false) }
@@ -45,6 +47,9 @@ fun BidHistoryView(viewModel: MainViewModel) {
     var bidderName by remember { mutableStateOf("") }
     var selectedBid by remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, UUID.randomUUID(), ZonedDateTime.now())) }
     var selectedUser by remember { mutableStateOf(ObservedUser(UUID.randomUUID(), "")) }
+
+    val auctionState by viewModel.auctionState.collectAsState()
+    val bidState by viewModel.bidState.collectAsState()
 
     Box {
         LazyColumn(
@@ -178,5 +183,5 @@ fun acceptOfferDialog(
 @Preview(showBackground = true)
 @Composable
 fun BidHistoryViewPreview() {
-    BidHistoryView(viewModel = MainViewModel())
+    BidHistoryView(viewModel = BidHistoryViewModel())
 }

@@ -21,7 +21,7 @@ fun FloatingAddButton(viewModel: ViewModel, onClick: () -> Unit) {
         Row {
             Spacer(modifier = Modifier.weight(1f))
             FloatingActionButton(
-                onClick = { onClick },
+                onClick = { onClick() },
                 modifier = Modifier.padding(24.dp)
             ) {
                 Icon(Icons.Filled.Add, "Floating action button.")

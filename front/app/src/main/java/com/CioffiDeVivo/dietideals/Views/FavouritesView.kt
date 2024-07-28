@@ -9,6 +9,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,17 +19,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.AuctionsList
 import com.CioffiDeVivo.dietideals.Components.AuctionsListFavored
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
+
+    val userState by viewModel.userState.collectAsState()
+    val favouredAuctionsState by viewModel.favouredAuctionState.collectAsState()
 
     Column(Modifier.fillMaxSize()) {
         FavouriteTabRow(
@@ -39,6 +40,7 @@ fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostControll
             } //or onTabChange = {selectedTab -> tabIndex = selectedTab}
         )
         when (tabIndex) {
+            //viewModel userState favoured auctions
             0 -> AuctionsListFavored(
                 auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(),
                 navController = navController,
