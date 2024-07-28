@@ -13,6 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.GoogleButton
 import com.CioffiDeVivo.dietideals.Views.Navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 
 class MainActivity : ComponentActivity() {

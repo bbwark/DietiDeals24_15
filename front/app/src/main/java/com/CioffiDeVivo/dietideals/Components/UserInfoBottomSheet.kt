@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.CioffiDeVivo.dietideals.DataModels.ObservedUser
+import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

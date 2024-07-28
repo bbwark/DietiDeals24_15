@@ -10,7 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.CioffiDeVivo.dietideals.DataModels.User
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.Views.modifierStandard
 
 @Composable
@@ -29,7 +29,7 @@ fun PasswordsTextfields(
         visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         supportingText = supportingText,
-        onDelete = { passwordVisible = !passwordVisible },
+        onTrailingIconClick = { passwordVisible = !passwordVisible },
         modifier = modifierStandard
     )
 

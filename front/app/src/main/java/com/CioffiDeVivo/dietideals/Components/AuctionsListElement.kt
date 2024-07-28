@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate

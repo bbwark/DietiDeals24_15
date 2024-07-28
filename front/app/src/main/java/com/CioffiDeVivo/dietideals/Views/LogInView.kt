@@ -23,12 +23,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
 @Composable
-fun LoginView(viewModel: DietiDealsViewModel, navController: NavController) {
+fun LoginView(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -80,5 +80,5 @@ fun LoginView(viewModel: DietiDealsViewModel, navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun LogInPreview(){
-    LoginView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    LoginView(navController = rememberNavController())
 }

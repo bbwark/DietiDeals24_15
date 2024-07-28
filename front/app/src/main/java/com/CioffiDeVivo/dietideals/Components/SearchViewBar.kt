@@ -19,7 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import androidx.lifecycle.ViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 
 @Composable
 fun SearchViewBar(
@@ -73,5 +75,5 @@ fun SearchViewBar(
 @Preview
 @Composable
 fun SearchViewBarPreview() {
-    SearchViewBar(viewModel = DietiDealsViewModel())
+    SearchViewBar(viewModel = SearchViewModel())
 }

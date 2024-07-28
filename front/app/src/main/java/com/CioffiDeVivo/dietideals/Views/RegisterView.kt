@@ -31,13 +31,13 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.GoogleButton
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
  @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
  @Composable
-fun RegisterView(viewModel: DietiDealsViewModel, navController: NavController) {
+fun RegisterView(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -133,5 +133,5 @@ fun ExternalButtons(){
 @Preview(showBackground = true)
 @Composable
 fun RegisterPreview(){
-    RegisterView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    RegisterView(navController = rememberNavController())
 }

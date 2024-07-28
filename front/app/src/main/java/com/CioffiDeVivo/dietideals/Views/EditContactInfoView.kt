@@ -23,14 +23,16 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.DietiDealsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostController){
+fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavHostController){
     
-    val userContactInfoState by viewModel.userState.collectAsState()
+    val userContactInfoState by viewModel.userEditContactInfoState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -44,10 +46,9 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
             navController = navController
         )
         ContactInfo(
-            user = userContactInfoState,
+            userState = RegistrationState(),
             onAddressChange = { viewModel.updateAddress(it) },
             onZipCodeChange = { viewModel.updateZipCode(it) },
-            onCountryChange = { viewModel.updateCountry(it) },
             onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
             onDeleteAddress = { viewModel.deleteAddress() },
             onDeleteZipCode = { viewModel.deleteZipCode() },
@@ -67,5 +68,5 @@ fun EditContactInfoView(viewModel: DietiDealsViewModel, navController: NavHostCo
 @Preview(showBackground = true)
 @Composable
 fun EditContactInfoPreview(){
-    EditContactInfoView(viewModel = DietiDealsViewModel(), navController = rememberNavController())
+    EditContactInfoView(viewModel = EditContactInfoViewModel(), navController = rememberNavController())
 }

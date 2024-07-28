@@ -22,6 +22,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,18 +33,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.CioffiDeVivo.dietideals.DataModels.Auction
-import com.CioffiDeVivo.dietideals.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.DataModels.Bid
-import com.CioffiDeVivo.dietideals.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
+import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import java.time.LocalDate
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AuctionView(auction: Auction, isOwner: Boolean) {
+fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean) {
+
+    val auctionState by viewModel.auctionState.collectAsState()
+
     val pagerState =
         rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
     Column(
@@ -198,6 +204,7 @@ fun DescriptionAuctionItem(description: String) {
 @Composable
 fun AuctionViewPreview() {
     AuctionView(
+        viewModel = AuctionViewModel(),
         auction = Auction(
             UUID.randomUUID(),
             UUID.randomUUID(),

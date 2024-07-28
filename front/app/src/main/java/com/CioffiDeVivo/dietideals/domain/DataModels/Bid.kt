@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.DataModels
+package com.CioffiDeVivo.dietideals.domain.DataModels
 
 import android.os.Build
 import androidx.annotation.RequiresApi
