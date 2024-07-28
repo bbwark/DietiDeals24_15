@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,12 +24,14 @@ import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ManageCardsView(viewModel: ManageCardsViewModel) {
+    val creditCardsState by viewModel.userCardsState.collectAsState()
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 12.dp),
             content = {
+                //viewModel userCardsState with rest API
                 itemsIndexed(viewModel.user.creditCards) { index, item ->
                     if (index == 0) {
                         Spacer(modifier = Modifier.height(10.dp))

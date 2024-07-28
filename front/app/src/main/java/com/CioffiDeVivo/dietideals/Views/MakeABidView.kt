@@ -45,6 +45,7 @@ fun MakeABid(viewModel: MakeABidViewModel){
 
     var bid by remember { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
+    val auctionState by viewModel.auctionState.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,

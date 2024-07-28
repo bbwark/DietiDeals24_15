@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
@@ -19,10 +20,13 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
-class FavoritesViewModel {
+class FavoritesViewModel : ViewModel(){
 
     private val _userState = MutableStateFlow(User())
     val userState: StateFlow<User> = _userState.asStateFlow()
+    private val _favouredAuctionState = MutableStateFlow<ArrayList<Auction>>(arrayListOf())
+    val favouredAuctionState : StateFlow<ArrayList<Auction>> = _favouredAuctionState.asStateFlow()
+
 
     var user by mutableStateOf(
         User(

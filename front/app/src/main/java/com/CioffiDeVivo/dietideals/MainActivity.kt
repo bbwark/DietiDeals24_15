@@ -29,8 +29,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    var mainViewModel = MainViewModel()
-                    SetupNavGraph(navController = navController, viewModel = mainViewModel, mainViewModel = mainViewModel)
+                    val mainViewModel = MainViewModel()
+                    SetupNavGraph(navController = navController, mainViewModel = mainViewModel)
                 }
             }
         }

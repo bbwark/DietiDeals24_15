@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +46,10 @@ import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
+
+    val userState by viewModel.userState.collectAsState()
+    val auctionState by viewModel.auctionState.collectAsState()
+
     Column(
         Modifier
             .fillMaxSize()
