@@ -36,8 +36,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "isSeller")
     private Boolean isSeller;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AuctionEntity> favouriteAuctionEntities;
+    @Builder.Default
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     @Column(name = "bio")
     private String bio;
@@ -54,13 +55,19 @@ public class UserEntity implements UserDetails {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CreditCardEntity> creditCards;
+    @Builder.Default
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<CreditCardEntity> creditCards = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<BidEntity> bids = new ArrayList<>();
+
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
-    private Set<Role> authorities;
+    private Set<Role> authorities = new HashSet<>();
 
     public UserEntity() {
         super();

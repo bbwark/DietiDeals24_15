@@ -1,8 +1,11 @@
 package com.dietideals.dietideals24_25.controllers;
 
+import com.dietideals.dietideals24_25.domain.dto.CreditCardDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
+import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
+import com.dietideals.dietideals24_25.services.CreditCardService;
 import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +14,25 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private UserService userService;
-
+    private CreditCardService creditCardService;
     private Mapper<UserEntity, UserDto> userMapper;
+    private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
 
-    public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper) {
+    public UserController(UserService userService, CreditCardService creditCardService, Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
         this.userService = userService;
+        this.creditCardService = creditCardService;
         this.userMapper = userMapper;
+        this.creditCardMapper = creditCardMapper;
     }
 
     @GetMapping("/google")
@@ -32,11 +40,34 @@ public class UserController {
         return ResponseEntity.ok(oAuth2User.getAttributes());
     }
 
-    @PostMapping(path = "/")
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+        boolean userHasCreditCards = !user.getCreditCards().isEmpty();
+        List<CreditCardDto> creditCardDtos = null;
+        if (userHasCreditCards) {
+            creditCardDtos = user.getCreditCards().stream()
+                .map(creditCard -> {
+                    CreditCardDto creditCardDto = new CreditCardDto(creditCard);
+                    return creditCardDto;
+                })
+                .collect(Collectors.toList());
+
+            user.getCreditCards().clear();
+        }
+
         UserEntity userEntity = userMapper.mapFrom(user);
-        UserEntity savedUserEntity = userService.registerUser(userEntity);
+
+        UserEntity savedUserEntity = userService.save(userEntity);
         UserDto responseUser = userMapper.mapTo(savedUserEntity);
+
+        if (userHasCreditCards) {
+            creditCardDtos.forEach(creditCardDto -> {
+                creditCardDto.setOwnerId(savedUserEntity.getId());
+                creditCardService.save(creditCardMapper.mapFrom(creditCardDto));
+                responseUser.getCreditCards().add(creditCardDto);
+            });
+        }
+        
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
@@ -48,7 +79,7 @@ public class UserController {
 
         userDto.setId(id);
         UserEntity userEntity = userMapper.mapFrom(userDto);
-        UserEntity savedUserEntity = userService.registerUser(userEntity);
+        UserEntity savedUserEntity = userService.save(userEntity);
         return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
     }
 

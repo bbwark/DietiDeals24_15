@@ -1,9 +1,7 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
+import com.dietideals.dietideals24_25.domain.AuctionCategory;
 import com.dietideals.dietideals24_25.domain.AuctionType;
-import com.dietideals.dietideals24_25.domain.entities.BidEntity;
-import com.dietideals.dietideals24_25.domain.entities.ItemEntity;
-import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,16 +20,26 @@ public class AuctionDto {
 
     private UUID id;
 
-    private UserEntity owner;
+    private UUID ownerId;
 
-    private ItemEntity item;
+    private ItemDto item;
 
     @Builder.Default
-    private ArrayList<BidEntity> bids = new ArrayList<>();
+    private ArrayList<BidDto> bids = new ArrayList<>();
 
     private Optional<LocalDate> endingDate;
 
     private Boolean expired;
 
-    private AuctionType auctionType;
+    private AuctionType type;
+
+    private String description;
+
+    private String minStep;
+
+    private String interval;
+    
+    private String startingPrice;
+
+    private AuctionCategory category;
 }
