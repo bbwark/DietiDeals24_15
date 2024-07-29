@@ -19,4 +19,5 @@ public class ItemDto {
 
     private String imageUrl;
 
+    private UUID auctionId;
 }

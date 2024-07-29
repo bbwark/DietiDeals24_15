@@ -9,7 +9,7 @@ import java.util.UUID;
 @Service
 public interface UserService {
 
-    UserEntity registerUser(UserEntity userEntity);
+    UserEntity save(UserEntity userEntity);
 
     Optional<UserEntity> findById(UUID id);
 

@@ -22,10 +22,10 @@ public class CreditCardController {
         this.creditCardMapper = creditCardMapper;
     }
 
-    @PostMapping(path = "/")
+    @PostMapping
     public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
         CreditCardEntity creditCardEntity = creditCardMapper.mapFrom(creditCard);
-        CreditCardEntity savedCreditCardEntity = creditCardService.createCreditCard(creditCardEntity);
+        CreditCardEntity savedCreditCardEntity = creditCardService.save(creditCardEntity);
         CreditCardDto responseCreditCard = creditCardMapper.mapTo(savedCreditCardEntity);
         return new ResponseEntity<>(responseCreditCard, HttpStatus.CREATED);
     }
