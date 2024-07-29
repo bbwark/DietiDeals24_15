@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("")
 public class AuctionController {
 
     private AuctionService auctionService;
@@ -26,14 +27,15 @@ public class AuctionController {
         this.auctionMapper = auctionMapper;
     }
 
-    @PostMapping(path = "/auctions")
-    public AuctionDto createAuction(@RequestBody AuctionDto auction) {
+    @PostMapping(path = "/")
+    public ResponseEntity<AuctionDto> createAuction(@RequestBody AuctionDto auction) {
         AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
         AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
-        return auctionMapper.mapTo(savedAuctionEntity);
+        AuctionDto responseAuction = auctionMapper.mapTo(savedAuctionEntity);
+        return new ResponseEntity<>(responseAuction, HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "/auctions/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") UUID id, @RequestBody AuctionDto auction) {
         if (!auctionService.exists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,7 +47,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionMapper.mapTo(savedAuctionEntity), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/auctions/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") UUID id) {
         Optional<AuctionEntity> foundAuction = auctionService.findById(id);
         return foundAuction.map(auctionEntity -> {
@@ -54,7 +56,7 @@ public class AuctionController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(path = "/auctions/item/{name}")
+    @GetMapping(path = "/item/{name}")
     public List<AuctionNameDto> listAuctionsByItemName(@PathVariable("name") String itemName) {
         List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
         return auctions.stream()
@@ -62,7 +64,7 @@ public class AuctionController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/auctions/owner/{id}")
+    @GetMapping(path = "/owner/{id}")
     public List<AuctionDto> listRandomAuctions(@PathVariable("id") UUID ownerId) {
         List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
         return auctions.stream()

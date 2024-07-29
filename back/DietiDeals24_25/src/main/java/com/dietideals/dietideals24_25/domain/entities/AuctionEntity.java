@@ -27,7 +27,7 @@ public class AuctionEntity {
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "auction", cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 

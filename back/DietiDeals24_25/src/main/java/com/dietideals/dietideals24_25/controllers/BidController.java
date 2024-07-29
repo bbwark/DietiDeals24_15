@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/bids")
 public class BidController {
 
     private BidService bidService;
@@ -20,14 +21,15 @@ public class BidController {
         this.bidMapper = bidMapper;
     }
 
-    @PostMapping(path = "/bids")
-    public BidDto createBid(@RequestBody BidDto bid) {
+    @PostMapping(path = "/")
+    public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         BidEntity bidEntity = bidMapper.mapFrom(bid);
         BidEntity savedBidEntity = bidService.createBid(bidEntity);
-        return bidMapper.mapTo(savedBidEntity);
+        BidDto responseBid = bidMapper.mapTo(savedBidEntity);
+        return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/bids/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteBid(@PathVariable("id") String id) {
         bidService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
