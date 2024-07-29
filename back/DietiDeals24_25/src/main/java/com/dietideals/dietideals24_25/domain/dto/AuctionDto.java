@@ -26,6 +26,7 @@ public class AuctionDto {
 
     private ItemEntity item;
 
+    @Builder.Default
     private ArrayList<BidEntity> bids = new ArrayList<>();
 
     private Optional<LocalDate> endingDate;

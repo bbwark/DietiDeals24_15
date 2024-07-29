@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "isSeller")
     private Boolean isSeller;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuctionEntity> favouriteAuctionEntities;
 
     @Column(name = "bio")
@@ -54,24 +54,21 @@ public class UserEntity implements UserDetails {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "card_number")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCardEntity> creditCards;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_role_junction",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")}
-    )
+    @JoinTable(name = "user_role_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id") })
     private Set<Role> authorities;
 
-    public UserEntity(){
+    public UserEntity() {
         super();
         this.authorities = new HashSet<Role>();
     }
 
-    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities, Boolean isSeller){
+    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities,
+            Boolean isSeller) {
         super();
         this.id = id;
         this.email = email;
@@ -82,7 +79,9 @@ public class UserEntity implements UserDetails {
         this.isSeller = isSeller;
     }
 
-    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities, Boolean isSeller, String address, Integer zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards) {
+    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities,
+            Boolean isSeller, String address, Integer zipCode, String country, String phoneNumber,
+            List<CreditCardEntity> creditCards) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -102,7 +101,6 @@ public class UserEntity implements UserDetails {
         this.name = name;
         this.authorities = authorities;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -134,4 +132,3 @@ public class UserEntity implements UserDetails {
         return true;
     }
 }
-

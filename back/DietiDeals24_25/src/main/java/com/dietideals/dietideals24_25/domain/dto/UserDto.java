@@ -26,6 +26,7 @@ public class UserDto {
 
     private Boolean isSeller;
 
+    @Builder.Default
     private List<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     private Optional<String> bio;
@@ -38,6 +39,7 @@ public class UserDto {
 
     private Optional<String> phoneNumber;
 
+    @Builder.Default
     private List<CreditCardEntity> creditCards = new ArrayList<>();
 
     private Set<Role> authorities;
