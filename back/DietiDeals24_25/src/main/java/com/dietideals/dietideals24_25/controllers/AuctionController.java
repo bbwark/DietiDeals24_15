@@ -27,15 +27,15 @@ public class AuctionController {
     }
 
     @PostMapping(path = "/auctions")
-    public AuctionDto createAuction(@RequestBody AuctionDto auction){
+    public AuctionDto createAuction(@RequestBody AuctionDto auction) {
         AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
         AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
         return auctionMapper.mapTo(savedAuctionEntity);
     }
 
     @PutMapping(path = "/auctions/{id}")
-    public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") UUID id, @RequestBody AuctionDto auction){
-        if(!auctionService.exists(id)){
+    public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") UUID id, @RequestBody AuctionDto auction) {
+        if (!auctionService.exists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -46,7 +46,7 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/auctions/{id}")
-    public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") UUID id){
+    public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") UUID id) {
         Optional<AuctionEntity> foundAuction = auctionService.findById(id);
         return foundAuction.map(auctionEntity -> {
             AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
@@ -55,7 +55,7 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/auctions/item/{name}")
-    public List<AuctionNameDto> listAuctionsByItemName(@PathVariable("name") String itemName){
+    public List<AuctionNameDto> listAuctionsByItemName(@PathVariable("name") String itemName) {
         List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
         return auctions.stream()
                 .map(auction -> new AuctionNameDto(auction.getId(), auction.getItem().getName()))
@@ -63,7 +63,7 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/auctions/owner/{id}")
-    public List<AuctionDto> listRandomAuctions(@PathVariable("id") UUID ownerId){
+    public List<AuctionDto> listRandomAuctions(@PathVariable("id") UUID ownerId) {
         List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
         return auctions.stream()
                 .map(auctionMapper::mapTo)

@@ -10,9 +10,14 @@ import java.util.UUID;
 @Service
 public interface AuctionService {
     AuctionEntity save(AuctionEntity auctionEntity);
+
     Optional<AuctionEntity> findById(UUID id);
+
     List<AuctionEntity> findByItemName(String itemName);
+
     List<AuctionEntity> findRandomAuctions(UUID ownerId);
+
     Boolean exists(UUID id);
+
     void delete(UUID id);
 }

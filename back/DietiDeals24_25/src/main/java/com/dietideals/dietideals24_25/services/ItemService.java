@@ -6,5 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ItemService {
     ItemEntity createItem(ItemEntity itemEntity);
-    void delete (String id);
+
+    void delete(String id);
 }

@@ -23,15 +23,19 @@ public class AuthenticationController {
 
     private UserRepository userRepository;
 
-    public AuthenticationController(Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService, UserRepository userRepository) {
+    public AuthenticationController(Mapper<UserEntity, UserDto> userMapper,
+            AuthenticationServiceImpl authenticationService, UserRepository userRepository) {
         this.userMapper = userMapper;
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/registerUser")
-    public UserEntity registerUserBuyer(@RequestBody RegistrationDto registrationDto){
-        return authenticationService.registerUserBuyer(registrationDto.getEmail(), registrationDto.getName(), registrationDto.getSurname(), registrationDto.getPassword(), registrationDto.getAddress(), registrationDto.getZipCode(), registrationDto.getCountry(), registrationDto.getPhoneNumber(), registrationDto.getCreditCards());
+    public UserEntity registerUserBuyer(@RequestBody RegistrationDto registrationDto) {
+        return authenticationService.registerUserBuyer(registrationDto.getEmail(), registrationDto.getName(),
+                registrationDto.getSurname(), registrationDto.getPassword(), registrationDto.getAddress(),
+                registrationDto.getZipCode(), registrationDto.getCountry(), registrationDto.getPhoneNumber(),
+                registrationDto.getCreditCards());
     }
 
     @PostMapping("/loginUser")
@@ -40,16 +44,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register/google")
-    public Optional<UserEntity> registerGoogleAccount(@RequestBody String googleIdToken) throws GeneralSecurityException, IOException {
+    public Optional<UserEntity> registerGoogleAccount(@RequestBody String googleIdToken)
+            throws GeneralSecurityException, IOException {
         UserDto userDto = authenticationService.registerWithGoogle(googleIdToken);
         UserEntity userEntity = userMapper.mapFrom(userDto);
-        if(userRepository.findByEmail(userEntity.getEmail()).isEmpty()){
+        if (userRepository.findByEmail(userEntity.getEmail()).isEmpty()) {
             userRepository.save(userEntity);
         }
         return userRepository.findByEmail(userEntity.getEmail());
 
     }
-
-
 
 }

@@ -6,11 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -29,13 +27,12 @@ public class AuctionEntity {
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @Builder.Default
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
     private ArrayList<BidEntity> bids = new ArrayList<>();
 
     private LocalDate endingDate;

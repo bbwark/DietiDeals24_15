@@ -15,21 +15,21 @@ public class BidController {
 
     private Mapper<BidEntity, BidDto> bidMapper;
 
-    public BidController(BidService bidService, Mapper <BidEntity, BidDto> bidMapper){
+    public BidController(BidService bidService, Mapper<BidEntity, BidDto> bidMapper) {
         this.bidService = bidService;
         this.bidMapper = bidMapper;
     }
 
     @PostMapping(path = "/bids")
-    public BidDto createBid(@RequestBody BidDto bid){
+    public BidDto createBid(@RequestBody BidDto bid) {
         BidEntity bidEntity = bidMapper.mapFrom(bid);
         BidEntity savedBidEntity = bidService.createBid(bidEntity);
         return bidMapper.mapTo(savedBidEntity);
     }
 
     @DeleteMapping(path = "/bids/{id}")
-    public ResponseEntity deleteBid(@PathVariable("id") String id){
+    public ResponseEntity<Void> deleteBid(@PathVariable("id") String id) {
         bidService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -46,11 +46,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.io.*;
 
-
 @Configuration
 @EnableWebSecurity
 @Slf4j
-public class SecurityConfig{
+public class SecurityConfig {
     private final RSAKeyProperties keys;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -60,21 +59,21 @@ public class SecurityConfig{
     private String clientSecret;
 
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository(){
+    public ClientRegistrationRepository clientRegistrationRepository() {
         return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
     }
 
-    public SecurityConfig(RSAKeyProperties keys){
+    public SecurityConfig(RSAKeyProperties keys) {
         this.keys = keys;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService){
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -82,33 +81,33 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests( auth -> {
+                .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/registerUser").permitAll();
                     auth.requestMatchers("/auth/loginUser").permitAll();
                     auth.anyRequest().authenticated();
                 }).oauth2Login(Customizer.withDefaults());
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
-        http.sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(){
+    public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
     }
 
     @Bean
-    public JwtEncoder jwtEncoder(){
+    public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
     }
 
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
@@ -117,7 +116,7 @@ public class SecurityConfig{
         return jwtConverter;
     }
 
-    private ClientRegistration googleClientRegistration(){
+    private ClientRegistration googleClientRegistration() {
         return ClientRegistration.withRegistrationId("google")
                 .clientId(clientId)
                 .clientSecret(clientSecret)

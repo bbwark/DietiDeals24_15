@@ -15,22 +15,22 @@ public class ItemController {
 
     private Mapper<ItemEntity, ItemDto> itemMapper;
 
-    public ItemController(ItemService itemService, Mapper<ItemEntity, ItemDto> itemMapper){
+    public ItemController(ItemService itemService, Mapper<ItemEntity, ItemDto> itemMapper) {
         this.itemService = itemService;
         this.itemMapper = itemMapper;
     }
 
     @PostMapping(path = "/items")
-    public ItemDto createItem(@RequestBody ItemDto item){
+    public ItemDto createItem(@RequestBody ItemDto item) {
         ItemEntity itemEntity = itemMapper.mapFrom(item);
         ItemEntity savedItemEntity = itemService.createItem(itemEntity);
         return itemMapper.mapTo(savedItemEntity);
     }
 
     @DeleteMapping(path = "/items/{id}")
-    public ResponseEntity deleteItem(@PathVariable("id") String id){
+    public ResponseEntity<Void> deleteItem(@PathVariable("id") String id) {
         itemService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
