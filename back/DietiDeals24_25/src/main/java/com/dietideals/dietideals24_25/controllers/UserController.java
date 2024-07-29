@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private UserService userService;
@@ -32,14 +32,15 @@ public class UserController {
         return ResponseEntity.ok(oAuth2User.getAttributes());
     }
 
-    @PostMapping(path = "/users")
-    public UserDto createUser(@RequestBody UserDto user) {
+    @PostMapping(path = "/")
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
         UserEntity userEntity = userMapper.mapFrom(user);
         UserEntity savedUserEntity = userService.registerUser(userEntity);
-        return userMapper.mapTo(savedUserEntity);
+        UserDto responseUser = userMapper.mapTo(savedUserEntity);
+        return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "/users/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
         if (!userService.exists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -51,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/user/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") UUID id) {
         Optional<UserEntity> foundUser = userService.findById(id);
         return foundUser.map(userEntity -> {
@@ -71,7 +72,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(path = "/users/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/credit_cards")
 public class CreditCardController {
 
     private CreditCardService creditCardService;
@@ -21,14 +22,15 @@ public class CreditCardController {
         this.creditCardMapper = creditCardMapper;
     }
 
-    @PostMapping(path = "/credit_cards")
-    public CreditCardDto createCreditCard(@RequestBody CreditCardDto creditCard) {
+    @PostMapping(path = "/")
+    public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
         CreditCardEntity creditCardEntity = creditCardMapper.mapFrom(creditCard);
         CreditCardEntity savedCreditCardEntity = creditCardService.createCreditCard(creditCardEntity);
-        return creditCardMapper.mapTo(savedCreditCardEntity);
+        CreditCardDto responseCreditCard = creditCardMapper.mapTo(savedCreditCardEntity);
+        return new ResponseEntity<>(responseCreditCard, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/credit_cards/{creditCardNumber}")
+    @DeleteMapping(path = "/{creditCardNumber}")
     public ResponseEntity<Void> deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber) {
         creditCardService.delete(creditCardNumber);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

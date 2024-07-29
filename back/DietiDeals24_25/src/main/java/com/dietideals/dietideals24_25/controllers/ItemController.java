@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/items")
 public class ItemController {
 
     private ItemService itemService;
@@ -20,14 +21,15 @@ public class ItemController {
         this.itemMapper = itemMapper;
     }
 
-    @PostMapping(path = "/items")
-    public ItemDto createItem(@RequestBody ItemDto item) {
+    @PostMapping(path = "/")
+    public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto item) {
         ItemEntity itemEntity = itemMapper.mapFrom(item);
         ItemEntity savedItemEntity = itemService.createItem(itemEntity);
-        return itemMapper.mapTo(savedItemEntity);
+        ItemDto responseItem = itemMapper.mapTo(savedItemEntity);
+        return new ResponseEntity<>(responseItem, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/items/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable("id") String id) {
         itemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
