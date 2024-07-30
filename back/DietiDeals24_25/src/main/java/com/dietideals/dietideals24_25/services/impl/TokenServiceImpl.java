@@ -21,7 +21,7 @@ public class TokenServiceImpl {
     @Autowired
     private JwtDecoder jwtDecoder;
 
-    public String generateJwt(Authentication authentication){
+    public String generateJwt(Authentication authentication) {
 
         Instant now = Instant.now();
 

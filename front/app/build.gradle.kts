@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.CioffiDeVivo.dietideals"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -77,7 +77,11 @@ dependencies {
     implementation ("androidx.credentials:credentials-play-services-auth:<latest version>")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
+
     implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
+    implementation("io.ktor:ktor-client-core:2.3.9")
+    implementation("io.ktor:ktor-client-cio:2.3.9")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
