@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserEntity registerUser(UserEntity userEntity) {
+    public UserEntity save(UserEntity userEntity) {
         return userRepository.save(userEntity);
     }
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow( () -> new UsernameNotFoundException("user not found"));
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
 }

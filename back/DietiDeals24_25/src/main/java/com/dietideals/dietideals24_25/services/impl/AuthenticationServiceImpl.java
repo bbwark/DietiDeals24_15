@@ -38,28 +38,28 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class AuthenticationServiceImpl  {
+public class AuthenticationServiceImpl {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private  RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private  TokenServiceImpl tokenService;
-
+    private TokenServiceImpl tokenService;
 
     private NetHttpTransport transport = new NetHttpTransport();
     private JsonFactory jsonFactory = new GsonFactory();
 
-    public UserEntity registerUserBuyer(String email, String name, String surname, String password, String address, Integer zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards){
+    public UserEntity registerUserBuyer(String email, String name, String surname, String password, String address,
+            Integer zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards) {
 
         boolean isSeller = true;
         String encodedPassword = passwordEncoder.encode(password);
@@ -69,35 +69,34 @@ public class AuthenticationServiceImpl  {
 
         authorities.add(userRole);
 
-        if(address == null || zipCode == null || country == null || phoneNumber == null || creditCards == null){
+        if (address == null || zipCode == null || country == null || phoneNumber == null || creditCards == null) {
             isSeller = false;
         }
 
-        return userRepository.save(new UserEntity(UUID.randomUUID(), email, name, surname, encodedPassword, authorities, isSeller, address, zipCode, country, phoneNumber, creditCards));
+        return userRepository.save(new UserEntity(UUID.randomUUID(), email, name, surname, encodedPassword, authorities,
+                isSeller, address, zipCode, country, phoneNumber, creditCards));
     }
 
-    public LoginDto loginUser(String email, String password){
+    public LoginDto loginUser(String email, String password) {
 
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password)
-            );
+                    new UsernamePasswordAuthenticationToken(email, password));
 
             String token = tokenService.generateJwt(authentication);
 
             return new LoginDto(userRepository.findByEmail(email), token);
 
-        } catch (AuthenticationException e){
-            return  new LoginDto(null,   "");
+        } catch (AuthenticationException e) {
+            return new LoginDto(null, "");
         }
 
     }
 
-
     public UserDto registerWithGoogle(String googleIdToken) throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier(transport, jsonFactory);
         GoogleIdToken idToken = verifier.verify(googleIdToken);
-        if(idToken != null){
+        if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
             String userId = payload.getSubject();
             String email = payload.getEmail();

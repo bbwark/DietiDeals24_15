@@ -37,7 +37,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionEntity> findRandomAuctions(UUID ownerId) {
-        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by("uuid"));
+        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by("id"));
         return auctionRepository.findRandomAuctions(ownerId, pageRequest);
     }
 

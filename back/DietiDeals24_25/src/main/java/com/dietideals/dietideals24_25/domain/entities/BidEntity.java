@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "bid")
+@Table(name = "bids")
 public class BidEntity {
 
     @Id
@@ -22,10 +22,13 @@ public class BidEntity {
 
     private Float value;
 
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private UUID userId;
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "auction_id")
+    private AuctionEntity auction;
 
     private String date;
-
-
 }

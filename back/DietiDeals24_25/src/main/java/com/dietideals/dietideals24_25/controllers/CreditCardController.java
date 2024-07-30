@@ -9,27 +9,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/credit_cards")
 public class CreditCardController {
 
     private CreditCardService creditCardService;
 
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
 
-    public CreditCardController(CreditCardService creditCardService, Mapper <CreditCardEntity, CreditCardDto> creditCardMapper){
+    public CreditCardController(CreditCardService creditCardService,
+            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
         this.creditCardService = creditCardService;
         this.creditCardMapper = creditCardMapper;
     }
 
-    @PostMapping(path = "/credit_cards")
-    public CreditCardDto createCreditCard(@RequestBody CreditCardDto creditCard){
+    @PostMapping
+    public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
         CreditCardEntity creditCardEntity = creditCardMapper.mapFrom(creditCard);
-        CreditCardEntity savedCreditCardEntity = creditCardService.createCreditCard(creditCardEntity);
-        return creditCardMapper.mapTo(savedCreditCardEntity);
+        CreditCardEntity savedCreditCardEntity = creditCardService.save(creditCardEntity);
+        CreditCardDto responseCreditCard = creditCardMapper.mapTo(savedCreditCardEntity);
+        return new ResponseEntity<>(responseCreditCard, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/credit_cards/{creditCardNumber}")
-    public ResponseEntity deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber){
+    @DeleteMapping(path = "/{creditCardNumber}")
+    public ResponseEntity<Void> deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber) {
         creditCardService.delete(creditCardNumber);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

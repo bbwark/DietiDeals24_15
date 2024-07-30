@@ -16,5 +16,5 @@ public class AuctionNameDto {
 
     private UUID id;
 
-    private String itemName;
+    private ItemDto item;
 }

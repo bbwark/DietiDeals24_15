@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "item")
+@Table(name = "items")
 public class ItemEntity {
 
     @Id
@@ -24,4 +24,6 @@ public class ItemEntity {
 
     private String imageUrl;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private AuctionEntity auction;
 }

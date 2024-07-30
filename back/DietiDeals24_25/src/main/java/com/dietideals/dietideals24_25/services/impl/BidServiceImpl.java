@@ -3,9 +3,10 @@ package com.dietideals.dietideals24_25.services.impl;
 import com.dietideals.dietideals24_25.domain.entities.BidEntity;
 import com.dietideals.dietideals24_25.repositories.BidRepository;
 import com.dietideals.dietideals24_25.services.BidService;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -16,12 +17,12 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public BidEntity createBid(BidEntity bidEntity) {
+    public BidEntity save(BidEntity bidEntity) {
         return bidRepository.save(bidEntity);
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(UUID id) {
         bidRepository.deleteById(id);
     }
 }

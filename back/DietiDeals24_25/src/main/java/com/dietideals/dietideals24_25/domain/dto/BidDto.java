@@ -17,9 +17,9 @@ public class BidDto {
 
     private Float value;
 
-    private UUID userId;
-
     private String date;
 
+    private UUID userId;
 
+    private UUID auctionId;
 }
