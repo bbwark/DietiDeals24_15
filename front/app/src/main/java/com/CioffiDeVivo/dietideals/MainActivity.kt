@@ -30,8 +30,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    val dietiDealsViewModel = DietiDealsViewModel()
-                    SetupNavGraph(navController = navController, viewModel = dietiDealsViewModel)
+                    val dietiDealsViewModel = MainViewModel()
+                    SetupNavGraph(navController = navController, mainViewModel = MainViewModel())
 
                 }
             }

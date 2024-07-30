@@ -27,7 +27,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 fun SearchViewBar(
     modifier: Modifier = Modifier,
     categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()),
-    viewModel: DietiDealsViewModel
+    viewModel: SearchViewModel
 ) {
     var state by remember { mutableStateOf("") }
 

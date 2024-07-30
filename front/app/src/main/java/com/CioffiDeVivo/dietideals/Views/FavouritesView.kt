@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.AuctionsListFavored
+import com.CioffiDeVivo.dietideals.Components.AuctionsListFavoured
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
 
@@ -41,12 +41,12 @@ fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostControll
         )
         when (tabIndex) {
             //viewModel userState favoured auctions
-            0 -> AuctionsListFavored(
+            0 -> AuctionsListFavoured(
                 auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel
             ) //ActiveAuctions
-            1 -> AuctionsListFavored(
+            1 -> AuctionsListFavoured(
                 auctions = viewModel.user.favouriteAuctions.filter { it.expired }.toTypedArray(),
                 navController = navController,
                 viewModel = viewModel

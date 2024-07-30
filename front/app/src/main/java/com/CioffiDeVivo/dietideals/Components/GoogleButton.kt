@@ -31,62 +31,59 @@ import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
 
+//private lateinit var auth: FirebaseAuth
+
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun GoogleButton(navController: NavController){
-
+    //auth = Firebase.auth
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val googleId = stringResource(id = R.string.googleId)
+    val credentialManager = CredentialManager.create(context)
 
-    val rawNonce = UUID.randomUUID().toString()
-    val rawNonceToBytes = rawNonce.toByteArray()
-    val messageDigest = MessageDigest.getInstance("SHA-256")
-    val digest = messageDigest.digest(rawNonceToBytes)
-    val hashedNonce = digest.fold(""){ str, it -> str + "%02x".format(it) }
 
     val onClick: () -> Unit = {
-        val credentialManager = CredentialManager.create(context)
-
-        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(googleId)
-            .setNonce(hashedNonce)
+            .setServerClientId("754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com")
             .build()
 
-        val credentialRequest: GetCredentialRequest = GetCredentialRequest.Builder()
+        val request: GetCredentialRequest = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
 
         coroutineScope.launch {
             try {
                 val result = credentialManager.getCredential(
-                    request = credentialRequest,
-                    context = context
+                    context = context,
+                    request = request
                 )
                 val credential = result.credential
-
-                val googleIdTokenCredential = GoogleIdTokenCredential
-                    .createFrom(credential.data)
-
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
-
                 Log.i(TAG, googleIdToken)
-                //Rest che prende il google Token
-
-
-                Toast.makeText(context, "You are signed in", Toast.LENGTH_SHORT).show()
-                navController.navigate(Screen.Home.route)
-            } catch ( e: GetCredentialException ){
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-            } catch ( e: GoogleIdTokenParsingException ){
+                Toast.makeText(context, "You Signed In", Toast.LENGTH_SHORT).show()
+                /*val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
+                auth.signInWithCredential(firebaseCredential)
+                    .addOnCompleteListener{ task ->
+                        if(task.isSuccessful){
+                            Toast.makeText(context, "You Signed In", Toast.LENGTH_SHORT).show()
+                        }
+                    }*/
+            } catch (e: Exception){
+                Log.e(TAG, e.toString())
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
             }
-            }
+        }
     }
 
     OutlinedButton(
