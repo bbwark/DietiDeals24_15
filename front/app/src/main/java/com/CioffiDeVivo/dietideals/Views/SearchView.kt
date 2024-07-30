@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,20 +26,16 @@ import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-<<<<<<< HEAD
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
     val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
-    
+
     Column(Modifier.fillMaxSize()) {
         SearchViewBar(viewModel = viewModel)
-        SearchAuctionsList(auctions = viewModel.auctionSearchResult, navController = navController, viewModel = viewModel)
-=======
-fun SearchView(viewModel: DietiDealsViewModel, navController: NavHostController) {
-    var categoriesToHide = remember { mutableStateOf(mutableSetOf<String>()) }
-    Column(Modifier.fillMaxSize()) {
-        SearchViewBar(categoriesToHide = categoriesToHide, viewModel = viewModel)
-        AuctionsList(auctions = viewModel.auctionSearchResult, categoriesToHide = categoriesToHide, navController = navController, viewModel = viewModel)
->>>>>>> main
+        SearchAuctionsList(
+            auctions = viewModel.auctionSearchResult,
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }
 
