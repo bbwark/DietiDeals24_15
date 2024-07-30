@@ -34,6 +34,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @Composable
@@ -68,7 +69,7 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
 }
 
 @Composable
-fun CardHeader(auctionItemName: String, viewModel: DietiDealsViewModel, navController: NavHostController) {
+fun CardHeader(auctionItemName: String, viewModel: SellViewModel, navController: NavHostController) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
