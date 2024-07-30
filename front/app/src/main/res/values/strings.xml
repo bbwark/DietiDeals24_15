@@ -39,5 +39,5 @@
     <string name="iban">IBAN</string>
     <string name="error_fieldEmpty">The field cannot be empty</string>
     <string name="emailExample">Example@Example.com</string>
-    <string name="googleId">958456298067-01qdqfcpm93c92f65na22si2h1as2sdk.apps.googleusercontent.com</string>
+    <string name="web_client_id">754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com</string>
 </resources>

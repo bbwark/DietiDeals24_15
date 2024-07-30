@@ -26,17 +26,18 @@ import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 import java.time.LocalDate
 import java.util.UUID
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchAuctionsList(
+fun AuctionsList(
     modifier: Modifier = Modifier,
     auctions: Array<Auction>,
     categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-), navController: NavHostController, viewModel: SearchViewModel) {
+    ), navController: NavHostController, viewModel: SearchViewModel) {
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -59,9 +60,56 @@ fun SearchAuctionsList(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun AuctionsListFavoured(
+    modifier: Modifier = Modifier,
+    auctions: Array<Auction>,
+    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
+    ), navController: NavHostController, viewModel: FavoritesViewModel) {
+    LazyColumn {
+        itemsIndexed(auctions) { index, auction ->
+            Column {
+                if (index == 0) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    /*This Spacer was added to create a small offset to start the list a little below
+                      the top of the Composable, this way the list will have a small transparent offset
+                      that disappears when you scroll down the list*/
+                }
+                if (!categoriesToHide.value.contains(auction.auctionCategory.name)) {
+                    AuctionsListElement(modifier = Modifier.clickable {
+                        viewModel.selectedAuction = auction
+                        //navController.navigate(Screen.Auction.route)
+                    }, auction = auction)
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, viewModel: HomeViewModel, navController: NavHostController){
+    LazyRow{
+        itemsIndexed(auctions){index, item->
+            Row {
+                if(index == 0){
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
+                HomeViewAuctionListElement(
+                    modifier = Modifier.clickable{/*TODO*/},
+                    auction = item
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun SearchAuctionListPreview(){
+fun AuctionListPreview(){
 
     val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer")
 
@@ -114,6 +162,6 @@ fun SearchAuctionListPreview(){
     )
 
     DietiDealsTheme {
-        SearchAuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = SearchViewModel())
+        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = SearchViewModel())
     }
 }
