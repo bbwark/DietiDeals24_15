@@ -24,15 +24,24 @@ public class CreditCardController {
 
     @PostMapping
     public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
-        CreditCardEntity creditCardEntity = creditCardMapper.mapFrom(creditCard);
-        CreditCardEntity savedCreditCardEntity = creditCardService.save(creditCardEntity);
-        CreditCardDto responseCreditCard = creditCardMapper.mapTo(savedCreditCardEntity);
-        return new ResponseEntity<>(responseCreditCard, HttpStatus.CREATED);
+        try {
+            CreditCardEntity creditCardEntity = creditCardMapper.mapFrom(creditCard);
+            CreditCardEntity savedCreditCardEntity = creditCardService.save(creditCardEntity);
+            CreditCardDto responseCreditCard = creditCardMapper.mapTo(savedCreditCardEntity);
+            return new ResponseEntity<>(responseCreditCard, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "/{creditCardNumber}")
     public ResponseEntity<Void> deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber) {
-        creditCardService.delete(creditCardNumber);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            creditCardService.delete(creditCardNumber);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
