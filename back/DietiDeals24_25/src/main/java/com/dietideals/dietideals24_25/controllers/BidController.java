@@ -24,17 +24,26 @@ public class BidController {
         this.bidMapper = bidMapper;
     }
 
+    
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
-        BidEntity bidEntity = bidMapper.mapFrom(bid);
-        BidEntity savedBidEntity = bidService.save(bidEntity);
-        BidDto responseBid = bidMapper.mapTo(savedBidEntity);
-        return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
+        try {
+            BidEntity bidEntity = bidMapper.mapFrom(bid);
+            BidEntity savedBidEntity = bidService.save(bidEntity);
+            BidDto responseBid = bidMapper.mapTo(savedBidEntity);
+            return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteBid(@PathVariable("id") UUID id) {
-        bidService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            bidService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

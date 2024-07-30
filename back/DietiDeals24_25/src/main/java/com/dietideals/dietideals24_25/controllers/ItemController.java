@@ -30,19 +30,27 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto item) {
-        ItemEntity itemEntity = itemMapper.mapFrom(item);
-        AuctionEntity auctionEntity = auctionService.findById(item.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction with id " + item.getAuctionId() + " not found"));
-        itemEntity.setAuction(auctionEntity);
-        ItemEntity savedItemEntity = itemService.save(itemEntity);
-        ItemDto responseItem = itemMapper.mapTo(savedItemEntity);
-        return new ResponseEntity<>(responseItem, HttpStatus.CREATED);
+        try {
+            ItemEntity itemEntity = itemMapper.mapFrom(item);
+            AuctionEntity auctionEntity = auctionService.findById(item.getAuctionId())
+                    .orElseThrow(() -> new RuntimeException("Auction with id " + item.getAuctionId() + " not found"));
+            itemEntity.setAuction(auctionEntity);
+            ItemEntity savedItemEntity = itemService.save(itemEntity);
+            ItemDto responseItem = itemMapper.mapTo(savedItemEntity);
+            return new ResponseEntity<>(responseItem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable("id") UUID id) {
-        itemService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            itemService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

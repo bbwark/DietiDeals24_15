@@ -42,65 +42,86 @@ public class AuctionController {
 
     @PostMapping
     public ResponseEntity<AuctionDto> createAuction(@RequestBody AuctionDto auction) {
-        boolean itemExists = auction.getItem() != null;
-        ItemEntity item = null;
-        if (itemExists) {
-            item = itemMapper.mapFrom(auction.getItem());
-            auction.setItem(null);
+        try {
+            boolean itemExists = auction.getItem() != null;
+            ItemEntity item = null;
+            if (itemExists) {
+                item = itemMapper.mapFrom(auction.getItem());
+                auction.setItem(null);
+            }
+
+            AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
+            UserEntity owner = userService.findById(auction.getOwnerId())
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("User with id " + auction.getOwnerId() + " not found"));
+            auctionEntity.setOwner(owner);
+            AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
+            AuctionDto responseAuction = auctionMapper.mapTo(savedAuctionEntity);
+
+            if (itemExists) {
+                item.setAuction(savedAuctionEntity);
+                item = itemService.save(item);
+                responseAuction.setItem(itemMapper.mapTo(item));
+            }
+
+            return new ResponseEntity<>(responseAuction, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
-        UserEntity owner = userService.findById(auction.getOwnerId())
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + auction.getOwnerId() + " not found"));
-        auctionEntity.setOwner(owner);
-        AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
-        AuctionDto responseAuction = auctionMapper.mapTo(savedAuctionEntity);
-
-        if (itemExists) {
-            item.setAuction(savedAuctionEntity);
-            item = itemService.save(item);
-            responseAuction.setItem(itemMapper.mapTo(item));
-        }
-
-        return new ResponseEntity<>(responseAuction, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") UUID id, @RequestBody AuctionDto auction) {
-        if (!auctionService.exists(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        try {
+            if (!auctionService.exists(id)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
 
-        auction.setId(id);
-        AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
-        AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
-        return new ResponseEntity<>(auctionMapper.mapTo(savedAuctionEntity), HttpStatus.OK);
+            auction.setId(id);
+            AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
+            AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
+            return new ResponseEntity<>(auctionMapper.mapTo(savedAuctionEntity), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") UUID id) {
-        Optional<AuctionEntity> foundAuction = auctionService.findById(id);
-        return foundAuction.map(auctionEntity -> {
-            AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
-            return new ResponseEntity<>(auctionDto, HttpStatus.OK);
-        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<AuctionEntity> foundAuction = auctionService.findById(id);
+            return foundAuction.map(auctionEntity -> {
+                AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
+                return new ResponseEntity<>(auctionDto, HttpStatus.OK);
+            }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/item/{name}")
     public ResponseEntity<List<AuctionDto>> listAuctionsByItemName(@PathVariable("name") String itemName) {
-        List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
-        List<AuctionDto> result = auctions.stream()
-                .map(auction -> auctionMapper.mapTo(auction))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
+            List<AuctionDto> result = auctions.stream()
+                    .map(auction -> auctionMapper.mapTo(auction))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/owner/{id}")
     public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") UUID ownerId) {
-        List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
-        List<AuctionDto> result = auctions.stream()
-                .map(auction -> auctionMapper.mapTo(auction))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
+            List<AuctionDto> result = auctions.stream()
+                    .map(auction -> auctionMapper.mapTo(auction))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -28,7 +28,8 @@ public class UserController {
     private Mapper<UserEntity, UserDto> userMapper;
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
 
-    public UserController(UserService userService, CreditCardService creditCardService, Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
+    public UserController(UserService userService, CreditCardService creditCardService,
+            Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
         this.userService = userService;
         this.creditCardService = creditCardService;
         this.userMapper = userMapper;
@@ -42,54 +43,66 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
-        boolean userHasCreditCards = !user.getCreditCards().isEmpty();
-        List<CreditCardDto> creditCardDtos = null;
-        if (userHasCreditCards) {
-            creditCardDtos = user.getCreditCards().stream()
-                .map(creditCard -> {
-                    CreditCardDto creditCardDto = new CreditCardDto(creditCard);
-                    return creditCardDto;
-                })
-                .collect(Collectors.toList());
+        try {
+            boolean userHasCreditCards = !user.getCreditCards().isEmpty();
+            List<CreditCardDto> creditCardDtos = null;
+            if (userHasCreditCards) {
+                creditCardDtos = user.getCreditCards().stream()
+                        .map(creditCard -> {
+                            CreditCardDto creditCardDto = new CreditCardDto(creditCard);
+                            return creditCardDto;
+                        })
+                        .collect(Collectors.toList());
 
-            user.getCreditCards().clear();
+                user.getCreditCards().clear();
+            }
+
+            UserEntity userEntity = userMapper.mapFrom(user);
+
+            UserEntity savedUserEntity = userService.save(userEntity);
+            UserDto responseUser = userMapper.mapTo(savedUserEntity);
+
+            if (userHasCreditCards) {
+                creditCardDtos.forEach(creditCardDto -> {
+                    creditCardDto.setOwnerId(savedUserEntity.getId());
+                    creditCardService.save(creditCardMapper.mapFrom(creditCardDto));
+                    responseUser.getCreditCards().add(creditCardDto);
+                });
+            }
+
+            return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        UserEntity userEntity = userMapper.mapFrom(user);
-
-        UserEntity savedUserEntity = userService.save(userEntity);
-        UserDto responseUser = userMapper.mapTo(savedUserEntity);
-
-        if (userHasCreditCards) {
-            creditCardDtos.forEach(creditCardDto -> {
-                creditCardDto.setOwnerId(savedUserEntity.getId());
-                creditCardService.save(creditCardMapper.mapFrom(creditCardDto));
-                responseUser.getCreditCards().add(creditCardDto);
-            });
-        }
-        
-        return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
-        if (!userService.exists(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        try {
+            if (!userService.exists(id)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
 
-        userDto.setId(id);
-        UserEntity userEntity = userMapper.mapFrom(userDto);
-        UserEntity savedUserEntity = userService.save(userEntity);
-        return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
+            userDto.setId(id);
+            UserEntity userEntity = userMapper.mapFrom(userDto);
+            UserEntity savedUserEntity = userService.save(userEntity);
+            return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") UUID id) {
-        Optional<UserEntity> foundUser = userService.findById(id);
-        return foundUser.map(userEntity -> {
-            UserDto userDto = userMapper.mapTo(userEntity);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<UserEntity> foundUser = userService.findById(id);
+            return foundUser.map(userEntity -> {
+                UserDto userDto = userMapper.mapTo(userEntity);
+                return new ResponseEntity<>(userDto, HttpStatus.OK);
+            }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/loginSuccesful")
@@ -105,7 +118,11 @@ public class UserController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
-        userService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            userService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
