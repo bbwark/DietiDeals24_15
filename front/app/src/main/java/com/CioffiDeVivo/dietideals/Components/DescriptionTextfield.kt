@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DescriptionTextfield(
     description: String,
-    descriptionOnChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
     maxDescriptionCharacters: Int,
     onDeleteDescription: (String) -> Unit
 ){
@@ -25,7 +25,7 @@ fun DescriptionTextfield(
         value = description,
         onValueChange = {
             if(it.length <= maxDescriptionCharacters){
-                descriptionOnChange(it)
+                onDescriptionChange(it)
             }
         },
         supportingText = {

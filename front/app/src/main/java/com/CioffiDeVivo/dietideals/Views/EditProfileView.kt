@@ -32,9 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
-import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
 
@@ -76,7 +74,7 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
         Spacer(modifier = Modifier.height(40.dp))
         DescriptionTextfield(
             description = userEditState.description,
-            descriptionOnChange = { viewModel.updateDescription(it) },
+            onDescriptionChange = { viewModel.updateDescription(it) },
             maxDescriptionCharacters = 100,
             onDeleteDescription = { viewModel.deleteDescription() }
         )

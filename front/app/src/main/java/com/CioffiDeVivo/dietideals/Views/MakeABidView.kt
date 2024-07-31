@@ -77,7 +77,7 @@ fun MakeABid(viewModel: MakeABidViewModel){
                 } else {
                     it
                 }
-
+                viewModel.updateBidValue(bid)
             },
             singleLine = true,
             trailingIcon = {
@@ -93,9 +93,7 @@ fun MakeABid(viewModel: MakeABidViewModel){
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick = {
-                viewModel.updateBidValue(bid)
-                      /*Navigate on The Auction View - Post the Bid*/ },
+            onClick = {/*Navigate on The Auction View - Post the Bid*/ },
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
