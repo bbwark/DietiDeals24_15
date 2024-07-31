@@ -39,7 +39,6 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MakeABid(viewModel: MakeABidViewModel){
 
@@ -78,7 +77,7 @@ fun MakeABid(viewModel: MakeABidViewModel){
                 } else {
                     it
                 }
-                viewModel.updateBidValue(it)
+
             },
             singleLine = true,
             trailingIcon = {
@@ -94,7 +93,9 @@ fun MakeABid(viewModel: MakeABidViewModel){
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick = { /*Navigate on The Auction View - Post the Bid*/ },
+            onClick = {
+                viewModel.updateBidValue(bid)
+                      /*Navigate on The Auction View - Post the Bid*/ },
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
@@ -106,7 +107,6 @@ fun MakeABid(viewModel: MakeABidViewModel){
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun MakeABidSilentPreview(){
