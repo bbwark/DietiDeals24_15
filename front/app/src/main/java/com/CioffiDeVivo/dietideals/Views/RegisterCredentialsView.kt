@@ -31,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +44,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfo
 import com.CioffiDeVivo.dietideals.Components.CreditCardFields
 import com.CioffiDeVivo.dietideals.Components.InputTextField
@@ -50,18 +53,18 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
     .padding(start = 30.dp, end = 30.dp)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RegisterCredentialsView(registerCredentialsViewModel: RegisterCredentialsViewModel){
+fun RegisterCredentialsView(registerCredentialsViewModel: RegisterCredentialsViewModel, navController: NavController){
 
     val userRegistrationState by registerCredentialsViewModel.userRegistrationState.collectAsState()
-    var isSeller by rememberSaveable { mutableStateOf(false) }
+    var isSeller by remember { mutableStateOf(false) }
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
         registerCredentialsViewModel.validationRegistrationEvent.collect { event ->
@@ -118,6 +121,7 @@ fun RegisterCredentialsView(registerCredentialsViewModel: RegisterCredentialsVie
                 userState = userRegistrationState,
                 onAddressChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
                 onZipCodeChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
+                onCountryChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
                 onPhoneNumberChange = { registerCredentialsViewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
                 onDeleteAddress = { registerCredentialsViewModel.deleteAddress() },
                 onDeleteZipCode = { registerCredentialsViewModel.deleteZipCode() },
@@ -147,14 +151,9 @@ fun RegisterCredentialsView(registerCredentialsViewModel: RegisterCredentialsVie
         Row (
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(
-                "Do you have an Account? ",
-
-                )
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(
-                    "Log In",
-                )
+            Text("Do you have an Account? ")
+            TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+                Text("Log In")
             }
         }
     }
@@ -222,10 +221,9 @@ fun PersonalInformation(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(registerCredentialsViewModel = RegisterCredentialsViewModel())
+    RegisterCredentialsView(registerCredentialsViewModel = RegisterCredentialsViewModel(), navController = rememberNavController())
 }
 

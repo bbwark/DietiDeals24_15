@@ -6,8 +6,11 @@ const val passwordMinimumLength = 8
 const val phoneNumberMinimumLength = 7
 const val phoneNumberMaximumLength = 15
 const val creditCardNumberLength = 16
+const val creditCardExpirationDateNumberLength = 5
 const val cvvLength = 3
 const val ibanLength = 27
+val currentYear = java.time.Year.now().value.toString().substring(2)
+val regexPattern = """^(0[1-9]|1[0-2])/$currentYear|[2-9]\d$""".toRegex()
 
 open class ValidateRegistrationForms {
 
@@ -132,7 +135,13 @@ open class ValidateRegistrationForms {
     }
 
     open fun validateExpirationDate(expirationDate: String): ValidationResult{
-        return  ValidationResult(positiveResult = true)
+        if (expirationDate.length != creditCardExpirationDateNumberLength || !regexPattern.matches(expirationDate)) {
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "Invalid Date"
+            )
+        }
+        return ValidationResult(positiveResult = true)
     }
 
     open fun validateCvv(cvv: String): ValidationResult{

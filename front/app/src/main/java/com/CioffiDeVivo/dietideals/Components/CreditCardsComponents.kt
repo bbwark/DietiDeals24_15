@@ -40,9 +40,9 @@ fun CreditCardFields(
             placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = {},
-            modifier = Modifier.width(150.dp)
+            modifier = Modifier.width(145.dp)
         )
-        Spacer(modifier = Modifier.width(30.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         InputTextField(
             value = userState.cvv,
             onValueChanged = { onCvvChange(it) },
@@ -50,7 +50,7 @@ fun CreditCardFields(
             isError = userState.cvvErrorMsg != null,
             supportingText = userState.cvvErrorMsg,
             onTrailingIconClick = {},
-            modifier = Modifier.width(150.dp)
+            modifier = Modifier.width(145.dp)
         )
     }
     InputTextField(
