@@ -75,7 +75,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
 
-    var bid by remember { mutableStateOf("") }
+    var minAccepted by remember { mutableStateOf("") }
+    var minStep by remember { mutableStateOf("") }
     val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val itemAuctionState by viewModel.itemState.collectAsState()
@@ -141,12 +142,12 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
                 SilentAuction(
                     auction = createAuctionState,
                     onBidChange = {
-                        bid = if (it.startsWith("0")) {
+                        minAccepted = if (it.startsWith("0")) {
                             ""
                         } else {
                             it
                         }
-                        viewModel.updateBidValue(bid)
+                        viewModel.updateMinAccepted(minAccepted)
                     },
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
@@ -157,12 +158,12 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
                 EnglishAuction(
                     auction = createAuctionState,
                     onBidChange = {
-                        bid = if (it.startsWith("0")) {
+                        minStep = if (it.startsWith("0")) {
                             ""
                         } else {
                             it
                         }
-                        viewModel.updateBidValue(bid)
+                        viewModel.updateMinStep(minStep)
                     },
                     onIntervalChange = { viewModel.updateInterval(it) },
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
@@ -187,10 +188,7 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
             )
         }
         Button(
-            onClick = {
-                      viewModel.updateBidValue(bid)
-                      /*ADD AUCTION*/
-                      },
+            onClick = {/*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/ },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
