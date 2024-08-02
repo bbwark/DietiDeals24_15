@@ -28,7 +28,6 @@ import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SellView(viewModel: SellViewModel, navController: NavHostController) {
     val userCreatedAuction by viewModel.userAuctionState.collectAsState()
@@ -62,15 +61,12 @@ fun SellView(viewModel: SellViewModel, navController: NavHostController) {
                 )
             }
         }
-        FloatingAddButton(
-            viewModel = viewModel
-        ) {
+        FloatingAddButton() {
             navController.navigate(Screen.CreateAuction.route)
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {

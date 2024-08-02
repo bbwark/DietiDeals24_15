@@ -1,8 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views.Navigation
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,14 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +23,7 @@ import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.AccountView
+import com.CioffiDeVivo.dietideals.Views.AddCardView
 import com.CioffiDeVivo.dietideals.Views.AuctionView
 import com.CioffiDeVivo.dietideals.Views.BidHistoryView
 import com.CioffiDeVivo.dietideals.Views.CreateAuction
@@ -44,6 +40,7 @@ import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
@@ -124,7 +121,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(registerCredentialsViewModel = RegisterCredentialsViewModel(), navController = navController)
+            RegisterCredentialsView(viewModel = RegisterCredentialsViewModel(), navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
@@ -244,7 +241,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    ManageCardsView(viewModel = ManageCardsViewModel())
+                    ManageCardsView(viewModel = ManageCardsViewModel(), navController = navController)
                 }
             }
         }
@@ -297,6 +294,29 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 Box(modifier = Modifier.padding(it)) {
                     BidHistoryView(viewModel = BidHistoryViewModel())
                 }
+            }
+        }
+        composable(
+            route = Screen.AddCard.route
+        ){
+            Scaffold(topBar = {
+                DetailsViewTopBar(
+                    caption = stringResource(R.string.addCard),
+                    destinationRoute = Screen.ManageCards.route,
+                    navController = navController
+                )
+            },
+                bottomBar = {
+                    BottomNavBar(
+                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
+                        navController = navController
+                    )
+                }
+            ){
+                Box(modifier = Modifier.padding(it)){
+                    AddCardView(viewModel = AddCardViewModel())
+                }
+
             }
         }
     }

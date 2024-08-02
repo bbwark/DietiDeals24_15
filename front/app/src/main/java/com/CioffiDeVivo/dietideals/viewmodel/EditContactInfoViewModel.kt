@@ -6,6 +6,7 @@ import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.state.EditContactInfoState
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class EditContactInfoViewModel( private val validateEditContactInfoForm: ValidateEditContactInfoForm = ValidateEditContactInfoForm() ): ViewModel() {
 
-    private val _userEditContactInfoState = MutableStateFlow(EditContactInfoState())
-    val userEditContactInfoState: StateFlow<EditContactInfoState> = _userEditContactInfoState.asStateFlow()
+    private val _userEditContactInfoState = MutableStateFlow(RegistrationState())
+    val userEditContactInfoState: StateFlow<RegistrationState> = _userEditContactInfoState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
 
