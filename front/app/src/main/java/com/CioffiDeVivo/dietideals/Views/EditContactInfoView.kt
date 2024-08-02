@@ -38,13 +38,8 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        DetailsViewTopBar(
-            caption = stringResource(R.string.contactInfo),
-            destinationRoute = "",
-            navController = navController
-        )
         ContactInfo(
-            userState = RegistrationState(),
+            userState = userContactInfoState,
             onAddressChange = { viewModel.updateAddress(it) },
             onZipCodeChange = { viewModel.updateZipCode(it) },
             onCountryChange = { viewModel.updateCountry(it) },
