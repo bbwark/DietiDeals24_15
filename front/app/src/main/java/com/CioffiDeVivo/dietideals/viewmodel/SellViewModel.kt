@@ -18,7 +18,6 @@ class SellViewModel: ViewModel() {
 
     //RESTAPI per prendere auction che corrispondono all' owner id dell utente loggato (Forse con SharedViewModel cosi si ha il dato del utente loggato)
 
-    @RequiresApi(Build.VERSION_CODES.O)
     var auctionCreatedByUser: Array<Auction> = arrayOf(
         Auction(
             UUID.randomUUID(),

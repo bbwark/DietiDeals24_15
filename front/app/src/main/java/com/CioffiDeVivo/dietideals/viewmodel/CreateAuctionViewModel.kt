@@ -71,7 +71,6 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun updateEndingDate(endingDate: Long){
         _auctionState.value = _auctionState.value.copy(
             endingDate = Instant

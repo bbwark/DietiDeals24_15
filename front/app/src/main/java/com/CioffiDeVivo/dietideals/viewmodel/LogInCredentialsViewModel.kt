@@ -2,6 +2,8 @@ package com.CioffiDeVivo.dietideals.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.Events.LoginEvent
+import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateLogInForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.state.LogInState
@@ -19,19 +21,33 @@ class LogInCredentialsViewModel( private val validateLogInForms: ValidateLogInFo
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
 
-    fun updateEmail(email: String){
+    fun loginOnAction(loginEvent: LoginEvent){
+        when(loginEvent){
+            is LoginEvent.EmailChanged -> {
+                updateEmail(loginEvent.email)
+            }
+            is LoginEvent.EmailDeleted -> {
+                deleteEmail()
+            }
+            is LoginEvent.PasswordChanged -> {
+                updatePassword(loginEvent.password)
+            }
+        }
+    }
+
+    private fun updateEmail(email: String){
         _userLogInState.value = _userLogInState.value.copy(
             email = email
         )
     }
 
-    fun deleteEmail(){
+    private fun deleteEmail(){
         _userLogInState.value = _userLogInState.value.copy(
             email = ""
         )
     }
 
-    fun updatePassword(password: String){
+    private fun updatePassword(password: String){
         _userLogInState.value = _userLogInState.value.copy(
             password = password
         )

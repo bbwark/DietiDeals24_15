@@ -55,12 +55,16 @@ fun AddCardView(viewModel: AddCardViewModel){
             onDateChange = { viewModel.addCardAction(AddCardEvents.ExpirationDateChanged(it)) },
             onCvvChange = { viewModel.addCardAction(AddCardEvents.CvvChanged(it)) },
             onIbanChange = { viewModel.addCardAction(AddCardEvents.IBANChanged(it)) },
-            onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
-            onDeleteIban = { viewModel.deleteIban() }
+            onDeleteCardNumber = { viewModel.addCardAction(AddCardEvents.CreditCardNumberDeleted(it)) },
+            onDeleteExpirationDate = { viewModel.addCardAction(AddCardEvents.ExpirationDateDeleted(it)) },
+            onDeleteCvv = { viewModel.addCardAction(AddCardEvents.CvvDeleted(it)) },
+            onDeleteIban = { viewModel.addCardAction(AddCardEvents.IBANDeleted(it)) }
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      viewModel.addCardAction(AddCardEvents.Submit)
+            },
             modifier = Modifier.pulsateClick()
         ) {
             Text(text = stringResource(id = R.string.saveCard))

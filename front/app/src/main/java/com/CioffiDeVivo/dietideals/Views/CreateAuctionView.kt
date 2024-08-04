@@ -66,6 +66,8 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
+import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -73,7 +75,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
+fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostController){
 
     var minAccepted by remember { mutableStateOf("") }
     var minStep by remember { mutableStateOf("") }
@@ -203,13 +205,13 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
 @Preview(showBackground = true)
 @Composable
 fun CreateAuctionPreview(){
-    CreateAuction(viewModel = MainViewModel(), navController = rememberNavController())
+    CreateAuction(viewModel = CreateAuctionViewModel(), navController = rememberNavController())
 }
 
 
 @Composable
 fun SilentAuction(
-    auction: Auction,
+    auction: CreateAuctionState,
     onBidChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
@@ -217,7 +219,7 @@ fun SilentAuction(
 ){
     Row {
         OutlinedTextField(
-            value = auction.minAccepted,
+            value = auction.minAccepted.toString(),
             onValueChange = { onBidChange(it) },
             singleLine = true,
             trailingIcon = {
@@ -253,7 +255,7 @@ fun SilentAuction(
 
 @Composable
 fun EnglishAuction(
-    auction: Auction,
+    auction: CreateAuctionState,
     onBidChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -264,7 +266,7 @@ fun EnglishAuction(
 ){
     Row {
         OutlinedTextField(
-            value = auction.minStep,
+            value = auction.minStep.toString(),
             onValueChange = { onBidChange(it) },
             singleLine = true,
             trailingIcon = {
@@ -343,7 +345,7 @@ fun ImageItem(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun AddingImagesOnCreateAuction(viewModel: MainViewModel) {
+fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
     val itemAuctionState by viewModel.itemState.collectAsState()
     val context = LocalContext.current

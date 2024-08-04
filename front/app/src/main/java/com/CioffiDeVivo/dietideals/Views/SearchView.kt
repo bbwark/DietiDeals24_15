@@ -1,15 +1,10 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -24,7 +19,6 @@ import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 import java.time.LocalDate
 import java.util.UUID
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
     val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
@@ -39,7 +33,6 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {

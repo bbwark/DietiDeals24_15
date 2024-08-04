@@ -54,6 +54,7 @@ import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
@@ -85,7 +86,17 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        PersonalInformation(viewModel)
+        PersonalInformation(
+            userRegistrationState = userRegistrationState,
+            onEmailChange = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
+            onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
+            onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
+            onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
+            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+            onDeleteEmail = { viewModel.registrationAction(RegistrationEvent.EmailDeleted(it)) },
+            onDeleteName = { viewModel.registrationAction(RegistrationEvent.NameDeleted(it)) },
+            onDeleteSurname = { viewModel.registrationAction(RegistrationEvent.SurnameDeleted(it)) }
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -121,9 +132,9 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
                 onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
                 onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
-                onDeleteAddress = { viewModel.deleteAddress() },
-                onDeleteZipCode = { viewModel.deleteZipCode() },
-                onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
+                onDeleteAddress = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
+                onDeleteZipCode = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
+                onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) }
             )
             CreditCardFields(
                 userState = userRegistrationState,
@@ -131,8 +142,10 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
                 onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
                 onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
-                onDeleteCardNumber = { viewModel.deleteCreditCardNumber() },
-                onDeleteIban = { viewModel.deleteIban() }
+                onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
+                onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvent.ExpirationDateDeleted(it)) },
+                onDeleteCvv = { viewModel.registrationAction(RegistrationEvent.CvvDeleted(it)) },
+                onDeleteIban = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
@@ -158,45 +171,52 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
 }
 @Composable
 fun PersonalInformation(
-    viewModel: RegisterCredentialsViewModel
+    userRegistrationState: RegistrationState,
+    onEmailChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
+    onSurnameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
+    onDeleteEmail: (String) -> Unit,
+    onDeleteName: (String) -> Unit,
+    onDeleteSurname: (String) -> Unit,
+){
 
-    ){
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
-    val userRegistrationState by viewModel.userRegistrationState.collectAsState()
 
     InputTextField(
         value = userRegistrationState.email,
-        onValueChanged = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
+        onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         isError = userRegistrationState.emailErrorMsg != null,
-        onTrailingIconClick = { viewModel.deleteEmail() },
+        onTrailingIconClick = { onDeleteEmail(it) },
         supportingText = userRegistrationState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userRegistrationState.name,
-        onValueChanged = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
+        onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
         isError = userRegistrationState.nameErrorMsg != null,
-        onTrailingIconClick = { viewModel.deleteName() },
+        onTrailingIconClick = { onDeleteName(it) },
         supportingText = userRegistrationState.nameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userRegistrationState.surname,
-        onValueChanged = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
+        onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
         isError = userRegistrationState.surnameErrorMsg != null,
-        onTrailingIconClick = { viewModel.deleteSurname() },
+        onTrailingIconClick = { onDeleteSurname(it) },
         supportingText = userRegistrationState.surnameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userRegistrationState.password,
-        onValueChanged = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
+        onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
         isError = userRegistrationState.passwordErrorMsg != null,
         onTrailingIconClick = { passwordVisible = !passwordVisible },
@@ -207,7 +227,7 @@ fun PersonalInformation(
     )
     InputTextField(
         value = userRegistrationState.newPassword,
-        onValueChanged = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+        onValueChanged = { onNewPasswordChange(it) },
         label = stringResource(R.string.rewritepassword),
         isError = userRegistrationState.newPasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },

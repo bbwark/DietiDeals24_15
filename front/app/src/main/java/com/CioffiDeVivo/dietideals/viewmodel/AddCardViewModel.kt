@@ -25,14 +25,26 @@ class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = Va
             is AddCardEvents.CreditCardNumberChanged -> {
                 updateCreditCardNumber(addCardEvents.creditCardNumber)
             }
+            is AddCardEvents.CreditCardNumberDeleted -> {
+                deleteCreditCardNumber()
+            }
             is AddCardEvents.ExpirationDateChanged -> {
                 updateExpirationDate(addCardEvents.expirationDate)
+            }
+            is AddCardEvents.ExpirationDateDeleted -> {
+                deleteExpirationDate()
             }
             is AddCardEvents.CvvChanged -> {
                 updateCvv(addCardEvents.cvv)
             }
+            is AddCardEvents.CvvDeleted -> {
+                deleteCvv()
+            }
             is AddCardEvents.IBANChanged -> {
                 updateIban(addCardEvents.iban)
+            }
+            is AddCardEvents.IBANDeleted -> {
+                deleteIban()
             }
             is AddCardEvents.Submit -> {
                 submitAddCard()
@@ -68,49 +80,49 @@ class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = Va
         }
     }
 
-    fun updateCreditCardNumber(creditCardNumber: String){
+    private fun updateCreditCardNumber(creditCardNumber: String){
         _userCardState.value = _userCardState.value.copy(
             creditCardNumber = creditCardNumber
         )
     }
 
-    fun deleteCreditCardNumber(){
+    private fun deleteCreditCardNumber(){
         _userCardState.value = _userCardState.value.copy(
             creditCardNumber = ""
         )
     }
 
-    fun updateExpirationDate(expirationDate: String){
+    private fun updateExpirationDate(expirationDate: String){
         _userCardState.value = _userCardState.value.copy(
             expirationDate = expirationDate.toString()
         )
     }
 
-    fun deleteExpirationDate(){
+    private fun deleteExpirationDate(){
         _userCardState.value = _userCardState.value.copy(
             expirationDate = ""
         )
     }
 
-    fun updateCvv(cvv: String){
+    private fun updateCvv(cvv: String){
         _userCardState.value = _userCardState.value.copy(
             cvv = cvv
         )
     }
 
-    fun deleteCvv(){
+    private fun deleteCvv(){
         _userCardState.value = _userCardState.value.copy(
             cvv = ""
         )
     }
 
-    fun updateIban(iban: String){
+    private fun updateIban(iban: String){
         _userCardState.value = _userCardState.value.copy(
             iban = iban
         )
     }
 
-    fun deleteIban(){
+    private fun deleteIban(){
         _userCardState.value = _userCardState.value.copy(
             iban = ""
         )
