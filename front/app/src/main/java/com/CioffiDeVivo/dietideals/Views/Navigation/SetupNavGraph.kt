@@ -43,6 +43,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
@@ -59,7 +60,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CreateAuction.route
+        startDestination = Screen.RegisterCredentials.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -114,7 +115,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    CreateAuction(viewModel = MainViewModel(), navController = navController)
+                    CreateAuction(viewModel = CreateAuctionViewModel(), navController = navController)
                 }
             }
         }

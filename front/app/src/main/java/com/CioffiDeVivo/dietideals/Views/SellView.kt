@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +23,6 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.SellGridElement
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @Composable

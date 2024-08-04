@@ -20,6 +20,8 @@ fun CreditCardFields(
     onCvvChange: (String) -> Unit,
     onIbanChange: (String) -> Unit,
     onDeleteCardNumber: (String) -> Unit,
+    onDeleteExpirationDate: (String) -> Unit,
+    onDeleteCvv: (String) -> Unit,
     onDeleteIban: (String) -> Unit,
 ){
     InputTextField(
@@ -39,7 +41,7 @@ fun CreditCardFields(
             isError = userState.expirationDateErrorMsg != null,
             placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
-            onTrailingIconClick = {},
+            onTrailingIconClick = { onDeleteExpirationDate(it) },
             modifier = Modifier.width(145.dp)
         )
         Spacer(modifier = Modifier.width(10.dp))
@@ -49,7 +51,7 @@ fun CreditCardFields(
             label = stringResource(R.string.cvv),
             isError = userState.cvvErrorMsg != null,
             supportingText = userState.cvvErrorMsg,
-            onTrailingIconClick = {},
+            onTrailingIconClick = { onDeleteCvv(it) },
             modifier = Modifier.width(145.dp)
         )
     }

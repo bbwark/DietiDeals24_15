@@ -33,10 +33,10 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostController){
 
@@ -50,38 +50,40 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DetailsViewTopBar(
-            caption = stringResource(R.string.editProfile),
-            destinationRoute = "",
-            navController = navController
+        InputTextField(
+            value = userEditState.email,
+            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.EmailChanged(it)) },
+            label = stringResource(R.string.email),
+            onTrailingIconClick = { viewModel.editProfileAction(EditProfileEvent.EmailDeleted(it)) },
+            modifier = modifierStandard
         )
         InputTextField(
             value = userEditState.name,
-            onValueChanged = { viewModel.updateName(it) },
+            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
             label = stringResource(R.string.name),
             trailingIcon = Icons.Filled.Clear,
-            onTrailingIconClick = { viewModel.deleteName() },
+            onTrailingIconClick = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) },
             modifier = modifierStandard
         )
         InputTextField(
             value = userEditState.surname,
-            onValueChanged = { viewModel.updateSurname(it) },
+            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.SurnameChanged(it)) },
             label = stringResource(R.string.surname),
             trailingIcon = Icons.Filled.Clear,
-            onTrailingIconClick = { viewModel.deleteSurname() },
+            onTrailingIconClick = { viewModel.editProfileAction(EditProfileEvent.SurnameDeleted(it)) },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))
         DescriptionTextfield(
             description = userEditState.description,
-            onDescriptionChange = { viewModel.updateDescription(it) },
+            onDescriptionChange = { viewModel.editProfileAction(EditProfileEvent.DescriptionChanged(it)) },
             maxDescriptionCharacters = 100,
-            onDeleteDescription = { viewModel.deleteDescription() }
+            onDeleteDescription = { viewModel.editProfileAction(EditProfileEvent.DescriptionDeleted(it)) }
         )
         Spacer(modifier = Modifier.height(40.dp))
         InputTextField(
             value = userEditState.password,
-            onValueChanged = { viewModel.updatePassword(it) },
+            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
             label = stringResource(R.string.password),
             isError = userEditState.passwordErrorMsg != null,
             onTrailingIconClick = { passwordVisible = !passwordVisible },
@@ -91,19 +93,21 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
             modifier = modifierStandard
         )
         InputTextField(
-            value = userEditState.password,
-            onValueChanged = { viewModel.updateNewPassword(it) },
-            label = stringResource(R.string.password),
-            isError = userEditState.passwordErrorMsg != null,
+            value = userEditState.newPassword,
+            onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) },
+            label = stringResource(R.string.rewritepassword),
+            isError = userEditState.newPasswordErrorMsg != null,
             onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
-            supportingText = userEditState.passwordErrorMsg,
+            supportingText = userEditState.newPasswordErrorMsg,
             visualTransformation = if(newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = if(newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      viewModel.editProfileAction(EditProfileEvent.Submit)
+            },
             modifier = Modifier.pulsateClick()
         ) {
             Text(text = stringResource(id = R.string.saveChanges))
@@ -112,7 +116,6 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EditProfilePreview(){

@@ -24,30 +24,35 @@ class EditProfileViewModel( private val validateEditProfileForm: ValidateEditPro
 
     fun editProfileAction(editProfileEvent: EditProfileEvent){
         when(editProfileEvent){
+            is EditProfileEvent.EmailChanged -> {
+                updateEmail(editProfileEvent.email)
+            }
+            is EditProfileEvent.EmailDeleted -> {
+                deleteEmail()
+            }
             is EditProfileEvent.NameChanged -> {
-                _userEditProfileState.value = _userEditProfileState.value.copy(
-                    name = editProfileEvent.name
-                )
+                updateName(editProfileEvent.name)
+            }
+            is EditProfileEvent.NameDeleted -> {
+                deleteName()
             }
             is EditProfileEvent.SurnameChanged -> {
-                _userEditProfileState.value = _userEditProfileState.value.copy(
-                    surname = editProfileEvent.surname
-                )
+                updateSurname(editProfileEvent.surname)
+            }
+            is EditProfileEvent.SurnameDeleted -> {
+                deleteSurname()
             }
             is EditProfileEvent.DescriptionChanged -> {
-                _userEditProfileState.value = _userEditProfileState.value.copy(
-                    description = editProfileEvent.description
-                )
+                updateDescription(editProfileEvent.description)
+            }
+            is EditProfileEvent.DescriptionDeleted -> {
+                deleteDescription()
             }
             is EditProfileEvent.PasswordChanged -> {
-                _userEditProfileState.value = _userEditProfileState.value.copy(
-                    password = editProfileEvent.password
-                )
+                updatePassword(editProfileEvent.password)
             }
             is EditProfileEvent.NewPasswordChanged -> {
-                _userEditProfileState.value = _userEditProfileState.value.copy(
-                    newPassword = editProfileEvent.newPassword
-                )
+                updateNewPassword(editProfileEvent.newPassword)
             }
             is EditProfileEvent.Submit -> {
                 submitEditProfile()
@@ -84,49 +89,61 @@ class EditProfileViewModel( private val validateEditProfileForm: ValidateEditPro
 
     //Update & Delete State
 
-    fun updateName(name: String){
+    private fun updateEmail(email: String){
+        _userEditProfileState.value = _userEditProfileState.value.copy(
+            email = email
+        )
+    }
+
+    private fun deleteEmail(){
+        _userEditProfileState.value = _userEditProfileState.value.copy(
+            email = ""
+        )
+    }
+
+    private fun updateName(name: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             name = name
         )
     }
 
-    fun deleteName(){
+    private fun deleteName(){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             name = ""
         )
     }
 
-    fun updateSurname(surname: String){
+    private fun updateSurname(surname: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             surname = surname
         )
     }
 
-    fun deleteSurname(){
+    private fun deleteSurname(){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             surname = ""
         )
     }
 
-    fun updateDescription(description: String){
+    private fun updateDescription(description: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             description = description
         )
     }
 
-    fun deleteDescription(){
+    private fun deleteDescription(){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             description = ""
         )
     }
 
-    fun updatePassword(password: String){
+    private fun updatePassword(password: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             password = password
         )
     }
 
-    fun updateNewPassword(newPassword: String){
+    private fun updateNewPassword(newPassword: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
             newPassword = newPassword
         )
