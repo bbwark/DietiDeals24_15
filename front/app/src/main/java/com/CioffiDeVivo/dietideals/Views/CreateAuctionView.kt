@@ -1,12 +1,11 @@
 package com.CioffiDeVivo.dietideals.Views
 
 import android.content.Context
+import android.content.UriMatcher
 import android.net.Uri
-import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +32,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -40,6 +40,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,16 +65,20 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
+import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
+fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostController){
 
+    var minAccepted by remember { mutableStateOf("") }
+    var minStep by remember { mutableStateOf("") }
     val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val itemAuctionState by viewModel.itemState.collectAsState()
@@ -138,14 +143,34 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
             AuctionType.Silent -> {
                 SilentAuction(
                     auction = createAuctionState,
-                    viewModel,
+                    onBidChange = {
+                        minAccepted = if (it.startsWith("0")) {
+                            ""
+                        } else {
+                            it
+                        }
+                        viewModel.updateMinAccepted(minAccepted)
+                    },
+                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                     onCalendarClick = { showDatePicker.value = true }
                 )
             }
             AuctionType.English -> {
                 EnglishAuction(
                     auction = createAuctionState,
-                    viewModel,
+                    onBidChange = {
+                        minStep = if (it.startsWith("0")) {
+                            ""
+                        } else {
+                            it
+                        }
+                        viewModel.updateMinStep(minStep)
+                    },
+                    onIntervalChange = { viewModel.updateInterval(it) },
+                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+                    onDeleteInterval = { viewModel.deleteInterval() },
+                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                     onCalendarClick = { showDatePicker.value = true }
                 )
             }
@@ -165,7 +190,7 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
             )
         }
         Button(
-            onClick = { /*ADD AUCTION*/ },
+            onClick = {/*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/ },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -177,33 +202,38 @@ fun CreateAuction(viewModel: MainViewModel, navController: NavHostController){
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun CreateAuctionPreview(){
-    CreateAuction(viewModel = MainViewModel(), navController = rememberNavController())
+    CreateAuction(viewModel = CreateAuctionViewModel(), navController = rememberNavController())
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SilentAuction(
-    auction: Auction,
-    viewModel: MainViewModel,
+    auction: CreateAuctionState,
+    onBidChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
 ){
     Row {
-        InputTextField(
-            value = auction.minAccepted,
-            onValueChanged = { viewModel.updateMinAccepted(it) },
-            label = stringResource(R.string.minStep),
-            onTrailingIconClick = { viewModel.deleteMinAccepted() },
+        OutlinedTextField(
+            value = auction.minAccepted.toString(),
+            onValueChange = { onBidChange(it) },
+            singleLine = true,
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.Euro,
+                    contentDescription = null,
+                )
+            },
+            visualTransformation = BidInputVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier.width(150.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            trailingIcon = Icons.Filled.Euro
+            label = { Text(stringResource(R.string.minimumBid)) },
         )
         Spacer(modifier = Modifier.width(30.dp))
-
         InputTextField(
             value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
             onValueChanged = { },
@@ -216,37 +246,46 @@ fun SilentAuction(
     }
     DescriptionTextfield(
         description = auction.description,
-        descriptionOnChange = { viewModel.updateDescriptionAuction(it) },
+        onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
-        onDeleteDescription = { viewModel.deleteDescriptionAuction() }
+        onDeleteDescription = { onDeleteDescription(it) }
     )
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EnglishAuction(
-    auction: Auction,
-    viewModel: MainViewModel,
+    auction: CreateAuctionState,
+    onBidChange: (String) -> Unit,
+    onIntervalChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onDeleteInterval: (String) -> Unit,
+    onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
 
 ){
     Row {
-        InputTextField(
-            value = auction.minStep,
-            onValueChanged = { viewModel.updateMinStep(it) },
-            label = stringResource(R.string.minStep),
-            onTrailingIconClick = { viewModel.deleteMinStep() },
+        OutlinedTextField(
+            value = auction.minStep.toString(),
+            onValueChange = { onBidChange(it) },
+            singleLine = true,
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.Euro,
+                    contentDescription = null,
+                )
+            },
+            visualTransformation = BidInputVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier.width(150.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            trailingIcon = Icons.Filled.Euro
+            label = { Text(stringResource(R.string.minStep)) },
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
             value = auction.interval,
-            onValueChanged = { viewModel.updateInterval(it) },
+            onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
-            onTrailingIconClick = { viewModel.deleteInterval() },
+            onTrailingIconClick = { onDeleteInterval(it) },
             modifier = Modifier.width(150.dp)
         )
     }
@@ -261,9 +300,9 @@ fun EnglishAuction(
     )
     DescriptionTextfield(
         description = auction.description,
-        descriptionOnChange = { viewModel.updateDescriptionAuction(it) },
+        onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
-        onDeleteDescription = { viewModel.deleteDescriptionAuction() }
+        onDeleteDescription = { onDeleteDescription(it) }
     )
 }
 
@@ -305,9 +344,8 @@ fun ImageItem(
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddingImagesOnCreateAuction(viewModel: MainViewModel) {
+fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
     val itemAuctionState by viewModel.itemState.collectAsState()
     val context = LocalContext.current

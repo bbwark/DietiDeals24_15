@@ -15,6 +15,7 @@
     <string name="contactInfo">Contact Info</string>
     <string name="editProfile">Edit Profile</string>
     <string name="saveChanges">Save Changes</string>
+    <string name="saveCard">Save Card</string>
     <string name="manageCards">Manage Cards</string>
     <string name="sellView">Your Auctions</string>
     <string name="email">Email</string>
@@ -23,7 +24,7 @@
     <string name="password">Password</string>
     <string name="rewritepassword">Re-Write Password</string>
     <string name="address">Address</string>
-    <string name="zipcode">Zip Code</string>
+    <string name="zipcode">ZipCode</string>
     <string name="country">Country</string>
     <string name="creditcard">Credit Card</string>
     <string name="expirationdate">E. Date</string>
@@ -37,6 +38,7 @@
     <string name="endingDate">End Date</string>
     <string name="bidHistory">Bid History</string>
     <string name="iban">IBAN</string>
+    <string name="addCard">Add a Card</string>
     <string name="error_fieldEmpty">The field cannot be empty</string>
     <string name="emailExample">Example@Example.com</string>
     <string name="web_client_id">754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com</string>

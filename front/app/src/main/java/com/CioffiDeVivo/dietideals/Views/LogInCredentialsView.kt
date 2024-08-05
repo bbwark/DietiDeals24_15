@@ -1,8 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -32,28 +32,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.Components.InputTextField
-import com.CioffiDeVivo.dietideals.Components.PasswordsTextfields
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
-import com.CioffiDeVivo.dietideals.domain.DataModels.User
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.Events.LoginEvent
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.state.LogInState
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavHostController){
 
     val userLoginState by viewModel.userLogInState.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = context){
+        viewModel.validationLogInEvent.collect { event ->
+            when(event){
+                is ValidationState.Success -> {
+                    Toast.makeText(context, "Successful Log In", Toast.LENGTH_SHORT).show()
+                }
+                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+            }
+        }
+    }
 
-    DetailsViewTopBar(
-        caption = stringResource(R.string.welcome),
-        destinationRoute = "",
-        navController = navController
-    )
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -62,9 +64,9 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
         Spacer(modifier = Modifier.height(30.dp))
         LoginInputs(
             userState = userLoginState,
-            onEmailChange = { viewModel.updateEmail(it) },
-            onPasswordChange = { viewModel.updatePassword(it) },
-            onDeleteEmail = { viewModel.deleteEmail() }
+            onEmailChange = { viewModel.loginOnAction(LoginEvent.EmailChanged(it)) },
+            onPasswordChange = { viewModel.loginOnAction(LoginEvent.PasswordChanged(it)) },
+            onDeleteEmail = { viewModel.loginOnAction(LoginEvent.EmailDeleted(it)) }
         )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
@@ -84,7 +86,11 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
                 "Do you have not an Account? ",
 
                 )
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(
+                onClick = {
+                    viewModel.loginOnAction(LoginEvent.Submit)
+                }
+            ) {
                 Text(
                     "Create an Account",
                 )
@@ -105,6 +111,7 @@ fun LoginInputs(
         value = userState.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
+        isError = userState.emailErrorMsg != null,
         trailingIcon = Icons.Filled.Clear,
         onTrailingIconClick = { onDeleteEmail(it) },
         modifier = modifierStandard
@@ -122,7 +129,6 @@ fun LoginInputs(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun LogInCredentialsPreview(){

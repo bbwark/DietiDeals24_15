@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,7 +15,6 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.UUID
 
-@RequiresApi(Build.VERSION_CODES.O)
 class SearchViewModel: ViewModel() {
 
     private val _searchedAuctionState = MutableStateFlow<ArrayList<Auction>>(arrayListOf())

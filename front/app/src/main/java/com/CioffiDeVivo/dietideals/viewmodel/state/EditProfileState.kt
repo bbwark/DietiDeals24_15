@@ -1,6 +1,8 @@
 package com.CioffiDeVivo.dietideals.viewmodel.state
 
 data class EditProfileState(
+    val email: String = "",
+    val emailErrorMsg: String? = null,
     val name:  String  = "",
     val nameErrorMsg: String? = null,
     val surname:  String  = "",
