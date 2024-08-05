@@ -40,10 +40,14 @@ public class BidController {
         try {
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss:SSS"));
             bid.setDate(timestamp);
-            
+
             AuctionEntity auctionEntity = auctionService.findById(bid.getAuctionId())
                     .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + " not found"));
             AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
+            
+            if (auctionDto.getOwnerId().equals(bid.getUserId())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
 
             if (auctionDto.getType() == AuctionType.English) {
                 List<BidEntity> bidEntities = bidService.findByAuctionId(auctionDto.getId());
