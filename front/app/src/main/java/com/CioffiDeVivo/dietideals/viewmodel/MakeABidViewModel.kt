@@ -15,9 +15,15 @@ class MakeABidViewModel : ViewModel() {
     val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
     fun updateBidValue(value: String){
-        _bidState.value = _bidState.value.copy(
-            value = value.toFloat()
-        )
+        if(value.isEmpty()){
+            _bidState.value = _bidState.value.copy(
+                value = 0F
+            )
+        } else{
+            _bidState.value = _bidState.value.copy(
+                value = value.toFloat()
+            )
+        }
     }
 
     fun deleteBidValue(){

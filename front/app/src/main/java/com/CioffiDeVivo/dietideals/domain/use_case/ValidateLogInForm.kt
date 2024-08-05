@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.domain.use_case
 
 class ValidateLogInForm(): ValidateRegistrationForms() {
 
+    //Aggiungere Errors per email o password errate
     override fun validateEmail(email: String): ValidationResult {
         if (email.isBlank()) {
             return ValidationResult(

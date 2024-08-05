@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
 import java.util.UUID
 
-@RequiresApi(Build.VERSION_CODES.O)
 class ManageCardsViewModel : ViewModel(){
 
     private val _userCardsState = MutableStateFlow(EditProfileState())

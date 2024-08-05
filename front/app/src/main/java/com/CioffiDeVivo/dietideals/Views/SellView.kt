@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +23,8 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.SellGridElement
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SellView(viewModel: SellViewModel, navController: NavHostController) {
     val userCreatedAuction by viewModel.userAuctionState.collectAsState()
@@ -62,15 +58,12 @@ fun SellView(viewModel: SellViewModel, navController: NavHostController) {
                 )
             }
         }
-        FloatingAddButton(
-            viewModel = viewModel
-        ) {
+        FloatingAddButton() {
             navController.navigate(Screen.CreateAuction.route)
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {

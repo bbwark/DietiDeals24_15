@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.viewmodel.state
 
-data class RegistrationState(
+data class RegistrationState (
     val email:  String  = "",
     val emailErrorMsg: String? = null,
     val name: String = "",

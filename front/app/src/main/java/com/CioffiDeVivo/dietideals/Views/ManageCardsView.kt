@@ -16,14 +16,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.ManageCardsElement
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ManageCardsView(viewModel: ManageCardsViewModel) {
+fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavController) {
     val creditCardsState by viewModel.userCardsState.collectAsState()
     Box {
         LazyColumn(
@@ -42,13 +44,14 @@ fun ManageCardsView(viewModel: ManageCardsViewModel) {
                     HorizontalDivider()
                 }
             })
-        FloatingAddButton(viewModel = viewModel) { /* Add New Card */ }
+        FloatingAddButton(onClick = {
+            navController.navigate(Screen.AddCard.route)
+        })
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview (showBackground = true)
 @Composable
 fun ManageCardsViewPreview() {
-    ManageCardsView(viewModel = ManageCardsViewModel())
+    ManageCardsView(viewModel = ManageCardsViewModel(), navController = rememberNavController())
 }

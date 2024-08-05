@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 
 @Composable
-fun FloatingAddButton(viewModel: ViewModel, onClick: () -> Unit) {
+fun FloatingAddButton(onClick: () -> Unit) {
     Column {
         Spacer(modifier = Modifier.weight(1f))
         Row {

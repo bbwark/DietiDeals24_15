@@ -26,11 +26,20 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
             is RegistrationEvent.EmailChanged -> {
                 updateEmail(registrationEvent.email)
             }
+            is RegistrationEvent.EmailDeleted -> {
+                deleteEmail()
+            }
             is RegistrationEvent.NameChanged -> {
                 updateName(registrationEvent.name)
             }
+            is RegistrationEvent.NameDeleted -> {
+                deleteName()
+            }
             is RegistrationEvent.SurnameChanged -> {
                 updateSurname(registrationEvent.surname)
+            }
+            is RegistrationEvent.SurnameDeleted -> {
+                deleteSurname()
             }
             is RegistrationEvent.PasswordChanged -> {
                 updatePassword(registrationEvent.password)
@@ -39,15 +48,19 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
                 updateNewPassword(registrationEvent.newPassword)
             }
             is RegistrationEvent.SellerChange -> {
-                _userRegistrationState.value = _userRegistrationState.value.copy(
-                    isSeller = registrationEvent.isSeller
-                )
+                updateIsSeller(registrationEvent.isSeller)
             }
             is RegistrationEvent.AddressChanged -> {
                 updateAddress(registrationEvent.address)
             }
+            is RegistrationEvent.AddressDeleted -> {
+                deleteAddress()
+            }
             is RegistrationEvent.ZipCodeChanged -> {
                 updateZipCode(registrationEvent.zipCode)
+            }
+            is RegistrationEvent.ZipCodeDeleted -> {
+                deleteZipCode()
             }
             is RegistrationEvent.CountryChanged -> {
                 updateCountry(registrationEvent.country)
@@ -55,17 +68,32 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
             is RegistrationEvent.PhoneNumberChanged -> {
                 updatePhoneNumber(registrationEvent.phoneNumber)
             }
+            is RegistrationEvent.PhoneNumberDeleted -> {
+                deletePhoneNumber()
+            }
             is RegistrationEvent.CreditCardNumberChanged -> {
                 updateCreditCardNumber(registrationEvent.creditCardNumber)
+            }
+            is RegistrationEvent.CreditCardNumberDeleted -> {
+                deleteCreditCardNumber()
             }
             is RegistrationEvent.ExpirationDateChanged -> {
                 updateExpirationDate(registrationEvent.expirationDate)
             }
+            is RegistrationEvent.ExpirationDateDeleted -> {
+                deleteExpirationDate()
+            }
             is RegistrationEvent.CvvChanged -> {
                 updateCvv(registrationEvent.cvv)
             }
+            is RegistrationEvent.CvvDeleted -> {
+                deleteCvv()
+            }
             is RegistrationEvent.IbanChanged -> {
                 updateIban(registrationEvent.iban)
+            }
+            is RegistrationEvent.IbanDeleted -> {
+                deleteIban()
             }
             is RegistrationEvent.Submit -> {
                 submitForm()
@@ -147,145 +175,145 @@ class RegisterCredentialsViewModel(private val validateRegistrationForms: Valida
 
     /*Update & Delete for RegistrationState*/
 
-    fun updateEmail(email: String){
+    private fun updateEmail(email: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             email = email
         )
     }
 
-    fun deleteEmail(){
+    private fun deleteEmail(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             email = ""
         )
     }
 
-    fun updateName(name: String){
+    private fun updateName(name: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             name = name
         )
     }
 
-    fun deleteName(){
+    private fun deleteName(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             name = ""
         )
     }
 
-    fun updateSurname(surname: String){
+    private fun updateSurname(surname: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             surname = surname
         )
     }
 
-    fun deleteSurname(){
+    private fun deleteSurname(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             surname = ""
         )
     }
 
-    fun updatePassword(password: String){
+    private fun updatePassword(password: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             password = password
         )
     }
 
-    fun updateNewPassword(newPassword: String){
+    private fun updateNewPassword(newPassword: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             newPassword = newPassword
         )
     }
 
-    fun updateIsSeller(){
+    private fun updateIsSeller(isSeller: Boolean){
         _userRegistrationState.value = _userRegistrationState.value.copy(
-            isSeller = !_userRegistrationState.value.isSeller
+            isSeller = isSeller
         )
     }
 
-    fun updateAddress(address: String){
+    private fun updateAddress(address: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             address = address
         )
     }
 
-    fun deleteAddress(){
+    private fun deleteAddress(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             address = ""
         )
     }
 
-    fun updateZipCode(zipCode: String){
+    private fun updateZipCode(zipCode: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             zipCode = zipCode
         )
     }
 
-    fun deleteZipCode(){
+    private fun deleteZipCode(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             zipCode = ""
         )
     }
 
-    fun updateCountry(country: String){
+    private fun updateCountry(country: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             country = country
         )
     }
 
-    fun updatePhoneNumber(phoneNumber: String){
+    private fun updatePhoneNumber(phoneNumber: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             phoneNumber = phoneNumber
         )
     }
 
-    fun deletePhoneNumber(){
+    private fun deletePhoneNumber(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             phoneNumber = ""
         )
     }
 
-    fun updateCreditCardNumber(creditCardNumber: String){
+    private fun updateCreditCardNumber(creditCardNumber: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             creditCardNumber = creditCardNumber
         )
     }
 
-    fun deleteCreditCardNumber(){
+    private fun deleteCreditCardNumber(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             creditCardNumber = ""
         )
     }
 
-    fun updateExpirationDate(expirationDate: String){
+    private fun updateExpirationDate(expirationDate: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             expirationDate = expirationDate
         )
     }
 
-    fun deleteExpirationDate(){
+    private fun deleteExpirationDate(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             expirationDate = ""
         )
     }
 
-    fun updateCvv(cvv: String){
+    private fun updateCvv(cvv: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             cvv = cvv
         )
     }
 
-    fun deleteCvv(){
+    private fun deleteCvv(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             cvv = ""
         )
     }
 
-    fun updateIban(iban: String){
+    private fun updateIban(iban: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             iban = iban
         )
     }
 
-    fun deleteIban(){
+    private fun deleteIban(){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             iban = ""
         )
