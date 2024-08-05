@@ -4,6 +4,10 @@ import com.dietideals.dietideals24_25.domain.dto.CreditCardDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.CreditCardService;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +45,19 @@ public class CreditCardController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
 
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/user/{userId}")
+    public ResponseEntity<List<CreditCardDto>> getCreditCardsByUserId(@PathVariable("userId") UUID userId) {
+        try {
+            List<CreditCardEntity> creditCardEntities = creditCardService.findByUserId(userId);
+            List<CreditCardDto> result = creditCardEntities.stream()
+                    .map(creditCardEntity -> creditCardMapper.mapTo(creditCardEntity))
+                    .collect(java.util.stream.Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
