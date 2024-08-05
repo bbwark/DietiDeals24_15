@@ -26,6 +26,7 @@ import io.ktor.http.HttpHeaders
 const val BASE_URL = "localhost"
 const val PORT = "8181"
 const val URL = "http://${BASE_URL}:${PORT}"
+
 /*
 * ================== USER APIs ==================
 *
@@ -118,7 +119,7 @@ suspend fun createItem(item: Item, token: String): HttpResponse {
     return resultResponse;
 }
 
-//todo delete mapping item /items/{id}
+//delete mapping item /items/{id}
 suspend fun deleteItem(id: String, token: String): HttpResponse {
     var result: HttpResponse
     HttpClient(CIO).use {
@@ -168,6 +169,21 @@ suspend fun deleteCreditCard(cardNumber: String, token: String): HttpResponse {
     return result
 }
 
+//get mapping get credit cards by user id /credit_cards/user/{userId}
+suspend fun getCreditCardsByUserId(userId: String, token: String): Array<CreditCard> {
+    var resultCreditCards: Array<CreditCard> = emptyArray()
+    HttpClient(CIO).use {
+        val gson = Gson()
+        val response = it.get {
+            url("${URL}/credit_cards/user/$userId")
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+        println(response)
+        resultCreditCards = gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
+    }
+    return resultCreditCards
+}
+
 /*
 * ================== BID APIs ==================
 *
@@ -202,6 +218,20 @@ suspend fun deleteBid(id: String, token: String): HttpResponse {
         result = response
     }
     return result
+}
+
+//get mapping get bid by auction id /bids/auction/{auctionId}
+suspend fun getBidsByAuctionId(auctionId: String, token: String): Array<Bid> {
+    var resultBids: Array<Bid> = emptyArray()
+    HttpClient(CIO).use {
+        val gson = Gson()
+        val response = it.get {
+            url("${URL}/bids/auction/$auctionId")
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+        resultBids = gson.fromJson(response.bodyAsText(), Array<Bid>::class.java)
+    }
+    return resultBids
 }
 
 /*
