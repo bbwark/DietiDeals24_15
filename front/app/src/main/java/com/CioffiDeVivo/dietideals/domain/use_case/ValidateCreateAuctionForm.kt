@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.domain.use_case
 
-import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionCategory
-
 class ValidateCreateAuctionForm{
 
     fun validateItemName(itemName: String): ValidationResult{
@@ -36,6 +34,16 @@ class ValidateCreateAuctionForm{
 
     fun validateInterval(interval: String): ValidationResult{
         if (interval.isBlank()) {
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "The field cannot be empty"
+            )
+        }
+        return ValidationResult(positiveResult = true)
+    }
+
+    fun validateDescription(description: String): ValidationResult{
+        if(description.isBlank()){
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "The field cannot be empty"

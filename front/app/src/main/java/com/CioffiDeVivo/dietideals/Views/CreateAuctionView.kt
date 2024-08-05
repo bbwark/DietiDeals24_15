@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
 import android.content.Context
-import android.content.UriMatcher
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -35,6 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,10 +61,10 @@ import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
-import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
@@ -81,7 +81,18 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     var minStep by remember { mutableStateOf("") }
     val showDatePicker = remember { mutableStateOf(false) }
     val createAuctionState by viewModel.auctionState.collectAsState()
-    val itemAuctionState by viewModel.itemState.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = context){
+        viewModel.validationCreateAuctionEvent.collect { event ->
+            when(event){
+                is ValidationState.Success -> {
+                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
+                }
+
+                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+            }
+        }
+    }
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
@@ -100,10 +111,10 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         Spacer(modifier = Modifier.height(30.dp))
 
         InputTextField(
-            value = itemAuctionState.name,
-            onValueChanged = { viewModel.updateItemName(it) },
+            value = createAuctionState.itemName,
+            onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
             label = stringResource(R.string.itemName),
-            onTrailingIconClick = { viewModel.deleteItemName() },
+            onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
             modifier = modifierStandard
         )
         Spacer(modifier = Modifier.size(15.dp))
@@ -142,14 +153,14 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         when (createAuctionState.auctionType) {
             AuctionType.Silent -> {
                 SilentAuction(
-                    auction = createAuctionState,
+                    auctionState = createAuctionState,
                     onBidChange = {
                         minAccepted = if (it.startsWith("0")) {
                             ""
                         } else {
                             it
                         }
-                        viewModel.updateMinAccepted(minAccepted)
+                        viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it))
                     },
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
@@ -158,19 +169,19 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             }
             AuctionType.English -> {
                 EnglishAuction(
-                    auction = createAuctionState,
+                    auctionState = createAuctionState,
                     onBidChange = {
                         minStep = if (it.startsWith("0")) {
                             ""
                         } else {
                             it
                         }
-                        viewModel.updateMinStep(minStep)
+                        viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it))
                     },
-                    onIntervalChange = { viewModel.updateInterval(it) },
-                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                    onDeleteInterval = { viewModel.deleteInterval() },
-                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                    onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
+                    onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
+                    onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted(it)) },
+                    onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
                     onCalendarClick = { showDatePicker.value = true }
                 )
             }
@@ -190,7 +201,10 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             )
         }
         Button(
-            onClick = {/*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/ },
+            onClick = {
+                /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
+                viewModel.createAuctionOnAction(CreateAuctionEvents.Submit)
+            },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -211,7 +225,7 @@ fun CreateAuctionPreview(){
 
 @Composable
 fun SilentAuction(
-    auction: CreateAuctionState,
+    auctionState: CreateAuctionState,
     onBidChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
@@ -219,7 +233,7 @@ fun SilentAuction(
 ){
     Row {
         OutlinedTextField(
-            value = auction.minAccepted.toString(),
+            value = auctionState.minAccepted.toString(),
             onValueChange = { onBidChange(it) },
             singleLine = true,
             trailingIcon = {
@@ -235,7 +249,7 @@ fun SilentAuction(
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            value = auctionState.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
             onValueChanged = { },
             label = stringResource(R.string.endingDate),
             onTrailingIconClick = { onCalendarClick() },
@@ -245,7 +259,7 @@ fun SilentAuction(
         )
     }
     DescriptionTextfield(
-        description = auction.description,
+        description = auctionState.description,
         onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
         onDeleteDescription = { onDeleteDescription(it) }
@@ -255,18 +269,17 @@ fun SilentAuction(
 
 @Composable
 fun EnglishAuction(
-    auction: CreateAuctionState,
+    auctionState: CreateAuctionState,
     onBidChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteInterval: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
-
 ){
     Row {
         OutlinedTextField(
-            value = auction.minStep.toString(),
+            value = auctionState.minStep.toString(),
             onValueChange = { onBidChange(it) },
             singleLine = true,
             trailingIcon = {
@@ -282,7 +295,7 @@ fun EnglishAuction(
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = auction.interval,
+            value = auctionState.interval,
             onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
             onTrailingIconClick = { onDeleteInterval(it) },
@@ -290,7 +303,7 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        value = auctionState.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
         onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
@@ -299,7 +312,7 @@ fun EnglishAuction(
         modifier = Modifier.width(325.dp)
     )
     DescriptionTextfield(
-        description = auction.description,
+        description = auctionState.description,
         onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
         onDeleteDescription = { onDeleteDescription(it) }
@@ -351,7 +364,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
     val context = LocalContext.current
     val multiPhotosPickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-            viewModel.updateImagesUri(it)
+            viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(it))
         }
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -366,7 +379,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
             ImageItem(
                 uri = uri,
                 onClick = {
-                    viewModel.deleteImageUri(index)
+                    viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesDeleted(index))
                     Toast.makeText(context, "Image Removed", Toast.LENGTH_SHORT).show()
                           },
                 context = context,
