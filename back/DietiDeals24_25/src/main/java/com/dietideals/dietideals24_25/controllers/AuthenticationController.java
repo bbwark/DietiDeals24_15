@@ -32,15 +32,23 @@ public class AuthenticationController {
 
     @PostMapping("/registerUser")
     public UserEntity registerUserBuyer(@RequestBody RegistrationDto registrationDto) {
+        try {
         return authenticationService.registerUserBuyer(registrationDto.getEmail(), registrationDto.getName(),
                 registrationDto.getSurname(), registrationDto.getPassword(), registrationDto.getAddress(),
                 registrationDto.getZipCode(), registrationDto.getCountry(), registrationDto.getPhoneNumber(),
                 registrationDto.getCreditCards());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping("/loginUser")
     public LoginDto loginUser(@RequestBody LoginRequest loginRequest) {
+        try {
         return authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping("/register/google")
