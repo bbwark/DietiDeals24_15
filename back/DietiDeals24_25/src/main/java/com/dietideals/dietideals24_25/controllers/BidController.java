@@ -5,6 +5,7 @@ import com.dietideals.dietideals24_25.domain.entities.BidEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.BidService;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ public class BidController {
         this.bidMapper = bidMapper;
     }
 
-    
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         try {
@@ -42,6 +42,19 @@ public class BidController {
         try {
             bidService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/auction/{auctionId}")
+    public ResponseEntity<List<BidDto>> getBidsByAuctionId(@PathVariable("auctionId") UUID auctionId) {
+        try {
+            List<BidEntity> bidEntities = bidService.findByAuctionId(auctionId);
+            List<BidDto> result = bidEntities.stream()
+                    .map(bidEntity -> bidMapper.mapTo(bidEntity))
+                    .collect(java.util.stream.Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

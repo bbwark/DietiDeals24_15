@@ -2,6 +2,7 @@ package com.dietideals.dietideals24_25.services;
 
 import com.dietideals.dietideals24_25.domain.entities.BidEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -12,4 +13,5 @@ public interface BidService {
 
     void delete(UUID id);
 
+    public List<BidEntity> findByAuctionId(UUID auctionId);
 }
