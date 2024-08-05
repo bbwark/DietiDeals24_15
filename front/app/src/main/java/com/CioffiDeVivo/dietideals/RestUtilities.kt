@@ -178,7 +178,6 @@ suspend fun getCreditCardsByUserId(userId: String, token: String): Array<CreditC
             url("${URL}/credit_cards/user/$userId")
             header(HttpHeaders.Authorization, "Bearer $token")
         }
-        println(response)
         resultCreditCards = gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
     }
     return resultCreditCards
