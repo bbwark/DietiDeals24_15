@@ -13,6 +13,6 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface CreditCardRepository extends CrudRepository<CreditCardEntity, String> {
 
-    @Query("SELECT c FROM CreditCardEntity c WHERE c.id = :userId")
+    @Query("SELECT c FROM CreditCardEntity c WHERE c.owner.id = :userId")
     List<CreditCardEntity> findByUserId(@Param("userId") UUID userId);
 }
