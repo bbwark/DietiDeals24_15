@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
         try {
-            boolean userHasCreditCards = !user.getCreditCards().isEmpty();
+            boolean userHasCreditCards = user.getCreditCards() != null && !user.getCreditCards().isEmpty();
             List<CreditCardDto> creditCardDtos = null;
             if (userHasCreditCards) {
                 creditCardDtos = user.getCreditCards().stream()
