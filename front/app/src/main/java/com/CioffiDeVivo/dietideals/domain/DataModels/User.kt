@@ -18,3 +18,11 @@ data class User(
     val phoneNumber: String = "",
     val creditCards: Array<CreditCard> = arrayOf()
 )
+
+enum class Countries{
+    Italy,
+    Spain,
+    Germany,
+    France,
+    Belgium
+}

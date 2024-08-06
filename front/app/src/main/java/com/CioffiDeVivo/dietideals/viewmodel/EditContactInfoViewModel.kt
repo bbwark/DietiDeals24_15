@@ -19,29 +19,30 @@ class EditContactInfoViewModel( private val validateEditContactInfoForm: Validat
     private val _userEditContactInfoState = MutableStateFlow(EditContactInfoState())
     val userEditContactInfoState: StateFlow<EditContactInfoState> = _userEditContactInfoState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
-    val validationLogInEvent = validationEventChannel.receiveAsFlow()
+    val validationEditContactInfoEvents = validationEventChannel.receiveAsFlow()
 
     fun editProfileAction(editContactInfoEvents: EditContactInfoEvents){
         when(editContactInfoEvents){
             is EditContactInfoEvents.AddressChanged -> {
-                _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-                    address = editContactInfoEvents.address
-                )
+                updateAddress(editContactInfoEvents.address)
+            }
+            is EditContactInfoEvents.AddressDeleted -> {
+                deleteAddress()
             }
             is EditContactInfoEvents.ZipCodeChanged -> {
-                _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-                    zipCode = editContactInfoEvents.zipcode
-                )
+                updateZipCode(editContactInfoEvents.zipcode)
+            }
+            is EditContactInfoEvents.ZipCodeDeleted -> {
+                deleteZipCode()
             }
             is EditContactInfoEvents.CountryChanged -> {
-                _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-                    country = editContactInfoEvents.country
-                )
+                updateCountry(editContactInfoEvents.country)
             }
             is EditContactInfoEvents.PhoneNumberChanged -> {
-                _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-                    phoneNumber = editContactInfoEvents.phoneNumber
-                )
+                updatePhoneNumber(editContactInfoEvents.phoneNumber)
+            }
+            is EditContactInfoEvents.PhoneNumberDeleted -> {
+                deletePhoneNumber()
             }
             is EditContactInfoEvents.Submit -> {
                 submitEditContactInfo()

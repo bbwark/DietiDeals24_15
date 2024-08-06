@@ -35,6 +35,7 @@ fun ContactInfoOnRegisterCredentials(
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
+    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
     InputTextField(
         value = userState.address,
         onValueChanged = { onAddressChange(it) },
@@ -56,7 +57,10 @@ fun ContactInfoOnRegisterCredentials(
         )
         Spacer(modifier = Modifier.width(10.dp))
         Spacer(modifier = Modifier.height(10.dp))
-        DropDown(onCountryChange)
+        DropDownMenuField(
+            menuList = countryList,
+            onChange = { onCountryChange(it) }
+        )
     }
     InputTextField(
         value = userState.phoneNumber,
@@ -80,6 +84,7 @@ fun ContactInfoOnEditContactInfo(
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
+    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
     InputTextField(
         value = userState.address,
         onValueChanged = { onAddressChange(it) },
@@ -101,7 +106,10 @@ fun ContactInfoOnEditContactInfo(
         )
         Spacer(modifier = Modifier.width(10.dp))
         Spacer(modifier = Modifier.height(10.dp))
-        DropDown(onCountryChange)
+        DropDownMenuField(
+            menuList = countryList,
+            onChange = { onCountryChange(it) }
+        )
     }
     InputTextField(
         value = userState.phoneNumber,
@@ -112,48 +120,5 @@ fun ContactInfoOnEditContactInfo(
         onTrailingIconClick = { onDeletePhoneNumber(it) },
         modifier = modifierStandard
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropDown(
-    onCountryChange: (String) -> Unit
-) {
-
-    val countryList = listOf("Italy", "England", "Spain", "Germany", "France")
-    var isExpanded by rememberSaveable { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf(countryList[0]) }
-
-    ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = !isExpanded }
-    ) {
-        OutlinedTextField(
-            value = selectedCountry,
-            onValueChange = { },
-            readOnly = true,
-            label = { Text(text = stringResource(R.string.country)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
-            modifier = Modifier
-                .width(145.dp)
-                .menuAnchor()
-        )
-        ExposedDropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }) {
-            countryList.forEachIndexed { index, text ->
-                DropdownMenuItem(
-                    text = { Text(text = text) },
-                    onClick = {
-                        selectedCountry = countryList[index]
-                        onCountryChange(selectedCountry)
-                        isExpanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                )
-            }
-        }
-        //Text(text = selectedCountry)
-    }
 }
 

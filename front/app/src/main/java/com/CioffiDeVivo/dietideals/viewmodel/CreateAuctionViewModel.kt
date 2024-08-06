@@ -186,15 +186,27 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
     }
 
     fun updateMinStep(minStep: String){
-        _auctionState.value = _auctionState.value.copy(
-            minStep = minStep.toFloat()
-        )
+        if(minStep.isEmpty()){
+            _auctionState.value = _auctionState.value.copy(
+                minStep = 0F
+            )
+        } else{
+            _auctionState.value = _auctionState.value.copy(
+                minStep = minStep.toFloat()
+            )
+        }
     }
 
     fun updateMinAccepted(minAccepted: String){
-        _auctionState.value = _auctionState.value.copy(
-            minAccepted = minAccepted.toFloat()
-        )
+        if(minAccepted.isEmpty()){
+            _auctionState.value = _auctionState.value.copy(
+                minAccepted = 0F
+            )
+        } else{
+            _auctionState.value = _auctionState.value.copy(
+                minAccepted = minAccepted.toFloat()
+            )
+        }
     }
 
     fun updateAuctionTypeToEnglish(){
@@ -209,7 +221,7 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
         )
     }
 
-    fun updateAuctionCategory(auctionCategory: AuctionCategory){
+    fun updateAuctionCategory(auctionCategory: String){
         _auctionState.value = _auctionState.value.copy(
             auctionCategory = auctionCategory
         )
