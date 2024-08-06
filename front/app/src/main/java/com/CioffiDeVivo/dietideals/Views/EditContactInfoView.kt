@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.ContactInfo
-import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.Components.ContactInfoOnEditContactInfo
+import com.CioffiDeVivo.dietideals.Components.ContactInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 @Composable
 fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavHostController){
@@ -38,7 +35,7 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        ContactInfo(
+        ContactInfoOnEditContactInfo(
             userState = userContactInfoState,
             onAddressChange = { viewModel.updateAddress(it) },
             onZipCodeChange = { viewModel.updateZipCode(it) },

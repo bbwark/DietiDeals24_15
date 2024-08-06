@@ -60,8 +60,6 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-        Spacer(modifier = Modifier.height(30.dp))
         LoginInputs(
             userState = userLoginState,
             onEmailChange = { viewModel.loginOnAction(LoginEvent.EmailChanged(it)) },

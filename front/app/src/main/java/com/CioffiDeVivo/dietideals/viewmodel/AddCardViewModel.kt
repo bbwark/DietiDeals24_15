@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.Events.AddCardEvents
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
+import com.CioffiDeVivo.dietideals.viewmodel.state.AddCardState
 import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm() ): ViewModel() {
 
-    private val _userCardState = MutableStateFlow(RegistrationState())
-    val userCardState: StateFlow<RegistrationState> = _userCardState.asStateFlow()
+    private val _userCardState = MutableStateFlow(AddCardState())
+    val userCardState: StateFlow<AddCardState> = _userCardState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationAddCardEvent = validationEventChannel.receiveAsFlow()
 

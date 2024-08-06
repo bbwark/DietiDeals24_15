@@ -12,12 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
@@ -30,23 +27,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.Components.ContactInfo
-import com.CioffiDeVivo.dietideals.Components.CreditCardFields
-import com.CioffiDeVivo.dietideals.Components.InputTextField
+import com.CioffiDeVivo.dietideals.Components.ContactInfoOnRegisterCredentials
+import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnRegisterCredentials
+import com.CioffiDeVivo.dietideals.Components.PersonalInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
@@ -54,7 +47,6 @@ import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
@@ -86,7 +78,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.createAccount))
         Spacer(modifier = Modifier.height(30.dp))
-        PersonalInformation(
+        PersonalInfoOnRegisterCredentials(
             userRegistrationState = userRegistrationState,
             onEmailChange = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
             onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
@@ -126,7 +118,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             Text(stringResource(R.string.areYouSeller))
         }
         if(isSeller){
-            ContactInfo(
+            ContactInfoOnRegisterCredentials(
                 userState = userRegistrationState,
                 onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
                 onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
@@ -136,7 +128,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 onDeleteZipCode = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
                 onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) }
             )
-            CreditCardFields(
+            CreditCardFieldsOnRegisterCredentials(
                 userState = userRegistrationState,
                 onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
                 onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
@@ -169,75 +161,6 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         }
     }
 }
-@Composable
-fun PersonalInformation(
-    userRegistrationState: RegistrationState,
-    onEmailChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
-    onSurnameChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onNewPasswordChange: (String) -> Unit,
-    onDeleteEmail: (String) -> Unit,
-    onDeleteName: (String) -> Unit,
-    onDeleteSurname: (String) -> Unit,
-){
-
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
-
-    InputTextField(
-        value = userRegistrationState.email,
-        onValueChanged = { onEmailChange(it) },
-        label = stringResource(R.string.email),
-        placeholder = stringResource(R.string.emailExample),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        isError = userRegistrationState.emailErrorMsg != null,
-        onTrailingIconClick = { onDeleteEmail(it) },
-        supportingText = userRegistrationState.emailErrorMsg,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userRegistrationState.name,
-        onValueChanged = { onNameChange(it) },
-        label = stringResource(R.string.name),
-        isError = userRegistrationState.nameErrorMsg != null,
-        onTrailingIconClick = { onDeleteName(it) },
-        supportingText = userRegistrationState.nameErrorMsg,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userRegistrationState.surname,
-        onValueChanged = { onSurnameChange(it) },
-        label = stringResource(R.string.surname),
-        isError = userRegistrationState.surnameErrorMsg != null,
-        onTrailingIconClick = { onDeleteSurname(it) },
-        supportingText = userRegistrationState.surnameErrorMsg,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userRegistrationState.password,
-        onValueChanged = { onPasswordChange(it) },
-        label = stringResource(R.string.password),
-        isError = userRegistrationState.passwordErrorMsg != null,
-        onTrailingIconClick = { passwordVisible = !passwordVisible },
-        supportingText = userRegistrationState.passwordErrorMsg,
-        visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userRegistrationState.newPassword,
-        onValueChanged = { onNewPasswordChange(it) },
-        label = stringResource(R.string.rewritepassword),
-        isError = userRegistrationState.newPasswordErrorMsg != null,
-        onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
-        supportingText = userRegistrationState.newPasswordErrorMsg,
-        visualTransformation = if(newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = if(newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-        modifier = modifierStandard
-    )
-}
-
 
 @Preview(showBackground = true)
 @Composable

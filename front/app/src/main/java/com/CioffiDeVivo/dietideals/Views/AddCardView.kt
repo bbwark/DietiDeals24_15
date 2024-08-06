@@ -19,7 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.Components.CreditCardFields
+import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnAddCard
+import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.AddCardEvents
 import com.CioffiDeVivo.dietideals.R
@@ -49,7 +50,7 @@ fun AddCardView(viewModel: AddCardViewModel){
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        CreditCardFields(
+        CreditCardFieldsOnAddCard(
             userState = userCard,
             onNumberChange = { viewModel.addCardAction(AddCardEvents.CreditCardNumberChanged(it)) },
             onDateChange = { viewModel.addCardAction(AddCardEvents.ExpirationDateChanged(it)) },

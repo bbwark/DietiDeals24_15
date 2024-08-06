@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class EditContactInfoViewModel( private val validateEditContactInfoForm: ValidateEditContactInfoForm = ValidateEditContactInfoForm() ): ViewModel() {
 
-    private val _userEditContactInfoState = MutableStateFlow(RegistrationState())
-    val userEditContactInfoState: StateFlow<RegistrationState> = _userEditContactInfoState.asStateFlow()
+    private val _userEditContactInfoState = MutableStateFlow(EditContactInfoState())
+    val userEditContactInfoState: StateFlow<EditContactInfoState> = _userEditContactInfoState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
 
