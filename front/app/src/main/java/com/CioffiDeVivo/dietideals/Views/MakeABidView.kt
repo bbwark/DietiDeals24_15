@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +43,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 @Composable
 fun MakeABid(viewModel: MakeABidViewModel){
 
-    var bid by remember { mutableStateOf("") }
+    var bid by rememberSaveable { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
     val auctionState by viewModel.auctionState.collectAsState()
 

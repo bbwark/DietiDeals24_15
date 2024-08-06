@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +10,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,13 +24,28 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfoOnEditContactInfo
 import com.CioffiDeVivo.dietideals.Components.ContactInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
+import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
+import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
 
 @Composable
 fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavHostController){
     
     val userContactInfoState by viewModel.userEditContactInfoState.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = context){
+        viewModel.validationEditContactInfoEvents.collect { event ->
+            when(event){
+                is ValidationState.Success -> {
+                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
+                }
+
+                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -37,17 +55,19 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
     ){
         ContactInfoOnEditContactInfo(
             userState = userContactInfoState,
-            onAddressChange = { viewModel.updateAddress(it) },
-            onZipCodeChange = { viewModel.updateZipCode(it) },
-            onCountryChange = { viewModel.updateCountry(it) },
-            onPhoneNumberChange = { viewModel.updatePhoneNumber(it) },
-            onDeleteAddress = { viewModel.deleteAddress() },
-            onDeleteZipCode = { viewModel.deleteZipCode() },
-            onDeletePhoneNumber = { viewModel.deletePhoneNumber() }
+            onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+            onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
+            onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },
+            onPhoneNumberChange = { viewModel.editProfileAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
+            onDeleteAddress = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+            onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+            onDeletePhoneNumber = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) }
         )
         Spacer(modifier = Modifier.height(40.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                viewModel.editProfileAction(EditContactInfoEvents.Submit)
+            },
             modifier = Modifier.pulsateClick()
         ) {
             Text(text = stringResource(id = R.string.saveChanges))

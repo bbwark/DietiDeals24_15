@@ -40,6 +40,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.Components.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.Components.InputTextField
 import com.CioffiDeVivo.dietideals.Components.CustomDatePickerDialog
+import com.CioffiDeVivo.dietideals.Components.DropDownMenuField
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
@@ -80,6 +82,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     var minAccepted by remember { mutableStateOf("") }
     var minStep by remember { mutableStateOf("") }
     val showDatePicker = remember { mutableStateOf(false) }
+    val categoryList = listOf( "Electronic", "Games", "House", "Engine", "Book", "Fashion", "Sport", "Music", "Other")
     val createAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
@@ -117,7 +120,11 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
             modifier = modifierStandard
         )
-        Spacer(modifier = Modifier.size(15.dp))
+        DropDownMenuField(
+            menuList = categoryList,
+            onChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(it)) }
+        )
+        Spacer(modifier = Modifier.height(15.dp))
         Row {
             ElevatedButton(
                 onClick = { viewModel.updateAuctionTypeToSilent() },
@@ -154,14 +161,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             AuctionType.Silent -> {
                 SilentAuction(
                     auctionState = createAuctionState,
-                    onBidChange = {
-                        minAccepted = if (it.startsWith("0")) {
-                            ""
-                        } else {
-                            it
-                        }
-                        viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it))
-                    },
+                    onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
                     onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                     onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                     onCalendarClick = { showDatePicker.value = true }
@@ -170,14 +170,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             AuctionType.English -> {
                 EnglishAuction(
                     auctionState = createAuctionState,
-                    onBidChange = {
-                        minStep = if (it.startsWith("0")) {
-                            ""
-                        } else {
-                            it
-                        }
-                        viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it))
-                    },
+                    onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it)) },
                     onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
                     onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
                     onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted(it)) },
@@ -231,10 +224,18 @@ fun SilentAuction(
     onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
 ){
+    var minAccepted by rememberSaveable { mutableStateOf("") }
     Row {
         OutlinedTextField(
-            value = auctionState.minAccepted.toString(),
-            onValueChange = { onBidChange(it) },
+            value = minAccepted,
+            onValueChange = {
+                minAccepted = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+                onBidChange(it)
+            },
             singleLine = true,
             trailingIcon = {
                 Icon(
@@ -277,10 +278,18 @@ fun EnglishAuction(
     onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
 ){
+    var minStep by rememberSaveable { mutableStateOf("") }
     Row {
         OutlinedTextField(
             value = auctionState.minStep.toString(),
-            onValueChange = { onBidChange(it) },
+            onValueChange = {
+                minStep = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+                onBidChange(it)
+            },
             singleLine = true,
             trailingIcon = {
                 Icon(
@@ -360,7 +369,7 @@ fun ImageItem(
 @Composable
 fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
-    val itemAuctionState by viewModel.itemState.collectAsState()
+    val itemAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
     val multiPhotosPickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {

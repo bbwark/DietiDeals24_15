@@ -11,7 +11,7 @@ sealed class CreateAuctionEvents {
     data class ImagesDeleted(val index: Int): CreateAuctionEvents()
     data class AuctionTypeChangedToEnglish(val auctionType: AuctionType): CreateAuctionEvents()
     data class AuctionTypeChangedToSilent(val auctionType: AuctionType): CreateAuctionEvents()
-    data class AuctionCategoryChanged(val auctionCategory: AuctionCategory): CreateAuctionEvents()
+    data class AuctionCategoryChanged(val auctionCategory: String): CreateAuctionEvents()
     data class IntervalChanged(val interval: String): CreateAuctionEvents()
     data class IntervalDeleted(val interval: String): CreateAuctionEvents()
     data class MinStepChanged(val minStep: String): CreateAuctionEvents()

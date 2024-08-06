@@ -23,6 +23,6 @@ data class CreateAuctionState(
     val minAccepted: Float = 0.0f,
     val minAcceptedErrorMsg: String? = null,
     val auctionType: AuctionType = AuctionType.None,
-    val auctionCategory: AuctionCategory = AuctionCategory.Other,
+    val auctionCategory: String? = null,
     val auctionCategoryErrorMsg: String? = null
 )
