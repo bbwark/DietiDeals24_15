@@ -13,8 +13,10 @@ import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.services.impl.AuthenticationServiceImpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,10 +35,13 @@ public class AuthenticationController {
     private AuthenticationServiceImpl authenticationService;
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public AuthenticationController(UserService userService, CreditCardService creditCardService,
             RoleService roleService, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
             Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService,
-            UserRepository userRepository) {
+            UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.creditCardService = creditCardService;
         this.roleService = roleService;
@@ -44,11 +49,12 @@ public class AuthenticationController {
         this.userMapper = userMapper;
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/registerUser")
     public ResponseEntity<UserDto> registerUserBuyer(@RequestBody UserDto user) {
-        return new UserController(userService, creditCardService, roleService, userMapper, creditCardMapper)
+        return new UserController(userService, creditCardService, roleService, userMapper, creditCardMapper, passwordEncoder)
                 .createUser(user);
     }
 
