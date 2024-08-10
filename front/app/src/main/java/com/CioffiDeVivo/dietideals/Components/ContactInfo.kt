@@ -59,6 +59,7 @@ fun ContactInfoOnRegisterCredentials(
         Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
             menuList = countryList,
+            label = stringResource(id = R.string.country),
             onChange = { onCountryChange(it) }
         )
     }
@@ -108,6 +109,7 @@ fun ContactInfoOnEditContactInfo(
         Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
             menuList = countryList,
+            label = stringResource(id = R.string.country),
             onChange = { onCountryChange(it) }
         )
     }

@@ -21,6 +21,7 @@ import com.CioffiDeVivo.dietideals.R
 @Composable
 fun DropDownMenuField(
     menuList: List<String>,
+    label: String,
     onChange: (String) -> Unit
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -34,7 +35,7 @@ fun DropDownMenuField(
             value = selectedElementOfList,
             onValueChange = { },
             readOnly = true,
-            label = { Text(text = stringResource(R.string.country)) },
+            label = { Text(text = label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
             modifier = Modifier
                 .width(145.dp)

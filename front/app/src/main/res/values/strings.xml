@@ -26,6 +26,7 @@
     <string name="address">Address</string>
     <string name="zipcode">ZipCode</string>
     <string name="country">Country</string>
+    <string name="category">Category</string>
     <string name="creditcard">Credit Card</string>
     <string name="expirationdate">E. Date</string>
     <string name="cvv">CVV</string>
