@@ -29,11 +29,11 @@ public class AuctionEntity {
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-    @OneToOne(mappedBy = "auction", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auction", cascade = CascadeType.ALL)
     private ItemEntity item;
 
     @Builder.Default
-    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auction", cascade = CascadeType.ALL)
     private List<BidEntity> bids = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,6 @@
 package com.dietideals.dietideals24_25;
 
-import com.dietideals.dietideals24_25.domain.entities.Role;
+import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.repositories.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,8 +20,8 @@ public class DietiDeals2425Application {
     CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
-            roleRepository.save(new Role("ADMIN"));
-            roleRepository.save(new Role("USER"));
+            roleRepository.save(new RoleEntity("ADMIN"));
+            roleRepository.save(new RoleEntity("USER"));
 
         };
     }

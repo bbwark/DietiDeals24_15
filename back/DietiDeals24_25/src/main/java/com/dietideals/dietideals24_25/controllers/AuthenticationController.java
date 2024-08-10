@@ -1,13 +1,20 @@
 package com.dietideals.dietideals24_25.controllers;
 
+import com.dietideals.dietideals24_25.domain.dto.CreditCardDto;
 import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.LoginRequest;
-import com.dietideals.dietideals24_25.domain.dto.RegistrationDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
+import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
+import com.dietideals.dietideals24_25.services.CreditCardService;
+import com.dietideals.dietideals24_25.services.RoleService;
+import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.services.impl.AuthenticationServiceImpl;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,36 +25,41 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    private UserService userService;
+    private CreditCardService creditCardService;
+    private RoleService roleService;
+    private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
     private Mapper<UserEntity, UserDto> userMapper;
     private AuthenticationServiceImpl authenticationService;
-
     private UserRepository userRepository;
 
     public AuthenticationController(Mapper<UserEntity, UserDto> userMapper,
-            AuthenticationServiceImpl authenticationService, UserRepository userRepository) {
+            AuthenticationServiceImpl authenticationService, UserRepository userRepository,
+            UserService userService, CreditCardService creditCardService, RoleService roleService,
+            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
         this.userMapper = userMapper;
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.creditCardService = creditCardService;
+        this.roleService = roleService;
+        this.creditCardMapper = creditCardMapper;
     }
 
     @PostMapping("/registerUser")
-    public UserEntity registerUserBuyer(@RequestBody RegistrationDto registrationDto) {
-        try {
-        return authenticationService.registerUserBuyer(registrationDto.getEmail(), registrationDto.getName(),
-                registrationDto.getSurname(), registrationDto.getPassword(), registrationDto.getAddress(),
-                registrationDto.getZipCode(), registrationDto.getCountry(), registrationDto.getPhoneNumber(),
-                registrationDto.getCreditCards());
-        } catch (Exception e) {
-            return null;
-        }
+    public ResponseEntity<UserDto> registerUserBuyer(@RequestBody UserDto user) {
+        return new UserController(userService, creditCardService, roleService, userMapper, creditCardMapper)
+                .createUser(user);
     }
 
     @PostMapping("/loginUser")
-    public LoginDto loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginDto> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
-        return authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+            return new ResponseEntity<>(
+                    authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword()),
+                    HttpStatus.OK);
         } catch (Exception e) {
-            return null;
+            return new ResponseEntity<>(new LoginDto(null, ""), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

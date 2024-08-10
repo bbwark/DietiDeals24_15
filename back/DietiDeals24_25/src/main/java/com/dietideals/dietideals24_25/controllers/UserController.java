@@ -3,9 +3,11 @@ package com.dietideals.dietideals24_25.controllers;
 import com.dietideals.dietideals24_25.domain.dto.CreditCardDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
+import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.CreditCardService;
+import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,10 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,13 +29,15 @@ public class UserController {
 
     private UserService userService;
     private CreditCardService creditCardService;
+    private RoleService roleService;
     private Mapper<UserEntity, UserDto> userMapper;
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
 
-    public UserController(UserService userService, CreditCardService creditCardService,
+    public UserController(UserService userService, CreditCardService creditCardService, RoleService roleService,
             Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
         this.userService = userService;
         this.creditCardService = creditCardService;
+        this.roleService = roleService;
         this.userMapper = userMapper;
         this.creditCardMapper = creditCardMapper;
     }
@@ -57,8 +63,19 @@ public class UserController {
                 user.getCreditCards().clear();
             }
 
-            UserEntity userEntity = userMapper.mapFrom(user);
+            if (user.getAddress() == null || user.getAddress().isEmpty() ||
+                user.getZipcode() == null || user.getZipcode().isEmpty() ||
+                user.getCountry() == null || user.getCountry().isEmpty() ||
+                user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty() ||
+                !userHasCreditCards) {
+                user.setIsSeller(false);
+            }
+            
+            Set<RoleEntity> authorities = new HashSet<>();
+            authorities.add(roleService.findByAuthority("USER").get());
+            user.setAuthorities(authorities);
 
+            UserEntity userEntity = userMapper.mapFrom(user);
             UserEntity savedUserEntity = userService.save(userEntity);
             UserDto responseUser = userMapper.mapTo(savedUserEntity);
 
