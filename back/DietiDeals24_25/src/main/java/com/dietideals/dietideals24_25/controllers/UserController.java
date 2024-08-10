@@ -64,13 +64,13 @@ public class UserController {
             }
 
             if (user.getAddress() == null || user.getAddress().isEmpty() ||
-                user.getZipcode() == null || user.getZipcode().isEmpty() ||
-                user.getCountry() == null || user.getCountry().isEmpty() ||
-                user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty() ||
-                !userHasCreditCards) {
+                    user.getZipcode() == null || user.getZipcode().isEmpty() ||
+                    user.getCountry() == null || user.getCountry().isEmpty() ||
+                    user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty() ||
+                    !userHasCreditCards) {
                 user.setIsSeller(false);
             }
-            
+
             Set<RoleEntity> authorities = new HashSet<>();
             authorities.add(roleService.findByAuthority("USER").get());
             user.setAuthorities(authorities);

@@ -1,13 +1,20 @@
 package com.dietideals.dietideals24_25.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.UUID;
 
-@Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
 @Table(name = "roles")
 public class RoleEntity implements GrantedAuthority {
 
@@ -18,16 +25,7 @@ public class RoleEntity implements GrantedAuthority {
 
     private String authority;
 
-    public RoleEntity(){
-        super();
-    }
-
-    public RoleEntity(String authority){
-        this.authority = authority;
-    }
-
-    public RoleEntity(UUID roleId, String authority){
-        this.roleId = roleId;
+    public RoleEntity(String authority) {
         this.authority = authority;
     }
 
