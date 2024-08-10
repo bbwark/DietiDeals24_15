@@ -47,7 +47,7 @@ fun AuctionsList(
                       the top of the Composable, this way the list will have a small transparent offset
                       that disappears when you scroll down the list*/
                 }
-                if (!categoriesToHide.value.contains(auction.auctionCategory.name)) {
+                if (!categoriesToHide.value.contains(auction.category.name)) {
                     AuctionsListElement(modifier = Modifier.clickable {
                         viewModel.selectedAuction = auction
                         //navController.navigate(Screen.Auction.route)
@@ -75,7 +75,7 @@ fun AuctionsListFavoured(
                       the top of the Composable, this way the list will have a small transparent offset
                       that disappears when you scroll down the list*/
                 }
-                if (!categoriesToHide.value.contains(auction.auctionCategory.name)) {
+                if (!categoriesToHide.value.contains(auction.category.name)) {
                     AuctionsListElement(modifier = Modifier.clickable {
                         viewModel.selectedAuction = auction
                         //navController.navigate(Screen.Auction.route)
@@ -111,53 +111,53 @@ fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>
 @Composable
 fun AuctionListPreview(){
 
-    val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer")
+    val testItem = Item(id = "", imagesUri = listOf(), name = "Desktop Computer")
 
     val testAuctions: Array<Auction> = arrayOf(
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 16),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 17),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 10),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 9),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 8),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 

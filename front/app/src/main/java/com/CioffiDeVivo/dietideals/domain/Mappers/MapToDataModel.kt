@@ -14,8 +14,8 @@ import java.util.UUID
 
 fun Auction.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Auction(
-        id = this.id?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
-        ownerId = this.ownerId?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
+        id = this.id ?: "",
+        ownerId = this.ownerId ?: "",
         item = this.item?.toViewModel() ?: com.CioffiDeVivo.dietideals.domain.DataModels.Item(),
         description = this.description ?: "",
         bids = this.bids.map { it.toViewModel() }.toTypedArray(),
@@ -24,16 +24,16 @@ fun Auction.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction
         interval = this.interval ?: "",
         expired = this.expired ?: false,
         minAccepted = this.startingPrice ?: "",
-        auctionType = this.type ?: AuctionType.None,
-        auctionCategory = this.category ?: AuctionCategory.Other
+        type = this.type ?: AuctionType.None,
+        category = this.category ?: AuctionCategory.Other
     )
 }
 
 fun Bid.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Bid {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Bid(
-        id = this.id?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
+        id = this.id ?: "",
         value = this.value ?: 0F,
-        userId = this.userId?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
+        userId = this.userId ?: "",
         date = this.date?.let { ZonedDateTime.parse(it) } ?: ZonedDateTime.now()
     )
 }
@@ -49,7 +49,7 @@ fun CreditCard.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Cred
 
 fun Item.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Item(
-        id = this.id?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
+        id = this.id ?: "",
         name = this.name ?: "",
         imagesUri = listOf(Uri.parse(this.imageUrl))
     )
@@ -57,7 +57,7 @@ fun Item.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
 
 fun User.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.User {
     return com.CioffiDeVivo.dietideals.domain.DataModels.User(
-        id = this.id?.let { UUID.fromString(it) } ?: UUID.randomUUID(),
+        id = this.id ?: "",
         name = this.name ?: "",
         email = this.email ?: "",
         password = this.password ?: "",

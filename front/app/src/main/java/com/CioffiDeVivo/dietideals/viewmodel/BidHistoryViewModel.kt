@@ -29,20 +29,20 @@ class BidHistoryViewModel : ViewModel() {
 
     var selectedAuction by mutableStateOf(
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = ""),
+            "",
+            "",
+            Item(id = "", name = ""),
             bids = arrayOf(
                 Bid(
-                    UUID.randomUUID(),
+                    "",
                     11f,
-                    UUID.randomUUID(),
+                    "",
                     ZonedDateTime.now().minusDays(5)
                 )
             ),
             endingDate = LocalDate.now(),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
     var selectedAuctionBidders: List<ObservedUser> = listOf() //need to write a function that takes all the users ID available in selectedAuction.bids and then make requests to the server based on those IDs to fill this list
