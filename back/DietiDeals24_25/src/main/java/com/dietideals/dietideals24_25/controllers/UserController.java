@@ -9,9 +9,12 @@ import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.CreditCardService;
 import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +36,18 @@ public class UserController {
     private Mapper<UserEntity, UserDto> userMapper;
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public UserController(UserService userService, CreditCardService creditCardService, RoleService roleService,
-            Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
+            Mapper<UserEntity, UserDto> userMapper, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.creditCardService = creditCardService;
         this.roleService = roleService;
         this.userMapper = userMapper;
         this.creditCardMapper = creditCardMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/google")
@@ -49,6 +57,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+        System.out.println("Registering user: " + user);
         try {
             boolean userHasCreditCards = user.getCreditCards() != null && !user.getCreditCards().isEmpty();
             List<CreditCardDto> creditCardDtos = null;
@@ -74,6 +83,7 @@ public class UserController {
             Set<RoleEntity> authorities = new HashSet<>();
             authorities.add(roleService.findByAuthority("USER").get());
             user.setAuthorities(authorities);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
 
             UserEntity userEntity = userMapper.mapFrom(user);
             UserEntity savedUserEntity = userService.save(userEntity);
