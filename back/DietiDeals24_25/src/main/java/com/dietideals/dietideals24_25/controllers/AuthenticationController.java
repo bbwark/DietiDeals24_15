@@ -33,17 +33,17 @@ public class AuthenticationController {
     private AuthenticationServiceImpl authenticationService;
     private UserRepository userRepository;
 
-    public AuthenticationController(Mapper<UserEntity, UserDto> userMapper,
-            AuthenticationServiceImpl authenticationService, UserRepository userRepository,
-            UserService userService, CreditCardService creditCardService, RoleService roleService,
-            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
-        this.userMapper = userMapper;
-        this.authenticationService = authenticationService;
-        this.userRepository = userRepository;
+    public AuthenticationController(UserService userService, CreditCardService creditCardService,
+            RoleService roleService, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
+            Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService,
+            UserRepository userRepository) {
         this.userService = userService;
         this.creditCardService = creditCardService;
         this.roleService = roleService;
         this.creditCardMapper = creditCardMapper;
+        this.userMapper = userMapper;
+        this.authenticationService = authenticationService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/registerUser")
