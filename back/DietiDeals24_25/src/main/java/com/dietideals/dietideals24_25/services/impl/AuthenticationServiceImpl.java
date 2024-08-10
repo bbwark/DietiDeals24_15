@@ -4,30 +4,20 @@ import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
-import com.dietideals.dietideals24_25.domain.entities.Role;
+import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.repositories.RoleRepository;
-import com.google.api.client.auth.openidconnect.IdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.json.webtoken.JsonWebToken;
-import com.nimbusds.jose.Payload;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -63,9 +53,9 @@ public class AuthenticationServiceImpl {
 
         boolean isSeller = true;
         String encodedPassword = passwordEncoder.encode(password);
-        Role userRole = roleRepository.findByAuthority("USER").get();
+        RoleEntity userRole = roleRepository.findByAuthority("USER").get();
 
-        Set<Role> authorities = new HashSet<>();
+        Set<RoleEntity> authorities = new HashSet<>();
 
         authorities.add(userRole);
 
@@ -102,8 +92,8 @@ public class AuthenticationServiceImpl {
             String email = payload.getEmail();
             String name = (String) payload.get("name");
 
-            Role userRole = roleRepository.findByAuthority("USER").get();
-            Set<Role> authorities = new HashSet<>();
+            RoleEntity userRole = roleRepository.findByAuthority("USER").get();
+            Set<RoleEntity> authorities = new HashSet<>();
             authorities.add(userRole);
 
             return new UserDto(UUID.randomUUID(), email, name, authorities);

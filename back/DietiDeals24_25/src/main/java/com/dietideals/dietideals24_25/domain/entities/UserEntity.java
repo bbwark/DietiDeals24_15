@@ -37,7 +37,7 @@ public class UserEntity implements UserDetails {
     private Boolean isSeller;
 
     @Builder.Default
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
     private List<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
 
     @Column(name = "bio")
@@ -67,14 +67,14 @@ public class UserEntity implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
-    private Set<Role> authorities = new HashSet<>();
+    private Set<RoleEntity> authorities = new HashSet<>();
 
     public UserEntity() {
         super();
-        this.authorities = new HashSet<Role>();
+        this.authorities = new HashSet<RoleEntity>();
     }
 
-    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities,
+    public UserEntity(UUID id, String email, String name, String surname, String password, Set<RoleEntity> authorities,
             Boolean isSeller) {
         super();
         this.id = id;
@@ -86,7 +86,7 @@ public class UserEntity implements UserDetails {
         this.isSeller = isSeller;
     }
 
-    public UserEntity(UUID id, String email, String name, String surname, String password, Set<Role> authorities,
+    public UserEntity(UUID id, String email, String name, String surname, String password, Set<RoleEntity> authorities,
             Boolean isSeller, String address, Integer zipCode, String country, String phoneNumber,
             List<CreditCardEntity> creditCards) {
         this.id = id;
@@ -102,7 +102,7 @@ public class UserEntity implements UserDetails {
         this.creditCards = creditCards;
     }
 
-    public UserEntity(UUID id, String email, String name, Set<Role> authorities) {
+    public UserEntity(UUID id, String email, String name, Set<RoleEntity> authorities) {
         this.id = id;
         this.email = email;
         this.name = name;

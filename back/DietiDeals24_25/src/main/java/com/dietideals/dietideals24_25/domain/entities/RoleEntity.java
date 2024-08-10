@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class RoleEntity implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -18,15 +18,15 @@ public class Role implements GrantedAuthority {
 
     private String authority;
 
-    public Role(){
+    public RoleEntity(){
         super();
     }
 
-    public Role(String authority){
+    public RoleEntity(String authority){
         this.authority = authority;
     }
 
-    public Role(UUID roleId, String authority){
+    public RoleEntity(UUID roleId, String authority){
         this.roleId = roleId;
         this.authority = authority;
     }
