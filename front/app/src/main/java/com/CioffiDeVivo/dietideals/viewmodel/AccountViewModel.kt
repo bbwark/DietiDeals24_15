@@ -26,7 +26,7 @@ class AccountViewModel : ViewModel() {
 
     var user by mutableStateOf(
         User(
-            UUID.randomUUID(),
+            "",
             "Nametest Surnametest",
             "",
             "passwordtest",

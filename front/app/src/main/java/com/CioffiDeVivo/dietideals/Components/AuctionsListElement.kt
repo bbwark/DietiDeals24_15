@@ -68,12 +68,12 @@ fun HomeViewAuctionListElement(modifier: Modifier = Modifier, auction: Auction){
 fun AuctionsListElementPreview() {
     
     val testAuction = Auction(
-        id = UUID.randomUUID(), 
-        ownerId = UUID.randomUUID(),
-        item = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer"),
+        id = "", 
+        ownerId = "",
+        item = Item(id = "", imagesUri = listOf(), name = "Desktop Computer"),
         endingDate = LocalDate.of(2025, 10, 15),
         expired = false,
-        auctionType = AuctionType.Silent)
+        type = AuctionType.Silent)
     
     DietiDealsTheme {
         AuctionsListElement(auction = testAuction)

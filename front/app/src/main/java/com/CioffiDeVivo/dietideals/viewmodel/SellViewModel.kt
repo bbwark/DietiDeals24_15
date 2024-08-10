@@ -20,28 +20,28 @@ class SellViewModel: ViewModel() {
 
     var auctionCreatedByUser: Array<Auction> = arrayOf(
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "First Auction"),
+            "",
+            "",
+            Item(id = "", name = "First Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "Second Auction"),
+            "",
+            "",
+            Item(id = "", name = "Second Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "Third Auction"),
+            "",
+            "",
+            Item(id = "", name = "Third Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 

@@ -71,14 +71,14 @@ fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean)
         AuctionHeader(
             itemName = auction.item.name,
             insertionistName = "Temporary Insertionist", //server request to get the name from the auction ownerId
-            auctionType = auction.auctionType
+            type = auction.type
         )
 
         Row(
             Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            when (auction.auctionType) {
+            when (auction.type) {
                 AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
                 AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
                 else ->{
@@ -109,7 +109,7 @@ fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean)
 }
 
 @Composable
-fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistName: String, auctionType: AuctionType) {
+fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistName: String, type: AuctionType) {
     Row(
         Modifier.padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -134,7 +134,7 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
         }
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = auctionType.name,
+            text = type.name,
             fontSize = 12.sp
         )
     }
@@ -206,12 +206,12 @@ fun AuctionViewPreview() {
     AuctionView(
         viewModel = AuctionViewModel(),
         auction = Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "Temporary Item"),
+            "",
+            "",
+            Item(id = "", name = "Temporary Item"),
             endingDate = LocalDate.now().plusMonths(1),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         isOwner = false
     )

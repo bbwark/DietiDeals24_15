@@ -39,24 +39,24 @@ fun SearchViewPreview() {
     val viewModel = MainViewModel()
     viewModel.auctionSearchResult = arrayOf(
         Auction(
-            UUID.randomUUID(), UUID.randomUUID(), item = Item(
-                UUID.randomUUID(), name = "first"
-            ), endingDate = LocalDate.now(), expired = false, auctionType = AuctionType.English
+            "", "", item = Item(
+                "", name = "first"
+            ), endingDate = LocalDate.now(), expired = false, type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(), UUID.randomUUID(), item = Item(
-                UUID.randomUUID(), name = "second"
-            ), endingDate = LocalDate.now().plusMonths(1), expired = false, auctionType = AuctionType.English
+            "", "", item = Item(
+                "", name = "second"
+            ), endingDate = LocalDate.now().plusMonths(1), expired = false, type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(), UUID.randomUUID(), item = Item(
-                UUID.randomUUID(), name = "third"
-            ), endingDate = LocalDate.now().plusMonths(2), expired = false, auctionType = AuctionType.English
+            "", "", item = Item(
+                "", name = "third"
+            ), endingDate = LocalDate.now().plusMonths(2), expired = false, type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(), UUID.randomUUID(), item = Item(
-                UUID.randomUUID(), name = "fourth"
-            ), endingDate = LocalDate.now().plusMonths(3), expired = false, auctionType = AuctionType.English
+            "", "", item = Item(
+                "", name = "fourth"
+            ), endingDate = LocalDate.now().plusMonths(3), expired = false, type = AuctionType.English
         )
     )
 

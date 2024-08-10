@@ -33,9 +33,7 @@ import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import java.time.ZonedDateTime
-import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -45,8 +43,8 @@ fun BidHistoryView(viewModel: BidHistoryViewModel) {
     var userInfo by remember { mutableStateOf(false) }
 
     var bidderName by remember { mutableStateOf("") }
-    var selectedBid by remember { mutableStateOf(Bid(UUID.randomUUID(), 0f, UUID.randomUUID(), ZonedDateTime.now())) }
-    var selectedUser by remember { mutableStateOf(ObservedUser(UUID.randomUUID(), "")) }
+    var selectedBid by remember { mutableStateOf(Bid("", 0f, "", ZonedDateTime.now())) }
+    var selectedUser by remember { mutableStateOf(ObservedUser("", "")) }
 
     val auctionState by viewModel.auctionState.collectAsState()
     val bidState by viewModel.bidState.collectAsState()

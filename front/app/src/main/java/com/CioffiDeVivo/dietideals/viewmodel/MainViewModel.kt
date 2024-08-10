@@ -45,7 +45,7 @@ class MainViewModel : ViewModel() {
     var auctionOpenByOwner by mutableStateOf(false)
     var user by mutableStateOf(
         User(
-            UUID.randomUUID(),
+            "",
             "Nametest Surnametest",
             "",
             "passwordtest",
@@ -59,20 +59,20 @@ class MainViewModel : ViewModel() {
     var selectedNavBarItem: MutableState<Int> = mutableStateOf(0)
     var selectedAuction by mutableStateOf(
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = ""),
+            "",
+            "",
+            Item(id = "", name = ""),
             bids = arrayOf(
                 Bid(
-                    UUID.randomUUID(),
+                    "",
                     11f,
-                    UUID.randomUUID(),
+                    "",
                     ZonedDateTime.now().minusDays(5)
                 )
             ),
             endingDate = LocalDate.now(),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
     var selectedAuctionBidders: List<ObservedUser> = listOf() //need to write a function that takes all the users ID available in selectedAuction.bids and then make requests to the server based on those IDs to fill this list
@@ -80,28 +80,28 @@ class MainViewModel : ViewModel() {
     var auctionSearchResult: Array<Auction> = arrayOf()
     var auctionCreatedByUser: Array<Auction> = arrayOf(
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "First Auction"),
+            "",
+            "",
+            Item(id = "", name = "First Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "Second Auction"),
+            "",
+            "",
+            Item(id = "", name = "Second Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = "Third Auction"),
+            "",
+            "",
+            Item(id = "", name = "Third Auction"),
             endingDate = LocalDate.now().plusMonths(2),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 
@@ -362,13 +362,13 @@ class MainViewModel : ViewModel() {
 
     fun updateAuctionTypeToEnglish(){
         _auctionState.value = _auctionState.value.copy(
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     }
 
     fun updateAuctionTypeToSilent(){
         _auctionState.value = _auctionState.value.copy(
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         )
     }
 
@@ -438,7 +438,7 @@ class MainViewModel : ViewModel() {
             }
             is CreateAuctionEvents.AuctionTypeChanged -> {
                 _auctionState.value = _auctionState.value.copy(
-                    auctionType = createAuctionEvents.auctionType
+                    type = createAuctionEvents.type
                 )
             }
             is CreateAuctionEvents.DescriptionChanged -> {

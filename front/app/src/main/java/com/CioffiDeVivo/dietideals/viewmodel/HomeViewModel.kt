@@ -29,7 +29,7 @@ class HomeViewModel : ViewModel() {
 
     var user by mutableStateOf(
         User(
-            UUID.randomUUID(),
+            "",
             "Nametest Surnametest",
             "",
             "passwordtest",
@@ -43,167 +43,167 @@ class HomeViewModel : ViewModel() {
 
     var selectedAuction by mutableStateOf(
         Auction(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Item(id = UUID.randomUUID(), name = ""),
+            "",
+            "",
+            Item(id = "", name = ""),
             bids = arrayOf(
                 Bid(
-                    UUID.randomUUID(),
+                    "",
                     11f,
-                    UUID.randomUUID(),
+                    "",
                     ZonedDateTime.now().minusDays(5)
                 )
             ),
             endingDate = LocalDate.now(),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 
     //Rest fo getting the correct Auctions for each category(latest, ending, partecipated...)
 
-    val testItem = Item(id = UUID.randomUUID(), imagesUri = listOf(), name = "Desktop Computer")
+    val testItem = Item(id = "", imagesUri = listOf(), name = "Desktop Computer")
     val testLatestAuctions: Array<Auction> = arrayOf(
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 16),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 17),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 10),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 9),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 8),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 
     val testEndingAuctions: Array<Auction> = arrayOf(
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 16),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 17),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 10),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 9),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 8),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 
     val testPartecipatedAuctions: Array<Auction> = arrayOf(
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 16),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 17),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 10),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 9),
             expired = false,
-            auctionType = AuctionType.Silent
+            type = AuctionType.Silent
         ),
         Auction(
-            id = UUID.randomUUID(),
-            ownerId = UUID.randomUUID(),
+            id = "",
+            ownerId = "",
             item = testItem,
             bids = arrayOf(),
             endingDate = LocalDate.of(2023, 12, 8),
             expired = false,
-            auctionType = AuctionType.English
+            type = AuctionType.English
         )
     )
 }

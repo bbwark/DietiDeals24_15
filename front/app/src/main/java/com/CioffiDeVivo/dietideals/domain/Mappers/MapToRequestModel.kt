@@ -18,8 +18,8 @@ fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.A
         interval = this.interval,
         expired = this.expired,
         startingPrice = this.minAccepted,
-        type = this.auctionType,
-        category = this.auctionCategory
+        type = this.type,
+        category = this.category
     )
 }
 
