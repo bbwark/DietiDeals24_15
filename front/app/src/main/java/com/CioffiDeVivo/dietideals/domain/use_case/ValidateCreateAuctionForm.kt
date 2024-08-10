@@ -12,8 +12,8 @@ class ValidateCreateAuctionForm{
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateMinAccepted(minAccepted: Float): ValidationResult{
-        if (minAccepted == 0.0f) {
+    fun validateMinAccepted(minAccepted: String): ValidationResult{
+        if (minAccepted.toFloat() == 0.0f) {
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "The field cannot be empty"
@@ -22,8 +22,8 @@ class ValidateCreateAuctionForm{
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateMinStep(minStep: Float): ValidationResult{
-        if (minStep == 0.0f) {
+    fun validateMinStep(minStep: String): ValidationResult{
+        if (minStep.isEmpty() || minStep.toFloat() == 0.0f) {
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "The field cannot be empty"

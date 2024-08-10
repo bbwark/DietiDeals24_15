@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.Views
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -114,7 +115,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         Spacer(modifier = Modifier.height(30.dp))
 
         InputTextField(
-            value = createAuctionState.itemName,
+            value = createAuctionState.auction.item.name,
             onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
             label = stringResource(R.string.itemName),
             onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
@@ -122,13 +123,14 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         )
         DropDownMenuField(
             menuList = categoryList,
+            label = stringResource(id = R.string.category),
             onChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(it)) }
         )
         Spacer(modifier = Modifier.height(15.dp))
         Row {
             ElevatedButton(
-                onClick = { viewModel.updateAuctionTypeToSilent() },
-                colors = if (createAuctionState.auctionType == AuctionType.Silent){
+                onClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent)) },
+                colors = if (createAuctionState.auction.type == AuctionType.Silent){
                     ButtonDefaults.buttonColors()
                 }else{
                      ButtonDefaults.elevatedButtonColors()
@@ -142,8 +144,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = { viewModel.updateAuctionTypeToEnglish() },
-                colors = if (createAuctionState.auctionType == AuctionType.English){
+                onClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English)) },
+                colors = if (createAuctionState.auction.type == AuctionType.English){
                     ButtonDefaults.buttonColors()
                 }else{
                     ButtonDefaults.elevatedButtonColors()
@@ -157,7 +159,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             }
         }
         Spacer(modifier = Modifier.size(15.dp))
-        when (createAuctionState.auctionType) {
+        when (createAuctionState.auction.type) {
             AuctionType.Silent -> {
                 SilentAuction(
                     auctionState = createAuctionState,
@@ -196,7 +198,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         Button(
             onClick = {
                 /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
-                viewModel.createAuctionOnAction(CreateAuctionEvents.Submit)
+                viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
             },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
@@ -250,7 +252,7 @@ fun SilentAuction(
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = auctionState.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
             onValueChanged = { },
             label = stringResource(R.string.endingDate),
             onTrailingIconClick = { onCalendarClick() },
@@ -260,7 +262,7 @@ fun SilentAuction(
         )
     }
     DescriptionTextfield(
-        description = auctionState.description,
+        description = auctionState.auction.description,
         onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
         onDeleteDescription = { onDeleteDescription(it) }
@@ -281,7 +283,7 @@ fun EnglishAuction(
     var minStep by rememberSaveable { mutableStateOf("") }
     Row {
         OutlinedTextField(
-            value = auctionState.minStep.toString(),
+            value = auctionState.auction.minStep,
             onValueChange = {
                 minStep = if (it.startsWith("0")) {
                     ""
@@ -304,7 +306,7 @@ fun EnglishAuction(
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
-            value = auctionState.interval,
+            value = auctionState.auction.interval,
             onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
             onTrailingIconClick = { onDeleteInterval(it) },
@@ -312,7 +314,7 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auctionState.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
         onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
@@ -321,7 +323,7 @@ fun EnglishAuction(
         modifier = Modifier.width(325.dp)
     )
     DescriptionTextfield(
-        description = auctionState.description,
+        description = auctionState.auction.description,
         onDescriptionChange = { onDescriptionChange(it) },
         maxDescriptionCharacters = 200,
         onDeleteDescription = { onDeleteDescription(it) }
@@ -383,7 +385,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
     }
 
     LazyRow {
-        itemsIndexed(itemAuctionState.imagesUri) { index, uri ->
+        itemsIndexed(itemAuctionState.auction.item.imagesUri) { index, uri ->
             Spacer(modifier = Modifier.width(10.dp))
             ImageItem(
                 uri = uri,
@@ -408,7 +410,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
                       permissionState.launchPermissionRequest()
                   }
         },
-        enabled = itemAuctionState.imagesUri.size < 5
+        enabled = itemAuctionState.auction.item.imagesUri.size < 5
     ) {
         Icon(imageVector = Icons.Default.ImageSearch, contentDescription = "Gallery Icon")
         Text(text = "Add Image")

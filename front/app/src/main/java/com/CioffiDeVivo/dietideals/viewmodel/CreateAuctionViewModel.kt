@@ -1,20 +1,21 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.ApiService
 import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
-import com.CioffiDeVivo.dietideals.Events.RegistrationEvent
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.Mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,11 +47,8 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
             is CreateAuctionEvents.ImagesDeleted -> {
                 deleteImageUri(createAuctionEvents.index)
             }
-            is CreateAuctionEvents.AuctionTypeChangedToEnglish -> {
-                updateAuctionTypeToEnglish()
-            }
-            is CreateAuctionEvents.AuctionTypeChangedToSilent -> {
-                updateAuctionTypeToSilent()
+            is CreateAuctionEvents.AuctionTypeChanged -> {
+                updateAuctionType(createAuctionEvents.auctionType)
             }
             is CreateAuctionEvents.AuctionCategoryChanged -> {
                 updateAuctionCategory(createAuctionEvents.auctionCategory)
@@ -83,34 +81,33 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
     }
 
     private fun submitCreateAuction() {
-
-        val itemNameValidation = validateCreateAuctionForm.validateItemName(auctionState.value.itemName)
-        val intervalValidation = validateCreateAuctionForm.validateInterval(auctionState.value.interval)
-        val minStepValidation = validateCreateAuctionForm.validateMinStep(auctionState.value.minStep)
-        val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(auctionState.value.minAccepted)
-        val descriptionValidation = validateCreateAuctionForm.validateDescription(auctionState.value.description)
+        val itemNameValidation = validateCreateAuctionForm.validateItemName(auctionState.value.auction.item.name)
+        val intervalValidation = validateCreateAuctionForm.validateInterval(auctionState.value.auction.interval)
+        val minStepValidation = validateCreateAuctionForm.validateMinStep(auctionState.value.auction.minStep)
+        val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(auctionState.value.auction.minAccepted)
+        val descriptionValidation = validateCreateAuctionForm.validateDescription(auctionState.value.auction.description)
 
         val hasErrorAuctionSilent = listOf(
             itemNameValidation,
             minAcceptedValidation,
             descriptionValidation
-        ).any { it.positiveResult }
+        ).any { !it.positiveResult }
 
         val hasErrorAuctionEnglish = listOf(
             itemNameValidation,
             minStepValidation,
             intervalValidation,
             descriptionValidation
-        ).any { it.positiveResult }
+        ).any { !it.positiveResult }
 
-        if(hasErrorAuctionSilent && auctionState.value.auctionType == AuctionType.Silent){
+        if(hasErrorAuctionSilent && auctionState.value.auction.type == AuctionType.Silent){
             _auctionState.value = _auctionState.value.copy(
                 itemNameErrorMsg = itemNameValidation.errorMessage,
                 minAcceptedErrorMsg = minAcceptedValidation.errorMessage
             )
             return
         }
-        if(hasErrorAuctionEnglish && auctionState.value.auctionType == AuctionType.English){
+        if(hasErrorAuctionEnglish && auctionState.value.auction.type == AuctionType.English){
             _auctionState.value = _auctionState.value.copy(
                 itemNameErrorMsg = itemNameValidation.errorMessage,
                 minStepErrorMsg = minStepValidation.errorMessage,
@@ -119,111 +116,141 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
             return
         }
 
+
         viewModelScope.launch {
-            validationEventChannel.send(ValidationState.Success)
+            try {
+                //TODO Extract userId from sharedPreferences
+                val auctionRequest: com.CioffiDeVivo.dietideals.domain.RequestModels.Auction = _auctionState.value.auction.toRequestModel()
+                val response = ApiService.createAuction(auctionRequest)
+                if (response.status.isSuccess()) {
+                    validationEventChannel.send(ValidationState.Success)
+                } else {
+                    validationEventChannel.send(ValidationState.Error("Error"))
+                }
+            } catch (e: Exception) {
+                //TODO ERROR HANDLING
+            }
         }
     }
 
-    private fun updateItemName(itemName: String){
+    private fun updateItemName(itemName: String) {
         _auctionState.value = _auctionState.value.copy(
-            itemName = itemName
+            auction = _auctionState.value.auction.copy(
+                item = _auctionState.value.auction.item.copy(
+                    name = itemName
+                )
+            )
         )
     }
 
     private fun deleteItemName(){
-        _auctionState.value = _auctionState.value.copy(
-            itemName = ""
-        )
+        updateItemName("")
     }
 
     private fun updateImagesUri(imagesUri: Uri?){
-        val updatedImagesUri = _auctionState.value.imagesUri.toMutableList()
+        val updatedImagesUri = _auctionState.value.auction.item.imagesUri.toMutableList()
         updatedImagesUri += imagesUri
         _auctionState.value = _auctionState.value.copy(
-            imagesUri  = updatedImagesUri.distinct()
+            auction = _auctionState.value.auction.copy(
+                item = _auctionState.value.auction.item.copy(
+                    imagesUri = updatedImagesUri.distinct()
+                )
+            )
         )
     }
 
     private fun deleteImageUri(index: Int){
-        val updatedImagesUri = _auctionState.value.imagesUri.toMutableList()
+        val updatedImagesUri = _auctionState.value.auction.item.imagesUri.toMutableList()
         updatedImagesUri.removeAt(index)
         _auctionState.value = _auctionState.value.copy(
-            imagesUri = updatedImagesUri.distinct()
+            auction = _auctionState.value.auction.copy(
+                item = _auctionState.value.auction.item.copy(
+                    imagesUri = updatedImagesUri.distinct()
+                )
+            )
         )
     }
 
     fun updateDescriptionAuction(description: String){
         _auctionState.value = _auctionState.value.copy(
-            description = description
+            auction = _auctionState.value.auction.copy(
+                description = description
+            )
         )
     }
 
     fun deleteDescriptionAuction(){
-        _auctionState.value = _auctionState.value.copy(
-            description = ""
-        )
+        updateDescriptionAuction("")
     }
 
     fun updateEndingDate(endingDate: Long){
         _auctionState.value = _auctionState.value.copy(
-            endingDate = Instant
-                .ofEpochMilli(endingDate)
-                .atZone(ZoneId.of("UTC"))
-                .toLocalDate()
+            auction = _auctionState.value.auction.copy(
+                endingDate = Instant
+                    .ofEpochMilli(endingDate)
+                    .atZone(ZoneId.of("UTC"))
+                    .toLocalDate()
+            )
         )
     }
 
-    fun updateInterval(interval: String){
+    private fun updateInterval(interval: String){
         _auctionState.value = _auctionState.value.copy(
-            interval = interval
+            auction = _auctionState.value.auction.copy(
+                interval = interval
+            )
         )
     }
 
-    fun deleteInterval(){
-        _auctionState.value = _auctionState.value.copy(
-            interval = ""
-        )
+    private fun deleteInterval(){
+        updateInterval("")
     }
 
-    fun updateMinStep(minStep: String){
+    private fun updateMinStep(minStep: String){
         if(minStep.isEmpty()){
             _auctionState.value = _auctionState.value.copy(
-                minStep = 0F
+                auction = _auctionState.value.auction.copy(
+                    minStep = "0"
+                )
             )
         } else{
             _auctionState.value = _auctionState.value.copy(
-                minStep = minStep.toFloat()
+                auction = _auctionState.value.auction.copy(
+                    minStep = minStep
+                )
             )
         }
     }
 
-    fun updateMinAccepted(minAccepted: String){
+    private fun updateMinAccepted(minAccepted: String){
         if(minAccepted.isEmpty()){
             _auctionState.value = _auctionState.value.copy(
-                minAccepted = 0F
+                auction = _auctionState.value.auction.copy(
+                    minAccepted = "0"
+                )
             )
         } else{
             _auctionState.value = _auctionState.value.copy(
-                minAccepted = minAccepted.toFloat()
+                auction = _auctionState.value.auction.copy(
+                    minAccepted = minAccepted
+                )
             )
         }
     }
 
-    fun updateAuctionTypeToEnglish(){
+    private fun updateAuctionType(auctionType: AuctionType){
         _auctionState.value = _auctionState.value.copy(
-            auctionType = AuctionType.English
+            auction = _auctionState.value.auction.copy(
+                type = auctionType
+            )
         )
     }
 
-    fun updateAuctionTypeToSilent(){
+    private fun updateAuctionCategory(auctionCategory: String){
         _auctionState.value = _auctionState.value.copy(
-            auctionType = AuctionType.Silent
-        )
-    }
-
-    fun updateAuctionCategory(auctionCategory: String){
-        _auctionState.value = _auctionState.value.copy(
-            auctionCategory = auctionCategory
+            auction = _auctionState.value.auction.copy(
+                category = AuctionCategory.valueOf(auctionCategory)
+            )
         )
     }
 
