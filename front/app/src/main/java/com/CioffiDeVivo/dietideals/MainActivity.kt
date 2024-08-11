@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         }
 
 
-        val email = encryptedSharedPreferences.getString("userId", null)
+        val email = encryptedSharedPreferences.getString("email", null)
         val password = encryptedSharedPreferences.getString("password", null)
         if (email != null && password != null) {
             lifecycleScope.launch {//change to runBlocking if you want to block main thread to wait for login (safer)
