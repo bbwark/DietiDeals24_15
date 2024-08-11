@@ -64,7 +64,7 @@ class EditProfileViewModel( private val validateEditProfileForm: ValidateEditPro
         val nameValidation = validateEditProfileForm.validateName(userEditProfileState.value.name)
         val surnameValidation = validateEditProfileForm.validateSurname(userEditProfileState.value.surname)
         val passwordValidation = validateEditProfileForm.validatePassword(userEditProfileState.value.password)
-        val newPasswordValidation = validateEditProfileForm.validateNewPassword(userEditProfileState.value.password, userEditProfileState.value.newPassword)
+        val newPasswordValidation = validateEditProfileForm.validateRetypePassword(userEditProfileState.value.password, userEditProfileState.value.newPassword)
 
         val hasError = listOf(
             nameValidation,

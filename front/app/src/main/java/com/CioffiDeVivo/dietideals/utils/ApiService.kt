@@ -50,9 +50,6 @@ object ApiService {
         _URL = "${baseUrl}:${port}";
     }
 
-    fun setToken(token: String) {
-        _TOKEN = token
-    }
 /*
 * ================== USER APIs ==================
 *

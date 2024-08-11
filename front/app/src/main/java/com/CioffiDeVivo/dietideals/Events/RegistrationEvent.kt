@@ -8,7 +8,7 @@ open class RegistrationEvent {
     data class SurnameChanged(val surname: String): RegistrationEvent()
     data class SurnameDeleted(val email: String): RegistrationEvent()
     data class PasswordChanged(val password: String): RegistrationEvent()
-    data class NewPasswordChanged(val newPassword: String): RegistrationEvent()
+    data class RetypePasswordChanged(val newPassword: String): RegistrationEvent()
     data class AddressChanged(val address: String): RegistrationEvent()
     data class AddressDeleted(val address: String): RegistrationEvent()
     data class CountryChanged(val country: String): RegistrationEvent()
@@ -25,5 +25,5 @@ open class RegistrationEvent {
     data class IbanChanged(val iban: String): RegistrationEvent()
     data class IbanDeleted(val address: String): RegistrationEvent()
     data class SellerChange(val isSeller: Boolean): RegistrationEvent()
-    object Submit: RegistrationEvent()
+    data class Submit(val submitted: Boolean = true) : RegistrationEvent()
 }

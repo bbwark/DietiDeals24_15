@@ -149,12 +149,6 @@ class MainViewModel : ViewModel() {
         )
     }
 
-    fun updateNewPassword(newPassword: String){
-        _userState.value = _userState.value.copy(
-            newPassword = newPassword
-        )
-    }
-
     fun updateIsSeller(){
         _userState.value = _userState.value.copy(
             isSeller = !_userState.value.isSeller

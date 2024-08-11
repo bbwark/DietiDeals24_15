@@ -1,6 +1,8 @@
 package com.CioffiDeVivo.dietideals.domain.use_case
 
 import android.util.Patterns
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 const val passwordMinimumLength = 8
 const val phoneNumberMinimumLength = 7
@@ -74,7 +76,7 @@ open class ValidateRegistrationForms {
 
     }
 
-    open fun validateNewPassword(password: String, newPassword: String): ValidationResult {
+    open fun validateRetypePassword(password: String, newPassword: String): ValidationResult {
         if (password != newPassword ) {
             return ValidationResult(
                 positiveResult = false,
@@ -135,7 +137,7 @@ open class ValidateRegistrationForms {
     }
 
     open fun validateExpirationDate(expirationDate: String): ValidationResult{
-        if (expirationDate.length != creditCardExpirationDateNumberLength || !regexPattern.matches(expirationDate)) {
+        if (expirationDate.length != creditCardExpirationDateNumberLength && !regexPattern.matches(expirationDate)) {
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "Invalid Date"
