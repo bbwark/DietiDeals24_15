@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.CioffiDeVivo.dietideals.domain.DataModels.ObservedUser
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserInfoBottomSheet(observedUser: ObservedUser, onDismissRequest: () -> Unit) {
+fun UserInfoBottomSheet(user: User, onDismissRequest: () -> Unit) {
     ModalBottomSheet(onDismissRequest = { onDismissRequest() }) {
         Box(Modifier.fillMaxWidth().heightIn(min = 500.dp)) {
             Column(modifier = Modifier.padding(14.dp)) {
@@ -38,11 +38,11 @@ fun UserInfoBottomSheet(observedUser: ObservedUser, onDismissRequest: () -> Unit
                     Spacer(modifier = Modifier.size(8.dp))
                     Column {
                         Text(
-                            text = observedUser.name,
+                            text = user.name,
                             fontSize = 24.sp,
                             fontWeight = FontWeight(600)
                         )
-                        if (observedUser.isSeller) {
+                        if (user.isSeller) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.Verified,
@@ -56,11 +56,11 @@ fun UserInfoBottomSheet(observedUser: ObservedUser, onDismissRequest: () -> Unit
                 }
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(
-                    text = observedUser.name + "'s Bio:",
+                    text = user.name + "'s Bio:",
                     fontSize = 20.sp,
                     fontWeight = FontWeight(600)
                 )
-                observedUser.bio?.let { Text(text = it, fontSize = 12.sp) }
+                user.bio?.let { Text(text = it, fontSize = 12.sp) }
             }
         }
     }

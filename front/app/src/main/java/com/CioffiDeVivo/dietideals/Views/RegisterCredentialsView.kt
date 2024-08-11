@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnRegisterCredentials
@@ -53,7 +54,7 @@ val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
     .padding(start = 30.dp, end = 30.dp)
 @Composable
-fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navController: NavController){
+fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navController: NavHostController){
 
     val userRegistrationState by viewModel.userRegistrationState.collectAsState()
     var isSeller by remember { mutableStateOf(false) }

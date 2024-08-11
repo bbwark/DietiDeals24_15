@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
@@ -47,7 +48,7 @@ import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 
 @Composable
-fun MakeABid(viewModel: MakeABidViewModel, navController: NavController){
+fun MakeABid(viewModel: MakeABidViewModel, navController: NavHostController){
 
     var bid by rememberSaveable { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
