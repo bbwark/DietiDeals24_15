@@ -66,7 +66,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
     val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
-        startDestination = Screen.RegisterCredentials.route
+        startDestination = Screen.MakeABid.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -141,7 +141,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
         composable(
             route = Screen.MakeABid.route
         ) {
-            MakeABid(viewModel = MakeABidViewModel())
+            val viewModel : MakeABidViewModel = viewModel(factory = viewModelFactory)
+            MakeABid(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Home.route
