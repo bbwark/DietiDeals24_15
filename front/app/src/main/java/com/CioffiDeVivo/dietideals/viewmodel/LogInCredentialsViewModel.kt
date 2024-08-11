@@ -77,6 +77,48 @@ class LogInCredentialsViewModel(
     }
 
     private fun submitLogIn() {
+        if (validationBlock()) {
+            viewModelScope.launch {
+                try {
+                    val loginResponse = AuthService.loginUser(
+                        _userLogInState.value.email,
+                        _userLogInState.value.password
+                    )
+                    if (loginResponse.status.isSuccess()) {
+                        val jsonObject =
+                            Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
+                        val token = jsonObject.get("jwt").asString
+                        if (token.isNotEmpty()) {
+                            val userId = jsonObject.getAsJsonObject("user").get("id").asString
+
+                            sharedPreferences.edit().apply {
+                                putString("userId", userId)
+                                apply()
+                            }
+
+                            val encryptedSharedPreferences =
+                                EncryptedPreferencesManager.getEncryptedPreferences()
+                            encryptedSharedPreferences.edit().apply {
+                                putString("email", _userLogInState.value.email)
+                                putString("password", _userLogInState.value.password)
+                                apply()
+                            }
+
+                            ApiService.initialize(
+                                token,
+                                getApplication<Application>().applicationContext
+                            )
+                            validationEventChannel.send(ValidationState.Success)
+                        }
+                    }
+                } catch (e: Exception) {
+                    //TODO error handling
+                }
+            }
+        }
+    }
+
+    private fun validationBlock() : Boolean {
         val emailValidation = validateLogInForms.validateEmail(userLogInState.value.email)
         val passwordValidation = validateLogInForms.validatePassword(userLogInState.value.password)
 
@@ -90,41 +132,8 @@ class LogInCredentialsViewModel(
                 emailErrorMsg = emailValidation.errorMessage,
                 passwordErrorMsg = passwordValidation.errorMessage,
             )
-            return
+            return false
         }
-        viewModelScope.launch {
-            try {
-                val loginResponse = AuthService.loginUser(
-                    _userLogInState.value.email,
-                    _userLogInState.value.password
-                )
-                if (loginResponse.status.isSuccess()) {
-                    val jsonObject =
-                        Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
-                    val token = jsonObject.get("jwt").asString
-                    if (token.isNotEmpty()) {
-                        val userId = jsonObject.getAsJsonObject("user").get("id").asString
-
-                        sharedPreferences.edit().apply {
-                            putString("userId", userId)
-                            apply()
-                        }
-
-                        val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-                        encryptedSharedPreferences.edit().apply {
-                            putString("email", _userLogInState.value.email)
-                            putString("password", _userLogInState.value.password)
-                            apply()
-                        }
-
-                        ApiService.setToken(token)
-                        validationEventChannel.send(ValidationState.Success)
-                    }
-                }
-            } catch (e: Exception) {
-                //TODO error handling
-            }
-
-        }
+        return true
     }
 }
