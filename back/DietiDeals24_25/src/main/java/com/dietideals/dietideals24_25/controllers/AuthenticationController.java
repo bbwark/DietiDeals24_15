@@ -61,9 +61,8 @@ public class AuthenticationController {
     @PostMapping("/loginUser")
     public ResponseEntity<LoginDto> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
-            return new ResponseEntity<>(
-                    authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword()),
-                    HttpStatus.OK);
+            LoginDto login = authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+            return new ResponseEntity<>(login, login.getJwt().isEmpty() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new LoginDto(null, ""), HttpStatus.INTERNAL_SERVER_ERROR);
         }
