@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -33,15 +34,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
+import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
+import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 
 @Composable
-fun MakeABid(viewModel: MakeABidViewModel){
+fun MakeABid(viewModel: MakeABidViewModel, navController: NavController){
 
     var bid by rememberSaveable { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
@@ -56,7 +62,9 @@ fun MakeABid(viewModel: MakeABidViewModel){
         Spacer(modifier = Modifier.height(7.dp))
         Row {
             Text(
-                "Placeholder", //Get Latest Bid or Minimum Bid
+                if (auctionState.type == AuctionType.English)
+                        (auctionState.bids.last().value + auctionState.minStep.toFloat()).toString()
+                        else auctionState.minAccepted,
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
@@ -94,7 +102,7 @@ fun MakeABid(viewModel: MakeABidViewModel){
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick = {/*Navigate on The Auction View - Post the Bid*/ },
+            onClick = { /*TODO If submitBid is true then navigate*/ viewModel.submitBid() },
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
@@ -109,5 +117,11 @@ fun MakeABid(viewModel: MakeABidViewModel){
 @Preview(showBackground = true)
 @Composable
 fun MakeABidSilentPreview(){
-    MakeABid(viewModel = MakeABidViewModel())
+    val viewModel = MakeABidViewModel(Application())
+    val bid1 = Bid(value = 10f)
+    val bid2 = Bid(value = 20f)
+    val auction = Auction(bids = arrayOf(bid1, bid2), type = AuctionType.English, minAccepted = "10", minStep = "1")
+    viewModel.setAuction(auction)
+
+    MakeABid(viewModel = viewModel, navController = rememberNavController())
 }
