@@ -4,6 +4,7 @@ import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
+import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.repositories.RoleRepository;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,6 +46,9 @@ public class AuthenticationServiceImpl {
 
     @Autowired
     private TokenServiceImpl tokenService;
+
+    @Autowired
+    private Mapper<UserEntity, UserDto> userMapper;
 
     private NetHttpTransport transport = new NetHttpTransport();
     private JsonFactory jsonFactory = new GsonFactory();
@@ -68,16 +73,13 @@ public class AuthenticationServiceImpl {
     }
 
     public LoginDto loginUser(String email, String password) {
-
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password));
-
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             String token = tokenService.generateJwt(authentication);
-
-            return new LoginDto(userRepository.findByEmail(email), token);
-
-        } catch (AuthenticationException e) {
+            UserEntity userEntity = userRepository.findByEmail(email).get();
+            Optional<UserDto> userResponse = Optional.ofNullable(userMapper.mapTo(userEntity));
+            return new LoginDto(userResponse, token);
+        } catch (Exception e) {
             return new LoginDto(null, "");
         }
 

@@ -1,19 +1,19 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
-import com.dietideals.dietideals24_25.domain.entities.UserEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class LoginDto {
 
-    private Optional<UserEntity> user;
+    private Optional<UserDto> user;
     private String jwt;
-
-    public LoginDto(Optional<UserEntity> user, String jwt){
-        this.user = user;
-        this.jwt = jwt;
-    }
 
 }
