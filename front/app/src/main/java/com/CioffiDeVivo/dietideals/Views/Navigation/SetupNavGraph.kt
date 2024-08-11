@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.Views.Navigation
 
 import android.annotation.SuppressLint
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -10,10 +11,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -115,7 +119,10 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    CreateAuction(viewModel = CreateAuctionViewModel(), navController = navController)
+                    val viewModel: CreateAuctionViewModel = viewModel(
+                        factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application)
+                    )
+                    CreateAuction(viewModel = viewModel, navController = navController)
                 }
             }
         }
@@ -127,7 +134,10 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
         composable(
             route = Screen.LogInCredentials.route
         ) {
-            LogInCredentialsView(viewModel = LogInCredentialsViewModel(), navController = navController)
+            val viewModel: LogInCredentialsViewModel = viewModel(
+                factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application)
+            )
+            LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.MakeABid.route
