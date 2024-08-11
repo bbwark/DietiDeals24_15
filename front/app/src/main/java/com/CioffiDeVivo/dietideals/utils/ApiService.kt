@@ -1,7 +1,8 @@
-package com.CioffiDeVivo.dietideals
+package com.CioffiDeVivo.dietideals.utils
 
 
 import android.content.Context
+import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.RequestModels.Auction
 import com.CioffiDeVivo.dietideals.domain.RequestModels.Bid
 import com.CioffiDeVivo.dietideals.domain.RequestModels.CreditCard
@@ -49,6 +50,9 @@ object ApiService {
         _URL = "${baseUrl}:${port}";
     }
 
+    fun setToken(token: String) {
+        _TOKEN = token
+    }
 /*
 * ================== USER APIs ==================
 *
@@ -61,7 +65,7 @@ object ApiService {
             val gson = Gson()
             val postedUser = gson.toJson(user)
             val response = it.post {
-                url("${URL}/users")
+                url("$URL/users")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(postedUser)
@@ -78,7 +82,7 @@ object ApiService {
             val gson = Gson()
             val userToUpdate = gson.toJson(user)
             val response = it.put {
-                url("${URL}/users/${user.id}")
+                url("$URL/users/${user.id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(userToUpdate)
@@ -94,7 +98,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/users/$id")
+                url("$URL/users/$id")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultUser = gson.fromJson(response.bodyAsText(), User::class.java)
@@ -108,7 +112,7 @@ object ApiService {
         var result: HttpResponse
         HttpClient(CIO).use {
             val response = it.delete {
-                url("${URL}/users/${id}")
+                url("$URL/users/${id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             result = response
@@ -130,7 +134,7 @@ object ApiService {
             val gson = Gson()
             val postedItem = gson.toJson(item)
             val response = it.post {
-                url("${URL}/items")
+                url("$URL/items")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(postedItem)
@@ -145,7 +149,7 @@ object ApiService {
         var result: HttpResponse
         HttpClient(CIO).use {
             val response = it.delete {
-                url("${URL}/items/${id}")
+                url("$URL/items/${id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             result = response
@@ -166,7 +170,7 @@ object ApiService {
             val gson = Gson()
             val postedCreditCard = gson.toJson(creditCard)
             val response = it.post {
-                url("${URL}/credit_cards")
+                url("$URL/credit_cards")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(postedCreditCard)
@@ -182,7 +186,7 @@ object ApiService {
         var result: HttpResponse
         HttpClient(CIO).use {
             val response = it.delete {
-                url("${URL}/credit_cards/${cardNumber}")
+                url("$URL/credit_cards/${cardNumber}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             result = response
@@ -196,7 +200,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/credit_cards/user/$userId")
+                url("$URL/credit_cards/user/$userId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultCreditCards = gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
@@ -217,7 +221,7 @@ object ApiService {
             val gson = Gson()
             val postedBid = gson.toJson(bid)
             val response = it.post {
-                url("${URL}/bids")
+                url("$URL/bids")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(postedBid)
@@ -232,7 +236,7 @@ object ApiService {
         var result: HttpResponse
         HttpClient(CIO).use {
             val response = it.delete {
-                url("${URL}/bids/${id}")
+                url("$URL/bids/${id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             result = response
@@ -246,7 +250,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/bids/auction/$auctionId")
+                url("$URL/bids/auction/$auctionId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultBids = gson.fromJson(response.bodyAsText(), Array<Bid>::class.java)
@@ -268,7 +272,7 @@ object ApiService {
             val gson = Gson()
             val postedAuction = gson.toJson(auction)
             val response = it.post {
-                url("${URL}/auctions")
+                url("$URL/auctions")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(postedAuction)
@@ -285,7 +289,7 @@ object ApiService {
             val gson = Gson()
             val updatedAuction = gson.toJson(auction)
             val response = it.put {
-                url("${URL}/auctions/${auction.id}")
+                url("$URL/auctions/${auction.id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(updatedAuction)
@@ -301,7 +305,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/auctions/$id")
+                url("$URL/auctions/$id")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultAuction = gson.fromJson(response.bodyAsText(), Auction::class.java)
@@ -315,7 +319,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/auctions/item/$name")
+                url("$URL/auctions/item/$name")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
@@ -329,7 +333,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/auctions/owner/$ownerId")
+                url("$URL/auctions/owner/$ownerId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
