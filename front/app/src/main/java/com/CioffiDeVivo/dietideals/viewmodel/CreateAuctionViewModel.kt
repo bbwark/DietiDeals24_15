@@ -81,6 +81,40 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
     }
 
     private fun submitCreateAuction() {
+        if (validationBlock()) {
+            viewModelScope.launch {
+                try {
+                    val sharedPreferences = getApplication<Application>().getSharedPreferences(
+                        "AppPreferences",
+                        Context.MODE_PRIVATE
+                    )
+                    val userId = sharedPreferences.getString("userId", null)
+
+                    _auctionState.value = _auctionState.value.copy(
+                        auction = _auctionState.value.auction.copy(
+                            ownerId = userId ?: ""
+                        )
+                    )
+
+                    val auctionRequest: com.CioffiDeVivo.dietideals.domain.RequestModels.Auction =
+                        _auctionState.value.auction.toRequestModel()
+                    val response = ApiService.createAuction(auctionRequest)
+                    if (response.status.isSuccess()) {
+
+                        //TODO effettua navigazione da qualche altra parte
+
+                        validationEventChannel.send(ValidationState.Success)
+                    } else {
+                        validationEventChannel.send(ValidationState.Error("Error"))
+                    }
+                } catch (e: Exception) {
+                    //TODO ERROR HANDLING
+                }
+            }
+        }
+    }
+
+    private fun validationBlock(): Boolean {
         val itemNameValidation = validateCreateAuctionForm.validateItemName(auctionState.value.auction.item.name)
         val intervalValidation = validateCreateAuctionForm.validateInterval(auctionState.value.auction.interval)
         val minStepValidation = validateCreateAuctionForm.validateMinStep(auctionState.value.auction.minStep)
@@ -105,7 +139,7 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
                 itemNameErrorMsg = itemNameValidation.errorMessage,
                 minAcceptedErrorMsg = minAcceptedValidation.errorMessage
             )
-            return
+            return false
         }
         if(hasErrorAuctionEnglish && auctionState.value.auction.type == AuctionType.English){
             _auctionState.value = _auctionState.value.copy(
@@ -113,35 +147,9 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
                 minStepErrorMsg = minStepValidation.errorMessage,
                 intervalErrorMsg = intervalValidation.errorMessage
             )
-            return
+            return false
         }
-
-
-        viewModelScope.launch {
-            try {
-                val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                val userId = sharedPreferences.getString("userId", null)
-
-                _auctionState.value = _auctionState.value.copy(
-                    auction = _auctionState.value.auction.copy(
-                        ownerId = userId ?: ""
-                    )
-                )
-
-                val auctionRequest: com.CioffiDeVivo.dietideals.domain.RequestModels.Auction = _auctionState.value.auction.toRequestModel()
-                val response = ApiService.createAuction(auctionRequest)
-                if (response.status.isSuccess()) {
-
-                    //TODO effettua navigazione da qualche altra parte
-
-                    validationEventChannel.send(ValidationState.Success)
-                } else {
-                    validationEventChannel.send(ValidationState.Error("Error"))
-                }
-            } catch (e: Exception) {
-                //TODO ERROR HANDLING
-            }
-        }
+        return true
     }
 
     private fun updateItemName(itemName: String) {
