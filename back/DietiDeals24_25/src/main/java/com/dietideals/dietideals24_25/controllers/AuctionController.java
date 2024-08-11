@@ -2,6 +2,7 @@ package com.dietideals.dietideals24_25.controllers;
 
 import com.dietideals.dietideals24_25.domain.dto.AuctionDto;
 import com.dietideals.dietideals24_25.domain.dto.ItemDto;
+import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.AuctionEntity;
 import com.dietideals.dietideals24_25.domain.entities.ItemEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
@@ -30,14 +31,17 @@ public class AuctionController {
     private ItemService itemService;
     private Mapper<AuctionEntity, AuctionDto> auctionMapper;
     private Mapper<ItemEntity, ItemDto> itemMapper;
+    private Mapper<UserEntity, UserDto> userMapper;
 
     public AuctionController(AuctionService auctionService, UserService userService, ItemService itemService,
-            Mapper<AuctionEntity, AuctionDto> auctionMapper, Mapper<ItemEntity, ItemDto> itemMapper) {
+            Mapper<AuctionEntity, AuctionDto> auctionMapper, Mapper<ItemEntity, ItemDto> itemMapper,
+            Mapper<UserEntity, UserDto> userMapper) {
         this.auctionService = auctionService;
         this.userService = userService;
         this.itemService = itemService;
         this.auctionMapper = auctionMapper;
         this.itemMapper = itemMapper;
+        this.userMapper = userMapper;
     }
 
     @PostMapping
@@ -94,6 +98,19 @@ public class AuctionController {
                 AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
                 return new ResponseEntity<>(auctionDto, HttpStatus.OK);
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/bidders/{id}")
+    public ResponseEntity<List<UserDto>> getAuctionBidders(@PathVariable("id") UUID id) {
+        try {
+            List<UserEntity> bidders = auctionService.findBiddersByAuctionId(id);
+            List<UserDto> result = bidders.stream()
+                    .map(bidder -> userMapper.mapTo(bidder))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
