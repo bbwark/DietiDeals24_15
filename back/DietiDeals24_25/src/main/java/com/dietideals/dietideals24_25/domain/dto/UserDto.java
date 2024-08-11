@@ -25,7 +25,10 @@ public class UserDto {
     private Boolean isSeller;
 
     @Builder.Default
-    private List<AuctionDto> favouriteAuctionEntities = new ArrayList<>();
+    private List<AuctionDto> ownedAuctions = new ArrayList<>();
+
+    @Builder.Default
+    private List<AuctionDto> favouriteAuctions = new ArrayList<>();
 
     private Optional<String> bio;
 

@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -36,6 +38,10 @@ public class AuctionEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "auction", cascade = CascadeType.ALL)
     private List<BidEntity> bids = new ArrayList<>();
 
+    @Builder.Default
+    @ManyToMany(mappedBy = "favouriteAuctions", fetch = FetchType.LAZY)
+    private Set<UserEntity> favouritedByUsers = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private AuctionType type;
 
@@ -51,6 +57,6 @@ public class AuctionEntity {
     private String minStep;
 
     private String interval;
-    
+
     private String startingPrice;
 }
