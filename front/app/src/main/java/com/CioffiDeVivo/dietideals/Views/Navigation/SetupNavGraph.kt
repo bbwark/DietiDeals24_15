@@ -43,6 +43,7 @@ import com.CioffiDeVivo.dietideals.Views.RegisterCredentialsView
 import com.CioffiDeVivo.dietideals.Views.RegisterView
 import com.CioffiDeVivo.dietideals.Views.SearchView
 import com.CioffiDeVivo.dietideals.Views.SellView
+import com.CioffiDeVivo.dietideals.utils.GenericViewModelFactory
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
@@ -62,9 +63,10 @@ import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel) {
+    val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
-        startDestination = Screen.CreateAuction.route
+        startDestination = Screen.RegisterCredentials.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -119,9 +121,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: CreateAuctionViewModel = viewModel(
-                        factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application)
-                    )
+                    val viewModel: CreateAuctionViewModel = viewModel(factory = viewModelFactory)
                     CreateAuction(viewModel = viewModel, navController = navController)
                 }
             }
@@ -129,14 +129,13 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            RegisterCredentialsView(viewModel = RegisterCredentialsViewModel(), navController = navController)
+            val viewModel: RegisterCredentialsViewModel = viewModel(factory = viewModelFactory)
+            RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
         ) {
-            val viewModel: LogInCredentialsViewModel = viewModel(
-                factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application)
-            )
+            val viewModel: LogInCredentialsViewModel = viewModel(factory = viewModelFactory)
             LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
