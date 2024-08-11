@@ -1,10 +1,11 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
+import android.app.Application
+import android.content.Context
 import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.ApiService
+import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.Events.CreateAuctionEvents
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
@@ -13,7 +14,6 @@ import com.CioffiDeVivo.dietideals.domain.Mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.state.CreateAuctionState
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 
-class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm() ): ViewModel() {
+class CreateAuctionViewModel(application: Application, private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm() ): AndroidViewModel(application) {
 
     private val _auctionState = MutableStateFlow(CreateAuctionState())
     val auctionState: StateFlow<CreateAuctionState> = _auctionState.asStateFlow()
@@ -119,10 +119,21 @@ class CreateAuctionViewModel( private val validateCreateAuctionForm: ValidateCre
 
         viewModelScope.launch {
             try {
-                //TODO Extract userId from sharedPreferences
+                val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+                val userId = sharedPreferences.getString("userId", null)
+
+                _auctionState.value = _auctionState.value.copy(
+                    auction = _auctionState.value.auction.copy(
+                        ownerId = userId ?: ""
+                    )
+                )
+
                 val auctionRequest: com.CioffiDeVivo.dietideals.domain.RequestModels.Auction = _auctionState.value.auction.toRequestModel()
                 val response = ApiService.createAuction(auctionRequest)
                 if (response.status.isSuccess()) {
+
+                    //TODO effettua navigazione da qualche altra parte
+
                     validationEventChannel.send(ValidationState.Success)
                 } else {
                     validationEventChannel.send(ValidationState.Error("Error"))
