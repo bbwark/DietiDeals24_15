@@ -42,7 +42,6 @@ import java.util.UUID
 
 //private lateinit var auth: FirebaseAuth
 
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun GoogleButton(navController: NavController){
     //auth = Firebase.auth

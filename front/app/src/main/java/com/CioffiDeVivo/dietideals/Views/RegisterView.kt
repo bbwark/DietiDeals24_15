@@ -35,7 +35,7 @@ import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 
- @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+
  @Composable
 fun RegisterView(navController: NavController) {
     Column(
