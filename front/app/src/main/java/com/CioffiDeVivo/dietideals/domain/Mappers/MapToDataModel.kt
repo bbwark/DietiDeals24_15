@@ -10,15 +10,14 @@ import com.CioffiDeVivo.dietideals.domain.RequestModels.Item
 import com.CioffiDeVivo.dietideals.domain.RequestModels.User
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.UUID
 
-fun Auction.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction {
+fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Auction(
         id = this.id ?: "",
         ownerId = this.ownerId ?: "",
-        item = this.item?.toViewModel() ?: com.CioffiDeVivo.dietideals.domain.DataModels.Item(),
+        item = this.item?.toDataModel() ?: com.CioffiDeVivo.dietideals.domain.DataModels.Item(),
         description = this.description ?: "",
-        bids = this.bids.map { it.toViewModel() }.toTypedArray(),
+        bids = this.bids.map { it.toDataModel() }.toTypedArray(),
         endingDate = this.endingDate?.let { LocalDate.parse(it) },
         minStep = this.minStep ?: "",
         interval = this.interval ?: "",
@@ -29,7 +28,7 @@ fun Auction.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction
     )
 }
 
-fun Bid.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Bid {
+fun Bid.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Bid {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Bid(
         id = this.id ?: "",
         value = this.value ?: 0F,
@@ -38,7 +37,7 @@ fun Bid.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Bid {
     )
 }
 
-fun CreditCard.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard {
+fun CreditCard.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard {
     return com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard(
         creditCardNumber = this.creditCardNumber ?: "",
         expirationDate = this.expirationDate?.let { LocalDate.parse(it) } ?: LocalDate.now(),
@@ -47,7 +46,7 @@ fun CreditCard.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Cred
     )
 }
 
-fun Item.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
+fun Item.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Item(
         id = this.id ?: "",
         name = this.name ?: "",
@@ -55,19 +54,20 @@ fun Item.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
     )
 }
 
-fun User.toViewModel(): com.CioffiDeVivo.dietideals.domain.DataModels.User {
+fun User.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.User {
     return com.CioffiDeVivo.dietideals.domain.DataModels.User(
         id = this.id ?: "",
         name = this.name ?: "",
         email = this.email ?: "",
         password = this.password ?: "",
         isSeller = this.isSeller ?: false,
-        favouriteAuctions = this.favouriteAuctionEntities.map { it.toViewModel() }.toTypedArray(),
+        favouriteAuctions = this.favouriteAuctions.map { it.toDataModel() }.toTypedArray(),
+        ownedAuctions = this.ownedAuctions.map { it.toDataModel() }.toTypedArray(),
         bio = this.bio ?: "",
         address = this.address ?: "",
         zipCode = this.zipcode ?: "",
         country = this.country ?: "",
         phoneNumber = this.phoneNumber ?: "",
-        creditCards = this.creditCards.map { it.toViewModel() }.toTypedArray()
+        creditCards = this.creditCards.map { it.toDataModel() }.toTypedArray()
     )
 }
