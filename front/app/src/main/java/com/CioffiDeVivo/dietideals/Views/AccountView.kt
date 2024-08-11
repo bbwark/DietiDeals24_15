@@ -43,7 +43,6 @@ import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.md_theme_light_secondaryContainer
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
 
