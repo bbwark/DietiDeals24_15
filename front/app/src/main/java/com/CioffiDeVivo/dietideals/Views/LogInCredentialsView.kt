@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,17 +42,20 @@ import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.state.LogInState
 
 @Composable
-fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavHostController){
+fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavHostController) {
 
     val userLoginState by viewModel.userLogInState.collectAsState()
     val context = LocalContext.current
-    LaunchedEffect(key1 = context){
+    LaunchedEffect(key1 = context) {
         viewModel.validationLogInEvent.collect { event ->
-            when(event){
+            when (event) {
                 is ValidationState.Success -> {
                     Toast.makeText(context, "Successful Log In", Toast.LENGTH_SHORT).show()
                 }
-                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+
+                else -> {
+                    Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -68,7 +72,7 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
         )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.loginOnAction(LoginEvent.Submit()) },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -77,16 +81,16 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
             }
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 "Do you have not an Account? ",
 
                 )
             TextButton(
                 onClick = {
-                    viewModel.loginOnAction(LoginEvent.Submit)
+                    /* TODO navigate to register view*/
                 }
             ) {
                 Text(
@@ -130,5 +134,5 @@ fun LoginInputs(
 @Preview(showBackground = true)
 @Composable
 fun LogInCredentialsPreview(){
-    LogInCredentialsView(viewModel = LogInCredentialsViewModel(), navController = rememberNavController())
+    LogInCredentialsView(viewModel = LogInCredentialsViewModel(application = Application()), navController = rememberNavController())
 }
