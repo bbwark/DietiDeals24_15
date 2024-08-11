@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -66,7 +65,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
     val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
-        startDestination = Screen.MakeABid.route
+        startDestination = Screen.BidHistory.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -303,7 +302,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    BidHistoryView(viewModel = BidHistoryViewModel())
+                    val viewModel : BidHistoryViewModel = viewModel(factory = viewModelFactory)
+                    BidHistoryView(viewModel = viewModel, navController = navController)
                 }
             }
         }
