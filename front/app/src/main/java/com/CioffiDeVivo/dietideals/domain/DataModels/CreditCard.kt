@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.util.UUID
 
-data class CreditCard @RequiresApi(Build.VERSION_CODES.O) constructor(
+data class CreditCard constructor(
     val creditCardNumber: String = "",
     val expirationDate: LocalDate = LocalDate.now(),
     val cvv: String = "",

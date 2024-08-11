@@ -8,8 +8,8 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.User
 
 fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.Auction {
     return com.CioffiDeVivo.dietideals.domain.RequestModels.Auction(
-        id = this.id.toString(),
-        ownerId = this.ownerId.toString(),
+        id = this.id,
+        ownerId = this.ownerId,
         item = this.item.toRequestModel(),
         description = this.description,
         bids = this.bids.map { it.toRequestModel() }.toCollection(ArrayList()),
@@ -25,9 +25,9 @@ fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.A
 
 fun Bid.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.Bid {
     return com.CioffiDeVivo.dietideals.domain.RequestModels.Bid(
-        id = this.id.toString(),
+        id = this.id,
         value = this.value,
-        userId = this.userId.toString(),
+        userId = this.userId,
         date = this.date.toString(),
         auctionId = null // To set from the context
     )
@@ -54,12 +54,13 @@ fun Item.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.Item
 
 fun User.toRequestModel(): com.CioffiDeVivo.dietideals.domain.RequestModels.User {
     return com.CioffiDeVivo.dietideals.domain.RequestModels.User(
-        id = this.id.toString(),
-        name = this.name,
+        id = this.id,
+        name = "${this.name} ${this.surname}",
         email = this.email,
         password = this.password,
         isSeller = this.isSeller,
-        favouriteAuctionEntities = this.favouriteAuctions.map { it.toRequestModel() }.toCollection(ArrayList()),
+        favouriteAuctions = this.favouriteAuctions.map { it.toRequestModel() }.toCollection(ArrayList()),
+        ownedAuctions = this.ownedAuctions.map { it.toRequestModel() }.toCollection(ArrayList()),
         bio = this.bio,
         address = this.address,
         zipcode = this.zipCode,
