@@ -38,7 +38,12 @@ public class UserEntity implements UserDetails {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<AuctionEntity> favouriteAuctionEntities = new ArrayList<>();
+    private List<AuctionEntity> ownedAuctions = new ArrayList<>();
+
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_favourite_auctions", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "auction_id"))
+    private Set<AuctionEntity> favouriteAuctions = new HashSet<>();
 
     @Column(name = "bio")
     private String bio;
