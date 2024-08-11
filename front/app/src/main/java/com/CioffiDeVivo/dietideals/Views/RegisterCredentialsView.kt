@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -84,7 +85,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
             onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
             onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.NewPasswordChanged(it)) },
+            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.RetypePasswordChanged(it)) },
             onDeleteEmail = { viewModel.registrationAction(RegistrationEvent.EmailDeleted(it)) },
             onDeleteName = { viewModel.registrationAction(RegistrationEvent.NameDeleted(it)) },
             onDeleteSurname = { viewModel.registrationAction(RegistrationEvent.SurnameDeleted(it)) }
@@ -142,7 +143,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { viewModel.registrationAction(RegistrationEvent.Submit) },
+            onClick = { viewModel.registrationAction(RegistrationEvent.Submit()) },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),
@@ -165,6 +166,6 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
 @Preview(showBackground = true)
 @Composable
 fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = RegisterCredentialsViewModel(), navController = rememberNavController())
+    RegisterCredentialsView(viewModel = RegisterCredentialsViewModel(application = Application()), navController = rememberNavController())
 }
 

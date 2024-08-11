@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -214,7 +215,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
 @Preview(showBackground = true)
 @Composable
 fun CreateAuctionPreview(){
-    CreateAuction(viewModel = CreateAuctionViewModel(), navController = rememberNavController())
+    CreateAuction(viewModel = CreateAuctionViewModel(application = Application()), navController = rememberNavController())
 }
 
 
