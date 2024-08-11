@@ -90,18 +90,16 @@ object ApiService {
     }
 
     //get mapping get user /users/{id}
-    suspend fun getUser(id: String): User {
-        var resultUser: User
+    suspend fun getUser(id: String): HttpResponse {
+        var result: HttpResponse
         HttpClient(CIO).use {
-            val gson = Gson()
             val response = it.get {
                 url("$URL/users/$id")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultUser = gson.fromJson(response.bodyAsText(), User::class.java)
-
+            result = response
         }
-        return resultUser
+        return result
     }
 
     //delete mapping delete user /users/{id}
@@ -336,5 +334,19 @@ object ApiService {
             resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
         }
         return resultAuctions
+    }
+
+    //get mapping get auction bidders /auctions/bidders/{id}
+    suspend fun getAuctionBidders(auctionId: String): Array<User> {
+        var resultUsers: Array<User> = emptyArray()
+        HttpClient(CIO).use {
+            val gson = Gson()
+            val response = it.get {
+                url("${URL}/auctions/bidders/$auctionId")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+            }
+            resultUsers = gson.fromJson(response.bodyAsText(), Array<User>::class.java)
+        }
+        return resultUsers
     }
 }
