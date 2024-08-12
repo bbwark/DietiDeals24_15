@@ -144,12 +144,12 @@ fun PersonalInfoOnEditProfile(
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.newPassword,
+        value = userRegistrationState.retypePassword,
         onValueChanged = { onNewPasswordChange(it) },
         label = stringResource(R.string.rewritepassword),
-        isError = userRegistrationState.newPasswordErrorMsg != null,
+        isError = userRegistrationState.retypePasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
-        supportingText = userRegistrationState.newPasswordErrorMsg,
+        supportingText = userRegistrationState.retypePasswordErrorMsg,
         visualTransformation = if(newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard

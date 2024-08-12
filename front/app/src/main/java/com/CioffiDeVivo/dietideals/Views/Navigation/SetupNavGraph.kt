@@ -84,7 +84,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    EditProfile(viewModel = EditProfileViewModel(), navController = navController)
+                    val viewModel: EditProfileViewModel = viewModel(factory = viewModelFactory)
+                    EditProfile(viewModel = viewModel, navController = navController)
                 }
             }
         }
