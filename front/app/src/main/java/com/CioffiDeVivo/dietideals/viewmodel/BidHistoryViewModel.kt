@@ -1,6 +1,8 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
@@ -12,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class BidHistoryViewModel : ViewModel() {
+class BidHistoryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _auctionState = MutableStateFlow(Auction())
     val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
@@ -22,8 +24,13 @@ class BidHistoryViewModel : ViewModel() {
     private val _auctionBidders = MutableStateFlow<List<User>>(emptyList())
     val auctionBidders: StateFlow<List<User>> = _auctionBidders.asStateFlow()
 
+    fun setAuction(auction: Auction){
+        _auctionState.value = auction
+    }
+
     fun fetchAuctionBidders() {
         viewModelScope.launch {
+            _auctionState.value = ApiService.getAuction(_auctionState.value.id).toDataModel()
             val bidders = getBiddersFromServer(_auctionState.value.id)
             _auctionBidders.value = bidders
         }

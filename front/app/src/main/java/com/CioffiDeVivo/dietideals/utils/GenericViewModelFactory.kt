@@ -3,8 +3,10 @@ package com.CioffiDeVivo.dietideals.utils
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 
@@ -20,6 +22,11 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
             modelClass.isAssignableFrom(CreateAuctionViewModel::class.java) ->
                 CreateAuctionViewModel(application) as T
 
+            modelClass.isAssignableFrom(MakeABidViewModel::class.java) ->
+                MakeABidViewModel(application) as T
+
+            modelClass.isAssignableFrom(BidHistoryViewModel::class.java) ->
+                BidHistoryViewModel(application) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
