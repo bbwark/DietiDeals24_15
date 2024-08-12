@@ -108,7 +108,7 @@ class LogInCredentialsViewModel(
                                 token,
                                 getApplication<Application>().applicationContext
                             )
-                            validationEventChannel.send(ValidationState.Success)
+
                         }
                     }
                 } catch (e: Exception) {
@@ -133,6 +133,9 @@ class LogInCredentialsViewModel(
                 passwordErrorMsg = passwordValidation.errorMessage,
             )
             return false
+        }
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationState.Success)
         }
         return true
     }

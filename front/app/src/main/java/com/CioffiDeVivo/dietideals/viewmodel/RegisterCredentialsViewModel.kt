@@ -175,7 +175,6 @@ class RegisterCredentialsViewModel(
                                 token,
                                 getApplication<Application>().applicationContext
                             )
-                            validationEventChannel.send(ValidationState.Success)
                         }
                     }
 
@@ -252,6 +251,10 @@ class RegisterCredentialsViewModel(
                 ibanErrorMsg = ibanValidation.errorMessage,
             )
             return false
+        }
+
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationState.Success)
         }
         return true
     }

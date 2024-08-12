@@ -103,9 +103,7 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
 
                         //TODO effettua navigazione da qualche altra parte
 
-                        validationEventChannel.send(ValidationState.Success)
-                    } else {
-                        validationEventChannel.send(ValidationState.Error("Error"))
+
                     }
                 } catch (e: Exception) {
                     //TODO ERROR HANDLING
@@ -148,6 +146,9 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
                 intervalErrorMsg = intervalValidation.errorMessage
             )
             return false
+        }
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationState.Success)
         }
         return true
     }
