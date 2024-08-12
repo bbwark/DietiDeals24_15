@@ -110,6 +110,10 @@ public class AuctionController {
             List<UserDto> result = bidders.stream()
                     .map(bidder -> userMapper.mapTo(bidder))
                     .collect(Collectors.toList());
+            result = result.stream()
+                    .map(userDto -> new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(),
+                            userDto.getBio()))
+                    .collect(Collectors.toList());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
