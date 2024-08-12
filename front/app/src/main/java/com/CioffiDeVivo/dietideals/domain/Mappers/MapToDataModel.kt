@@ -9,7 +9,10 @@ import com.CioffiDeVivo.dietideals.domain.RequestModels.CreditCard
 import com.CioffiDeVivo.dietideals.domain.RequestModels.Item
 import com.CioffiDeVivo.dietideals.domain.RequestModels.User
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Auction {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Auction(
@@ -33,7 +36,8 @@ fun Bid.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Bid {
         id = this.id ?: "",
         value = this.value ?: 0F,
         userId = this.userId ?: "",
-        date = this.date?.let { ZonedDateTime.parse(it) } ?: ZonedDateTime.now()
+        date = this.date?.let { LocalDateTime.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss:SSS")).atZone(
+            ZoneId.systemDefault()) } ?: ZonedDateTime.now()
     )
 }
 
@@ -50,7 +54,7 @@ fun Item.toDataModel(): com.CioffiDeVivo.dietideals.domain.DataModels.Item {
     return com.CioffiDeVivo.dietideals.domain.DataModels.Item(
         id = this.id ?: "",
         name = this.name ?: "",
-        imagesUri = listOf(Uri.parse(this.imageUrl))
+        imagesUri = listOf(Uri.parse(this.imageUrl?:""))
     )
 }
 
