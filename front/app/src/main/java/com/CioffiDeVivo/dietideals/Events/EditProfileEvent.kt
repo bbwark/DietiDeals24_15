@@ -11,5 +11,5 @@ sealed class EditProfileEvent{
     data class NewPasswordChanged(val newPassword: String): EditProfileEvent()
     data class DescriptionChanged(val description: String) : EditProfileEvent()
     data class DescriptionDeleted(val description: String) : EditProfileEvent()
-    object Submit: EditProfileEvent()
+    data class Submit(val submitted: Boolean = true) : EditProfileEvent()
 }

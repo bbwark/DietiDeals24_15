@@ -1,15 +1,13 @@
 package com.CioffiDeVivo.dietideals.viewmodel.state
 
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
+
 data class EditProfileState(
-    val email: String = "",
     val emailErrorMsg: String? = null,
-    val name:  String  = "",
     val nameErrorMsg: String? = null,
-    val surname:  String  = "",
     val surnameErrorMsg: String? = null,
-    val description:  String  = "",
-    val password: String = "",
     val passwordErrorMsg: String? = null,
-    val newPassword: String = "",
-    val newPasswordErrorMsg: String? = null
+    val retypePasswordErrorMsg: String? = null,
+    val retypePassword: String = "",
+    val user: User = User()
 )
