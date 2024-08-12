@@ -34,7 +34,7 @@ public class UserDto {
 
     private Optional<String> address;
 
-    private Optional<Integer> zipcode;
+    private Optional<String> zipcode;
 
     private Optional<String> country;
 
@@ -50,5 +50,18 @@ public class UserDto {
         this.email = email;
         this.name = name;
         this.authorities = authorities;
+        ownedAuctions = new ArrayList<>();
+        favouriteAuctions = new ArrayList<>();
+        creditCards = new ArrayList<>();
+    }
+
+    public UserDto(UUID id, String name, Boolean isSeller, Optional<String> bio) {
+        this.id = id;
+        this.name = name;
+        this.isSeller = isSeller;
+        this.bio = bio;
+        ownedAuctions = new ArrayList<>();
+        favouriteAuctions = new ArrayList<>();
+        creditCards = new ArrayList<>();
     }
 }

@@ -52,7 +52,7 @@ public class UserEntity implements UserDetails {
     private String address;
 
     @Column(name = "zipCode")
-    private Integer zipCode;
+    private String zipCode;
 
     @Column(name = "country")
     private String country;
@@ -92,7 +92,7 @@ public class UserEntity implements UserDetails {
     }
 
     public UserEntity(UUID id, String email, String name, String surname, String password, Set<RoleEntity> authorities,
-            Boolean isSeller, String address, Integer zipCode, String country, String phoneNumber,
+            Boolean isSeller, String address, String zipCode, String country, String phoneNumber,
             List<CreditCardEntity> creditCards) {
         this.id = id;
         this.email = email;

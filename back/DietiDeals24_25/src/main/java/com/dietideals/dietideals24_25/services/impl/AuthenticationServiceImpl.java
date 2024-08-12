@@ -54,7 +54,7 @@ public class AuthenticationServiceImpl {
     private JsonFactory jsonFactory = new GsonFactory();
 
     public UserEntity registerUserBuyer(String email, String name, String surname, String password, String address,
-            Integer zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards) {
+            String zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards) {
 
         boolean isSeller = true;
         String encodedPassword = passwordEncoder.encode(password);
