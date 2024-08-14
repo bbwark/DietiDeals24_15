@@ -132,12 +132,14 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/name/{id}")
-    public ResponseEntity<String> getUserName(@PathVariable("id") UUID id) {
+    @GetMapping(path = "/info/{id}")
+    public ResponseEntity<UserDto> getUserInfo(@PathVariable("id") UUID id) {
         try {
             Optional<UserEntity> foundUser = userService.findById(id);
             return foundUser.map(userEntity -> {
-                return new ResponseEntity<>(userEntity.getName(), HttpStatus.OK);
+                UserDto userDto = userMapper.mapTo(userEntity);
+                userDto = new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(), userDto.getBio());
+                return new ResponseEntity<>(userDto, HttpStatus.OK);
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
