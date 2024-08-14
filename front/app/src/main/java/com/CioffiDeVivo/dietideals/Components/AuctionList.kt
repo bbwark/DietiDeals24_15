@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,15 +21,11 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
-import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 import java.time.LocalDate
-import java.util.UUID
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AuctionsList(
     modifier: Modifier = Modifier,
@@ -59,13 +53,12 @@ fun AuctionsList(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AuctionsListFavoured(
     modifier: Modifier = Modifier,
     auctions: Array<Auction>,
     categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-    ), navController: NavHostController, viewModel: FavoritesViewModel) {
+    ), navController: NavHostController) {
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -76,10 +69,7 @@ fun AuctionsListFavoured(
                       that disappears when you scroll down the list*/
                 }
                 if (!categoriesToHide.value.contains(auction.category.name)) {
-                    AuctionsListElement(modifier = Modifier.clickable {
-                        viewModel.selectedAuction = auction
-                        //navController.navigate(Screen.Auction.route)
-                    }, auction = auction)
+                    AuctionsListElement(modifier = Modifier.clickable {/*TODO Navigate to Auction Details*/}, auction = auction)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
@@ -87,7 +77,6 @@ fun AuctionsListFavoured(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, viewModel: HomeViewModel, navController: NavHostController){
     LazyRow{
@@ -106,7 +95,6 @@ fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun AuctionListPreview(){

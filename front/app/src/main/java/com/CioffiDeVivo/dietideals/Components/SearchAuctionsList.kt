@@ -4,12 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -23,11 +20,8 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
-import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
 import java.time.LocalDate
-import java.util.UUID
 
 
 @RequiresApi(Build.VERSION_CODES.O)

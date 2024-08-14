@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,15 +20,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.AuctionsListFavoured
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
-import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.FavouritesViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostController) {
+fun FavouritesView(viewModel: FavouritesViewModel, navController: NavHostController) {
     var tabIndex: Int by remember { mutableStateOf(0) }
 
     val userState by viewModel.userState.collectAsState()
-    val favouredAuctionsState by viewModel.favouredAuctionState.collectAsState()
 
     Column(Modifier.fillMaxSize()) {
         FavouriteTabRow(
@@ -42,14 +39,12 @@ fun FavouritesView(viewModel: FavoritesViewModel, navController: NavHostControll
         when (tabIndex) {
             //viewModel userState favoured auctions
             0 -> AuctionsListFavoured(
-                auctions = viewModel.user.favouriteAuctions.filter { !it.expired }.toTypedArray(),
-                navController = navController,
-                viewModel = viewModel
+                auctions = userState.favouriteAuctions.filter { !it.expired }.toTypedArray(),
+                navController = navController
             ) //ActiveAuctions
             1 -> AuctionsListFavoured(
-                auctions = viewModel.user.favouriteAuctions.filter { it.expired }.toTypedArray(),
-                navController = navController,
-                viewModel = viewModel
+                auctions = userState.favouriteAuctions.filter { it.expired }.toTypedArray(),
+                navController = navController
             ) //FinishedAuctions
         }
     }
@@ -67,11 +62,10 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun FavouritesViewPreview(){
     DietiDealsTheme {
-        FavouritesView(viewModel = FavoritesViewModel(), navController = rememberNavController())
+        FavouritesView(viewModel = FavouritesViewModel(Application()), navController = rememberNavController())
     }
 }

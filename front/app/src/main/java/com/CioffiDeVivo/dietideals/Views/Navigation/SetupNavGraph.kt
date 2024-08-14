@@ -50,7 +50,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.FavoritesViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.FavouritesViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
@@ -179,7 +179,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    FavouritesView(viewModel = FavoritesViewModel(), navController = navController)
+                    val viewModel: FavouritesViewModel = viewModel(factory = viewModelFactory)
+                    FavouritesView(viewModel = viewModel, navController = navController)
                 }
             }
         }
