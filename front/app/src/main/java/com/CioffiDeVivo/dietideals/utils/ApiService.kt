@@ -22,6 +22,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import java.lang.IllegalStateException
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -115,6 +116,19 @@ object ApiService {
         return result
     }
 
+    suspend fun getUserName(id: String): String {
+        var result = ""
+        HttpClient(CIO).use {
+            val response = it.get {
+                url("$URL/users/name/${id}")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+            }
+            if (response.status.isSuccess()) {
+                result = response.bodyAsText()
+            }
+        }
+        return result
+    }
 
 /*
 * ================== ITEM APIs ==================
@@ -295,17 +309,16 @@ object ApiService {
     }
 
     //get mapping get auction /auctions/{id}
-    suspend fun getAuction(id: String): Auction {
-        var resultAuction: Auction
+    suspend fun getAuction(id: String): HttpResponse {
+        var result: HttpResponse
         HttpClient(CIO).use {
-            val gson = Gson()
             val response = it.get {
                 url("$URL/auctions/$id")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultAuction = gson.fromJson(response.bodyAsText(), Auction::class.java)
+            result = response
         }
-        return resultAuction
+        return result
     }
 
     //get mapping get auctionsByItemName /auctions/item/{name}
