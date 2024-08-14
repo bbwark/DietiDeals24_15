@@ -48,7 +48,7 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
                 }
             })
         FloatingAddButton(onClick = {
-            navController.navigate(Screen.AddCard.route)
+            /*TODO navigate to add credit card view*/
         })
     }
 }
