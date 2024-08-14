@@ -155,7 +155,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    HomeView(viewModel = HomeViewModel(), navController = navController)
+                    val viewModel : HomeViewModel = viewModel(factory = viewModelFactory)
+                    HomeView(viewModel = viewModel, navController = navController)
                 }
             }
         }

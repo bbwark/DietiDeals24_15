@@ -31,7 +31,7 @@ fun AuctionsList(
     modifier: Modifier = Modifier,
     auctions: Array<Auction>,
     categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-    ), navController: NavHostController, viewModel: SearchViewModel) {
+    ), navController: NavHostController,) {
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -42,10 +42,7 @@ fun AuctionsList(
                       that disappears when you scroll down the list*/
                 }
                 if (!categoriesToHide.value.contains(auction.category.name)) {
-                    AuctionsListElement(modifier = Modifier.clickable {
-                        viewModel.selectedAuction = auction
-                        //navController.navigate(Screen.Auction.route)
-                    }, auction = auction)
+                    AuctionsListElement(modifier = Modifier.clickable {/*TODO navigate to auction detail*/}, auction = auction)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
@@ -78,7 +75,7 @@ fun AuctionsListFavoured(
 }
 
 @Composable
-fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, viewModel: HomeViewModel, navController: NavHostController){
+fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navController: NavHostController){
     LazyRow{
         itemsIndexed(auctions){index, item->
             Row {
@@ -150,6 +147,6 @@ fun AuctionListPreview(){
     )
 
     DietiDealsTheme {
-        AuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = SearchViewModel())
+        AuctionsList(auctions = testAuctions, navController = rememberNavController())
     }
 }
