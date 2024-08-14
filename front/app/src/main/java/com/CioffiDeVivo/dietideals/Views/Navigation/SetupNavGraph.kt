@@ -251,7 +251,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    ManageCardsView(viewModel = ManageCardsViewModel(), navController = navController)
+                    val viewModel : ManageCardsViewModel = viewModel(factory = viewModelFactory)
+                    ManageCardsView(viewModel = viewModel, navController = navController)
                 }
             }
         }

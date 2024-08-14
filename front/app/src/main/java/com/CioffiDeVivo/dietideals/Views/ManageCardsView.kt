@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -21,26 +22,28 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.FloatingAddButton
 import com.CioffiDeVivo.dietideals.Components.ManageCardsElement
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
+import com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
+import java.time.LocalDate
 
 @Composable
 fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavController) {
-    val creditCardsState by viewModel.userCardsState.collectAsState()
+    val userCardsState by viewModel.userCardsState.collectAsState()
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 12.dp),
             content = {
-                //viewModel userCardsState with rest API
-                itemsIndexed(viewModel.user.creditCards) { index, item ->
+                itemsIndexed(userCardsState.user.creditCards) { index, item ->
                     if (index == 0) {
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                     ManageCardsElement(
                         cardNumber = item.creditCardNumber,
-                        clickOnDelete = {/* delete the card from user's cards */ })
+                        clickOnDelete = { viewModel.deleteCard(item.creditCardNumber) })
                     HorizontalDivider()
                 }
             })
@@ -53,5 +56,22 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
 @Preview (showBackground = true)
 @Composable
 fun ManageCardsViewPreview() {
-    ManageCardsView(viewModel = ManageCardsViewModel(), navController = rememberNavController())
+    val viewModel = ManageCardsViewModel(Application())
+    val user = User(
+        "",
+        "Nametest Surnametest",
+        "",
+        "emailtest",
+        creditCards = arrayOf(
+            CreditCard("556666666666", LocalDate.now().plusYears(1), "222"),
+            CreditCard("456666666666", LocalDate.now().plusYears(2), "222"),
+            CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
+        )
+    )
+    viewModel.setUser(user)
+
+    ManageCardsView(
+        viewModel = viewModel,
+        navController = rememberNavController()
+    )
 }

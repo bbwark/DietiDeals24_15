@@ -1,37 +1,35 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.DataModels.User
+import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.viewmodel.state.EditProfileState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.time.LocalDate
-import java.util.UUID
+import kotlinx.coroutines.launch
 
-class ManageCardsViewModel : ViewModel(){
+class ManageCardsViewModel(application: Application) : AndroidViewModel(application){
 
     private val _userCardsState = MutableStateFlow(EditProfileState())
     val userCardsState: StateFlow<EditProfileState> = _userCardsState.asStateFlow()
 
-    var user by mutableStateOf(
-        User(
-            "",
-            "Nametest Surnametest",
-            "",
-            "passwordtest",
-            creditCards = arrayOf(
-                CreditCard("556666666666", LocalDate.now().plusYears(1),"222"),
-                CreditCard("456666666666", LocalDate.now().plusYears(2), "222"),
-                CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
-            )
+    fun setUser(user: User) {
+        _userCardsState.value = _userCardsState.value.copy(
+            user = user
         )
-    )
+    }
 
+    fun deleteCard(creditCardNumber: String) {
+        viewModelScope.launch {
+            ApiService.deleteCreditCard(creditCardNumber)
+            _userCardsState.value = _userCardsState.value.copy(
+                user = _userCardsState.value.user.copy(
+                    creditCards = _userCardsState.value.user.creditCards.filterNot { it.creditCardNumber == creditCardNumber }.toTypedArray()
+                )
+            )
+        }
+    }
 }
