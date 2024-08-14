@@ -124,6 +124,7 @@ public class UserController {
             Optional<UserEntity> foundUser = userService.findById(id);
             return foundUser.map(userEntity -> {
                 UserDto userDto = userMapper.mapTo(userEntity);
+                userDto.setPassword("");
                 return new ResponseEntity<>(userDto, HttpStatus.OK);
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
