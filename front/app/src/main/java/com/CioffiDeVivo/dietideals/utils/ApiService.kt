@@ -116,16 +116,14 @@ object ApiService {
         return result
     }
 
-    suspend fun getUserName(id: String): String {
-        var result = ""
+    suspend fun getUserInfo(id: String): HttpResponse {
+        var result: HttpResponse
         HttpClient(CIO).use {
             val response = it.get {
-                url("$URL/users/name/${id}")
+                url("$URL/users/info/${id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            if (response.status.isSuccess()) {
-                result = response.bodyAsText()
-            }
+            result = response
         }
         return result
     }
