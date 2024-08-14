@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.utils
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
@@ -31,6 +32,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) ->
                 EditProfileViewModel(application) as T
+
+            modelClass.isAssignableFrom(AddCardViewModel::class.java) ->
+                AddCardViewModel(application) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
