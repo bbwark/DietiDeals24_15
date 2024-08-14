@@ -1,10 +1,15 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.Events.AddCardEvents
+import com.CioffiDeVivo.dietideals.domain.Mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
+import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.viewmodel.state.AddCardState
 import com.CioffiDeVivo.dietideals.viewmodel.state.RegistrationState
 import kotlinx.coroutines.channels.Channel
@@ -13,8 +18,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
-class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm() ): ViewModel() {
+class AddCardViewModel(application: Application, private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm() ): AndroidViewModel(application) {
 
     private val _userCardState = MutableStateFlow(AddCardState())
     val userCardState: StateFlow<AddCardState> = _userCardState.asStateFlow()
@@ -54,10 +60,25 @@ class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = Va
     }
 
     private fun submitAddCard(){
-        val creditCardNumberValidation = validateAddCardForm.validateCreditCardNumber(userCardState.value.creditCardNumber)
-        val expirationDateValidation = validateAddCardForm.validateExpirationDate(userCardState.value.expirationDate)
-        val cvvValidation = validateAddCardForm.validateCvv(userCardState.value.cvv)
-        val ibanValidation = validateAddCardForm.validateIban(userCardState.value.iban)
+        if(validationBock()) {
+            val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val userId = sharedPreferences.getString("userId", null)
+            if(userId != null) {
+                val creditCardRequest = _userCardState.value.card.toRequestModel()
+                creditCardRequest.ownerId = userId
+                viewModelScope.launch {
+                    val createCreditCardResponse = ApiService.createCreditCard(creditCardRequest)
+                    //TODO create credit card response handling
+                }
+            }
+        }
+    }
+
+    private fun validationBock() : Boolean {
+        val creditCardNumberValidation = validateAddCardForm.validateCreditCardNumber(userCardState.value.card.creditCardNumber)
+        val expirationDateValidation = validateAddCardForm.validateExpirationDate(userCardState.value.card.expirationDate.toString())
+        val cvvValidation = validateAddCardForm.validateCvv(userCardState.value.card.cvv)
+        val ibanValidation = validateAddCardForm.validateIban(userCardState.value.card.iban)
 
         val hasError = listOf(
             creditCardNumberValidation,
@@ -73,59 +94,61 @@ class AddCardViewModel(private val validateAddCardForm: ValidateAddCardForm = Va
                 cvvErrorMsg = cvvValidation.errorMessage,
                 ibanErrorMsg = ibanValidation.errorMessage,
             )
-            return
+            return false
         }
 
         viewModelScope.launch {
             validationEventChannel.send(ValidationState.Success)
         }
+
+        return true
     }
 
     private fun updateCreditCardNumber(creditCardNumber: String){
         _userCardState.value = _userCardState.value.copy(
-            creditCardNumber = creditCardNumber
+            card = _userCardState.value.card.copy(
+                creditCardNumber = creditCardNumber
+            )
         )
     }
 
     private fun deleteCreditCardNumber(){
-        _userCardState.value = _userCardState.value.copy(
-            creditCardNumber = ""
-        )
+       updateCreditCardNumber("")
     }
 
     private fun updateExpirationDate(expirationDate: String){
         _userCardState.value = _userCardState.value.copy(
-            expirationDate = expirationDate.toString()
+            card = _userCardState.value.card.copy(
+                expirationDate = LocalDate.parse(expirationDate)
+            )
         )
     }
 
     private fun deleteExpirationDate(){
-        _userCardState.value = _userCardState.value.copy(
-            expirationDate = ""
-        )
+        updateExpirationDate("")
     }
 
     private fun updateCvv(cvv: String){
         _userCardState.value = _userCardState.value.copy(
-            cvv = cvv
+            card = _userCardState.value.card.copy(
+                cvv = cvv
+            )
         )
     }
 
     private fun deleteCvv(){
-        _userCardState.value = _userCardState.value.copy(
-            cvv = ""
-        )
+        updateCvv("")
     }
 
     private fun updateIban(iban: String){
         _userCardState.value = _userCardState.value.copy(
-            iban = iban
+            card = _userCardState.value.card.copy(
+                iban = iban
+            )
         )
     }
 
     private fun deleteIban(){
-        _userCardState.value = _userCardState.value.copy(
-            iban = ""
-        )
+        updateIban("")
     }
 }

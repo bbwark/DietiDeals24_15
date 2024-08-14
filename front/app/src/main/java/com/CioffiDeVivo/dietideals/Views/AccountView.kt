@@ -1,8 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -38,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.md_theme_light_secondaryContainer
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
@@ -152,7 +149,6 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview (showBackground = true)
 @Composable
 fun AccountViewPreview() {
