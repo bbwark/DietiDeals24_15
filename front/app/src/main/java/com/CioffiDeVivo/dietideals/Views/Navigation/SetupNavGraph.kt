@@ -212,12 +212,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    //should not pass auction and boolean as parameters
-                    AuctionView(
-                        viewModel = AuctionViewModel(),
-                        auction = mainViewModel.selectedAuction,
-                        isOwner = mainViewModel.auctionOpenByOwner
-                    )
+                    val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
+                    AuctionView(viewModel = viewModel)
                 }
             }
         }

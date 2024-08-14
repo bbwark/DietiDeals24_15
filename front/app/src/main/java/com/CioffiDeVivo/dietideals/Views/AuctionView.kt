@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.app.Application
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -22,8 +21,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
@@ -40,17 +44,25 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import java.time.LocalDate
-import java.util.UUID
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean) {
+fun AuctionView(viewModel: AuctionViewModel) {
 
     val auctionState by viewModel.auctionState.collectAsState()
+    val isOwner by viewModel.isOwnerState.collectAsState()
+    val insertionist by viewModel.insertionsState.collectAsState()
+
+    var userInfo by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchAuctionState()
+        viewModel.fetchInsertionist()
+        viewModel.fetchIsOwnerState()
+    }
 
     val pagerState =
-        rememberPagerState { 3 } //To substitute it with the number of images in the array of images got from backend
+        rememberPagerState { 3 } //TODO To substitute it with the number of images in the array of images got from backend
     Column(
         Modifier
             .fillMaxSize()
@@ -69,18 +81,19 @@ fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean)
         }
 
         AuctionHeader(
-            itemName = auction.item.name,
-            insertionistName = "Temporary Insertionist", //server request to get the name from the auction ownerId
-            type = auction.type
+            itemName = auctionState.item.name,
+            insertionistName = insertionist.name,
+            type = auctionState.type,
+            onUserInfo = { userInfo = true }
         )
 
         Row(
             Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            when (auction.type) {
-                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
-                AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
+            when (auctionState.type) {
+                AuctionType.English -> EnglishAuctionBody(lastBid = auctionState.bids.lastOrNull())
+                AuctionType.Silent -> auctionState.endingDate?.let { SilentAuctionBody(endingDate = it) }
                 else ->{
 
                 }
@@ -89,7 +102,7 @@ fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = "View bid history",
-                    Modifier.clickable { /* navigate to Bid History view */ },
+                    Modifier.clickable { /* TODO navigate to Bid History view */ },
                     Color.Blue,
                     fontSize = 12.sp
                 )
@@ -98,18 +111,24 @@ fun AuctionView(viewModel: AuctionViewModel, auction: Auction, isOwner: Boolean)
 
         if (!isOwner) {
             Spacer(modifier = Modifier.size(12.dp))
-            Button(onClick = { /* Navigates to Make A Bid View */ }) {
+            Button(onClick = { /* TODO Navigates to Make A Bid View */ }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.size(12.dp))
         }
 
-        auction.description.let { DescriptionAuctionItem(description = it) }
+        DescriptionAuctionItem(description = auctionState.description)
+        if(userInfo) {
+            UserInfoBottomSheet(
+                user = insertionist,
+                onDismissRequest = { userInfo = false }
+            )
+        }
     }
 }
 
 @Composable
-fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistName: String, type: AuctionType) {
+fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistName: String, type: AuctionType, onUserInfo: () -> Unit) {
     Row(
         Modifier.padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -123,7 +142,7 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
             Spacer(modifier = Modifier.size(3.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { /* open user info modal */ }) {
+                modifier = Modifier.clickable { onUserInfo() }) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = null,
@@ -199,20 +218,18 @@ fun DescriptionAuctionItem(description: String) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun AuctionViewPreview() {
-    AuctionView(
-        viewModel = AuctionViewModel(),
-        auction = Auction(
-            "",
-            "",
-            Item(id = "", name = "Temporary Item"),
-            endingDate = LocalDate.now().plusMonths(1),
-            expired = false,
-            type = AuctionType.English
-        ),
-        isOwner = false
+    val auction = Auction(
+        "",
+        "",
+        Item(id = "", name = "Temporary Item"),
+        endingDate = LocalDate.now().plusMonths(1),
+        expired = false,
+        type = AuctionType.English
     )
+    val viewModel = AuctionViewModel(Application())
+    viewModel.setAuction(auction)
+    AuctionView(viewModel = viewModel)
 }

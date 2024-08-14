@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
@@ -35,6 +36,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(AddCardViewModel::class.java) ->
                 AddCardViewModel(application) as T
+
+            modelClass.isAssignableFrom(AuctionViewModel::class.java) ->
+                AuctionViewModel(application) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
