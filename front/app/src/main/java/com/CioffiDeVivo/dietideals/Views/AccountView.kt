@@ -51,7 +51,7 @@ fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        AccountViewTopBar(viewModel.user.name, viewModel.user.email)
+        AccountViewTopBar(userState.name, userState.email)
         Spacer(modifier = Modifier.size(24.dp))
         AccountViewButton(
             navController = navController,
