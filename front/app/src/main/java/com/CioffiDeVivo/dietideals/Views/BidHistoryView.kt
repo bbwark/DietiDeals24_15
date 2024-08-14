@@ -102,7 +102,7 @@ fun BidHistoryView(viewModel: BidHistoryViewModel, navController: NavHostControl
                 onDismissRequest = { acceptOffer = false },
                 onAcceptOffer = {
                     acceptOffer = false
-                    //backend management of accepting a bid
+                    //todo backend management of accepting a bid
                 }
             )
         }
