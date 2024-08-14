@@ -13,6 +13,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.FavouritesViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
 
 
@@ -51,6 +52,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) ->
                 HomeViewModel(application) as T
+
+            modelClass.isAssignableFrom(ManageCardsViewModel::class.java) ->
+                ManageCardsViewModel(application) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
