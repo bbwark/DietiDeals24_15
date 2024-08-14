@@ -79,7 +79,7 @@ fun CreditCardFieldsOnAddCard(
     onDeleteIban: (String) -> Unit,
 ){
     InputTextField(
-        value = userState.creditCardNumber,
+        value = userState.card.creditCardNumber,
         onValueChanged = { onNumberChange(it) },
         label = stringResource(R.string.creditcard),
         isError = userState.creditCardNumberErrorMsg != null,
@@ -89,7 +89,7 @@ fun CreditCardFieldsOnAddCard(
     )
     Row {
         InputTextField(
-            value = userState.expirationDate,
+            value = userState.card.expirationDate.toString(),
             onValueChanged = { onDateChange(it) },
             label = stringResource(R.string.expirationdate),
             isError = userState.expirationDateErrorMsg != null,
@@ -100,7 +100,7 @@ fun CreditCardFieldsOnAddCard(
         )
         Spacer(modifier = Modifier.width(10.dp))
         InputTextField(
-            value = userState.cvv,
+            value = userState.card.cvv,
             onValueChanged = { onCvvChange(it) },
             label = stringResource(R.string.cvv),
             isError = userState.cvvErrorMsg != null,
@@ -110,7 +110,7 @@ fun CreditCardFieldsOnAddCard(
         )
     }
     InputTextField(
-        value = userState.iban,
+        value = userState.card.iban,
         onValueChanged = { onIbanChange(it) },
         label = stringResource(R.string.iban),
         isError = userState.ibanErrorMsg != null,
