@@ -9,6 +9,9 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.domain.Mappers.toDataModel
 import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.google.gson.Gson
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,9 +33,12 @@ class BidHistoryViewModel(application: Application) : AndroidViewModel(applicati
 
     fun fetchAuctionBidders() {
         viewModelScope.launch {
-            _auctionState.value = ApiService.getAuction(_auctionState.value.id).toDataModel()
-            val bidders = getBiddersFromServer(_auctionState.value.id)
-            _auctionBidders.value = bidders
+            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
+            if (getAuctionResponse.status.isSuccess()) {
+                _auctionState.value = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.RequestModels.Auction::class.java).toDataModel()
+                val bidders = getBiddersFromServer(_auctionState.value.id)
+                _auctionBidders.value = bidders
+            }
         }
     }
 
