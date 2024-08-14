@@ -132,6 +132,18 @@ public class UserController {
         }
     }
 
+    @GetMapping(path = "/name/{id}")
+    public ResponseEntity<String> getUserName(@PathVariable("id") UUID id) {
+        try {
+            Optional<UserEntity> foundUser = userService.findById(id);
+            return foundUser.map(userEntity -> {
+                return new ResponseEntity<>(userEntity.getName(), HttpStatus.OK);
+            }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/loginSuccesful")
     public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         UUID id = oAuth2AuthenticationToken.getPrincipal().getAttribute("id");
