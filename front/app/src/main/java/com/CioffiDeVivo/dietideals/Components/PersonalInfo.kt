@@ -104,7 +104,7 @@ fun PersonalInfoOnEditProfile(
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     InputTextField(
-        value = userRegistrationState.email,
+        value = userRegistrationState.user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
@@ -115,7 +115,7 @@ fun PersonalInfoOnEditProfile(
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.name,
+        value = userRegistrationState.user.name,
         onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
         isError = userRegistrationState.nameErrorMsg != null,
@@ -124,7 +124,7 @@ fun PersonalInfoOnEditProfile(
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.surname,
+        value = userRegistrationState.user.surname,
         onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
         isError = userRegistrationState.surnameErrorMsg != null,
@@ -133,7 +133,7 @@ fun PersonalInfoOnEditProfile(
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.password,
+        value = userRegistrationState.user.password,
         onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
         isError = userRegistrationState.passwordErrorMsg != null,
