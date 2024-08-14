@@ -68,7 +68,7 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
         Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
-                      viewModel.addCardAction(AddCardEvents.Submit)
+                      viewModel.addCardAction(AddCardEvents.Submit())
             },
             modifier = Modifier.pulsateClick()
         ) {

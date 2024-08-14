@@ -8,5 +8,5 @@ sealed class EditContactInfoEvents{
     data class CountryChanged(val country: String) : EditContactInfoEvents()
     data class PhoneNumberChanged(val phoneNumber: String) : EditContactInfoEvents()
     data class PhoneNumberDeleted(val address: String) : EditContactInfoEvents()
-    object Submit: EditContactInfoEvents()
+    data class Submit(val submitted: Boolean = true) : EditContactInfoEvents()
 }
