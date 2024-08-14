@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnAddCard
 import com.CioffiDeVivo.dietideals.Components.CreditCardFieldsOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
@@ -29,7 +33,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
 
 
 @Composable
-fun AddCardView(viewModel: AddCardViewModel){
+fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
     val userCard by viewModel.userCardState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
@@ -76,5 +80,5 @@ fun AddCardView(viewModel: AddCardViewModel){
 @Preview(showBackground = true)
 @Composable
 fun AddCardPreview(){
-    AddCardView(viewModel = AddCardViewModel())
+    AddCardView(viewModel = AddCardViewModel(Application()), navController = rememberNavController())
 }
