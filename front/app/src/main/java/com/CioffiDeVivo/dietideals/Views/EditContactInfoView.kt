@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,10 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.ContactInfoOnEditContactInfo
-import com.CioffiDeVivo.dietideals.Components.ContactInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.Events.EditContactInfoEvents
-import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
@@ -66,7 +65,7 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
         Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
-                viewModel.editProfileAction(EditContactInfoEvents.Submit)
+                viewModel.editProfileAction(EditContactInfoEvents.Submit())
             },
             modifier = Modifier.pulsateClick()
         ) {
@@ -78,5 +77,5 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
 @Preview(showBackground = true)
 @Composable
 fun EditContactInfoPreview(){
-    EditContactInfoView(viewModel = EditContactInfoViewModel(), navController = rememberNavController())
+    EditContactInfoView(viewModel = EditContactInfoViewModel(Application()), navController = rememberNavController())
 }

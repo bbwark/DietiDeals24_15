@@ -106,7 +106,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     )
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    EditContactInfoView(viewModel = EditContactInfoViewModel(), navController = navController)
+                    val viewModel: EditContactInfoViewModel = viewModel(factory = viewModelFactory)
+                    EditContactInfoView(viewModel = viewModel, navController = navController)
                 }
             }
         }
