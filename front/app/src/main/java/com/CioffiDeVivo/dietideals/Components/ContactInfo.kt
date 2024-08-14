@@ -87,7 +87,7 @@ fun ContactInfoOnEditContactInfo(
 ){
     val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
     InputTextField(
-        value = userState.address,
+        value = userState.user.address,
         onValueChanged = { onAddressChange(it) },
         label = stringResource(R.string.address),
         isError = userState.addressErrorMsg != null,
@@ -97,7 +97,7 @@ fun ContactInfoOnEditContactInfo(
     )
     Row {
         InputTextField(
-            value = userState.zipCode,
+            value = userState.user.zipCode,
             onValueChanged = { onZipCodeChange(it) },
             label = stringResource(R.string.zipcode),
             isError = userState.zipCodeErrorMsg != null,
@@ -114,7 +114,7 @@ fun ContactInfoOnEditContactInfo(
         )
     }
     InputTextField(
-        value = userState.phoneNumber,
+        value = userState.user.phoneNumber,
         onValueChanged = { onPhoneNumberChange(it) },
         label = stringResource(R.string.phonenumber),
         isError = userState.phoneNumberErrorMsg != null,

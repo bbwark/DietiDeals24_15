@@ -1,12 +1,11 @@
 package com.CioffiDeVivo.dietideals.viewmodel.state
 
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
+
 data class EditContactInfoState(
-    val address: String = "",
     val addressErrorMsg: String? = null,
-    val zipCode: String = "",
     val zipCodeErrorMsg: String? = null,
-    val country: String = "",
     val countryErrorMsg: String? = null,
-    val phoneNumber: String = "",
     val phoneNumberErrorMsg: String? = null,
+    val user: User = User()
 )
