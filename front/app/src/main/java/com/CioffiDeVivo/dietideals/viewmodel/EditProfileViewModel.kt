@@ -3,9 +3,9 @@ package com.CioffiDeVivo.dietideals.viewmodel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.Events.EditProfileEvent
+import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.domain.Mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidateEditProfileForm
 import com.CioffiDeVivo.dietideals.domain.use_case.ValidationState
@@ -14,8 +14,6 @@ import com.CioffiDeVivo.dietideals.utils.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.CioffiDeVivo.dietideals.utils.extractKeyFromJson
 import com.CioffiDeVivo.dietideals.viewmodel.state.EditProfileState
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
@@ -127,6 +125,12 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     //Update & Delete State
+
+    fun setUser(user: User) {
+        _userEditProfileState.value = _userEditProfileState.value.copy(
+            user = user
+        )
+    }
 
     private fun updateEmail(email: String){
         _userEditProfileState.value = _userEditProfileState.value.copy(
