@@ -23,6 +23,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
+import java.io.IOException
 import java.lang.IllegalStateException
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -210,7 +211,12 @@ object ApiService {
                 url("$URL/credit_cards/user/$userId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultCreditCards = gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
+            if (response.status.isSuccess()) {
+                resultCreditCards =
+                    gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
+            } else {
+                throw IOException("HttpRequest Failed: $response")
+            }
         }
         return resultCreditCards
     }
@@ -260,7 +266,11 @@ object ApiService {
                 url("$URL/bids/auction/$auctionId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultBids = gson.fromJson(response.bodyAsText(), Array<Bid>::class.java)
+            if (response.status.isSuccess()) {
+                resultBids = gson.fromJson(response.bodyAsText(), Array<Bid>::class.java)
+            } else {
+                throw IOException("HttpRequest Failed: $response")
+            }
         }
         return resultBids
     }
@@ -328,7 +338,11 @@ object ApiService {
                 url("$URL/auctions/item/$name")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            if (response.status.isSuccess()) {
+                resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            } else {
+                throw IOException("HttpRequest Failed: $response")
+            }
         }
         return resultAuctions
     }
@@ -342,7 +356,11 @@ object ApiService {
                 url("$URL/auctions/owner/$ownerId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            if (response.status.isSuccess()) {
+                resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            } else {
+                throw IOException("HttpRequest Failed: $response")
+            }
         }
         return resultAuctions
     }
@@ -356,7 +374,11 @@ object ApiService {
                 url("${URL}/auctions/bidders/$auctionId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultUsers = gson.fromJson(response.bodyAsText(), Array<User>::class.java)
+            if (response.status.isSuccess()) {
+                resultUsers = gson.fromJson(response.bodyAsText(), Array<User>::class.java)
+            } else {
+                throw IOException("HttpRequest Failed: $response")
+            }
         }
         return resultUsers
     }
