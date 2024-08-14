@@ -10,6 +10,6 @@ sealed class AddCardEvents {
     data class CvvDeleted(val cvv: String) : AddCardEvents()
     data class IBANChanged(val iban: String) : AddCardEvents()
     data class IBANDeleted(val iban: String) : AddCardEvents()
-    object Submit: AddCardEvents()
+    data class Submit(val submitted: Boolean = true) : AddCardEvents()
 
 }
