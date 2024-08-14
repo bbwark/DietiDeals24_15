@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,21 +31,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
-import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
-import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.domain.DataModels.Item
-import java.time.LocalDate
-import java.util.UUID
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
-    val userState by viewModel.userState.collectAsState()
-    val auctionsState by viewModel.auctionsState.collectAsState()
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -55,7 +46,7 @@ fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
     ) {
         Spacer(modifier = Modifier.height(18.dp))
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { /*TODO navigate to favourite view*/ },
             modifier = Modifier.pulsateClick()
             ) {
             Icon(Icons.Rounded.Favorite, contentDescription = null)
@@ -72,7 +63,7 @@ fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { /*TODO*/ },
+            onClick = { /*TODO navigate to search view*/ },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
 
@@ -87,19 +78,18 @@ fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
             }
         )
         Spacer(modifier = Modifier.height(50.dp))
-        LatestAuctions(viewModel, navController)
+        LatestAuctions(viewModel.getLatestAuctions(), navController)
         Spacer(modifier = Modifier.height(35.dp))
-        EndingAuctions(viewModel, navController)
+        EndingAuctions(viewModel.getEndingAuctions(), navController)
         Spacer(modifier = Modifier.height(35.dp))
-        PartecipatedAuctions(viewModel, navController)
+        ParticipatedAuctions(viewModel.getParticipatedAuctions(), navController)
     }
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LatestAuctions(
-    viewModel: HomeViewModel,
+    latestAuctions: Array<Auction>,
     navController: NavHostController,
 ){
     Text(
@@ -109,16 +99,14 @@ fun LatestAuctions(
     )
     Spacer(modifier = Modifier.height(10.dp))
     HomeViewAuctionsList(
-        auctions = viewModel.testLatestAuctions,
-        viewModel = viewModel,
+        auctions = latestAuctions,
         navController = navController
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EndingAuctions(
-    viewModel: HomeViewModel,
+    endingAuctions: Array<Auction>,
     navController: NavHostController,
 ) {
     Text(
@@ -128,16 +116,14 @@ fun EndingAuctions(
     )
     Spacer(modifier = Modifier.height(10.dp))
     HomeViewAuctionsList(
-        auctions = viewModel.testEndingAuctions,
-        viewModel = viewModel,
+        auctions = endingAuctions,
         navController = navController
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PartecipatedAuctions(
-    viewModel: HomeViewModel,
+fun ParticipatedAuctions(
+    participatedAuctions: Array<Auction>,
     navController: NavHostController,
 ){
     Text(
@@ -147,15 +133,13 @@ fun PartecipatedAuctions(
     )
     Spacer(modifier = Modifier.height(10.dp))
     HomeViewAuctionsList(
-        auctions = viewModel.testPartecipatedAuctions,
-        viewModel = viewModel,
+        auctions = participatedAuctions,
         navController = navController
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
-    HomeView(viewModel = HomeViewModel(), navController = rememberNavController())
+    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController())
 }
