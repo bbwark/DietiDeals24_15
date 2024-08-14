@@ -9,6 +9,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.FavouritesViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
@@ -43,6 +44,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(EditContactInfoViewModel::class.java) ->
                 EditContactInfoViewModel(application) as T
+
+            modelClass.isAssignableFrom(FavouritesViewModel::class.java) ->
+                FavouritesViewModel(application) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
