@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.Components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -29,16 +26,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @Composable
-fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, viewModel: SellViewModel, navController: NavHostController) { //it should receive also the compressed image
+fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, navController: NavHostController) { //it should receive also the compressed image
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -54,7 +47,6 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
         ) {
             CardHeader(
                 auctionItemName = auctionItemName, //viewModel auction name
-                viewModel = viewModel,
                 navController = navController
             )
             Image(
@@ -69,7 +61,7 @@ fun SellGridElement(auctionItemName: String, modifier: Modifier = Modifier, view
 }
 
 @Composable
-fun CardHeader(auctionItemName: String, viewModel: SellViewModel, navController: NavHostController) {
+fun CardHeader(auctionItemName: String, navController: NavHostController) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -89,13 +81,11 @@ fun CardHeader(auctionItemName: String, viewModel: SellViewModel, navController:
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun SellGridElementPreview() {
     SellGridElement(
         auctionItemName = "Auction Item Name Placeholder",
-        viewModel = SellViewModel(),
         navController = rememberNavController()
     )
 }

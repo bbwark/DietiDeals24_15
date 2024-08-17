@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,18 +30,22 @@ import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 @Composable
 fun SellView(viewModel: SellViewModel, navController: NavHostController) {
     val userCreatedAuction by viewModel.userAuctionState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchAuctions()
+    }
+
     Box {
-        if (viewModel.auctionCreatedByUser.isNotEmpty()) {
+        if (userCreatedAuction.isNotEmpty()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 content = {
                     //view model userCreatedAuction
-                    itemsIndexed(viewModel.auctionCreatedByUser) { index, item ->
+                    itemsIndexed(userCreatedAuction) { index, item ->
                         SellGridElement(
                             auctionItemName = item.item.name,
-                            viewModel = viewModel,
                             navController = navController
                         )
                     }
@@ -67,5 +73,5 @@ fun SellView(viewModel: SellViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {
-    SellView(viewModel = SellViewModel(), rememberNavController())
+    SellView(viewModel = SellViewModel(Application()), rememberNavController())
 }
