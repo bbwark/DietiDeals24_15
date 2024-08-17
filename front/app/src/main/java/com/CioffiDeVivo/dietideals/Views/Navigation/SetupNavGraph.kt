@@ -65,7 +65,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
     val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
-        startDestination = Screen.BidHistory.route
+        startDestination = Screen.Search.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -195,7 +195,8 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    SearchView(viewModel = SearchViewModel(), navController = navController)
+                    val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
+                    SearchView(viewModel = viewModel, navController = navController)
                 }
             }
         }

@@ -1,46 +1,38 @@
 package com.CioffiDeVivo.dietideals.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
-import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
-import com.CioffiDeVivo.dietideals.domain.DataModels.Item
+import com.CioffiDeVivo.dietideals.domain.Mappers.toDataModel
+import com.CioffiDeVivo.dietideals.utils.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.time.LocalDate
-import java.time.ZonedDateTime
-import java.util.UUID
+import kotlinx.coroutines.launch
 
-class SearchViewModel: ViewModel() {
+class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private val _searchedAuctionState = MutableStateFlow<ArrayList<Auction>>(arrayListOf())
     val searchedAuctionState : StateFlow<ArrayList<Auction>> = _searchedAuctionState.asStateFlow()
-    //Stato della parola nella Search. Soluzioni: Stato delle auctions e della parola nella seach, oppure altra variale di stato String.
-    //RESTAPI per la ricerca tramite keyword.
 
-    var auctionSearchResult: Array<Auction> = arrayOf()
+    private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
+    val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
 
-    var selectedAuction by mutableStateOf(
-        Auction(
-            "",
-            "",
-            Item(id = "", name = ""),
-            bids = arrayOf(
-                Bid(
-                    "",
-                    11f,
-                    "",
-                    ZonedDateTime.now().minusDays(5)
-                )
-            ),
-            endingDate = LocalDate.now(),
-            expired = false,
-            type = AuctionType.English
-        )
-    )
+    fun setCategoriesToHide(categoriesToHide: Set<String>) {
+        _categoriesToHide.value = categoriesToHide
+    }
 
+    fun searchWordUpdate(searchWord: String) {
+        viewModelScope.launch {
+            val auctions = ApiService.getAuctionsByItemName("can")
+            val list: ArrayList<Auction> = arrayListOf()
+            for (auction in auctions) {
+                list.add(auction.toDataModel())
+            }
+            _searchedAuctionState.value = list
+        }
+    }
 }

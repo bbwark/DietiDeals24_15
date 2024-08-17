@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.Components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,17 +18,17 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
-import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchAuctionsList(
     modifier: Modifier = Modifier,
-    auctions: Array<Auction>,
-    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-), navController: NavHostController, viewModel: SearchViewModel) {
+    auctions: ArrayList<Auction>,
+    categoriesToHide: Set<String>,
+    navController: NavHostController) {
+
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -40,10 +38,9 @@ fun SearchAuctionsList(
                       the top of the Composable, this way the list will have a small transparent offset
                       that disappears when you scroll down the list*/
                 }
-                if (!categoriesToHide.value.contains(auction.category.name)) {
+                if (!categoriesToHide.contains(auction.category.name)) {
                     AuctionsListElement(modifier = Modifier.clickable {
-                        viewModel.selectedAuction = auction
-                        //navController.navigate(Screen.Auction.route)
+                        //navController.navigate(Screen.Auction.route), naviga all'auction detail con id selezionato
                     }, auction = auction)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
@@ -52,14 +49,13 @@ fun SearchAuctionsList(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun SearchAuctionListPreview(){
 
     val testItem = Item(id = "", imagesUri = listOf(), name = "Desktop Computer")
 
-    val testAuctions: Array<Auction> = arrayOf(
+    val testAuctions: ArrayList<Auction> = arrayListOf(
         Auction(
             id = "",
             ownerId = "",
@@ -108,6 +104,6 @@ fun SearchAuctionListPreview(){
     )
 
     DietiDealsTheme {
-        SearchAuctionsList(auctions = testAuctions, navController = rememberNavController(), viewModel = SearchViewModel())
+        SearchAuctionsList(auctions = testAuctions, navController = rememberNavController(), categoriesToHide = mutableSetOf())
     }
 }

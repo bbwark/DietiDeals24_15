@@ -1,8 +1,11 @@
 package com.CioffiDeVivo.dietideals.Views
 
+import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -11,24 +14,24 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.SearchAuctionsList
 import com.CioffiDeVivo.dietideals.Components.SearchViewBar
-import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
-import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
-import com.CioffiDeVivo.dietideals.domain.DataModels.Item
-import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
-import java.time.LocalDate
-import java.util.UUID
+import kotlinx.coroutines.delay
 
 @Composable
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
     val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
+    val categoriesToHide by viewModel.categoriesToHide.collectAsState()
 
     Column(Modifier.fillMaxSize()) {
-        SearchViewBar(viewModel = viewModel)
+        SearchViewBar(
+            categoriesToHide = categoriesToHide,
+            updateCategories = { viewModel.setCategoriesToHide(it) },
+            updateSearchWord = { viewModel.searchWordUpdate(it) },
+            navController = navController)
         SearchAuctionsList(
-            auctions = viewModel.auctionSearchResult,
-            navController = navController,
-            viewModel = viewModel
+            auctions = searchedAuctionState,
+            categoriesToHide = categoriesToHide,
+            navController = navController
         )
     }
 }
@@ -36,29 +39,5 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    val viewModel = MainViewModel()
-    viewModel.auctionSearchResult = arrayOf(
-        Auction(
-            "", "", item = Item(
-                "", name = "first"
-            ), endingDate = LocalDate.now(), expired = false, type = AuctionType.English
-        ),
-        Auction(
-            "", "", item = Item(
-                "", name = "second"
-            ), endingDate = LocalDate.now().plusMonths(1), expired = false, type = AuctionType.English
-        ),
-        Auction(
-            "", "", item = Item(
-                "", name = "third"
-            ), endingDate = LocalDate.now().plusMonths(2), expired = false, type = AuctionType.English
-        ),
-        Auction(
-            "", "", item = Item(
-                "", name = "fourth"
-            ), endingDate = LocalDate.now().plusMonths(3), expired = false, type = AuctionType.English
-        )
-    )
-
-    SearchView(viewModel = SearchViewModel(), navController = rememberNavController())
+    SearchView(viewModel = SearchViewModel(Application()), navController = rememberNavController())
 }
