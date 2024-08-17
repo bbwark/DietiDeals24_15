@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionCategory
 
 @Composable
-fun FilterButton(selectedOptions: MutableState<MutableSet<String>>) {
+fun FilterButton(selectedOptions: Set<String>, updateCategories: (MutableSet<String>) -> (Unit)) {
     var expanded by remember { mutableStateOf(false) }
     val options = AuctionCategory.values().map { it.name }
 
@@ -37,7 +36,7 @@ fun FilterButton(selectedOptions: MutableState<MutableSet<String>>) {
             onDismissRequest = { expanded = false }
         ) {
             options.forEach { option ->
-                val isChecked = remember { mutableStateOf(selectedOptions.value.contains(option)) }
+                val isChecked = remember { mutableStateOf(selectedOptions.contains(option)) }
                 DropdownMenuItem(
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -49,13 +48,15 @@ fun FilterButton(selectedOptions: MutableState<MutableSet<String>>) {
                             Text(text = option)
                         }
                     }, onClick = {
+                        val newSet = selectedOptions.toMutableSet()
                         if (isChecked.value) {
-                            selectedOptions.value = selectedOptions.value.toMutableSet().apply { remove(option) }
+                            newSet.remove(option)
                             isChecked.value = false
                         } else {
-                            selectedOptions.value = selectedOptions.value.toMutableSet().apply { add(option) }
+                            newSet.add(option)
                             isChecked.value = true
                         }
+                        updateCategories(newSet)
                     })
             }
         }
