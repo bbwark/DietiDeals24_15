@@ -9,6 +9,7 @@ import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.repositories.RoleRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -90,7 +91,6 @@ public class AuthenticationServiceImpl {
         GoogleIdToken idToken = verifier.verify(googleIdToken);
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
-            String userId = payload.getSubject();
             String email = payload.getEmail();
             String name = (String) payload.get("name");
 
