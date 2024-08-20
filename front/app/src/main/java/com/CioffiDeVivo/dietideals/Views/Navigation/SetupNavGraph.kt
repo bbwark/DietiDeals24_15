@@ -22,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavBar
+import com.CioffiDeVivo.dietideals.Components.BottomNavBarItem
+import com.CioffiDeVivo.dietideals.Components.BottomNavigationBar
 import com.CioffiDeVivo.dietideals.Components.DetailsViewTopBar
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
@@ -61,11 +63,11 @@ import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel) {
+fun SetupNavGraph(navController: NavHostController) {
     val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
-        startDestination = Screen.Sell.route
+        startDestination = Screen.Home.route
     ) {
         composable(
             route = Screen.EditProfile.route
@@ -78,10 +80,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel: EditProfileViewModel = viewModel(factory = viewModelFactory)
@@ -100,10 +99,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel: EditContactInfoViewModel = viewModel(factory = viewModelFactory)
@@ -149,10 +145,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
             route = Screen.Home.route
         ) {
             Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                    navController = navController
-                )
+                BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel : HomeViewModel = viewModel(factory = viewModelFactory)
@@ -174,10 +167,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
             route = Screen.Favourites.route
         ) {
             Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                    navController = navController
-                )
+                BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel: FavouritesViewModel = viewModel(factory = viewModelFactory)
@@ -189,10 +179,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
             route = Screen.Search.route
         ) {
             Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                    navController = navController
-                )
+                BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
@@ -203,20 +190,17 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
         composable(
             route = Screen.Auction.route
         ) {
+            val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
             Scaffold(topBar = {
                 AuctionTopBar(
                     navController = navController,
-                    viewModel = mainViewModel
+                    viewModel = viewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
                     AuctionView(viewModel = viewModel)
                 }
             }
@@ -225,10 +209,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
             route = Screen.Account.route
         ) {
             Scaffold(bottomBar = {
-                BottomNavBar(
-                    selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                    navController = navController
-                )
+                BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
                     AccountView(viewModel = AccountViewModel(), navController = navController)
@@ -246,10 +227,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel : ManageCardsViewModel = viewModel(factory = viewModelFactory)
@@ -276,10 +254,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                     }
                 },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }
             ) {
                 Box(modifier = Modifier.padding(it)) {
@@ -299,10 +274,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
                     val viewModel : BidHistoryViewModel = viewModel(factory = viewModelFactory)
@@ -321,10 +293,7 @@ fun SetupNavGraph(navController: NavHostController, mainViewModel: MainViewModel
                 )
             },
                 bottomBar = {
-                    BottomNavBar(
-                        selectedNavBarItem = mainViewModel.selectedNavBarItem,
-                        navController = navController
-                    )
+                    BottomNavigationBar(navController = navController)
                 }
             ){
                 Box(modifier = Modifier.padding(it)){
