@@ -58,8 +58,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     SetupNavGraph(
-                        navController = navController,
-                        mainViewModel = MainViewModel()
+                        navController = navController
                     )
                 }
             }
