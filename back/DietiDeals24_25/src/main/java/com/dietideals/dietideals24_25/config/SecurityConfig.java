@@ -87,8 +87,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/registerUser").permitAll();
                     auth.requestMatchers("/auth/loginUser").permitAll();
-                    auth.anyRequest().authenticated();
-                }).oauth2Login(Customizer.withDefaults());
+                    try {
+                        auth.anyRequest().authenticated()
+                                .and().oauth2Login().defaultSuccessUrl("/api/v1/demo", true);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
