@@ -41,14 +41,22 @@ import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
 import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun MakeABid(viewModel: MakeABidViewModel, navController: NavHostController){
+fun MakeABid(
+    sharedState: Int,
+    viewModel: SharedViewModel,
+    navController: NavHostController,
+    onMakeABid: () -> Unit
+){
 
     var bid by rememberSaveable { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
@@ -59,7 +67,8 @@ fun MakeABid(viewModel: MakeABidViewModel, navController: NavHostController){
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        ViewTitle(title = stringResource(R.string.minimumBid)) //Differences id Silent or English
+        ViewTitle(title = "State: $sharedState")
+        ViewTitle(title = stringResource(R.string.minStep))
         Spacer(modifier = Modifier.height(7.dp))
         Row {
             Text(
@@ -103,7 +112,7 @@ fun MakeABid(viewModel: MakeABidViewModel, navController: NavHostController){
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick = { /*TODO If submitBid is true then navigate*/ viewModel.submitBid() },
+            onClick =  /*TODO If submitBid is true then navigate viewModel.submitBid()*/ onMakeABid ,
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
@@ -118,11 +127,11 @@ fun MakeABid(viewModel: MakeABidViewModel, navController: NavHostController){
 @Preview(showBackground = true)
 @Composable
 fun MakeABidSilentPreview(){
-    val viewModel = MakeABidViewModel(Application())
+    val viewModel = SharedViewModel(Application())
     val bid1 = Bid(value = 10f)
     val bid2 = Bid(value = 20f)
     val auction = Auction(bids = arrayOf(bid1, bid2), type = AuctionType.English, minAccepted = "10", minStep = "1")
     viewModel.setAuction(auction)
 
-    MakeABid(viewModel = viewModel, navController = rememberNavController())
+    MakeABid(sharedState = 0, viewModel = viewModel, navController = rememberNavController(), onMakeABid = {})
 }

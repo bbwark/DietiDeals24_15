@@ -19,13 +19,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuctionTopBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: AuctionViewModel
+    viewModel: SharedViewModel
 ) {
     TopAppBar(
         title = { Text(text = "") },
@@ -66,5 +67,5 @@ fun AuctionTopBar(
 @Preview
 @Composable
 fun AuctionTopBarPreview() {
-    AuctionTopBar(navController = rememberNavController(), viewModel = AuctionViewModel(application = Application()))
+    AuctionTopBar(navController = rememberNavController(), viewModel = SharedViewModel(application = Application()))
 }
