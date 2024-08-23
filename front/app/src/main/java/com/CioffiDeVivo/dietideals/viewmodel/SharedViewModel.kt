@@ -14,6 +14,7 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.CreditCard
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.domain.Mappers.toDataModel
+import com.CioffiDeVivo.dietideals.domain.Mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -25,13 +26,23 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-open class AuctionViewModel(application: Application) : AndroidViewModel(application){
+class SharedViewModel(application: Application) : AndroidViewModel(application) {
     private val _auctionState = MutableStateFlow(Auction())
     val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
     private val _isOwnerState = MutableStateFlow(false)
     val isOwnerState: StateFlow<Boolean> = _isOwnerState.asStateFlow()
     private val _insertionistState = MutableStateFlow(User())
     val insertionsState = _insertionistState.asStateFlow()
+    private val _bidState = MutableStateFlow(Bid())
+    val bidState: StateFlow<Bid> = _bidState.asStateFlow()
+
+    //Test Shared
+    private val _sharedState = MutableStateFlow(0)
+    val sharedState = _sharedState.asStateFlow()
+
+    fun updateNumber(){
+        _sharedState.value++
+    }
 
     var user by mutableStateOf(
         User(
@@ -95,5 +106,59 @@ open class AuctionViewModel(application: Application) : AndroidViewModel(applica
                 _insertionistState.value = Gson().fromJson(getUserInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.RequestModels.User::class.java).toDataModel()
             }
         }
+    }
+
+    fun updateBidValue(value: String){
+        if(value.isEmpty()){
+            _bidState.value = _bidState.value.copy(
+                value = 0F
+            )
+        } else{
+            _bidState.value = _bidState.value.copy(
+                value = value.toFloat()
+            )
+        }
+    }
+
+    fun deleteBidValue(){
+        _bidState.value = _bidState.value.copy(
+            value = 0.0f
+        )
+    }
+
+    fun submitBid() : Boolean {
+        var createBidCallSuccessful  = false
+        var validationSuccessful = false
+        when(_auctionState.value.type){
+            AuctionType.English -> {
+                validationSuccessful = validateBidEnglish(_bidState.value, _auctionState.value)
+            }
+            AuctionType.Silent -> {
+                validationSuccessful = validateBidSilent(_bidState.value, _auctionState.value)
+            }
+            else -> {}
+        }
+        if(validationSuccessful){
+            val bid = _bidState.value.toRequestModel()
+            val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            bid.userId = sharedPreferences.getString("userId", null)
+            bid.auctionId = _auctionState.value.id
+
+            if (bid.userId != null) {
+                viewModelScope.launch {
+                    val createBidResponse = ApiService.createBid(bid)
+                    createBidCallSuccessful = createBidResponse.status.isSuccess()
+                }
+            }
+        }
+        return createBidCallSuccessful && validationSuccessful
+    }
+
+    private fun validateBidEnglish(bid: Bid, auction: Auction) : Boolean {
+        return bid.value > (auction.bids.last().value + auction.minStep.toFloat())
+    }
+
+    private fun validateBidSilent(bid: Bid, auction: Auction) : Boolean {
+        return bid.value > auction.minAccepted.toFloat()
     }
 }
