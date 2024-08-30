@@ -285,7 +285,7 @@ fun SetupNavGraph() {
                         viewModel = viewModel,
                         navController = navController,
                         onMakeABid = {
-                            navController.navigate(Screen.Home.route){
+                            navController.navigate(Screen.Auction.route){
                                 popUpTo("auction"){
                                     inclusive = true
                                 }
@@ -293,23 +293,24 @@ fun SetupNavGraph() {
                         }
                     )
                 }
-            }
-            composable(
-                route = Screen.BidHistory.route
-            ) {
-                Scaffold(topBar = {
-                    DetailsViewTopBar(
-                        caption = stringResource(id = R.string.bidHistory),
-                        destinationRoute = Screen.Auction.route,
-                        navController = navController
-                    )
-                },
-                    bottomBar = {
-                        BottomNavigationBar(navController = navController)
-                    }) {
-                    Box(modifier = Modifier.padding(it)) {
-                        val viewModel : BidHistoryViewModel = viewModel(factory = viewModelFactory)
-                        BidHistoryView(viewModel = viewModel, navController = navController)
+                composable(
+                    route = Screen.BidHistory.route
+                ) {entry ->
+                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
+                    val sharedState by viewModel.sharedState.collectAsStateWithLifecycle()
+                    Scaffold(topBar = {
+                        DetailsViewTopBar(
+                            caption = stringResource(id = R.string.bidHistory),
+                            destinationRoute = Screen.Auction.route,
+                            navController = navController
+                        )
+                    },
+                        bottomBar = {
+                            BottomNavigationBar(navController = navController)
+                        }) {
+                        Box(modifier = Modifier.padding(it)) {
+                            BidHistoryView(sharedState = sharedState ,viewModel = viewModel, navController = navController)
+                        }
                     }
                 }
             }

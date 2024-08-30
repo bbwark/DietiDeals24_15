@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun MakeABid(
-    sharedState: Int,
+    sharedState: Auction,
     viewModel: SharedViewModel,
     navController: NavHostController,
     onMakeABid: () -> Unit
@@ -67,7 +67,7 @@ fun MakeABid(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        ViewTitle(title = "State: $sharedState")
+        ViewTitle(title = "State: ${sharedState.type.name}")
         ViewTitle(title = stringResource(R.string.minStep))
         Spacer(modifier = Modifier.height(7.dp))
         Row {
@@ -133,5 +133,5 @@ fun MakeABidSilentPreview(){
     val auction = Auction(bids = arrayOf(bid1, bid2), type = AuctionType.English, minAccepted = "10", minStep = "1")
     viewModel.setAuction(auction)
 
-    MakeABid(sharedState = 0, viewModel = viewModel, navController = rememberNavController(), onMakeABid = {})
+    MakeABid(sharedState = auction, viewModel = viewModel, navController = rememberNavController(), onMakeABid = {})
 }
