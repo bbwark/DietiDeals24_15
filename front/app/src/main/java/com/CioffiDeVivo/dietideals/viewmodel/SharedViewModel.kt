@@ -37,11 +37,35 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
     //Test Shared
-    private val _sharedState = MutableStateFlow(0)
+    private val _sharedState = MutableStateFlow(Auction())
     val sharedState = _sharedState.asStateFlow()
+    fun changeAuctionType(auctionType: AuctionType){
+        _sharedState.value = _sharedState.value.copy(
+            type = auctionType
+        )
+    }
 
-    fun updateNumber(){
-        _sharedState.value++
+    private val _auctionBidders = MutableStateFlow<List<User>>(emptyList())
+    val auctionBidders: StateFlow<List<User>> = _auctionBidders.asStateFlow()
+
+    fun fetchAuctionBidders() {
+        viewModelScope.launch {
+            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
+            if (getAuctionResponse.status.isSuccess()) {
+                _auctionState.value = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.RequestModels.Auction::class.java).toDataModel()
+                val bidders = getBiddersFromServer(_auctionState.value.id)
+                _auctionBidders.value = bidders
+            }
+        }
+    }
+
+    private suspend fun getBiddersFromServer(auctionId: String): List<User> {
+        val result = emptyList<User>().toMutableList()
+        val requestUsers = ApiService.getAuctionBidders(auctionId)
+        for (user in requestUsers) {
+            result += user.toDataModel()
+        }
+        return result
     }
 
     var user by mutableStateOf(

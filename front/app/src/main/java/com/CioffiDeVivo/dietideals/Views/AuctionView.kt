@@ -41,6 +41,7 @@ import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
@@ -55,7 +56,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AuctionView(
-    sharedState: Int,
+    sharedState: Auction,
     viewModel: SharedViewModel,
     navController: NavHostController
 ) {
@@ -123,7 +124,7 @@ fun AuctionView(
         if (!isOwner) {
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = { /* TODO Navigates to Make A Bid View */
-                viewModel.updateNumber()
+                viewModel.changeAuctionType(AuctionType.Silent)
                 navController.navigate(Screen.MakeABid.route)
             }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
@@ -138,6 +139,7 @@ fun AuctionView(
                 onDismissRequest = { userInfo = false }
             )
         }
+        ViewTitle(title = "State: ${sharedState.type.name}")
     }
 }
 
@@ -245,5 +247,5 @@ fun AuctionViewPreview() {
     )
     val viewModel = SharedViewModel(Application())
     viewModel.setAuction(auction)
-    AuctionView(sharedState = 0, viewModel = viewModel, navController = rememberNavController())
+    AuctionView(sharedState = auction, viewModel = viewModel, navController = rememberNavController())
 }
