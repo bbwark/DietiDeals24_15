@@ -56,6 +56,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AuctionView(
+    auctionId: String,
     sharedState: Auction,
     viewModel: SharedViewModel,
     navController: NavHostController
@@ -68,7 +69,7 @@ fun AuctionView(
     var userInfo by remember { mutableStateOf(false) }
 
     /*LaunchedEffect(Unit) {
-        viewModel.fetchAuctionState()
+        viewModel.fetchAuctionState(auctionId)
         viewModel.fetchInsertionist()
         viewModel.fetchIsOwnerState()
     }*/
@@ -247,5 +248,5 @@ fun AuctionViewPreview() {
     )
     val viewModel = SharedViewModel(Application())
     viewModel.setAuction(auction)
-    AuctionView(sharedState = auction, viewModel = viewModel, navController = rememberNavController())
+    AuctionView(auctionId = "1" ,sharedState = auction, viewModel = viewModel, navController = rememberNavController())
 }

@@ -38,7 +38,11 @@ import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 
 @Composable
-fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
+fun HomeView(
+    viewModel: HomeViewModel,
+    navController: NavHostController,
+    onClickSearch: (String) -> Unit
+){
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -142,5 +146,5 @@ fun ParticipatedAuctions(
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
-    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController())
+    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController(), onClickSearch = {})
 }
