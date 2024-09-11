@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-open class AuctionViewModel(application: Application) : AndroidViewModel(application){
+class AuctionViewModel(application: Application) : AndroidViewModel(application){
     private val _auctionState = MutableStateFlow(Auction())
     val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
     private val _isOwnerState = MutableStateFlow(false)

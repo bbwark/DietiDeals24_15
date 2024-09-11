@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,10 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.DietiDealsTheme
 import java.time.LocalDate
 import java.util.UUID
@@ -51,8 +54,12 @@ fun iconPlaceholder() {
 }
 
 @Composable
-fun HomeViewAuctionListElement(modifier: Modifier = Modifier, auction: Auction){
-    ElevatedCard(modifier = Modifier.pulsateClick()) {
+fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
+    ElevatedCard(
+        modifier = Modifier
+            .pulsateClick()
+            .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") }
+    ) {
         Text(text = auction.item.name)
         // We have to implement an image system so we can delete this placeholder for testing
         Image(
@@ -62,7 +69,6 @@ fun HomeViewAuctionListElement(modifier: Modifier = Modifier, auction: Auction){
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun AuctionsListElementPreview() {

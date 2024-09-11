@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
@@ -75,7 +76,7 @@ fun AuctionsListFavoured(
 }
 
 @Composable
-fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>, navController: NavHostController){
+fun HomeViewAuctionsList(auctions: Array<Auction>, navController: NavController){
     LazyRow{
         itemsIndexed(auctions){index, item->
             Row {
@@ -83,8 +84,8 @@ fun HomeViewAuctionsList(modifier: Modifier = Modifier, auctions: Array<Auction>
                     Spacer(modifier = Modifier.width(20.dp))
                 }
                 HomeViewAuctionListElement(
-                    modifier = Modifier.clickable{/*TODO*/},
-                    auction = item
+                    auction = item,
+                    navController = navController
                 )
                 Spacer(modifier = Modifier.width(10.dp))
             }

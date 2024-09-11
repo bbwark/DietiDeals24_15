@@ -24,9 +24,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.CioffiDeVivo.dietideals.Components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.Components.BottomNavigationBar
@@ -224,7 +226,9 @@ fun SetupNavGraph() {
                 }) {
                     Box(modifier = Modifier.padding(it)) {
                         val viewModel : HomeViewModel = viewModel(factory = viewModelFactory)
-                        HomeView(viewModel = viewModel, navController = navController)
+                        HomeView(viewModel = viewModel, navController = navController, onClickSearch = {
+                            navController.navigate(Screen.Auction.route + "/$it")
+                        })
                     }
                 }
             }
@@ -254,7 +258,15 @@ fun SetupNavGraph() {
                 startDestination = Screen.Auction.route,
                 route = "auction",
             ){
-                composable(route = Screen.Auction.route) { entry ->
+                composable(
+                    route = Screen.Auction.route + "/{auctionId}",
+                    arguments = listOf(
+                        navArgument("auctionId"){
+                            type = NavType.StringType
+                        }
+                    )
+                ) { entry ->
+                    val auctionId = entry.arguments?.getString("auctionId") ?: ""
                     val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
                     val sharedState by viewModel.sharedState.collectAsStateWithLifecycle()
                     Scaffold(topBar = {
@@ -268,6 +280,7 @@ fun SetupNavGraph() {
                         }) {
                         Box(modifier = Modifier.padding(it)) {
                             AuctionView(
+                                auctionId = auctionId,
                                 sharedState = sharedState,
                                 viewModel = viewModel,
                                 navController = navController

@@ -113,9 +113,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun fetchAuctionState() {
+    fun fetchAuctionState(auctionId: String) {
         viewModelScope.launch {
-            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
+            val getAuctionResponse = ApiService.getAuction(auctionId)
+            //Bisogna caricare l'auctionState grazie alla REST che effettua il fetch dell Auction
             if(getAuctionResponse.status.isSuccess()) {
                 val auctionResponse = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.RequestModels.Auction::class.java)
                 setAuction(auctionResponse.toDataModel())
