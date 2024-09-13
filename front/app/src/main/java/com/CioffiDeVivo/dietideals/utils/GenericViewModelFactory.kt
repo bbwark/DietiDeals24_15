@@ -3,21 +3,21 @@ package com.CioffiDeVivo.dietideals.utils
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.CioffiDeVivo.dietideals.viewmodel.AddCardViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.CreateAuctionViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.EditContactInfoViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.EditProfileViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.FavouritesViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.LogInCredentialsViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.MakeABidViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.ManageCardsViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.RegisterCredentialsViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.SearchViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.SellViewModel
-import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.createAuction.CreateAuctionViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.favourites.FavouritesViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.home.HomeViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
+import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 
 
 class GenericViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
