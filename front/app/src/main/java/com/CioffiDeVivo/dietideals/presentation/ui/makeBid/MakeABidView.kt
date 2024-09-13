@@ -39,8 +39,9 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
+import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 
 @Composable
 fun MakeABid(
@@ -53,6 +54,7 @@ fun MakeABid(
     var bid by rememberSaveable { mutableStateOf("") }
     val userBidState by viewModel.bidState.collectAsState()
     val auctionState by viewModel.auctionState.collectAsState()
+    val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -82,11 +84,10 @@ fun MakeABid(
         Spacer(modifier = Modifier.height(50.dp))
         OutlinedTextField(
             value = bid,
-            onValueChange = {
-                bid = if (it.startsWith("0")) {
-                    ""
-                } else {
-                    it
+            onValueChange = { newBid ->
+                val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
+                if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
+                    bid = trimmed
                 }
                 viewModel.updateBidValue(bid)
             },
@@ -97,14 +98,14 @@ fun MakeABid(
                     contentDescription = null,
                 )
             },
-            visualTransformation = BidInputVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            visualTransformation = currencyVisualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.width(250.dp),
             label = { Text("Your Bid") },
         )
         Spacer(modifier = Modifier.size(50.dp))
         Button(
-            onClick =  /*TODO If submitBid is true then navigate viewModel.submitBid()*/ onMakeABid ,
+            onClick =  /*TODO If submitBid is true then navigate viewModel.submitBid()*/{},
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .pulsateClick()
