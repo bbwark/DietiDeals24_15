@@ -32,6 +32,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitl
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable
 fun HomeView(
@@ -63,7 +64,7 @@ fun HomeView(
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { /*TODO navigate to search view*/ },
+            onClick = { navController.navigate(Screen.Auction.route + "/1") },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
 
