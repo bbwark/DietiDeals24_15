@@ -24,6 +24,7 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
+
     fun getLatestAuctions(): Array<Auction> {
         var randomAuctionsData: Array<Auction> = arrayOf()
         viewModelScope.launch {

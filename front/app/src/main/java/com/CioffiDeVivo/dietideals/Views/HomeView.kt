@@ -33,11 +33,15 @@ import com.CioffiDeVivo.dietideals.Components.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.Components.pulsateClick
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 
 @Composable
-fun HomeView(viewModel: HomeViewModel, navController: NavHostController){
+fun HomeView(
+    viewModel: HomeViewModel,
+    navController: NavHostController
+){
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier

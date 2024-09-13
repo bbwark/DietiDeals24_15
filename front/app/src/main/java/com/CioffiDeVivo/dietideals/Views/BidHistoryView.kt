@@ -32,13 +32,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
+import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.User
 import com.CioffiDeVivo.dietideals.viewmodel.BidHistoryViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
 import java.time.ZonedDateTime
 
 @Composable
-fun BidHistoryView(viewModel: BidHistoryViewModel, navController: NavHostController) {
+fun BidHistoryView(
+    sharedState: Auction,
+    viewModel: SharedViewModel,
+    navController: NavHostController
+) {
     var showDetails by remember { mutableStateOf(false) }
     var acceptOffer by remember { mutableStateOf(false) }
     var userInfo by remember { mutableStateOf(false) }
@@ -185,5 +191,5 @@ fun AcceptOfferDialog(
 @Preview(showBackground = true)
 @Composable
 fun BidHistoryViewPreview() {
-    BidHistoryView(viewModel = BidHistoryViewModel(Application()), navController = rememberNavController())
+    BidHistoryView(sharedState = Auction() ,viewModel = SharedViewModel(Application()), navController = rememberNavController())
 }

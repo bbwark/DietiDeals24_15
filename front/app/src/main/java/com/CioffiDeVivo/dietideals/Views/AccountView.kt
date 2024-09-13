@@ -39,19 +39,22 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.ui.theme.md_theme_light_secondaryContainer
 import com.CioffiDeVivo.dietideals.viewmodel.AccountViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.LocalUserState
 
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
 
     val userState by viewModel.userState.collectAsState()
     val auctionState by viewModel.auctionState.collectAsState()
+    val userViewModel = LocalUserState.current
+    val loggedUserState by userViewModel.userState.collectAsState()
 
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        AccountViewTopBar(userState.name, userState.email)
+        AccountViewTopBar(loggedUserState.name, loggedUserState.email)
         Spacer(modifier = Modifier.size(24.dp))
         AccountViewButton(
             navController = navController,
@@ -126,7 +129,7 @@ fun AccountViewButton(navController: NavHostController, destinationRoute: String
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 14.dp)
-            .clickable { navController.navigate(destinationRoute)}
+            .clickable { navController.navigate(destinationRoute) }
     ) {
         Icon(
             imageVector = icon,

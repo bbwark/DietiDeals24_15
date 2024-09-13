@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.Components
 
+import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
@@ -16,15 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
 import com.CioffiDeVivo.dietideals.viewmodel.MainViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuctionTopBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: MainViewModel
+    viewModel: SharedViewModel
 ) {
     TopAppBar(
         title = { Text(text = "") },
@@ -62,9 +64,8 @@ fun AuctionTopBar(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun AuctionTopBarPreview() {
-    AuctionTopBar(navController = rememberNavController(), viewModel = MainViewModel())
+    AuctionTopBar(navController = rememberNavController(), viewModel = SharedViewModel(application = Application()))
 }
