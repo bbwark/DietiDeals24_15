@@ -3,11 +3,11 @@ package com.CioffiDeVivo.dietideals.utils
 
 import android.content.Context
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.RequestModels.Auction
-import com.CioffiDeVivo.dietideals.domain.RequestModels.Bid
-import com.CioffiDeVivo.dietideals.domain.RequestModels.CreditCard
-import com.CioffiDeVivo.dietideals.domain.RequestModels.Item
-import com.CioffiDeVivo.dietideals.domain.RequestModels.User
+import com.CioffiDeVivo.dietideals.domain.requestModels.Auction
+import com.CioffiDeVivo.dietideals.domain.requestModels.Bid
+import com.CioffiDeVivo.dietideals.domain.requestModels.CreditCard
+import com.CioffiDeVivo.dietideals.domain.requestModels.Item
+import com.CioffiDeVivo.dietideals.domain.requestModels.User
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
