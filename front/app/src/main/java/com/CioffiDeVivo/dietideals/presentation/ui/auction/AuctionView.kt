@@ -87,8 +87,6 @@ fun AuctionView(
                     .size(200.dp)
             )
         }
-        Text(text = auctionId)
-
         AuctionHeader(
             itemName = auctionState.item.name,
             insertionistName = insertionist.name,

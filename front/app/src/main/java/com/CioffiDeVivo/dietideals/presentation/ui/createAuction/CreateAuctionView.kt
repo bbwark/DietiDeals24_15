@@ -68,7 +68,8 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
-import com.CioffiDeVivo.dietideals.utils.BidInputVisualTransformation
+import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
+import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -225,16 +226,16 @@ fun SilentAuction(
     onCalendarClick: () -> Unit
 ){
     var minAccepted by rememberSaveable { mutableStateOf("") }
+    val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
     Row {
         OutlinedTextField(
             value = minAccepted,
-            onValueChange = {
-                minAccepted = if (it.startsWith("0")) {
-                    ""
-                } else {
-                    it
+            onValueChange = { newBid ->
+                val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
+                if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
+                    minAccepted = trimmed
                 }
-                onBidChange(it)
+                onBidChange(minAccepted)
             },
             singleLine = true,
             trailingIcon = {
@@ -243,8 +244,8 @@ fun SilentAuction(
                     contentDescription = null,
                 )
             },
-            visualTransformation = BidInputVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            visualTransformation = currencyVisualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.width(150.dp),
             label = { Text(stringResource(R.string.minimumBid)) },
         )
@@ -279,16 +280,16 @@ fun EnglishAuction(
     onCalendarClick: () -> Unit
 ){
     var minStep by rememberSaveable { mutableStateOf("") }
+    val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
     Row {
         OutlinedTextField(
             value = auctionState.auction.minStep,
-            onValueChange = {
-                minStep = if (it.startsWith("0")) {
-                    ""
-                } else {
-                    it
+            onValueChange = { newBid ->
+                val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
+                if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
+                    minStep = trimmed
                 }
-                onBidChange(it)
+                onBidChange(minStep)
             },
             singleLine = true,
             trailingIcon = {
@@ -297,8 +298,8 @@ fun EnglishAuction(
                     contentDescription = null,
                 )
             },
-            visualTransformation = BidInputVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            visualTransformation = currencyVisualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.width(150.dp),
             label = { Text(stringResource(R.string.minStep)) },
         )

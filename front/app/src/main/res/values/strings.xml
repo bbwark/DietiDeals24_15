@@ -11,7 +11,7 @@
     <string name="welcome">Welcome</string>
     <string name="logInAccount">Log into an Account</string>
     <string name="lastBid">Last Bid</string>
-    <string name="minimumBid">Minimum Bid</string>
+    <string name="minimumBid">Min.Bid</string>
     <string name="contactInfo">Contact Info</string>
     <string name="editProfile">Edit Profile</string>
     <string name="saveChanges">Save Changes</string>
