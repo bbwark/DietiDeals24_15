@@ -40,8 +40,7 @@ import com.CioffiDeVivo.dietideals.viewmodel.HomeViewModel
 @Composable
 fun HomeView(
     viewModel: HomeViewModel,
-    navController: NavHostController,
-    onClickSearch: (String) -> Unit
+    navController: NavHostController
 ){
     Column(
         horizontalAlignment = Alignment.End,
@@ -68,7 +67,7 @@ fun HomeView(
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { /*TODO navigate to search view*/ navController.navigate(Screen.Auction.route) },
+            onClick = { /*TODO navigate to search view*/ },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
 
@@ -146,5 +145,5 @@ fun ParticipatedAuctions(
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview(){
-    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController(), onClickSearch = {})
+    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController())
 }

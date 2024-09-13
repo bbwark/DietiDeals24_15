@@ -226,9 +226,7 @@ fun SetupNavGraph() {
                 }) {
                     Box(modifier = Modifier.padding(it)) {
                         val viewModel : HomeViewModel = viewModel(factory = viewModelFactory)
-                        HomeView(viewModel = viewModel, navController = navController, onClickSearch = {
-                            navController.navigate(Screen.Auction.route + "/$it")
-                        })
+                        HomeView(viewModel = viewModel, navController = navController)
                     }
                 }
             }
