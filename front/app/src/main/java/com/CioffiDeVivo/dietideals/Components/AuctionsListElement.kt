@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
@@ -32,11 +33,15 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Composable
-fun AuctionsListElement(modifier: Modifier = Modifier, auction: Auction) {
+fun AuctionsListElement(auction: Auction, navController: NavController) {
     Row(modifier = Modifier.padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically){
         iconPlaceholder()
         Spacer(modifier = Modifier.width(7.dp))
-        Text(modifier = Modifier.fillMaxWidth(), text = auction.item.name)
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") },
+            text = auction.item.name)
     }
 }
 
@@ -82,6 +87,6 @@ fun AuctionsListElementPreview() {
         type = AuctionType.Silent)
     
     DietiDealsTheme {
-        AuctionsListElement(auction = testAuction)
+        AuctionsListElement(auction = testAuction, navController = rememberNavController())
     }
 }

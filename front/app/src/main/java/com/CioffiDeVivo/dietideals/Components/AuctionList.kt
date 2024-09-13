@@ -29,10 +29,9 @@ import java.time.LocalDate
 
 @Composable
 fun AuctionsList(
-    modifier: Modifier = Modifier,
     auctions: Array<Auction>,
-    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-    ), navController: NavHostController,) {
+    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()),
+    navController: NavController,) {
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -43,7 +42,7 @@ fun AuctionsList(
                       that disappears when you scroll down the list*/
                 }
                 if (!categoriesToHide.value.contains(auction.category.name)) {
-                    AuctionsListElement(modifier = Modifier.clickable {/*TODO navigate to auction detail*/}, auction = auction)
+                    AuctionsListElement(auction = auction, navController = navController)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
@@ -53,10 +52,9 @@ fun AuctionsList(
 
 @Composable
 fun AuctionsListFavoured(
-    modifier: Modifier = Modifier,
     auctions: Array<Auction>,
-    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()
-    ), navController: NavHostController) {
+    categoriesToHide: MutableState<MutableSet<String>> = mutableStateOf(mutableSetOf()),
+    navController: NavController) {
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
             Column {
@@ -67,7 +65,7 @@ fun AuctionsListFavoured(
                       that disappears when you scroll down the list*/
                 }
                 if (!categoriesToHide.value.contains(auction.category.name)) {
-                    AuctionsListElement(modifier = Modifier.clickable {/*TODO Navigate to Auction Details*/}, auction = auction)
+                    AuctionsListElement(auction = auction, navController = navController)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
@@ -76,7 +74,9 @@ fun AuctionsListFavoured(
 }
 
 @Composable
-fun HomeViewAuctionsList(auctions: Array<Auction>, navController: NavController){
+fun HomeViewAuctionsList(
+    auctions: Array<Auction>,
+    navController: NavController){
     LazyRow{
         itemsIndexed(auctions){index, item->
             Row {
