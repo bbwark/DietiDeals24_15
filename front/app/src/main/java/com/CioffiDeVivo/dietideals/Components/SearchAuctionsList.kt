@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
@@ -24,10 +25,9 @@ import java.time.LocalDate
 
 @Composable
 fun SearchAuctionsList(
-    modifier: Modifier = Modifier,
     auctions: ArrayList<Auction>,
     categoriesToHide: Set<String>,
-    navController: NavHostController) {
+    navController: NavController) {
 
     LazyColumn {
         itemsIndexed(auctions) { index, auction ->
@@ -39,9 +39,7 @@ fun SearchAuctionsList(
                       that disappears when you scroll down the list*/
                 }
                 if (!categoriesToHide.contains(auction.category.name)) {
-                    AuctionsListElement(modifier = Modifier.clickable {
-                        //navController.navigate(Screen.Auction.route), naviga all'auction detail con id selezionato
-                    }, auction = auction)
+                    AuctionsListElement(auction = auction, navController = navController)
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }

@@ -36,30 +36,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.Components.UserInfoBottomSheet
+import com.CioffiDeVivo.dietideals.Components.ViewTitle
 import com.CioffiDeVivo.dietideals.domain.DataModels.Auction
 import com.CioffiDeVivo.dietideals.domain.DataModels.AuctionType
 import com.CioffiDeVivo.dietideals.domain.DataModels.Bid
 import com.CioffiDeVivo.dietideals.domain.DataModels.Item
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.Views.Navigation.Screen
 import com.CioffiDeVivo.dietideals.viewmodel.AuctionViewModel
+import com.CioffiDeVivo.dietideals.viewmodel.SharedViewModel
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AuctionView(viewModel: AuctionViewModel) {
-
+fun AuctionView(
+    auctionId: String,
+    sharedState: Auction,
+    viewModel: SharedViewModel,
+    navController: NavHostController
+) {
     val auctionState by viewModel.auctionState.collectAsState()
     val isOwner by viewModel.isOwnerState.collectAsState()
     val insertionist by viewModel.insertionsState.collectAsState()
 
+
     var userInfo by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchAuctionState()
+    /*LaunchedEffect(Unit) {
+        viewModel.fetchAuctionState(auctionId)
         viewModel.fetchInsertionist()
         viewModel.fetchIsOwnerState()
-    }
+    }*/
 
     val pagerState =
         rememberPagerState { 3 } //TODO To substitute it with the number of images in the array of images got from backend
@@ -79,6 +92,7 @@ fun AuctionView(viewModel: AuctionViewModel) {
                     .size(200.dp)
             )
         }
+        Text(text = auctionId)
 
         AuctionHeader(
             itemName = auctionState.item.name,
@@ -111,7 +125,10 @@ fun AuctionView(viewModel: AuctionViewModel) {
 
         if (!isOwner) {
             Spacer(modifier = Modifier.size(12.dp))
-            Button(onClick = { /* TODO Navigates to Make A Bid View */ }) {
+            Button(onClick = { /* TODO Navigates to Make A Bid View */
+                viewModel.changeAuctionType(AuctionType.Silent)
+                navController.navigate(Screen.MakeABid.route)
+            }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.size(12.dp))
@@ -124,6 +141,7 @@ fun AuctionView(viewModel: AuctionViewModel) {
                 onDismissRequest = { userInfo = false }
             )
         }
+        ViewTitle(title = "State: ${sharedState.type.name}")
     }
 }
 
@@ -229,7 +247,7 @@ fun AuctionViewPreview() {
         expired = false,
         type = AuctionType.English
     )
-    val viewModel = AuctionViewModel(Application())
+    val viewModel = SharedViewModel(Application())
     viewModel.setAuction(auction)
-    AuctionView(viewModel = viewModel)
+    AuctionView(auctionId = "1" ,sharedState = auction, viewModel = viewModel, navController = rememberNavController())
 }
