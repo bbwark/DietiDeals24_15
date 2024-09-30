@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.services.impl;
 
+import com.dietideals.dietideals24_25.domain.Country;
 import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
@@ -55,7 +56,7 @@ public class AuthenticationServiceImpl {
     private JsonFactory jsonFactory = new GsonFactory();
 
     public UserEntity registerUserBuyer(String email, String name, String surname, String password, String address,
-            String zipCode, String country, String phoneNumber, List<CreditCardEntity> creditCards) {
+                                        String zipCode, Country country, String phoneNumber, List<CreditCardEntity> creditCards) {
 
         boolean isSeller = true;
         String encodedPassword = passwordEncoder.encode(password);

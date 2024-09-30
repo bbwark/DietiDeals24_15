@@ -17,20 +17,19 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenuField(
-    menuList: List<String>,
+fun <T> DropDownMenuField(
+    selectedValue: T,
+    menuList: Array<T>,
     label: String,
-    onChange: (String) -> Unit
-) {
+    onValueSelected: (T) -> Unit,
+) where T : Enum<T> {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-    var selectedElementOfList by rememberSaveable { mutableStateOf(menuList[0]) }
-
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded }
     ) {
         OutlinedTextField(
-            value = selectedElementOfList,
+            value = selectedValue.toString(),
             onValueChange = { },
             readOnly = true,
             label = { Text(text = label) },
@@ -41,16 +40,15 @@ fun DropDownMenuField(
         )
         ExposedDropdownMenu(
             expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }) {
-            menuList.forEachIndexed { index, text ->
+            onDismissRequest = { isExpanded = false }
+        ) {
+            menuList.forEach { value ->
                 DropdownMenuItem(
-                    text = { Text(text = text) },
+                    text = { Text(text = value.toString()) },
                     onClick = {
-                        selectedElementOfList = menuList[index]
-                        onChange(selectedElementOfList)
+                        onValueSelected(value)
                         isExpanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    }
                 )
             }
         }

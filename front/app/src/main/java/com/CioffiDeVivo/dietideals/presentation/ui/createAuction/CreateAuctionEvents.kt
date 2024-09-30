@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
 import android.net.Uri
+import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 
 sealed class CreateAuctionEvents {
@@ -9,7 +10,7 @@ sealed class CreateAuctionEvents {
     data class ImagesChanged(val image: Uri?): CreateAuctionEvents()
     data class ImagesDeleted(val index: Int): CreateAuctionEvents()
     data class AuctionTypeChanged(val auctionType: AuctionType): CreateAuctionEvents()
-    data class AuctionCategoryChanged(val auctionCategory: String): CreateAuctionEvents()
+    data class AuctionCategoryChanged(val auctionCategory: AuctionCategory): CreateAuctionEvents()
     data class IntervalChanged(val interval: String): CreateAuctionEvents()
     data class IntervalDeleted(val interval: String): CreateAuctionEvents()
     data class MinStepChanged(val minStep: String): CreateAuctionEvents()

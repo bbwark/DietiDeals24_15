@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.domain.mappers
 import android.net.Uri
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.requestModels.Auction
 import com.CioffiDeVivo.dietideals.domain.requestModels.Bid
 import com.CioffiDeVivo.dietideals.domain.requestModels.CreditCard
@@ -70,7 +71,7 @@ fun User.toDataModel(): com.CioffiDeVivo.dietideals.domain.models.User {
         bio = this.bio ?: "",
         address = this.address ?: "",
         zipCode = this.zipcode ?: "",
-        country = this.country ?: "",
+        country = this.country ?: Country.Italy,
         phoneNumber = this.phoneNumber ?: "",
         creditCards = this.creditCards.map { it.toDataModel() }.toTypedArray()
     )

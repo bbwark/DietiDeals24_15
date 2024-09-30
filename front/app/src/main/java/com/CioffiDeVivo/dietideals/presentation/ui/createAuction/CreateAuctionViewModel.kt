@@ -264,10 +264,10 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
         )
     }
 
-    private fun updateAuctionCategory(auctionCategory: String){
+    private fun updateAuctionCategory(auctionCategory: AuctionCategory){
         _auctionState.value = _auctionState.value.copy(
             auction = _auctionState.value.auction.copy(
-                category = AuctionCategory.valueOf(auctionCategory)
+                category = auctionCategory
             )
         )
     }

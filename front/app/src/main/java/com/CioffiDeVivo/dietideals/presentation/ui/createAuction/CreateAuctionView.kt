@@ -66,6 +66,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DropDown
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
@@ -79,10 +80,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostController){
 
-    var minAccepted by remember { mutableStateOf("") }
-    var minStep by remember { mutableStateOf("") }
     val showDatePicker = remember { mutableStateOf(false) }
-    val categoryList = listOf( "Electronic", "Games", "House", "Engine", "Book", "Fashion", "Sport", "Music", "Other")
+    var selectedCategory by remember { mutableStateOf(AuctionCategory.Other) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
@@ -121,9 +120,13 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             modifier = modifierStandard
         )
         DropDownMenuField(
-            menuList = categoryList,
+            selectedValue = selectedCategory,
+            menuList = AuctionCategory.values(),
             label = stringResource(id = R.string.category),
-            onChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(it)) }
+            onValueSelected = {
+                newSelection -> selectedCategory = newSelection
+                viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(selectedCategory))
+                }
         )
         Spacer(modifier = Modifier.height(15.dp))
         Row {

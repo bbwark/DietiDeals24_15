@@ -17,7 +17,7 @@ import java.time.LocalDate
 
 class MainViewModel : ViewModel() {
 
-    private val _userState = MutableStateFlow(User("0", "Simone", "Cioffi","simo@gmail.com"))
+    private val _userState = MutableStateFlow(User("1", "Simone", "Cioffi","simo@gmail.com"))
     val userState: StateFlow<User> = _userState.asStateFlow()
 
     private val _creditCardState = MutableStateFlow(CreditCard())

@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationState
@@ -17,14 +22,14 @@ import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.Registrat
 fun ContactInfoOnRegisterCredentials(
     userState: RegistrationState,
     onAddressChange: (String) -> Unit,
+    onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
-    onCountryChange: (String) -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onDeleteAddress: (String) -> Unit,
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
-    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
+    var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
         value = userState.user.address,
         onValueChanged = { onAddressChange(it) },
@@ -47,9 +52,13 @@ fun ContactInfoOnRegisterCredentials(
         Spacer(modifier = Modifier.width(10.dp))
         Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
-            menuList = countryList,
-            label = stringResource(id = R.string.country),
-            onChange = { onCountryChange(it) }
+            selectedValue = selectedCountry,
+            menuList = Country.values(),
+            label = stringResource(id = R.string.category),
+            onValueSelected = {
+                newSelection -> selectedCountry = newSelection
+                onCountryChange(selectedCountry)
+            }
         )
     }
     InputTextField(
@@ -67,14 +76,14 @@ fun ContactInfoOnRegisterCredentials(
 fun ContactInfoOnEditContactInfo(
     userState: EditContactInfoState,
     onAddressChange: (String) -> Unit,
+    onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
-    onCountryChange: (String) -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onDeleteAddress: (String) -> Unit,
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
-    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
+    var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
         value = userState.user.address,
         onValueChanged = { onAddressChange(it) },
@@ -97,9 +106,13 @@ fun ContactInfoOnEditContactInfo(
         Spacer(modifier = Modifier.width(10.dp))
         Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
-            menuList = countryList,
-            label = stringResource(id = R.string.country),
-            onChange = { onCountryChange(it) }
+            selectedValue = selectedCountry,
+            menuList = Country.values(),
+            label = stringResource(id = R.string.category),
+            onValueSelected = {
+                newSelection -> selectedCountry = newSelection
+                onCountryChange(selectedCountry)
+            }
         )
     }
     InputTextField(

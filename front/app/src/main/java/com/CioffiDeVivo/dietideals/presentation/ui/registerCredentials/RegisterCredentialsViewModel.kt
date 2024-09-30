@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.utils.ApiService
@@ -190,7 +191,6 @@ class RegisterCredentialsViewModel(
         val newPasswordValidation = validateRegistrationForms.validateRetypePassword(userRegistrationState.value.user.password, userRegistrationState.value.retypePassword)
         val addressValidation = validateRegistrationForms.validateAddress(userRegistrationState.value.user.address)
         val zipCodeValidation = validateRegistrationForms.validateZipCode(userRegistrationState.value.user.zipCode)
-        val countryValidation = validateRegistrationForms.validateCountry(userRegistrationState.value.user.country)
         val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(userRegistrationState.value.user.phoneNumber)
         val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(userRegistrationState.value.card.creditCardNumber)
         val expirationDateValidation = validateRegistrationForms.validateExpirationDate(userRegistrationState.value.card.expirationDate.format(DateTimeFormatter.ofPattern("MM/yy")))
@@ -213,7 +213,6 @@ class RegisterCredentialsViewModel(
             newPasswordValidation,
             addressValidation,
             zipCodeValidation,
-            countryValidation,
             phoneNumberValidation,
             creditCardNumberValidation,
             expirationDateValidation,
@@ -240,7 +239,6 @@ class RegisterCredentialsViewModel(
                 retypePasswordErrorMsg = newPasswordValidation.errorMessage,
                 addressErrorMsg = addressValidation.errorMessage,
                 zipCodeErrorMsg = zipCodeValidation.errorMessage,
-                countryErrorMsg = countryValidation.errorMessage,
                 phoneNumberErrorMsg = phoneNumberValidation.errorMessage,
                 creditCardNumberErrorMsg = creditCardNumberValidation.errorMessage,
                 expirationDateErrorMsg = expirationDateValidation.errorMessage,
@@ -340,7 +338,7 @@ class RegisterCredentialsViewModel(
         updateZipCode("")
     }
 
-    private fun updateCountry(country: String){
+    private fun updateCountry(country: Country){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             user = _userRegistrationState.value.user.copy(
                 country = country

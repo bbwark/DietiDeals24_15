@@ -12,7 +12,6 @@ data class RegistrationState (
     val retypePasswordErrorMsg: String? = null,
     val addressErrorMsg: String? = null,
     val zipCodeErrorMsg: String? = null,
-    val countryErrorMsg: String? = null,
     val phoneNumberErrorMsg: String? = null,
     val creditCardNumberErrorMsg: String? = null,
     val expirationDateErrorMsg: String? = null,

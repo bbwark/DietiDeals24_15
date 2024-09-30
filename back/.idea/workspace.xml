@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d52395b7-dffb-43d7-8c72-f08c8a3cf22b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/mappers/MapToDataModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/mappers/MapToDataModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/AuctionCategory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/AuctionCategory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/requestModels/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/requestModels/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/validations/ValidateRegistrationForms.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/validations/ValidateRegistrationForms.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/ContactInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/ContactInfo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/DropDownMenuField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/DropDownMenuField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/MainViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionEvents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoEvents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationState.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2m1rhSI3GF7MjaEqMJqY0ahYQS2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.DietiDeals2425Application.executor": "Run",
+    "git-widget-placeholder": "Enums-Change",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/PC/Desktop/Informatica",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="DietiDeals2425Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="DietiDeals24_25" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.dietideals.dietideals24_25.DietiDeals2425Application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.dietideals.dietideals24_25.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.DietiDeals2425Application" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d52395b7-dffb-43d7-8c72-f08c8a3cf22b" name="Changes" comment="" />
+      <created>1726255043030</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1726255043030</updated>
+      <workItem from="1726255043938" duration="2859000" />
+      <workItem from="1726310335896" duration="1943000" />
+      <workItem from="1727631369672" duration="80000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
