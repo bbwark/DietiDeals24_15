@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.utils.ApiService
@@ -63,13 +64,11 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
     private fun validationBlock() : Boolean {
         val addressValidation = validateEditContactInfoForm.validateAddress(userEditContactInfoState.value.user.address)
         val zipCodeValidation = validateEditContactInfoForm.validateZipCode(userEditContactInfoState.value.user.zipCode)
-        val countryValidation = validateEditContactInfoForm.validateCountry(userEditContactInfoState.value.user.country)
         val phoneNumberValidation = validateEditContactInfoForm.validatePhoneNumber(userEditContactInfoState.value.user.phoneNumber)
 
         val hasError = listOf(
             addressValidation,
             zipCodeValidation,
-            countryValidation,
             phoneNumberValidation
         ).any { it.positiveResult }
 
@@ -77,7 +76,6 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
             _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
                 addressErrorMsg = addressValidation.errorMessage,
                 zipCodeErrorMsg = zipCodeValidation.errorMessage,
-                countryErrorMsg = countryValidation.errorMessage,
                 phoneNumberErrorMsg = phoneNumberValidation.errorMessage
             )
             return false
@@ -114,7 +112,7 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
         updateZipCode("")
     }
 
-    private fun updateCountry(country: String){
+    private fun updateCountry(country: Country){
         _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
             user = _userEditContactInfoState.value.user.copy(
                 country = country

@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
+import com.CioffiDeVivo.dietideals.domain.models.Country
+
 open class RegistrationEvent {
     data class EmailChanged(val email: String): RegistrationEvent()
     data class EmailDeleted(val email: String): RegistrationEvent()
@@ -11,7 +13,7 @@ open class RegistrationEvent {
     data class RetypePasswordChanged(val newPassword: String): RegistrationEvent()
     data class AddressChanged(val address: String): RegistrationEvent()
     data class AddressDeleted(val address: String): RegistrationEvent()
-    data class CountryChanged(val country: String): RegistrationEvent()
+    data class CountryChanged(val country: Country): RegistrationEvent()
     data class ZipCodeChanged(val zipCode: String): RegistrationEvent()
     data class ZipCodeDeleted(val address: String): RegistrationEvent()
     data class PhoneNumberChanged(val phoneNumber: String): RegistrationEvent()

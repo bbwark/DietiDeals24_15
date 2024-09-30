@@ -53,8 +53,8 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
         ContactInfoOnEditContactInfo(
             userState = userContactInfoState,
             onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-            onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
             onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },
+            onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
             onPhoneNumberChange = { viewModel.editProfileAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
             onDeleteAddress = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
             onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },

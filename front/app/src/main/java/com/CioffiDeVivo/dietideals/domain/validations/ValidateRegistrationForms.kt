@@ -104,16 +104,6 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    open fun validateCountry(country: String): ValidationResult{
-        if (country.isBlank()) {
-            return ValidationResult(
-                positiveResult = false,
-                errorMessage = "The field cannot be empty"
-            )
-        }
-        return ValidationResult(positiveResult = true)
-    }
-
     open fun validatePhoneNumber(phoneNumber: String): ValidationResult{
         if(phoneNumber.length < phoneNumberMinimumLength || phoneNumber.length > phoneNumberMaximumLength){
             return ValidationResult(

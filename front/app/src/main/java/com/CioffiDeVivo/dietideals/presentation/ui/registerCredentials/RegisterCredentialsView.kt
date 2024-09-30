@@ -120,8 +120,8 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             ContactInfoOnRegisterCredentials(
                 userState = userRegistrationState,
                 onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
-                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
                 onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
+                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
                 onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
                 onDeleteAddress = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
                 onDeleteZipCode = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
