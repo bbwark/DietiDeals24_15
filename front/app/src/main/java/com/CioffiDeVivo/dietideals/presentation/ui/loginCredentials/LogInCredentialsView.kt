@@ -2,12 +2,16 @@ package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 import android.app.Application
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
@@ -37,6 +41,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTex
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 
 @Composable
@@ -60,7 +65,8 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         LoginInputs(
             userState = userLoginState,
@@ -68,31 +74,30 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
             onPasswordChange = { viewModel.loginOnAction(LoginEvent.PasswordChanged(it)) },
             onDeleteEmail = { viewModel.loginOnAction(LoginEvent.EmailDeleted(it)) }
         )
-        Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = { viewModel.loginOnAction(LoginEvent.Submit()) },
             modifier = Modifier
-                .size(width = 330.dp, height = 50.dp)
+                .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
+                .height(50.dp)
                 .pulsateClick(),
             content = {
                 Text(stringResource(R.string.logIn), fontSize = 20.sp)
             }
         )
-        Spacer(modifier = Modifier.height(20.dp))
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = modifierStandard
         ) {
             Text(
-                "Do you have not an Account? ",
-
-                )
-            TextButton(
-                onClick = {
-                    /* TODO navigate to register view*/
-                }
-            ) {
+                text = "Do you have not an Account? ",
+                fontSize = 12.sp
+            )
+            TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
                 Text(
-                    "Create an Account",
+                    text = "Create an Account",
+                    fontSize = 12.sp
                 )
             }
         }

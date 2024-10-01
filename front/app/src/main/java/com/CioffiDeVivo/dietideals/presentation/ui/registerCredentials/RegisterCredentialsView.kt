@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
-import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardFieldsOnRegisterCredentials
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardComponents
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.PersonalInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
@@ -126,7 +126,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
                 onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
             )
-            CreditCardFieldsOnRegisterCredentials(
+            CreditCardComponents(
                 userState = userRegistrationState,
                 onNumberChange = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberChanged(it)) },
                 onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },

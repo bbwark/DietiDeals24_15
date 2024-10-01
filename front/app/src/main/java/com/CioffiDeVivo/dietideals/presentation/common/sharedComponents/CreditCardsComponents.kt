@@ -1,17 +1,22 @@
 package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
@@ -20,7 +25,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.Registrat
 import com.CioffiDeVivo.dietideals.utils.ExpirationDateTrasformation
 
 @Composable
-fun CreditCardFieldsOnRegisterCredentials(
+fun CreditCardComponents(
     userState: RegistrationState,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
@@ -43,7 +48,9 @@ fun CreditCardFieldsOnRegisterCredentials(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = modifierStandard
     )
-    Row {
+    Row(
+        modifier = modifierStandard
+    ){
         InputTextField(
             value = userState.expirationDate,
             onValueChanged = {
@@ -58,7 +65,9 @@ fun CreditCardFieldsOnRegisterCredentials(
             onTrailingIconClick = { onDeleteExpirationDate(it) },
             visualTransformation =  ExpirationDateTrasformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
         Spacer(modifier = Modifier.width(10.dp))
         InputTextField(
@@ -73,7 +82,9 @@ fun CreditCardFieldsOnRegisterCredentials(
             supportingText = userState.cvvErrorMsg,
             onTrailingIconClick = { onDeleteCvv(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     InputTextField(
@@ -88,7 +99,7 @@ fun CreditCardFieldsOnRegisterCredentials(
 }
 
 @Composable
-fun CreditCardFieldsOnAddCard(
+fun CreditCardComponents(
     userState: AddCardState,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
@@ -111,7 +122,9 @@ fun CreditCardFieldsOnAddCard(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = modifierStandard
     )
-    Row {
+    Row(
+        modifier = modifierStandard
+    ){
         InputTextField(
             value = userState.expirationDate,
             onValueChanged = {
@@ -126,9 +139,10 @@ fun CreditCardFieldsOnAddCard(
             onTrailingIconClick = { onDeleteExpirationDate(it) },
             visualTransformation =  ExpirationDateTrasformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
-        Spacer(modifier = Modifier.width(10.dp))
         InputTextField(
             value = userState.card.cvv,
             onValueChanged = {
@@ -141,7 +155,9 @@ fun CreditCardFieldsOnAddCard(
             supportingText = userState.cvvErrorMsg,
             onTrailingIconClick = { onDeleteCvv(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     InputTextField(
@@ -153,4 +169,28 @@ fun CreditCardFieldsOnAddCard(
         onTrailingIconClick = { onDeleteIban(it) },
         modifier = modifierStandard
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CreditCardComponentPreview(){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CreditCardComponents(
+            userState = AddCardState(),
+            onNumberChange = {},
+            onDateChange = {},
+            onCvvChange = {},
+            onIbanChange = {},
+            onDeleteCardNumber = {},
+            onDeleteExpirationDate = {},
+            onDeleteCvv = {},
+            onDeleteIban = {}
+        )
+    }
 }

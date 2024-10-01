@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
@@ -77,7 +79,8 @@ fun GoogleButton(navController: NavController){
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
-            .size(width = 330.dp, height = 50.dp)
+            .fillMaxWidth()
+            .height(50.dp)
             .pulsateClick(),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
