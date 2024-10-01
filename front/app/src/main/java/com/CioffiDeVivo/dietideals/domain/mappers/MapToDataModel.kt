@@ -54,7 +54,7 @@ fun Item.toDataModel(): com.CioffiDeVivo.dietideals.domain.models.Item {
     return com.CioffiDeVivo.dietideals.domain.models.Item(
         id = this.id ?: "",
         name = this.name ?: "",
-        imagesUri = listOf(Uri.parse(this.imageUrl?:""))
+        imagesUri = this.imageUrl?.split(" ") ?: emptyList()
     )
 }
 
