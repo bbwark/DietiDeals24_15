@@ -165,7 +165,7 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
         updateItemName("")
     }
 
-    private fun updateImagesUri(imagesUri: Uri?){
+    private fun updateImagesUri(imagesUri: String){
         val updatedImagesUri = _auctionState.value.auction.item.imagesUri.toMutableList()
         updatedImagesUri += imagesUri
         _auctionState.value = _auctionState.value.copy(
