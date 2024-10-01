@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,6 +43,7 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 
 @Composable
@@ -61,10 +64,13 @@ fun MakeABid(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        ViewTitle(title = "State: ${sharedState.type.name}")
         ViewTitle(title = stringResource(R.string.minStep))
-        Spacer(modifier = Modifier.height(7.dp))
-        Row {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
             Text(
                 if (auctionState.type == AuctionType.English)
                         (auctionState.bids.last().value + auctionState.minStep.toFloat()).toString()
@@ -73,7 +79,6 @@ fun MakeABid(
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
             )
-            Spacer(modifier = Modifier.width(5.dp))
             Text(
                 "EUR",
                 fontSize = 28.sp,
@@ -81,7 +86,6 @@ fun MakeABid(
                 fontWeight = FontWeight.Bold
             )
         }
-        Spacer(modifier = Modifier.height(50.dp))
         OutlinedTextField(
             value = bid,
             onValueChange = { newBid ->
@@ -100,19 +104,18 @@ fun MakeABid(
             },
             visualTransformation = currencyVisualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(250.dp),
+            modifier = modifierStandard,
             label = { Text("Your Bid") },
         )
-        Spacer(modifier = Modifier.size(50.dp))
         Button(
             onClick =  /*TODO If submitBid is true then navigate viewModel.submitBid()*/{},
             modifier = Modifier
-                .size(width = 200.dp, height = 60.dp)
-                .pulsateClick()
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
+                .height(50.dp)
+                .pulsateClick(),
         ) {
-            Text("Make a Bid",
-                fontSize = 20.sp
-            )
+            Text("Make a Bid", fontSize = 20.sp)
         }
     }
 }

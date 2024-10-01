@@ -77,7 +77,7 @@ fun SetupNavGraph() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Screen.RegisterCredentials.route
+            startDestination = Screen.Login.route
         ) {
             composable(
                 route = Screen.Account.route

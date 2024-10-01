@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -19,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 
 @Composable
 fun InputTextField(
@@ -35,7 +38,7 @@ fun InputTextField(
     supportingText: String? = null,
     isError: Boolean = false,
     onTrailingIconClick: (String) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = modifierStandard
 ){
     var text by rememberSaveable { mutableStateOf("") }
 

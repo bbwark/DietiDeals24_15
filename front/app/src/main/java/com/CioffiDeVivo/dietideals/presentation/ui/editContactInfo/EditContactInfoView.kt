@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -62,12 +64,14 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
             onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
             onDeletePhoneNumber = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) }
         )
-        Spacer(modifier = Modifier.height(40.dp))
         Button(
             onClick = {
                 viewModel.editProfileAction(EditContactInfoEvents.Submit())
             },
-            modifier = Modifier.pulsateClick()
+            modifier = Modifier
+                .wrapContentWidth()
+                .padding(bottom = 8.dp)
+                .pulsateClick(),
         ) {
             Text(text = stringResource(id = R.string.saveChanges))
         }

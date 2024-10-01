@@ -95,12 +95,14 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun validationBlock() : Boolean {
+        val emailValidation = validateEditProfileForm.validateEmail(userEditProfileState.value.user.email)
         val nameValidation = validateEditProfileForm.validateName(userEditProfileState.value.user.name)
         val surnameValidation = validateEditProfileForm.validateSurname(userEditProfileState.value.user.surname)
         val passwordValidation = validateEditProfileForm.validatePassword(userEditProfileState.value.user.password)
         val newPasswordValidation = validateEditProfileForm.validateRetypePassword(userEditProfileState.value.user.password, userEditProfileState.value.retypePassword)
 
         val hasError = listOf(
+            emailValidation,
             nameValidation,
             surnameValidation,
             passwordValidation,
@@ -109,6 +111,7 @@ class EditProfileViewModel(application: Application, private val validateEditPro
 
         if(hasError){
             _userEditProfileState.value = _userEditProfileState.value.copy(
+                emailErrorMsg = emailValidation.errorMessage,
                 nameErrorMsg = nameValidation.errorMessage,
                 surnameErrorMsg = surnameValidation.errorMessage,
                 passwordErrorMsg = passwordValidation.errorMessage,
