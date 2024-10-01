@@ -331,7 +331,7 @@ fun EnglishAuction(
 
 @Composable
 fun ImageItem(
-    uri: Uri?,
+    uri: String,
     onClick: () -> Unit,
     context: Context,
     iconButton: ImageVector = Icons.Filled.BrokenImage,
@@ -418,7 +418,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
 @Composable
 fun DialogImage(
-    uri: Uri?,
+    uri: String,
     onDismissRequest: () -> Unit
 ){
     Dialog(
