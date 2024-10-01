@@ -12,6 +12,7 @@ import com.CioffiDeVivo.dietideals.domain.models.Item
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 
@@ -91,6 +93,20 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
                     _auctionState.value = _auctionState.value.copy(
                         auction = _auctionState.value.auction.copy(
                             ownerId = userId ?: ""
+                        )
+                    )
+
+                    val item = auctionState.value.auction.item
+                    val uploadedUrls = item.imagesUri.map { uriString ->
+                        val file = File(Uri.parse(uriString).path ?: throw IllegalArgumentException("Invalid URI"))
+                        ApiService.uploadImage(file, "img").bodyAsText()
+                    }
+
+                    _auctionState.value = _auctionState.value.copy(
+                        auction = _auctionState.value.auction.copy(
+                            item = _auctionState.value.auction.item.copy(
+                                imagesUri = uploadedUrls
+                            )
                         )
                     )
 
