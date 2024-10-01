@@ -22,7 +22,10 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 
-class CreateAuctionViewModel(application: Application, private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm() ): AndroidViewModel(application) {
+class CreateAuctionViewModel(
+    application: Application,
+    private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm()
+): AndroidViewModel(application) {
 
     private val _auctionState = MutableStateFlow(CreateAuctionState())
     val auctionState: StateFlow<CreateAuctionState> = _auctionState.asStateFlow()
@@ -129,6 +132,10 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
             intervalValidation,
             descriptionValidation
         ).any { !it.positiveResult }
+
+        if(auctionState.value.auction.type == AuctionType.None){
+            return false
+        }
 
         if(hasErrorAuctionSilent && auctionState.value.auction.type == AuctionType.Silent){
             _auctionState.value = _auctionState.value.copy(

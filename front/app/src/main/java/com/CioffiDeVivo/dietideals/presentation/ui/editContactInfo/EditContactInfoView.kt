@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo
 
 import android.app.Application
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfoOnEditContactInfo
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
@@ -48,9 +49,10 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ){
-        ContactInfoOnEditContactInfo(
+        ContactInfo(
             userState = userContactInfoState,
             onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
             onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },

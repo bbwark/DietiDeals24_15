@@ -10,6 +10,5 @@ data class CreateAuctionState(
     val minStepErrorMsg: String? = "",
     val intervalErrorMsg: String? = "",
     val minAcceptedErrorMsg: String? = "",
-    val auctionCategoryErrorMsg: String? = "",
     val auction: Auction = Auction()
 )
