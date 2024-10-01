@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BrokenImage
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -28,7 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.domain.models.Auction
@@ -69,17 +76,38 @@ fun AuctionView(
         viewModel.fetchIsOwnerState()
     }*/
 
-    val pagerState =
-        rememberPagerState { 3 } //TODO To substitute it with the number of images in the array of images got from backend
+    val pagerState = rememberPagerState { auctionState.item.imagesUri.size }
+
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(state = pagerState) {
+        if (auctionState.item.imagesUri.isNotEmpty()) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) { page ->
+                val imageUrl = auctionState.item.imagesUri[page]
+                Image(
+                    painter = rememberAsyncImagePainter(
+                        model = imageUrl,
+                        placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                        error = rememberVectorPainter(image = Icons.Default.BrokenImage)
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                )
+            }
+        } else {
             Image(
-                painter = painterResource(id = R.drawable.placeholder),
+                painter = rememberVectorPainter(image = Icons.Default.BrokenImage),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
@@ -194,7 +222,7 @@ fun EnglishAuctionBody(lastBid: Bid?) {
                 color = Color.Red,
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500)
-            ) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
+            ) //TODO a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
         }
     }
 }
@@ -213,7 +241,7 @@ fun SilentAuctionBody(endingDate: LocalDate) {
                 color = Color.Red,
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500)
-            ) //a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
+            ) //TODO a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
         }
     }
 }
