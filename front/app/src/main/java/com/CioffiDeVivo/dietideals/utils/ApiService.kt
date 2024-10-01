@@ -12,6 +12,8 @@ import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.delete
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -21,8 +23,10 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
+import java.io.File
 import java.io.IOException
 import java.lang.IllegalStateException
 import kotlin.properties.ReadOnlyProperty
@@ -381,5 +385,29 @@ object ApiService {
             }
         }
         return resultUsers
+    }
+
+/*
+* ================== IMAGES APIs ==================
+*
+* */
+
+    //post mapping upload image /images/upload
+    suspend fun uploadImage(file: File, fileName: String): HttpResponse {
+        return HttpClient(CIO).use { client ->
+            client.post {
+                url("${URL}/images/upload")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+
+                setBody(MultiPartFormDataContent(
+                    formData {
+                        append("file", file.readBytes(), Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=$fileName")
+                            append(HttpHeaders.ContentType, "image/jpeg")
+                        })
+                    }
+                ))
+            }
+        }
     }
 }
