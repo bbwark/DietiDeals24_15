@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -120,9 +119,16 @@ fun AccountViewTopBar(userName: String, userEmail: String) {
     }
 }
 
-@SuppressLint("InvalidColorHexValue")
 @Composable
-fun AccountViewButton(navController: NavHostController, destinationRoute: String, caption: String, icon: ImageVector, showChevron: Boolean = true, destructiveAction: Boolean = false, onClick: () -> Unit = {}) {
+fun AccountViewButton(
+    navController: NavHostController,
+    destinationRoute: String,
+    caption: String,
+    icon: ImageVector,
+    showChevron: Boolean = true,
+    destructiveAction: Boolean = false,
+    onClick: () -> Unit = {}
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

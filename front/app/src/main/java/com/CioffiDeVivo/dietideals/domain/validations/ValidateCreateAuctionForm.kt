@@ -13,7 +13,7 @@ class ValidateCreateAuctionForm{
     }
 
     fun validateMinAccepted(minAccepted: String): ValidationResult{
-        if (minAccepted.toFloat() == 0.0f) {
+        if (minAccepted.isBlank()) {
             return ValidationResult(
                 positiveResult = false,
                 errorMessage = "The field cannot be empty"

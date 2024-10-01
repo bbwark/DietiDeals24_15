@@ -77,6 +77,7 @@ dependencies {
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation ("androidx.credentials:credentials-play-services-auth:<latest version>")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.foundation:foundation-layout:1.7.2")
 
     implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
 

@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfoOnRegisterCredentials
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardFieldsOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.PersonalInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.R
@@ -49,7 +49,7 @@ import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
-    .padding(start = 30.dp, end = 30.dp)
+    .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
 @Composable
 fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navController: NavHostController){
 
@@ -62,7 +62,6 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 is ValidationState.Success -> {
                     Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
-
                 else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
             }
         }
@@ -79,14 +78,14 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         Spacer(modifier = Modifier.height(30.dp))
         PersonalInfoOnRegisterCredentials(
             userRegistrationState = userRegistrationState,
-            onEmailChange = { viewModel.registrationAction(RegistrationEvent.EmailChanged(it)) },
-            onNameChange = { viewModel.registrationAction(RegistrationEvent.NameChanged(it)) },
-            onSurnameChange = { viewModel.registrationAction(RegistrationEvent.SurnameChanged(it)) },
-            onPasswordChange = { viewModel.registrationAction(RegistrationEvent.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvent.RetypePasswordChanged(it)) },
-            onDeleteEmail = { viewModel.registrationAction(RegistrationEvent.EmailDeleted(it)) },
-            onDeleteName = { viewModel.registrationAction(RegistrationEvent.NameDeleted(it)) },
-            onDeleteSurname = { viewModel.registrationAction(RegistrationEvent.SurnameDeleted(it)) }
+            onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
+            onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
+            onSurnameChange = { viewModel.registrationAction(RegistrationEvents.SurnameChanged(it)) },
+            onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
+            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
+            onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
+            onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) },
+            onDeleteSurname = { viewModel.registrationAction(RegistrationEvents.SurnameDeleted(it)) }
         )
         Row(
             modifier = Modifier
@@ -99,7 +98,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 checked = isSeller,
                 onCheckedChange = {
                     isSeller = it
-                    viewModel.registrationAction(RegistrationEvent.SellerChange(it))
+                    viewModel.registrationAction(RegistrationEvents.SellerChange(it))
                 },
                 thumbContent = {
                     if (isSeller){
@@ -117,31 +116,31 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             Text(stringResource(R.string.areYouSeller))
         }
         if(isSeller){
-            ContactInfoOnRegisterCredentials(
+            ContactInfo(
                 userState = userRegistrationState,
-                onAddressChange = { viewModel.registrationAction(RegistrationEvent.AddressChanged(it)) },
-                onCountryChange = { viewModel.registrationAction(RegistrationEvent.CountryChanged(it)) },
-                onZipCodeChange = { viewModel.registrationAction(RegistrationEvent.ZipCodeChanged(it)) },
-                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvent.PhoneNumberChanged(it)) },
-                onDeleteAddress = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
-                onDeleteZipCode = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
-                onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) }
+                onAddressChange = { viewModel.registrationAction(RegistrationEvents.AddressChanged(it)) },
+                onCountryChange = { viewModel.registrationAction(RegistrationEvents.CountryChanged(it)) },
+                onZipCodeChange = { viewModel.registrationAction(RegistrationEvents.ZipCodeChanged(it)) },
+                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvents.PhoneNumberChanged(it)) },
+                onDeleteAddress = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
             )
             CreditCardFieldsOnRegisterCredentials(
                 userState = userRegistrationState,
-                onNumberChange = { viewModel.registrationAction(RegistrationEvent.CreditCardNumberChanged(it)) },
-                onDateChange = { viewModel.registrationAction(RegistrationEvent.ExpirationDateChanged(it)) },
-                onCvvChange = { viewModel.registrationAction(RegistrationEvent.CvvChanged(it)) },
-                onIbanChange = { viewModel.registrationAction(RegistrationEvent.IbanChanged(it)) },
-                onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) },
-                onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvent.ExpirationDateDeleted(it)) },
-                onDeleteCvv = { viewModel.registrationAction(RegistrationEvent.CvvDeleted(it)) },
-                onDeleteIban = { viewModel.registrationAction(RegistrationEvent.AddressDeleted(it)) }
+                onNumberChange = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberChanged(it)) },
+                onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },
+                onCvvChange = { viewModel.registrationAction(RegistrationEvents.CvvChanged(it)) },
+                onIbanChange = { viewModel.registrationAction(RegistrationEvents.IbanChanged(it)) },
+                onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvents.ExpirationDateDeleted(it)) },
+                onDeleteCvv = { viewModel.registrationAction(RegistrationEvents.CvvDeleted(it)) },
+                onDeleteIban = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
         Button(
-            onClick = { viewModel.registrationAction(RegistrationEvent.Submit()) },
+            onClick = { viewModel.registrationAction(RegistrationEvents.Submit()) },
             modifier = Modifier
                 .size(width = 330.dp, height = 50.dp)
                 .pulsateClick(),

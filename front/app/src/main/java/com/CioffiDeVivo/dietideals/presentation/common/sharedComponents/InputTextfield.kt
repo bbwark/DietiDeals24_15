@@ -7,7 +7,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun InputTextField(
@@ -39,7 +42,7 @@ fun InputTextField(
     OutlinedTextField(
         value = value,
         onValueChange = { onValueChanged(it) },
-        label = { Text(label) },
+        label = { Text(label, fontSize = 15.sp) },
         placeholder = { Text(placeholder) },
         visualTransformation = visualTransformation,
         readOnly = readOnly,
@@ -49,7 +52,8 @@ fun InputTextField(
                 if (supportingText != null) {
                     Text(text = supportingText, color = Color.Red)
                 }
-        } },
+            }
+        },
         trailingIcon = {
             Icon(
                 trailingIcon,

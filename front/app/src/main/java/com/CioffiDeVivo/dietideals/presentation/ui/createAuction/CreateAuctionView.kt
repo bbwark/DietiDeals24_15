@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -46,12 +48,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,7 +77,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
-import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
+import com.CioffiDeVivo.dietideals.utils.IntervalTransformation
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -84,20 +92,19 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     var selectedCategory by remember { mutableStateOf(AuctionCategory.Other) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
+    val permissionState = rememberPermissionState(
+        permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     LaunchedEffect(key1 = context){
         viewModel.validationCreateAuctionEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {
                     Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
-
                 else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
             }
         }
     }
-    val permissionState = rememberPermissionState(
-        permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
-    )
     SideEffect {
         permissionState.launchPermissionRequest()
     }
@@ -117,6 +124,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
             label = stringResource(R.string.itemName),
             onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
+            isError = createAuctionState.itemNameErrorMsg != null,
+            supportingText = createAuctionState.itemNameErrorMsg,
             modifier = modifierStandard
         )
         DropDownMenuField(
@@ -126,9 +135,9 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             onValueSelected = {
                 newSelection -> selectedCategory = newSelection
                 viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(selectedCategory))
-                }
+            },
+            modifier = Modifier.padding(start = 100.dp, end = 100.dp, bottom = 8.dp)
         )
-        Spacer(modifier = Modifier.height(15.dp))
         Row {
             ElevatedButton(
                 onClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent)) },
@@ -203,7 +212,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                 viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
             },
             modifier = Modifier
-                .size(width = 330.dp, height = 50.dp)
+                .wrapContentWidth()
+                .padding(bottom = 8.dp)
                 .pulsateClick(),
             content = {
                 Text(stringResource(R.string.createAuction), fontSize = 20.sp)
@@ -230,7 +240,9 @@ fun SilentAuction(
 ){
     var minAccepted by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
-    Row {
+    Row (
+        modifier = modifierStandard
+    ){
         OutlinedTextField(
             value = minAccepted,
             onValueChange = { newBid ->
@@ -249,8 +261,21 @@ fun SilentAuction(
             },
             visualTransformation = currencyVisualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(150.dp),
-            label = { Text(stringResource(R.string.minimumBid)) },
+            label = {
+                Text(
+                    stringResource(R.string.minimumBid),
+                    fontSize = 14.sp
+                )
+            },
+            isError = auctionState.minAcceptedErrorMsg != null,
+            supportingText = {
+                if(auctionState.minAcceptedErrorMsg != null){
+                    Text(text = auctionState.minAcceptedErrorMsg, color = Color.Red)
+                }
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
@@ -258,9 +283,11 @@ fun SilentAuction(
             onValueChanged = { },
             label = stringResource(R.string.endingDate),
             onTrailingIconClick = { onCalendarClick() },
-            modifier = Modifier.width(150.dp),
             readOnly = true,
             trailingIcon = Icons.Filled.CalendarMonth,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     DescriptionTextfield(
@@ -284,7 +311,10 @@ fun EnglishAuction(
 ){
     var minStep by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
-    Row {
+
+    Row(
+        modifier = modifierStandard
+    ) {
         OutlinedTextField(
             value = auctionState.auction.minStep,
             onValueChange = { newBid ->
@@ -303,16 +333,36 @@ fun EnglishAuction(
             },
             visualTransformation = currencyVisualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(150.dp),
-            label = { Text(stringResource(R.string.minStep)) },
+            label = {
+                Text(
+                    stringResource(R.string.minStep),
+                    fontSize = 13.sp
+                )
+            },
+            isError = auctionState.minStepErrorMsg != null,
+            supportingText = {
+                if(auctionState.minStepErrorMsg != null){
+                    Text(text = auctionState.minStepErrorMsg, color = Color.Red)
+                }
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
         InputTextField(
             value = auctionState.auction.interval,
             onValueChanged = { onIntervalChange(it) },
             label = stringResource(R.string.interval),
+            placeholder = stringResource(id = R.string.intervalPlaceholder),
             onTrailingIconClick = { onDeleteInterval(it) },
-            modifier = Modifier.width(150.dp)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = IntervalTransformation(),
+            isError = auctionState.intervalErrorMsg != null,
+            supportingText = auctionState.intervalErrorMsg,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     InputTextField(
@@ -322,7 +372,7 @@ fun EnglishAuction(
         trailingIcon = Icons.Filled.CalendarMonth,
         onTrailingIconClick = { onCalendarClick() },
         readOnly = true,
-        modifier = Modifier.width(325.dp)
+        modifier = modifierStandard
     )
     DescriptionTextfield(
         description = auctionState.auction.description,
