@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.utils.ApiService
@@ -24,7 +25,10 @@ import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 
-class CreateAuctionViewModel(application: Application, private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm() ): AndroidViewModel(application) {
+class CreateAuctionViewModel(
+    application: Application,
+    private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm()
+): AndroidViewModel(application) {
 
     private val _auctionState = MutableStateFlow(CreateAuctionState())
     val auctionState: StateFlow<CreateAuctionState> = _auctionState.asStateFlow()
@@ -128,23 +132,28 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
 
     private fun validationBlock(): Boolean {
         val itemNameValidation = validateCreateAuctionForm.validateItemName(auctionState.value.auction.item.name)
+        val auctionTypeValidation = validateCreateAuctionForm.validateAuctionType(auctionState.value.auction.type)
         val intervalValidation = validateCreateAuctionForm.validateInterval(auctionState.value.auction.interval)
         val minStepValidation = validateCreateAuctionForm.validateMinStep(auctionState.value.auction.minStep)
         val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(auctionState.value.auction.minAccepted)
-        val descriptionValidation = validateCreateAuctionForm.validateDescription(auctionState.value.auction.description)
 
         val hasErrorAuctionSilent = listOf(
             itemNameValidation,
             minAcceptedValidation,
-            descriptionValidation
         ).any { !it.positiveResult }
 
         val hasErrorAuctionEnglish = listOf(
             itemNameValidation,
             minStepValidation,
             intervalValidation,
-            descriptionValidation
         ).any { !it.positiveResult }
+
+        if(auctionState.value.auction.type == AuctionType.None){
+            _auctionState.value = _auctionState.value.copy(
+                auctionTypeErrorMsg = auctionTypeValidation.errorMessage
+            )
+            return false
+        }
 
         if(hasErrorAuctionSilent && auctionState.value.auction.type == AuctionType.Silent){
             _auctionState.value = _auctionState.value.copy(
@@ -280,11 +289,17 @@ class CreateAuctionViewModel(application: Application, private val validateCreat
         )
     }
 
-    private fun updateAuctionCategory(auctionCategory: String){
+    private fun updateAuctionCategory(auctionCategory: AuctionCategory){
         _auctionState.value = _auctionState.value.copy(
             auction = _auctionState.value.auction.copy(
-                category = AuctionCategory.valueOf(auctionCategory)
+                category = auctionCategory
             )
+        )
+    }
+
+    fun removeErrorMsgAuctionType(){
+        _auctionState.value = _auctionState.value.copy(
+            auctionTypeErrorMsg = null
         )
     }
 

@@ -36,6 +36,7 @@
     <string name="itemName">Item Name</string>
     <string name="minStep">Min.Step</string>
     <string name="interval">Interval</string>
+    <string name="intervalPlaceholder">MM:SS</string>
     <string name="endingDate">End Date</string>
     <string name="bidHistory">Bid History</string>
     <string name="iban">IBAN</string>
@@ -45,4 +46,5 @@
     <string name="web_client_id">754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com</string>
     <string name="base_url">http://16.171.206.112</string>
     <string name="port">8181</string>
+    <string name="alert">Alert</string>
 </resources>

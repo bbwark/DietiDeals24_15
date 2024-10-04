@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.domain.entities;
 
+import com.dietideals.dietideals24_25.domain.Country;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,7 +56,7 @@ public class UserEntity implements UserDetails {
     private String zipCode;
 
     @Column(name = "country")
-    private String country;
+    private Country country;
 
     @Column(name = "phoneNumber")
     private String phoneNumber;
@@ -92,7 +93,7 @@ public class UserEntity implements UserDetails {
     }
 
     public UserEntity(UUID id, String email, String name, String surname, String password, Set<RoleEntity> authorities,
-            Boolean isSeller, String address, String zipCode, String country, String phoneNumber,
+            Boolean isSeller, String address, String zipCode, Country country, String phoneNumber,
             List<CreditCardEntity> creditCards) {
         this.id = id;
         this.email = email;
@@ -101,6 +102,7 @@ public class UserEntity implements UserDetails {
         this.password = password;
         this.authorities = authorities;
         this.isSeller = isSeller;
+        this.address = address;
         this.zipCode = zipCode;
         this.country = country;
         this.phoneNumber = phoneNumber;
