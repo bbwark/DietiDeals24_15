@@ -14,22 +14,21 @@ import com.dietideals.dietideals24_25.utils.S3Service;
 @RestController
 @RequestMapping("/images")
 public class ImageController {
-
     @Autowired
     private S3Service s3Service;
 
-    // Endpoint per caricare immagini
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            // Carica l'immagine su S3 e ottieni l'URL pubblico
+            if (file.isEmpty()) {
+                return new ResponseEntity<>("Please select a file to upload", HttpStatus.BAD_REQUEST);
+            }
+
             String imageUrl = s3Service.uploadFile("dietidealsbucket", "images", file);
-            
-            // Qui puoi salvare l'URL nel database con altri metadati (se necessario)
-            
-            return new ResponseEntity<>(imageUrl, HttpStatus.CREATED);  // Restituisci l'URL al frontend
+           
+            return new ResponseEntity<>(imageUrl, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error uploading file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

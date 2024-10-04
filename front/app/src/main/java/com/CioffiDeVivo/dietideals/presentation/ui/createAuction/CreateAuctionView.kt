@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Euro
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -51,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -404,7 +406,7 @@ fun EnglishAuction(
 
 @Composable
 fun ImageItem(
-    uri: Uri?,
+    uri: String,
     onClick: () -> Unit,
     context: Context,
     iconButton: ImageVector = Icons.Filled.BrokenImage,
@@ -413,7 +415,11 @@ fun ImageItem(
     val showDialog = remember { mutableStateOf(false) }
     Box {
         Image(
-            painter = rememberAsyncImagePainter(uri),
+            painter = rememberAsyncImagePainter(
+                model = uri,
+                error = rememberVectorPainter(image = Icons.Default.BrokenImage),  // Icona di errore
+                placeholder = rememberVectorPainter(image = Icons.Default.Image)   // Icona di caricamento
+            ),
             contentScale = ContentScale.FillBounds,
             modifier = modifier
                 .size(width = 80.dp, height = 80.dp)
@@ -445,10 +451,13 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
     val itemAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
-    val multiPhotosPickerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-            viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(it))
+    val multiPhotosPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { selectedUri ->
+            viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(selectedUri.toString()))
         }
+    }
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
@@ -491,7 +500,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
 @Composable
 fun DialogImage(
-    uri: Uri?,
+    uri: String,
     onDismissRequest: () -> Unit
 ){
     Dialog(
