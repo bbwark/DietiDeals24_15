@@ -76,6 +76,7 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.utils.IntervalTransformation
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
@@ -92,6 +93,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     var selectedCategory by remember { mutableStateOf(AuctionCategory.Other) }
     val createAuctionState by viewModel.auctionState.collectAsState()
     val context = LocalContext.current
+    val showDialog = remember { mutableStateOf(false) }
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
@@ -101,7 +103,9 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                 is ValidationState.Success -> {
                     Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
-                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+                else -> {
+                    Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -140,7 +144,10 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         )
         Row {
             ElevatedButton(
-                onClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent)) },
+                onClick = {
+                    viewModel.removeErrorMsgAuctionType()
+                    viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent))
+                },
                 colors = if (createAuctionState.auction.type == AuctionType.Silent){
                     ButtonDefaults.buttonColors()
                 }else{
@@ -155,7 +162,10 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             }
             Spacer(modifier = Modifier.size(10.dp))
             ElevatedButton(
-                onClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English)) },
+                onClick = {
+                    viewModel.removeErrorMsgAuctionType()
+                    viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English))
+                },
                 colors = if (createAuctionState.auction.type == AuctionType.English){
                     ButtonDefaults.buttonColors()
                 }else{
@@ -206,10 +216,20 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                 onCancel = { showDatePicker.value = false }
             )
         }
+
+        if(showDialog.value && createAuctionState.auctionTypeErrorMsg != null){
+            DialogAlert(
+                showDialog = showDialog,
+                dialogText = createAuctionState.auctionTypeErrorMsg!!
+            )
+        }
+
         Button(
             onClick = {
-                /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
+                showDialog.value = true
                 viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
+
+                /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
             },
             modifier = Modifier
                 .wrapContentWidth()

@@ -1,5 +1,9 @@
 package com.CioffiDeVivo.dietideals.domain.validations
 
+import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+
+val intervalRegex = Regex("^(3[0-9]|[4-8][0-9]|90)[0-5][0-9]$")
+
 class ValidateCreateAuctionForm{
 
     fun validateItemName(itemName: String): ValidationResult{
@@ -39,14 +43,20 @@ class ValidateCreateAuctionForm{
                 errorMessage = "The field cannot be empty"
             )
         }
+        if(!intervalRegex.matches(interval)){
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "Invalid Interval"
+            )
+        }
         return ValidationResult(positiveResult = true)
     }
 
-    fun validateDescription(description: String): ValidationResult{
-        if(description.isBlank()){
+    fun validateAuctionType(auctionType: AuctionType): ValidationResult{
+        if(auctionType == AuctionType.None){
             return ValidationResult(
                 positiveResult = false,
-                errorMessage = "The field cannot be empty"
+                errorMessage = "You have to choose an Auction Type!"
             )
         }
         return ValidationResult(positiveResult = true)
