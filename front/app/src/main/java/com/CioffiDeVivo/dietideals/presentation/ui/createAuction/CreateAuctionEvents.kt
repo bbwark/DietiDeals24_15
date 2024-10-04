@@ -7,7 +7,7 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 sealed class CreateAuctionEvents {
     data class ItemNameChanged(val itemName: String): CreateAuctionEvents()
     data class ItemNameDeleted(val itemName: String): CreateAuctionEvents()
-    data class ImagesChanged(val image: Uri?): CreateAuctionEvents()
+    data class ImagesChanged(val image: String): CreateAuctionEvents()
     data class ImagesDeleted(val index: Int): CreateAuctionEvents()
     data class AuctionTypeChanged(val auctionType: AuctionType): CreateAuctionEvents()
     data class AuctionCategoryChanged(val auctionCategory: AuctionCategory): CreateAuctionEvents()

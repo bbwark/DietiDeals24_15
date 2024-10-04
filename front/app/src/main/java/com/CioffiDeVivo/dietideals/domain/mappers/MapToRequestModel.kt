@@ -45,10 +45,10 @@ fun CreditCard.toRequestModel(): com.CioffiDeVivo.dietideals.domain.requestModel
 
 fun Item.toRequestModel(): com.CioffiDeVivo.dietideals.domain.requestModels.Item {
     return com.CioffiDeVivo.dietideals.domain.requestModels.Item(
-        id = this.id.toString(),
+        id = this.id,
         name = this.name,
-        imageUrl = this.imagesUri.firstOrNull()?.toString(),
-        auctionId = null // To set from the context
+        imageUrl = this.imagesUri.joinToString(" "),
+        auctionId = null // Da impostare dal contesto
     )
 }
 
