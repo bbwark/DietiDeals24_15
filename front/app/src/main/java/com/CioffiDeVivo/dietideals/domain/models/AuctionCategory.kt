@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.domain.models;
 
-enum class AuctionCategory {
+enum class AuctionCategory{
     Electronic,
     Games,
     House,

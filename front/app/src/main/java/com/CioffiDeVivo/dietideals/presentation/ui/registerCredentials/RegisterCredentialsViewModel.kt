@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.utils.ApiService
@@ -38,81 +39,81 @@ class RegisterCredentialsViewModel(
         application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
     }
 
-    fun registrationAction(registrationEvent: RegistrationEvent){
-        when(registrationEvent){
-            is RegistrationEvent.EmailChanged -> {
-                updateEmail(registrationEvent.email)
+    fun registrationAction(registrationEvents: RegistrationEvents){
+        when(registrationEvents){
+            is RegistrationEvents.EmailChanged -> {
+                updateEmail(registrationEvents.email)
             }
-            is RegistrationEvent.EmailDeleted -> {
+            is RegistrationEvents.EmailDeleted -> {
                 deleteEmail()
             }
-            is RegistrationEvent.NameChanged -> {
-                updateName(registrationEvent.name)
+            is RegistrationEvents.NameChanged -> {
+                updateName(registrationEvents.name)
             }
-            is RegistrationEvent.NameDeleted -> {
+            is RegistrationEvents.NameDeleted -> {
                 deleteName()
             }
-            is RegistrationEvent.SurnameChanged -> {
-                updateSurname(registrationEvent.surname)
+            is RegistrationEvents.SurnameChanged -> {
+                updateSurname(registrationEvents.surname)
             }
-            is RegistrationEvent.SurnameDeleted -> {
+            is RegistrationEvents.SurnameDeleted -> {
                 deleteSurname()
             }
-            is RegistrationEvent.PasswordChanged -> {
-                updatePassword(registrationEvent.password)
+            is RegistrationEvents.PasswordChanged -> {
+                updatePassword(registrationEvents.password)
             }
-            is RegistrationEvent.RetypePasswordChanged -> {
-                updateNewPassword(registrationEvent.newPassword)
+            is RegistrationEvents.RetypePasswordChanged -> {
+                updateNewPassword(registrationEvents.newPassword)
             }
-            is RegistrationEvent.SellerChange -> {
-                updateIsSeller(registrationEvent.isSeller)
+            is RegistrationEvents.SellerChange -> {
+                updateIsSeller(registrationEvents.isSeller)
             }
-            is RegistrationEvent.AddressChanged -> {
-                updateAddress(registrationEvent.address)
+            is RegistrationEvents.AddressChanged -> {
+                updateAddress(registrationEvents.address)
             }
-            is RegistrationEvent.AddressDeleted -> {
+            is RegistrationEvents.AddressDeleted -> {
                 deleteAddress()
             }
-            is RegistrationEvent.ZipCodeChanged -> {
-                updateZipCode(registrationEvent.zipCode)
+            is RegistrationEvents.ZipCodeChanged -> {
+                updateZipCode(registrationEvents.zipCode)
             }
-            is RegistrationEvent.ZipCodeDeleted -> {
+            is RegistrationEvents.ZipCodeDeleted -> {
                 deleteZipCode()
             }
-            is RegistrationEvent.CountryChanged -> {
-                updateCountry(registrationEvent.country)
+            is RegistrationEvents.CountryChanged -> {
+                updateCountry(registrationEvents.country)
             }
-            is RegistrationEvent.PhoneNumberChanged -> {
-                updatePhoneNumber(registrationEvent.phoneNumber)
+            is RegistrationEvents.PhoneNumberChanged -> {
+                updatePhoneNumber(registrationEvents.phoneNumber)
             }
-            is RegistrationEvent.PhoneNumberDeleted -> {
+            is RegistrationEvents.PhoneNumberDeleted -> {
                 deletePhoneNumber()
             }
-            is RegistrationEvent.CreditCardNumberChanged -> {
-                updateCreditCardNumber(registrationEvent.creditCardNumber)
+            is RegistrationEvents.CreditCardNumberChanged -> {
+                updateCreditCardNumber(registrationEvents.creditCardNumber)
             }
-            is RegistrationEvent.CreditCardNumberDeleted -> {
+            is RegistrationEvents.CreditCardNumberDeleted -> {
                 deleteCreditCardNumber()
             }
-            is RegistrationEvent.ExpirationDateChanged -> {
-                updateExpirationDate(registrationEvent.expirationDate)
+            is RegistrationEvents.ExpirationDateChanged -> {
+                updateExpirationDate(registrationEvents.expirationDate)
             }
-            is RegistrationEvent.ExpirationDateDeleted -> {
+            is RegistrationEvents.ExpirationDateDeleted -> {
                 deleteExpirationDate()
             }
-            is RegistrationEvent.CvvChanged -> {
-                updateCvv(registrationEvent.cvv)
+            is RegistrationEvents.CvvChanged -> {
+                updateCvv(registrationEvents.cvv)
             }
-            is RegistrationEvent.CvvDeleted -> {
+            is RegistrationEvents.CvvDeleted -> {
                 deleteCvv()
             }
-            is RegistrationEvent.IbanChanged -> {
-                updateIban(registrationEvent.iban)
+            is RegistrationEvents.IbanChanged -> {
+                updateIban(registrationEvents.iban)
             }
-            is RegistrationEvent.IbanDeleted -> {
+            is RegistrationEvents.IbanDeleted -> {
                 deleteIban()
             }
-            is RegistrationEvent.Submit -> {
+            is RegistrationEvents.Submit -> {
                 submitForm()
             }
         }
@@ -190,10 +191,9 @@ class RegisterCredentialsViewModel(
         val newPasswordValidation = validateRegistrationForms.validateRetypePassword(userRegistrationState.value.user.password, userRegistrationState.value.retypePassword)
         val addressValidation = validateRegistrationForms.validateAddress(userRegistrationState.value.user.address)
         val zipCodeValidation = validateRegistrationForms.validateZipCode(userRegistrationState.value.user.zipCode)
-        val countryValidation = validateRegistrationForms.validateCountry(userRegistrationState.value.user.country)
         val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(userRegistrationState.value.user.phoneNumber)
         val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(userRegistrationState.value.card.creditCardNumber)
-        val expirationDateValidation = validateRegistrationForms.validateExpirationDate(userRegistrationState.value.card.expirationDate.format(DateTimeFormatter.ofPattern("MM/yy")))
+        val expirationDateValidation = validateRegistrationForms.validateExpirationDate(userRegistrationState.value.expirationDate)
         val cvvValidation = validateRegistrationForms.validateCvv(userRegistrationState.value.card.cvv)
         val ibanValidation = validateRegistrationForms.validateIban(userRegistrationState.value.card.iban)
 
@@ -213,7 +213,6 @@ class RegisterCredentialsViewModel(
             newPasswordValidation,
             addressValidation,
             zipCodeValidation,
-            countryValidation,
             phoneNumberValidation,
             creditCardNumberValidation,
             expirationDateValidation,
@@ -240,7 +239,6 @@ class RegisterCredentialsViewModel(
                 retypePasswordErrorMsg = newPasswordValidation.errorMessage,
                 addressErrorMsg = addressValidation.errorMessage,
                 zipCodeErrorMsg = zipCodeValidation.errorMessage,
-                countryErrorMsg = countryValidation.errorMessage,
                 phoneNumberErrorMsg = phoneNumberValidation.errorMessage,
                 creditCardNumberErrorMsg = creditCardNumberValidation.errorMessage,
                 expirationDateErrorMsg = expirationDateValidation.errorMessage,
@@ -340,7 +338,7 @@ class RegisterCredentialsViewModel(
         updateZipCode("")
     }
 
-    private fun updateCountry(country: String){
+    private fun updateCountry(country: Country){
         _userRegistrationState.value = _userRegistrationState.value.copy(
             user = _userRegistrationState.value.user.copy(
                 country = country
@@ -374,9 +372,7 @@ class RegisterCredentialsViewModel(
 
     private fun updateExpirationDate(expirationDate: String){
         _userRegistrationState.value = _userRegistrationState.value.copy(
-            card = _userRegistrationState.value.card.copy(
-                expirationDate = LocalDate.parse("01/$expirationDate", DateTimeFormatter.ofPattern("dd/MM/yy"))
-            )
+            expirationDate = expirationDate
         )
     }
 

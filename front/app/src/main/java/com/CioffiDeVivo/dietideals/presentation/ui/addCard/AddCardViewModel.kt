@@ -114,9 +114,7 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
 
     private fun updateExpirationDate(expirationDate: String){
         _userCardState.value = _userCardState.value.copy(
-            card = _userCardState.value.card.copy(
-                expirationDate = LocalDate.parse(expirationDate)
-            )
+            expirationDate = expirationDate
         )
     }
 

@@ -12,12 +12,12 @@ data class User(
     val bio: String = "",
     val address: String = "",
     val zipCode: String = "",
-    val country: String = "",
+    val country: Country? = Country.Italy,
     val phoneNumber: String = "",
     val creditCards: Array<CreditCard> = arrayOf()
 )
 
-enum class Countries{
+enum class Country{
     Italy,
     Spain,
     Germany,

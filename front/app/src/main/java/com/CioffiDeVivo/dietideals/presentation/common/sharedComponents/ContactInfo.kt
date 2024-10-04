@@ -1,30 +1,39 @@
 package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationState
 
 @Composable
-fun ContactInfoOnRegisterCredentials(
+fun ContactInfo(
     userState: RegistrationState,
     onAddressChange: (String) -> Unit,
+    onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
-    onCountryChange: (String) -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onDeleteAddress: (String) -> Unit,
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
-    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
+    var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
         value = userState.user.address,
         onValueChanged = { onAddressChange(it) },
@@ -34,7 +43,9 @@ fun ContactInfoOnRegisterCredentials(
         onTrailingIconClick = { onDeleteAddress(it) },
         modifier = modifierStandard
     )
-    Row {
+    Row(
+        modifier = modifierStandard
+    ){
         InputTextField(
             value = userState.user.zipCode,
             onValueChanged = { onZipCodeChange(it) },
@@ -42,14 +53,21 @@ fun ContactInfoOnRegisterCredentials(
             isError = userState.zipCodeErrorMsg != null,
             supportingText = userState.zipCodeErrorMsg,
             onTrailingIconClick = { onDeleteZipCode(it) },
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
-        Spacer(modifier = Modifier.width(10.dp))
-        Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
-            menuList = countryList,
+            selectedValue = selectedCountry,
+            menuList = Country.values(),
             label = stringResource(id = R.string.country),
-            onChange = { onCountryChange(it) }
+            onValueSelected = {
+                    newSelection -> selectedCountry = newSelection
+                onCountryChange(selectedCountry)
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     InputTextField(
@@ -64,17 +82,17 @@ fun ContactInfoOnRegisterCredentials(
 }
 
 @Composable
-fun ContactInfoOnEditContactInfo(
+fun ContactInfo(
     userState: EditContactInfoState,
     onAddressChange: (String) -> Unit,
+    onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
-    onCountryChange: (String) -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onDeleteAddress: (String) -> Unit,
     onDeleteZipCode: (String) -> Unit,
     onDeletePhoneNumber: (String) -> Unit,
 ){
-    val countryList = listOf("Italy", "Spain", "Germany", "France", "Belgium")
+    var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
         value = userState.user.address,
         onValueChanged = { onAddressChange(it) },
@@ -84,7 +102,9 @@ fun ContactInfoOnEditContactInfo(
         onTrailingIconClick = { onDeleteAddress(it) },
         modifier = modifierStandard
     )
-    Row {
+    Row(
+        modifier = modifierStandard
+    ){
         InputTextField(
             value = userState.user.zipCode,
             onValueChanged = { onZipCodeChange(it) },
@@ -92,14 +112,21 @@ fun ContactInfoOnEditContactInfo(
             isError = userState.zipCodeErrorMsg != null,
             supportingText = userState.zipCodeErrorMsg,
             onTrailingIconClick = { onDeleteZipCode(it) },
-            modifier = Modifier.width(145.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
         )
-        Spacer(modifier = Modifier.width(10.dp))
-        Spacer(modifier = Modifier.height(10.dp))
         DropDownMenuField(
-            menuList = countryList,
+            selectedValue = selectedCountry,
+            menuList = Country.values(),
             label = stringResource(id = R.string.country),
-            onChange = { onCountryChange(it) }
+            onValueSelected = {
+                newSelection -> selectedCountry = newSelection
+                onCountryChange(selectedCountry)
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
     InputTextField(
@@ -111,5 +138,22 @@ fun ContactInfoOnEditContactInfo(
         onTrailingIconClick = { onDeletePhoneNumber(it) },
         modifier = modifierStandard
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewInfo(){
+    Column {
+        ContactInfo(
+            userState = EditContactInfoState(),
+            onAddressChange = {},
+            onCountryChange = {},
+            onZipCodeChange = {},
+            onPhoneNumberChange = {},
+            onDeleteAddress = {},
+            onDeleteZipCode = {},
+            onDeletePhoneNumber = {}
+        )
+    }
 }
 

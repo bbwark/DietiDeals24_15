@@ -77,7 +77,7 @@ fun SetupNavGraph() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Screen.CreateAuction.route
+            startDestination = Screen.RegisterCredentials.route
         ) {
             composable(
                 route = Screen.Account.route

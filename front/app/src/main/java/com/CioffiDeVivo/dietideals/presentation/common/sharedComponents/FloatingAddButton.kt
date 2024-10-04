@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.CioffiDeVivo.dietideals.animations.pulsateClick
 
 @Composable
 fun FloatingAddButton(onClick: () -> Unit) {
@@ -20,7 +21,9 @@ fun FloatingAddButton(onClick: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             FloatingActionButton(
                 onClick = { onClick() },
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier
+                    .padding(24.dp)
+                    .pulsateClick()
             ) {
                 Icon(Icons.Filled.Add, "Floating action button.")
             }

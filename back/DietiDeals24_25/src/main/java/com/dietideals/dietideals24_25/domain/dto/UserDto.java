@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
+import com.dietideals.dietideals24_25.domain.Country;
 import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +37,7 @@ public class UserDto {
 
     private Optional<String> zipcode;
 
-    private Optional<String> country;
+    private Optional<Country> country;
 
     private Optional<String> phoneNumber;
 

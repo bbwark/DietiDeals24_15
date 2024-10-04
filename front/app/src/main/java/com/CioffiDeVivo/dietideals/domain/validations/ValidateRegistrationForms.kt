@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.domain.validations
 
 import android.util.Patterns
+import java.time.LocalDate
 
 const val passwordMinimumLength = 8
 const val phoneNumberMinimumLength = 7
@@ -10,7 +11,8 @@ const val creditCardExpirationDateNumberLength = 5
 const val cvvLength = 3
 const val ibanLength = 27
 val currentYear = java.time.Year.now().value.toString().substring(2)
-val regexPattern = """^(0[1-9]|1[0-2])/$currentYear|[2-9]\d$""".toRegex()
+val regexCreditCardPattern = """^(0[1-9]|1[0-2])/$currentYear|[2-9]\d$""".toRegex()
+val regexExpirationDatePattern = Regex("^(0[1-9]|1[0-2])([0-9]{2})$")
 
 open class ValidateRegistrationForms {
 
@@ -104,16 +106,6 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    open fun validateCountry(country: String): ValidationResult{
-        if (country.isBlank()) {
-            return ValidationResult(
-                positiveResult = false,
-                errorMessage = "The field cannot be empty"
-            )
-        }
-        return ValidationResult(positiveResult = true)
-    }
-
     open fun validatePhoneNumber(phoneNumber: String): ValidationResult{
         if(phoneNumber.length < phoneNumberMinimumLength || phoneNumber.length > phoneNumberMaximumLength){
             return ValidationResult(
@@ -135,11 +127,19 @@ open class ValidateRegistrationForms {
     }
 
     open fun validateExpirationDate(expirationDate: String): ValidationResult{
-        if (expirationDate.length != creditCardExpirationDateNumberLength && !regexPattern.matches(expirationDate)) {
-            return ValidationResult(
-                positiveResult = false,
-                errorMessage = "Invalid Date"
-            )
+        if (expirationDate.length != creditCardExpirationDateNumberLength && !regexCreditCardPattern.matches(expirationDate)) {
+            val month = expirationDate.substring(0, 2).toInt()
+            val year = "20" + expirationDate.substring(2, 4)
+            val expirationYear = year.toInt()
+            val currentDate = LocalDate.now()
+            val currentMonth = currentDate.monthValue
+            val currentYear = currentDate.year
+            if(expirationYear < currentYear || (expirationYear == currentYear && month <= currentMonth)){
+                return ValidationResult(
+                    positiveResult = false,
+                    errorMessage = "Invalid Date"
+                )
+            }
         }
         return ValidationResult(positiveResult = true)
     }
