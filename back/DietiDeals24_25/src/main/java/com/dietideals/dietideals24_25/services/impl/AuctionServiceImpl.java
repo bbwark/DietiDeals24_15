@@ -49,6 +49,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<AuctionEntity> findExpiredAuctions() {
+        return auctionRepository.findExpiredAuctions();
+    }
+
+    @Override
     public Boolean exists(UUID id) {
         return auctionRepository.existsById(id);
     }
