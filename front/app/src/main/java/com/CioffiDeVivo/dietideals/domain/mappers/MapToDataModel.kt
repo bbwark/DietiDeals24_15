@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.domain.mappers
 
-import android.net.Uri
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Country
@@ -22,7 +21,7 @@ fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.domain.models.Auction {
         item = this.item?.toDataModel() ?: com.CioffiDeVivo.dietideals.domain.models.Item(),
         description = this.description ?: "",
         bids = this.bids.map { it.toDataModel() }.toTypedArray(),
-        endingDate = this.endingDate?.let { LocalDate.parse(it) },
+        endingDate = this.endingDate?.let { LocalDateTime.parse(it) },
         minStep = this.minStep ?: "",
         interval = this.interval ?: "",
         expired = this.expired ?: false,

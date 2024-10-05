@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.domain.models
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class Auction (
     val id: String = "",
@@ -8,7 +8,7 @@ data class Auction (
     val item: Item = Item(name = ""),
     val description: String = "",
     val bids: Array<Bid> = arrayOf(),
-    val endingDate: LocalDate? = LocalDate.now(),
+    val endingDate: LocalDateTime? = LocalDateTime.now(),
     val minStep: String = "",
     val interval: String = "",
     val expired: Boolean = false,
