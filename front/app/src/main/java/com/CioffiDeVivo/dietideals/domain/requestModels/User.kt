@@ -19,6 +19,7 @@ data class User (
     @SerializedName("country"                  ) var country                  : Country?                = Country.Italy,
     @SerializedName("phoneNumber"              ) var phoneNumber              : String?                = null,
     @SerializedName("creditCards"              ) var creditCards              : ArrayList<CreditCard>  = arrayListOf(),
-    @SerializedName("authorities"              ) var authorities              : ArrayList<Authority> = arrayListOf()
+    @SerializedName("authorities"              ) var authorities              : ArrayList<Authority>   = arrayListOf(),
+    @SerializedName("deviceTokens"             ) var deviceTokens             : ArrayList<String>      = arrayListOf()
 
 )

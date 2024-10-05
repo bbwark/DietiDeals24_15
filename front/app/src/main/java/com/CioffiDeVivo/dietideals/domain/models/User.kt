@@ -14,7 +14,8 @@ data class User(
     val zipCode: String = "",
     val country: Country? = Country.Italy,
     val phoneNumber: String = "",
-    val creditCards: Array<CreditCard> = arrayOf()
+    val creditCards: Array<CreditCard> = arrayOf(),
+    val deviceTokens: Array<String> = arrayOf()
 )
 
 enum class Country{

@@ -73,6 +73,7 @@ fun User.toDataModel(): com.CioffiDeVivo.dietideals.domain.models.User {
         zipCode = this.zipcode ?: "",
         country = this.country ?: Country.Italy,
         phoneNumber = this.phoneNumber ?: "",
-        creditCards = this.creditCards.map { it.toDataModel() }.toTypedArray()
+        creditCards = this.creditCards.map { it.toDataModel() }.toTypedArray(),
+        deviceTokens = this.deviceTokens.map { it }.toTypedArray()
     )
 }
