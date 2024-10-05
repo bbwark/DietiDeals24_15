@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "754156422030",
-    "project_id": "dietideals24-5b232",
-    "storage_bucket": "dietideals24-5b232.appspot.com"
+    "project_number": "679886350477",
+    "project_id": "dietidealsproject",
+    "storage_bucket": "dietidealsproject.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:754156422030:android:ba2051f5d8914192549adf",
+        "mobilesdk_app_id": "1:679886350477:android:0405d180c4d3ee13e45ac4",
         "android_client_info": {
           "package_name": "com.CioffiDeVivo.dietideals"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "754156422030-66msb0ke90hmmst2jtjvibgptvkmnbnv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.CioffiDeVivo.dietideals",
-            "certificate_hash": "de4f3e40fab64f67e7e539f35e9e1bcd7671f0f6"
-          }
-        },
-        {
-          "client_id": "754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCaaV0PHwX5Lvr8nzbwVMfqwykHcMmcnms"
+          "current_key": "AIzaSyDrH6xCPq5VLyl8TOy2LdvYKmMu1kQRHxE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
