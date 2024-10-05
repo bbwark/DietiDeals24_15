@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +48,7 @@ public class AuctionEntity {
     @Enumerated(EnumType.STRING)
     private AuctionCategory category;
 
-    private LocalDate endingDate;
+    private LocalDateTime endingDate;
 
     private Boolean expired;
 
