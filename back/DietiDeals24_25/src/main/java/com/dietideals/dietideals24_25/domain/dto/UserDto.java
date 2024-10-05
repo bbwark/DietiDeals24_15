@@ -31,6 +31,9 @@ public class UserDto {
     @Builder.Default
     private List<AuctionDto> favouriteAuctions = new ArrayList<>();
 
+    @Builder.Default
+    private List<String> deviceTokens = new ArrayList<>();
+
     private Optional<String> bio;
 
     private Optional<String> address;

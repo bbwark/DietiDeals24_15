@@ -67,5 +67,6 @@ fun User.toRequestModel(): com.CioffiDeVivo.dietideals.domain.requestModels.User
         country = this.country,
         phoneNumber = this.phoneNumber,
         creditCards = this.creditCards.map { it.toRequestModel() }.toCollection(ArrayList()),
+        deviceTokens = this.deviceTokens.map { it } as ArrayList<String>
     )
 }

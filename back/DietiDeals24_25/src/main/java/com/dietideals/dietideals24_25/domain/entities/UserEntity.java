@@ -46,6 +46,12 @@ public class UserEntity implements UserDetails {
     @JoinTable(name = "user_favourite_auctions", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "auction_id"))
     private Set<AuctionEntity> favouriteAuctions = new HashSet<>();
 
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "user_device_tokens", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "device_token")
+    private List<String> deviceTokens = new ArrayList<>();
+
     @Column(name = "bio")
     private String bio;
 
