@@ -41,5 +41,7 @@ public class AuctionDto {
     
     private String startingPrice;
 
+    private String buyoutPrice;
+
     private AuctionCategory category;
 }

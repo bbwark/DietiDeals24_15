@@ -9,11 +9,12 @@ data class Auction(
     @SerializedName("item"              ) var item:             Item?               = null,
     @SerializedName("description"       ) var description:      String?             = null,
     @SerializedName("bids"              ) var bids:             ArrayList<Bid>      = arrayListOf(),
-    @SerializedName("ending_date"       ) var endingDate:       String?             = null,
-    @SerializedName("min_step"          ) var minStep:          String?             = null,
+    @SerializedName("endingDate"       ) var endingDate:       String?             = null,
+    @SerializedName("minStep"          ) var minStep:          String?             = null,
     @SerializedName("interval"          ) var interval:         String?             = null,
     @SerializedName("expired"           ) var expired:          Boolean?            = false,
     @SerializedName("startingPrice"     ) var startingPrice:    String?             = null,
-    @SerializedName("type"              ) var type:      AuctionType?        = null,
-    @SerializedName("category"          ) var category:  AuctionCategory?    = AuctionCategory.Other
+    @SerializedName("type"              ) var type:             AuctionType?        = null,
+    @SerializedName("category"          ) var category:         AuctionCategory?    = AuctionCategory.Other,
+    @SerializedName("buyoutPrice"       ) var buyoutPrice:      String?             = null,
 )
