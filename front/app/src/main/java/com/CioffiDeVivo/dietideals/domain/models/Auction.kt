@@ -14,5 +14,6 @@ data class Auction (
     val expired: Boolean = false,
     val minAccepted: String = "",
     val type: AuctionType = AuctionType.None,
-    val category: AuctionCategory = AuctionCategory.Other
+    val category: AuctionCategory = AuctionCategory.Other,
+    val buyoutPrice: String = "",
 )

@@ -59,4 +59,6 @@ public class AuctionEntity {
     private String interval;
 
     private String startingPrice;
+
+    private String buyoutPrice;
 }
