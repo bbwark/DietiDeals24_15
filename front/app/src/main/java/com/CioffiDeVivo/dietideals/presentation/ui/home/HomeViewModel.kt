@@ -6,7 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.domain.repository.UserRepository
 import com.CioffiDeVivo.dietideals.utils.ApiService
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {

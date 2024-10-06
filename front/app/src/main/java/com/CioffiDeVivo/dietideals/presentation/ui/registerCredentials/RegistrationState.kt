@@ -4,6 +4,8 @@ import com.CioffiDeVivo.dietideals.domain.models.CreditCard
 import com.CioffiDeVivo.dietideals.domain.models.User
 
 data class RegistrationState (
+    val user: User = User(),
+    val card: CreditCard = CreditCard(),
     val emailErrorMsg: String? = null,
     val nameErrorMsg: String? = null,
     val surnameErrorMsg: String? = null,
@@ -17,7 +19,5 @@ data class RegistrationState (
     val expirationDate: String = "",
     val expirationDateErrorMsg: String? = null,
     val cvvErrorMsg: String? = null,
-    val ibanErrorMsg: String? = null,
-    val user: User = User(),
-    val card: CreditCard = CreditCard()
+    val ibanErrorMsg: String? = null
 )
