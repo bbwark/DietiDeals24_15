@@ -77,7 +77,7 @@ fun SetupNavGraph() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Screen.RegisterCredentials.route
+            startDestination = Screen.Home.route
         ) {
             composable(
                 route = Screen.Account.route
@@ -182,7 +182,7 @@ fun SetupNavGraph() {
                     }
                 ) {
                     Box(modifier = Modifier.padding(it)) {
-                        val viewModel : SellViewModel = viewModel(factory = viewModelFactory)
+                        val viewModel = SellViewModel()
                         SellView(viewModel = viewModel, navController = navController)
                     }
                 }
