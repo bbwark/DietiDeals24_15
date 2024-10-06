@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,6 +39,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Optional<UserEntity> findById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public List<UUID> findUserIdsByFavouriteAuctionId(UUID auctionId) {
+        return userRepository.findUserIdsByFavouriteAuctionIdNative(auctionId);
     }
 
     @Override
