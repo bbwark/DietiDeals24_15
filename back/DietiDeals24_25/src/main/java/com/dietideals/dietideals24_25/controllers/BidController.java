@@ -10,6 +10,7 @@ import com.dietideals.dietideals24_25.services.AuctionService;
 import com.dietideals.dietideals24_25.services.BidService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/bids")
@@ -59,6 +61,13 @@ public class BidController {
                     if (bidDto.getValue() >= bid.getValue()) {
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
                     }
+                }
+            }
+
+            if (auctionDto.getType() == AuctionType.Silent) {
+                if (bid.getValue() >= Float.parseFloat(auctionDto.getBuyoutPrice())) {
+                    auctionDto.setEndingDate(Optional.of(LocalDateTime.now().minus(1, ChronoUnit.DAYS)));
+                    auctionService.save(auctionMapper.mapFrom(auctionDto));
                 }
             }
 
