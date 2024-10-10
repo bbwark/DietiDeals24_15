@@ -8,24 +8,59 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.presentation.ui.search.components.SearchAuctionsList
 import com.CioffiDeVivo.dietideals.presentation.ui.search.components.SearchViewBar
 
 @Composable
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
-    val searchedAuctionState by viewModel.searchedAuctionState.collectAsState()
+    val searchUiState by viewModel.searchUiState.collectAsState()
     val categoriesToHide by viewModel.categoriesToHide.collectAsState()
 
-    Column(Modifier.fillMaxSize()) {
+    when(searchUiState){
+        is SearchUiState.Loading -> {
+            SearchViewBar(
+                categoriesToHide = categoriesToHide,
+                updateCategories = { viewModel.setCategoriesToHide(categoriesToHide) },
+                updateSearchWord = { viewModel.searchWordUpdate(it) },
+                navController = navController
+            )
+            LoadingView()
+        }
+        is SearchUiState.Success -> SearchAuctionsListView(
+            auctions = (searchUiState as SearchUiState.Success).auctions,
+            navController = navController,
+            categoriesToHide = categoriesToHide,
+            updateCategories = { viewModel.setCategoriesToHide(categoriesToHide) },
+            updateSearchWord = { viewModel.searchWordUpdate(it) }
+        )
+        is SearchUiState.Error -> RetryView()
+    }
+}
+
+@Composable
+fun SearchAuctionsListView(
+    auctions: ArrayList<Auction>,
+    navController: NavController,
+    categoriesToHide: Set<String>,
+    updateCategories: (Set<String>) -> (Unit),
+    updateSearchWord: (String) -> (Unit),
+){
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         SearchViewBar(
             categoriesToHide = categoriesToHide,
-            updateCategories = { viewModel.setCategoriesToHide(it) },
-            updateSearchWord = { viewModel.searchWordUpdate(it) },
+            updateCategories = { updateCategories(it) },
+            updateSearchWord = { updateSearchWord(it) },
             navController = navController)
         SearchAuctionsList(
-            auctions = searchedAuctionState,
+            auctions = auctions,
             categoriesToHide = categoriesToHide,
             navController = navController
         )

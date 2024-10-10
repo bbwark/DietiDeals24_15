@@ -42,70 +42,78 @@ import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
 fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavHostController) {
 
-    val userLoginState by viewModel.userLogInState.collectAsState()
+    val loginUiState by viewModel.logInCredentialsUiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context) {
         viewModel.validationLogInEvent.collect { event ->
             when (event) {
                 is ValidationState.Success -> {
-                    Toast.makeText(context, "Successful Log In", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Log In Success!", Toast.LENGTH_SHORT).show()
                 }
 
                 else -> {
-                    Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Invalid Field!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        LoginInputs(
-            userState = userLoginState,
-            onEmailChange = { viewModel.loginOnAction(LoginEvent.EmailChanged(it)) },
-            onPasswordChange = { viewModel.loginOnAction(LoginEvent.PasswordChanged(it)) },
-            onDeleteEmail = { viewModel.loginOnAction(LoginEvent.EmailDeleted(it)) }
-        )
-        Button(
-            onClick = { viewModel.loginOnAction(LoginEvent.Submit()) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
-                .height(50.dp)
-                .pulsateClick(),
-            content = {
-                Text(stringResource(R.string.logIn), fontSize = 20.sp)
-            }
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = modifierStandard
-        ) {
-            Text(
-                text = "Do you have not an Account? ",
-                fontSize = 12.sp
-            )
-            TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
-                Text(
-                    text = "Create an Account",
-                    fontSize = 12.sp
+    when(loginUiState){
+        is LogInCredentialsUiState.Loading -> LoadingView()
+        is LogInCredentialsUiState.Error -> RetryView()
+        is LogInCredentialsUiState.Success -> {}
+        is LogInCredentialsUiState.LogInParams -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                LoginInputs(
+                    userState = loginUiState,
+                    onEmailChange = { viewModel.loginOnAction(LoginEvent.EmailChanged(it)) },
+                    onPasswordChange = { viewModel.loginOnAction(LoginEvent.PasswordChanged(it)) },
+                    onDeleteEmail = { viewModel.loginOnAction(LoginEvent.EmailDeleted(it)) }
                 )
+                Button(
+                    onClick = { viewModel.loginOnAction(LoginEvent.Submit()) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
+                        .height(50.dp)
+                        .pulsateClick(),
+                    content = {
+                        Text(stringResource(R.string.logIn), fontSize = 20.sp)
+                    }
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = modifierStandard
+                ) {
+                    Text(
+                        text = "Do you have not an Account? ",
+                        fontSize = 12.sp
+                    )
+                    TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
+                        Text(
+                            text = "Create an Account",
+                            fontSize = 12.sp
+                        )
+                    }
+                }
             }
         }
     }
 }
 @Composable
 fun LoginInputs(
-    userState: LogInState,
+    userState: LogInCredentialsUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onDeleteEmail: (String) -> Unit
@@ -113,12 +121,13 @@ fun LoginInputs(
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     InputTextField(
-        value = userState.email,
+        value = (userState as LogInCredentialsUiState.LogInParams).email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         isError = userState.emailErrorMsg != null,
         trailingIcon = Icons.Filled.Clear,
         onTrailingIconClick = { onDeleteEmail(it) },
+        supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(

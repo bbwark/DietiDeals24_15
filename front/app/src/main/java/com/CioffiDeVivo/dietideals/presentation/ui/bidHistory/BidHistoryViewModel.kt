@@ -30,7 +30,7 @@ class BidHistoryViewModel(application: Application) : AndroidViewModel(applicati
         _auctionState.value = auction
     }
 
-    fun fetchAuctionBidders() {
+    fun fetchAuctionBidders(auctionId: String) {
         viewModelScope.launch {
             val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
             if (getAuctionResponse.status.isSuccess()) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(application: Application): AndroidViewModel(application) {
 
-    private val _searchedAuctionState = MutableStateFlow<ArrayList<Auction>>(arrayListOf())
-    val searchedAuctionState : StateFlow<ArrayList<Auction>> = _searchedAuctionState.asStateFlow()
+    private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Loading)
+    val searchUiState: StateFlow<SearchUiState> = _searchUiState.asStateFlow()
 
     private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
     val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
@@ -25,12 +26,21 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     fun searchWordUpdate(searchWord: String) {
         viewModelScope.launch {
-            val auctions = ApiService.getAuctionsByItemName("can")
-            val list: ArrayList<Auction> = arrayListOf()
-            for (auction in auctions) {
-                list.add(auction.toDataModel())
+            setLoadingState()
+            _searchUiState.value = try {
+                val auctions = ApiService.getAuctionsByItemName(searchWord)
+                val list: ArrayList<Auction> = arrayListOf()
+                for (auction in auctions) {
+                    list.add(auction.toDataModel())
+                }
+                SearchUiState.Success(list)
+            } catch (e: Exception){
+                SearchUiState.Error
             }
-            _searchedAuctionState.value = list
         }
+    }
+
+    private fun setLoadingState(){
+        _searchUiState.value = SearchUiState.Loading
     }
 }

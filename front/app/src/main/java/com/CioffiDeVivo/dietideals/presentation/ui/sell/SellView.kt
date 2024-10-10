@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
-import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,29 +20,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.components.SellGridElement
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun SellView(viewModel: SellViewModel, navController: NavHostController) {
-    val userCreatedAuction by viewModel.userAuctionState.collectAsState()
+fun SellView(viewModel: SellViewModel, navController: NavController) {
+
+    val sellUiState by viewModel.sellUiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchAuctions()
     }
 
+    when(sellUiState){
+        is SellUiState.Loading -> LoadingView()
+        is SellUiState.Success -> SellGridView(
+            auctions = (sellUiState as SellUiState.Success).auctions,
+            navController = navController
+        )
+        is SellUiState.Error -> RetryView()
+    }
+
+}
+
+@Composable
+fun SellGridView(
+    auctions: ArrayList<Auction>,
+    navController: NavController
+){
     Box {
-        if (userCreatedAuction.isNotEmpty()) {
+        if (auctions.isNotEmpty()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 content = {
                     //view model userCreatedAuction
-                    itemsIndexed(userCreatedAuction) { index, item ->
+                    itemsIndexed(auctions) { index, item ->
                         SellGridElement(
                             auction = item,
                             navController = navController
@@ -74,5 +93,5 @@ fun SellView(viewModel: SellViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {
-    SellView(viewModel = SellViewModel(Application()), rememberNavController())
+    SellView(viewModel = SellViewModel(), rememberNavController())
 }
