@@ -127,7 +127,13 @@ open class ValidateRegistrationForms {
     }
 
     open fun validateExpirationDate(expirationDate: String): ValidationResult{
-        if (expirationDate.length != creditCardExpirationDateNumberLength && !regexCreditCardPattern.matches(expirationDate)) {
+        if(expirationDate.isBlank()){
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "The field cannot be empty"
+            )
+        }
+        if (!regexCreditCardPattern.matches(expirationDate)) {
             val month = expirationDate.substring(0, 2).toInt()
             val year = "20" + expirationDate.substring(2, 4)
             val expirationYear = year.toInt()

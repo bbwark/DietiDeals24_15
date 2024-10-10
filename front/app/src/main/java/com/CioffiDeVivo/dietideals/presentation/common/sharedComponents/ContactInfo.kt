@@ -2,11 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,13 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
-import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoState
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationState
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 
 @Composable
 fun ContactInfo(
-    userState: RegistrationState,
+    userState: RegisterCredentialsUiState,
     onAddressChange: (String) -> Unit,
     onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
@@ -35,7 +31,7 @@ fun ContactInfo(
 ){
     var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
-        value = userState.user.address,
+        value = (userState as RegisterCredentialsUiState.RegisterParams).user.address,
         onValueChanged = { onAddressChange(it) },
         label = stringResource(R.string.address),
         isError = userState.addressErrorMsg != null,
@@ -83,7 +79,7 @@ fun ContactInfo(
 
 @Composable
 fun ContactInfo(
-    userState: EditContactInfoState,
+    userState: EditContactInfoUiState,
     onAddressChange: (String) -> Unit,
     onCountryChange: (Country) -> Unit,
     onZipCodeChange: (String) -> Unit,
@@ -94,7 +90,7 @@ fun ContactInfo(
 ){
     var selectedCountry by remember { mutableStateOf(Country.Italy) }
     InputTextField(
-        value = userState.user.address,
+        value = (userState as EditContactInfoUiState.EditContactInfoParams).user.address,
         onValueChanged = { onAddressChange(it) },
         label = stringResource(R.string.address),
         isError = userState.addressErrorMsg != null,
@@ -138,22 +134,5 @@ fun ContactInfo(
         onTrailingIconClick = { onDeletePhoneNumber(it) },
         modifier = modifierStandard
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewInfo(){
-    Column {
-        ContactInfo(
-            userState = EditContactInfoState(),
-            onAddressChange = {},
-            onCountryChange = {},
-            onZipCodeChange = {},
-            onPhoneNumberChange = {},
-            onDeleteAddress = {},
-            onDeleteZipCode = {},
-            onDeletePhoneNumber = {}
-        )
-    }
 }
 

@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.domain.repository.UserRepository
 import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,23 +13,29 @@ import kotlinx.coroutines.launch
 
 class ManageCardsViewModel(application: Application) : AndroidViewModel(application){
 
-    private val _userCardsState = MutableStateFlow(EditProfileState())
-    val userCardsState: StateFlow<EditProfileState> = _userCardsState.asStateFlow()
+    val loggedUser: StateFlow<User?> = UserRepository.loggedUser
 
-    fun setUser(user: User) {
-        _userCardsState.value = _userCardsState.value.copy(
-            user = user
-        )
+    private val _userState = MutableStateFlow(User())
+    val userState: StateFlow<User> = _userState.asStateFlow()
+
+    private val _manageCardsUiState = MutableStateFlow<ManageCardsUiState>(ManageCardsUiState.Loading)
+    val manageCardsUiState: StateFlow<ManageCardsUiState> = _manageCardsUiState.asStateFlow()
+
+    fun setUserState(){
+        _userState.value = loggedUser.value!!
     }
 
     fun deleteCard(creditCardNumber: String) {
         viewModelScope.launch {
-            ApiService.deleteCreditCard(creditCardNumber)
-            _userCardsState.value = _userCardsState.value.copy(
-                user = _userCardsState.value.user.copy(
-                    creditCards = _userCardsState.value.user.creditCards.filterNot { it.creditCardNumber == creditCardNumber }.toTypedArray()
+            _manageCardsUiState.value = try {
+                ApiService.deleteCreditCard(creditCardNumber)
+                _userState.value = _userState.value.copy(
+                    creditCards = _userState.value.creditCards.filterNot { it.creditCardNumber == creditCardNumber }.toTypedArray()
                 )
-            )
+                ManageCardsUiState.Success
+            } catch (e: Exception){
+                ManageCardsUiState.Error
+            }
         }
     }
 }

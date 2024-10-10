@@ -79,7 +79,9 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.utils.IntervalTransformation
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -93,7 +95,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
 
     val showDatePicker = remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(AuctionCategory.Other) }
-    val createAuctionState by viewModel.auctionState.collectAsState()
+    val createAuctionUiState by viewModel.createAuctionUiState.collectAsState()
     val context = LocalContext.current
     val showDialog = remember { mutableStateOf(false) }
     val permissionState = rememberPermissionState(
@@ -114,135 +116,146 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     SideEffect {
         permissionState.launchPermissionRequest()
     }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
 
-        AddingImagesOnCreateAuction(viewModel = viewModel)
+    when(createAuctionUiState){
+        is CreateAuctionUiState.Error -> RetryView()
+        is CreateAuctionUiState.Loading -> LoadingView()
+        is CreateAuctionUiState.Success -> {
 
-        Spacer(modifier = Modifier.height(30.dp))
-
-        InputTextField(
-            value = createAuctionState.auction.item.name,
-            onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
-            label = stringResource(R.string.itemName),
-            onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
-            isError = createAuctionState.itemNameErrorMsg != null,
-            supportingText = createAuctionState.itemNameErrorMsg,
-            modifier = modifierStandard
-        )
-        DropDownMenuField(
-            selectedValue = selectedCategory,
-            menuList = AuctionCategory.values(),
-            label = stringResource(id = R.string.category),
-            onValueSelected = {
-                newSelection -> selectedCategory = newSelection
-                viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(selectedCategory))
-            },
-            modifier = Modifier.padding(start = 100.dp, end = 100.dp, bottom = 8.dp)
-        )
-        Row {
-            ElevatedButton(
-                onClick = {
-                    viewModel.removeErrorMsgAuctionType()
-                    viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent))
-                },
-                colors = if (createAuctionState.auction.type == AuctionType.Silent){
-                    ButtonDefaults.buttonColors()
-                }else{
-                     ButtonDefaults.elevatedButtonColors()
-                     },
-                modifier = Modifier
-                    .width(100.dp)
-                    .pulsateClick()
-
-            ) {
-                Text("Silent")
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-            ElevatedButton(
-                onClick = {
-                    viewModel.removeErrorMsgAuctionType()
-                    viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English))
-                },
-                colors = if (createAuctionState.auction.type == AuctionType.English){
-                    ButtonDefaults.buttonColors()
-                }else{
-                    ButtonDefaults.elevatedButtonColors()
-                },
-                modifier = Modifier
-                    .width(100.dp)
-                    .pulsateClick()
-
-            ) {
-                Text("English")
-            }
         }
-        Spacer(modifier = Modifier.size(15.dp))
-        when (createAuctionState.auction.type) {
-            AuctionType.Silent -> {
-                SilentAuction(
-                    auctionState = createAuctionState,
-                    onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
-                    onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                    onDeleteDescription = { viewModel.deleteDescriptionAuction() },
-                    onCalendarClick = { showDatePicker.value = true }
-                )
-            }
-            AuctionType.English -> {
-                EnglishAuction(
-                    auctionState = createAuctionState,
-                    onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it)) },
-                    onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
-                    onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
-                    onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted(it)) },
-                    onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
-                    onCalendarClick = { showDatePicker.value = true }
-                )
-            }
-            else -> {
+        is CreateAuctionUiState.CreateAuctionParams -> {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
 
-            }
-        }
-        if(showDatePicker.value){
-            CustomDatePickerDialog(
-                onAccept = {
-                    showDatePicker.value = false
-                    if (it != null){
-                        viewModel.updateEndingDate(it)
+                AddingImagesOnCreateAuction(viewModel = viewModel)
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                InputTextField(
+                    value = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.name,
+                    onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
+                    label = stringResource(R.string.itemName),
+                    onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
+                    isError = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).itemNameErrorMsg != null,
+                    supportingText = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).itemNameErrorMsg,
+                    modifier = modifierStandard
+                )
+                DropDownMenuField(
+                    selectedValue = selectedCategory,
+                    menuList = AuctionCategory.values(),
+                    label = stringResource(id = R.string.category),
+                    onValueSelected = {
+                            newSelection -> selectedCategory = newSelection
+                        viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionCategoryChanged(selectedCategory))
+                    },
+                    modifier = Modifier.padding(start = 100.dp, end = 100.dp, bottom = 8.dp)
+                )
+                Row {
+                    ElevatedButton(
+                        onClick = {
+                            viewModel.removeErrorMsgAuctionType()
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent))
+                        },
+                        colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.Silent){
+                            ButtonDefaults.buttonColors()
+                        }else{
+                            ButtonDefaults.elevatedButtonColors()
+                        },
+                        modifier = Modifier
+                            .width(100.dp)
+                            .pulsateClick()
+
+                    ) {
+                        Text("Silent")
                     }
-                },
-                onCancel = { showDatePicker.value = false }
-            )
-        }
+                    Spacer(modifier = Modifier.size(10.dp))
+                    ElevatedButton(
+                        onClick = {
+                            viewModel.removeErrorMsgAuctionType()
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English))
+                        },
+                        colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.English){
+                            ButtonDefaults.buttonColors()
+                        }else{
+                            ButtonDefaults.elevatedButtonColors()
+                        },
+                        modifier = Modifier
+                            .width(100.dp)
+                            .pulsateClick()
 
-        if(showDialog.value && createAuctionState.auctionTypeErrorMsg != null){
-            DialogAlert(
-                showDialog = showDialog,
-                dialogText = createAuctionState.auctionTypeErrorMsg!!
-            )
-        }
+                    ) {
+                        Text("English")
+                    }
+                }
+                Spacer(modifier = Modifier.size(15.dp))
+                when ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type) {
+                    AuctionType.Silent -> {
+                        SilentAuction(
+                            auctionState = createAuctionUiState,
+                            onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
+                            onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
+                            onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                            onCalendarClick = { showDatePicker.value = true }
+                        )
+                    }
+                    AuctionType.English -> {
+                        EnglishAuction(
+                            auctionState = createAuctionUiState,
+                            onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it)) },
+                            onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
+                            onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
+                            onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted(it)) },
+                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
+                            onCalendarClick = { showDatePicker.value = true }
+                        )
+                    }
+                    else -> {
 
-        Button(
-            onClick = {
-                showDialog.value = true
-                viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
+                    }
+                }
+                if(showDatePicker.value){
+                    CustomDatePickerDialog(
+                        onAccept = {
+                            showDatePicker.value = false
+                            if (it != null){
+                                viewModel.updateEndingDate(it)
+                            }
+                        },
+                        onCancel = { showDatePicker.value = false }
+                    )
+                }
 
-                /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
-            },
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(bottom = 8.dp)
-                .pulsateClick(),
-            content = {
-                Text(stringResource(R.string.createAuction), fontSize = 20.sp)
+                if(showDialog.value && (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auctionTypeErrorMsg != null){
+                    DialogAlert(
+                        showDialog = showDialog,
+                        dialogText = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auctionTypeErrorMsg!!
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        showDialog.value = true
+                        viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
+
+                        /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
+                    },
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(bottom = 8.dp)
+                        .pulsateClick(),
+                    content = {
+                        Text(stringResource(R.string.createAuction), fontSize = 20.sp)
+                    }
+                )
+
             }
-        )
-
+        }
     }
+
 }
 
 @Preview(showBackground = true)
@@ -254,7 +267,7 @@ fun CreateAuctionPreview(){
 
 @Composable
 fun SilentAuction(
-    auctionState: CreateAuctionState,
+    auctionState: CreateAuctionUiState,
     onBidChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
@@ -262,6 +275,7 @@ fun SilentAuction(
 ){
     var minAccepted by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
+    (auctionState as CreateAuctionUiState.CreateAuctionParams)
     Row (
         modifier = modifierStandard
     ){
@@ -323,7 +337,7 @@ fun SilentAuction(
 
 @Composable
 fun EnglishAuction(
-    auctionState: CreateAuctionState,
+    auctionState: CreateAuctionUiState,
     onBidChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -333,7 +347,7 @@ fun EnglishAuction(
 ){
     var minStep by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
-
+    (auctionState as CreateAuctionUiState.CreateAuctionParams)
     Row(
         modifier = modifierStandard
     ) {
@@ -449,7 +463,8 @@ fun ImageItem(
 @Composable
 fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
 
-    val itemAuctionState by viewModel.auctionState.collectAsState()
+    val auctionState by viewModel.createAuctionUiState.collectAsState()
+    (auctionState as CreateAuctionUiState.CreateAuctionParams)
     val context = LocalContext.current
     val multiPhotosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -466,7 +481,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
     }
 
     LazyRow {
-        itemsIndexed(itemAuctionState.auction.item.imagesUri) { index, uri ->
+        itemsIndexed((auctionState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri) { index, uri ->
             Spacer(modifier = Modifier.width(10.dp))
             ImageItem(
                 uri = uri,
@@ -491,7 +506,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
                       permissionState.launchPermissionRequest()
                   }
         },
-        enabled = itemAuctionState.auction.item.imagesUri.size < 5
+        enabled = (auctionState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri.size < 5
     ) {
         Icon(imageVector = Icons.Default.ImageSearch, contentDescription = "Gallery Icon")
         Text(text = "Add Image")

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
@@ -43,20 +44,38 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 
 @Composable
 fun MakeABid(
-    sharedState: Auction,
+    auctionState: Auction,
     viewModel: SharedViewModel,
-    navController: NavHostController,
-    onMakeABid: () -> Unit
+    navController: NavController,
 ){
+    val makeABidUiState by viewModel.makeABidUiState.collectAsState()
 
+    when(makeABidUiState){
+        is MakeABidUiState.Loading -> LoadingView()
+        is MakeABidUiState.Success -> {
+            MakeABidLayout(
+                auctionState = auctionState,
+                onBidChange = { viewModel.updateBidValue(it) }
+            )
+        }
+        is MakeABidUiState.Error -> RetryView()
+    }
+
+}
+
+@Composable
+fun MakeABidLayout(
+    auctionState: Auction,
+    onBidChange: (String) -> Unit
+){
     var bid by rememberSaveable { mutableStateOf("") }
-    val userBidState by viewModel.bidState.collectAsState()
-    val auctionState by viewModel.auctionState.collectAsState()
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
 
     Column(
@@ -73,8 +92,8 @@ fun MakeABid(
         ){
             Text(
                 if (auctionState.type == AuctionType.English)
-                        (auctionState.bids.last().value + auctionState.minStep.toFloat()).toString()
-                        else auctionState.minAccepted,
+                    (auctionState.bids.last().value + auctionState.minStep.toFloat()).toString()
+                else auctionState.minAccepted,
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
@@ -93,7 +112,7 @@ fun MakeABid(
                 if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
                     bid = trimmed
                 }
-                viewModel.updateBidValue(bid)
+                onBidChange(bid)
             },
             singleLine = true,
             trailingIcon = {
@@ -127,7 +146,6 @@ fun MakeABidSilentPreview(){
     val bid1 = Bid(value = 10f)
     val bid2 = Bid(value = 20f)
     val auction = Auction(bids = arrayOf(bid1, bid2), type = AuctionType.English, minAccepted = "10", minStep = "1")
-    viewModel.setAuction(auction)
 
-    MakeABid(sharedState = auction, viewModel = viewModel, navController = rememberNavController(), onMakeABid = {})
+    MakeABid(auctionState = auction, viewModel = viewModel, navController = rememberNavController())
 }

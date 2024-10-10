@@ -17,6 +17,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,12 +36,20 @@ import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel,
     navController: NavHostController
 ){
+    val homeUiState by viewModel.homeUiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchHomeAuctions()
+    }
+
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -47,7 +58,7 @@ fun HomeView(
     ) {
         Spacer(modifier = Modifier.height(18.dp))
         IconButton(
-            onClick = { /*TODO navigate to favourite view*/ },
+            onClick = { navController.navigate(Screen.Favourites.route) },
             modifier = Modifier.pulsateClick()
             ) {
             Icon(Icons.Rounded.Favorite, contentDescription = null)
@@ -64,7 +75,7 @@ fun HomeView(
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { navController.navigate(Screen.Auction.route + "/1") },
+            onClick = { navController.navigate(Screen.Search.route) },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
 
@@ -79,13 +90,19 @@ fun HomeView(
             }
         )
         Spacer(modifier = Modifier.height(50.dp))
-        LatestAuctions(viewModel.getLatestAuctions(), navController)
-        Spacer(modifier = Modifier.height(35.dp))
-        EndingAuctions(viewModel.getEndingAuctions(), navController)
-        Spacer(modifier = Modifier.height(35.dp))
-        ParticipatedAuctions(viewModel.getParticipatedAuctions(), navController)
-    }
 
+        when(homeUiState){
+            is HomeUiState.Loading -> LoadingView()
+            is HomeUiState.Success -> {
+                LatestAuctions((homeUiState as HomeUiState.Success).latestAuctions, navController)
+                Spacer(modifier = Modifier.height(35.dp))
+                EndingAuctions((homeUiState as HomeUiState.Success).endingAuction, navController)
+                Spacer(modifier = Modifier.height(35.dp))
+                ParticipatedAuctions((homeUiState as HomeUiState.Success).participatedAuction, navController)
+            }
+            is HomeUiState.Error -> RetryView()
+        }
+    }
 }
 
 @Composable

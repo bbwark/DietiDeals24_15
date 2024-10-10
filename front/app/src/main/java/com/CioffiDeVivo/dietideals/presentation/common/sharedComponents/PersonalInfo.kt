@@ -14,13 +14,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
-import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileState
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationState
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 
 @Composable
 fun PersonalInfoOnRegisterCredentials(
-    userRegistrationState: RegistrationState,
+    userState: RegisterCredentialsUiState,
     onEmailChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onSurnameChange: (String) -> Unit,
@@ -35,52 +35,52 @@ fun PersonalInfoOnRegisterCredentials(
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     InputTextField(
-        value = userRegistrationState.user.email,
+        value = (userState as RegisterCredentialsUiState.RegisterParams).user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        isError = userRegistrationState.emailErrorMsg != null,
+        isError = userState.emailErrorMsg != null,
         onTrailingIconClick = { onDeleteEmail(it) },
-        supportingText = userRegistrationState.emailErrorMsg,
+        supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.name,
+        value = userState.user.name,
         onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
-        isError = userRegistrationState.nameErrorMsg != null,
+        isError = userState.nameErrorMsg != null,
         onTrailingIconClick = { onDeleteName(it) },
-        supportingText = userRegistrationState.nameErrorMsg,
+        supportingText = userState.nameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.surname,
+        value = userState.user.surname,
         onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
-        isError = userRegistrationState.surnameErrorMsg != null,
+        isError = userState.surnameErrorMsg != null,
         onTrailingIconClick = { onDeleteSurname(it) },
-        supportingText = userRegistrationState.surnameErrorMsg,
+        supportingText = userState.surnameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.password,
+        value = userState.user.password,
         onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
-        isError = userRegistrationState.passwordErrorMsg != null,
+        isError = userState.passwordErrorMsg != null,
         onTrailingIconClick = { passwordVisible = !passwordVisible },
-        supportingText = userRegistrationState.passwordErrorMsg,
+        supportingText = userState.passwordErrorMsg,
         visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.retypePassword,
+        value = userState.retypePassword,
         onValueChanged = { onNewPasswordChange(it) },
         label = stringResource(R.string.rewritepassword),
-        isError = userRegistrationState.retypePasswordErrorMsg != null,
+        isError = userState.retypePasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
-        supportingText = userRegistrationState.retypePasswordErrorMsg,
+        supportingText = userState.retypePasswordErrorMsg,
         visualTransformation = if(newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard
@@ -89,7 +89,7 @@ fun PersonalInfoOnRegisterCredentials(
 
 @Composable
 fun PersonalInfoOnEditProfile(
-    userRegistrationState: EditProfileState,
+    userState: EditProfileUiState,
     onEmailChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onSurnameChange: (String) -> Unit,
@@ -104,52 +104,52 @@ fun PersonalInfoOnEditProfile(
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     InputTextField(
-        value = userRegistrationState.user.email,
+        value = (userState as EditProfileUiState.EditProfileParams).user.email,
         onValueChanged = { onEmailChange(it) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        isError = userRegistrationState.emailErrorMsg != null,
+        isError = userState.emailErrorMsg != null,
         onTrailingIconClick = { onDeleteEmail(it) },
-        supportingText = userRegistrationState.emailErrorMsg,
+        supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.name,
+        value = userState.user.name,
         onValueChanged = { onNameChange(it) },
         label = stringResource(R.string.name),
-        isError = userRegistrationState.nameErrorMsg != null,
+        isError = userState.nameErrorMsg != null,
         onTrailingIconClick = { onDeleteName(it) },
-        supportingText = userRegistrationState.nameErrorMsg,
+        supportingText = userState.nameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.surname,
+        value = userState.user.surname,
         onValueChanged = { onSurnameChange(it) },
         label = stringResource(R.string.surname),
-        isError = userRegistrationState.surnameErrorMsg != null,
+        isError = userState.surnameErrorMsg != null,
         onTrailingIconClick = { onDeleteSurname(it) },
-        supportingText = userRegistrationState.surnameErrorMsg,
+        supportingText = userState.surnameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.user.password,
+        value = userState.user.password,
         onValueChanged = { onPasswordChange(it) },
         label = stringResource(R.string.password),
-        isError = userRegistrationState.passwordErrorMsg != null,
+        isError = userState.passwordErrorMsg != null,
         onTrailingIconClick = { passwordVisible = !passwordVisible },
-        supportingText = userRegistrationState.passwordErrorMsg,
+        supportingText = userState.passwordErrorMsg,
         visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard
     )
     InputTextField(
-        value = userRegistrationState.retypePassword,
+        value = userState.retypePassword,
         onValueChanged = { onNewPasswordChange(it) },
         label = stringResource(R.string.rewritepassword),
-        isError = userRegistrationState.retypePasswordErrorMsg != null,
+        isError = userState.retypePasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
-        supportingText = userRegistrationState.retypePasswordErrorMsg,
+        supportingText = userState.retypePasswordErrorMsg,
         visualTransformation = if(newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard

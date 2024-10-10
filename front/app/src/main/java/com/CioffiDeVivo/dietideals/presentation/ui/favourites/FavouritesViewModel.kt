@@ -12,8 +12,5 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     private val _userState = MutableStateFlow(User())
     val userState: StateFlow<User> = _userState.asStateFlow()
 
-    fun setUser(user: User) {
-        _userState.value = user
-    }
 
 }
