@@ -67,6 +67,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterC
 import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -77,7 +78,7 @@ fun SetupNavGraph() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = Screen.LogInCredentials.route
         ) {
             composable(
                 route = Screen.Account.route
@@ -263,7 +264,7 @@ fun SetupNavGraph() {
                 ) { entry ->
                     val auctionId = entry.arguments?.getString("auctionId") ?: ""
                     val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val sharedState by viewModel.sharedState.collectAsStateWithLifecycle()
+                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
                     Scaffold(topBar = {
                         AuctionTopBar(
                             navController = navController,
@@ -276,7 +277,7 @@ fun SetupNavGraph() {
                         Box(modifier = Modifier.padding(it)) {
                             AuctionView(
                                 auctionId = auctionId,
-                                sharedState = sharedState,
+                                auctionState = auctionState,
                                 viewModel = viewModel,
                                 navController = navController
                             )
@@ -287,25 +288,18 @@ fun SetupNavGraph() {
                     route = Screen.MakeABid.route
                 ) { entry ->
                     val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val sharedState by viewModel.sharedState.collectAsStateWithLifecycle()
+                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
                     MakeABid(
-                        sharedState = sharedState,
+                        auctionState = auctionState,
                         viewModel = viewModel,
-                        navController = navController,
-                        onMakeABid = {
-                            navController.navigate(Screen.Auction.route){
-                                popUpTo("auction"){
-                                    inclusive = true
-                                }
-                            }
-                        }
+                        navController = navController
                     )
                 }
                 composable(
                     route = Screen.BidHistory.route
                 ) {entry ->
                     val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val sharedState by viewModel.sharedState.collectAsStateWithLifecycle()
+                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
                     Scaffold(topBar = {
                         DetailsViewTopBar(
                             caption = stringResource(id = R.string.bidHistory),
@@ -317,7 +311,7 @@ fun SetupNavGraph() {
                             BottomNavigationBar(navController = navController)
                         }) {
                         Box(modifier = Modifier.padding(it)) {
-                            BidHistoryView(sharedState = sharedState ,viewModel = viewModel, navController = navController)
+                            BidHistoryView(auctionState = auctionState, viewModel = viewModel, navController = navController)
                         }
                     }
                 }

@@ -15,6 +15,9 @@ import com.CioffiDeVivo.dietideals.domain.models.Item
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -29,44 +32,15 @@ import java.time.ZonedDateTime
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
     private val _auctionState = MutableStateFlow(Auction())
     val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
-    private val _isOwnerState = MutableStateFlow(false)
-    val isOwnerState: StateFlow<Boolean> = _isOwnerState.asStateFlow()
-    private val _insertionistState = MutableStateFlow(User())
-    val insertionsState = _insertionistState.asStateFlow()
     private val _bidState = MutableStateFlow(Bid())
     val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
-    //Test Shared
-    private val _sharedState = MutableStateFlow(Auction())
-    val sharedState = _sharedState.asStateFlow()
-    fun changeAuctionType(auctionType: AuctionType){
-        _sharedState.value = _sharedState.value.copy(
-            type = auctionType
-        )
-    }
-
-    private val _auctionBidders = MutableStateFlow<List<User>>(emptyList())
-    val auctionBidders: StateFlow<List<User>> = _auctionBidders.asStateFlow()
-
-    fun fetchAuctionBidders() {
-        viewModelScope.launch {
-            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
-            if (getAuctionResponse.status.isSuccess()) {
-                _auctionState.value = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
-                val bidders = getBiddersFromServer(_auctionState.value.id)
-                _auctionBidders.value = bidders
-            }
-        }
-    }
-
-    private suspend fun getBiddersFromServer(auctionId: String): List<User> {
-        val result = emptyList<User>().toMutableList()
-        val requestUsers = ApiService.getAuctionBidders(auctionId)
-        for (user in requestUsers) {
-            result += user.toDataModel()
-        }
-        return result
-    }
+    private val _auctionUiState = MutableStateFlow<AuctionUiState>(AuctionUiState.Loading)
+    val auctionUiState: StateFlow<AuctionUiState> = _auctionUiState.asStateFlow()
+    private val _bidHistoryUiState = MutableStateFlow<BidHistoryUiState>(BidHistoryUiState.Loading)
+    val bidHistoryUiState: StateFlow<BidHistoryUiState> = _bidHistoryUiState.asStateFlow()
+    private val _makeABidUiState = MutableStateFlow<MakeABidUiState>(MakeABidUiState.Loading)
+    val makeABidUiState: StateFlow<MakeABidUiState> = _makeABidUiState.asStateFlow()
 
     var user by mutableStateOf(
         User(
@@ -101,36 +75,69 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         )
     )
 
-    fun setAuction(auction: Auction) {
-        _auctionState.value = auction
-    }
-
-    fun fetchIsOwnerState() {
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("userId", null)
-        if(userId != null) {
-            _isOwnerState.value = _auctionState.value.ownerId == userId
-        }
-    }
-
-    fun fetchAuctionState(auctionId: String) {
+    fun fetchAuctionBidders() {
         viewModelScope.launch {
-            val getAuctionResponse = ApiService.getAuction(auctionId)
-            //Bisogna caricare l'auctionState grazie alla REST che effettua il fetch dell Auction
-            if(getAuctionResponse.status.isSuccess()) {
-                val auctionResponse = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java)
-                setAuction(auctionResponse.toDataModel())
+            _bidHistoryUiState.value = try {
+                val bidders = getBiddersFromServer(_auctionState.value.id)
+                BidHistoryUiState.Success(bidders)
+            } catch (e: Exception){
+                BidHistoryUiState.Error
             }
         }
     }
 
-    fun fetchInsertionist() {
+
+        private suspend fun getBiddersFromServer(auctionId: String): List<User> {
+        val result = emptyList<User>().toMutableList()
+        val requestUsers = ApiService.getAuctionBidders(auctionId)
+        for (user in requestUsers) {
+            result += user.toDataModel()
+        }
+        return result
+    }
+
+    fun fetchAuctionUiState(auctionId: String){
+        viewModelScope.launch {
+            _auctionUiState.value = try {
+                AuctionUiState.Success(fetchAuctionState(auctionId), fetchInsertionist(), isOwner())
+            } catch (e: Exception){
+                AuctionUiState.Error
+            }
+        }
+    }
+
+
+    private fun isOwner(): Boolean {
+        val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null)
+        return if(userId != null) {
+            _auctionState.value.ownerId == userId
+        } else{
+            false
+        }
+    }
+
+    private fun fetchAuctionState(auctionId: String): Auction {
+        var auctionResponse = Auction()
+        viewModelScope.launch {
+            val getAuctionResponse = ApiService.getAuction(auctionId)
+            if (getAuctionResponse.status.isSuccess()) {
+                auctionResponse = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                _auctionState.value = auctionResponse
+            }
+        }
+        return auctionResponse
+    }
+
+    fun fetchInsertionist(): User {
+        var ownerResponse = User()
         viewModelScope.launch {
             val getUserInfoResponse = ApiService.getUserInfo(_auctionState.value.ownerId)
             if (getUserInfoResponse.status.isSuccess()) {
-                _insertionistState.value = Gson().fromJson(getUserInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                ownerResponse = Gson().fromJson(getUserInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
             }
         }
+        return ownerResponse
     }
 
     fun updateBidValue(value: String){
@@ -143,12 +150,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                 value = value.toFloat()
             )
         }
-    }
-
-    fun deleteBidValue(){
-        _bidState.value = _bidState.value.copy(
-            value = 0.0f
-        )
     }
 
     fun submitBid() : Boolean {

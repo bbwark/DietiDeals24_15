@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
@@ -51,32 +53,52 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.models.Item
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import java.time.LocalDate
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AuctionView(
     auctionId: String,
-    sharedState: Auction,
+    auctionState: Auction,
     viewModel: SharedViewModel,
     navController: NavHostController
 ) {
-    val auctionState by viewModel.auctionState.collectAsState()
-    val isOwner by viewModel.isOwnerState.collectAsState()
-    val insertionist by viewModel.insertionsState.collectAsState()
+    val auctionUiState by viewModel.auctionUiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchAuctionUiState(auctionId)
+    }
 
+    when(auctionUiState){
+        is AuctionUiState.Loading -> LoadingView()
+        is AuctionUiState.Success -> {
+            AuctionViewLayout(
+                auction = (auctionUiState as AuctionUiState.Success).auction,
+                insertionist = (auctionUiState as AuctionUiState.Success).owner,
+                isOwner = (auctionUiState as AuctionUiState.Success).isOwner,
+                navController = navController
+            )
+        }
+        is AuctionUiState.Error -> RetryView()
+    }
+
+}
+
+@Composable
+fun AuctionViewLayout(
+    auction: Auction,
+    insertionist: User,
+    isOwner: Boolean,
+    navController: NavController
+){
     var userInfo by remember { mutableStateOf(false) }
-
-    /*LaunchedEffect(Unit) {
-        viewModel.fetchAuctionState(auctionId)
-        viewModel.fetchInsertionist()
-        viewModel.fetchIsOwnerState()
-    }*/
-
-    val pagerState = rememberPagerState { auctionState.item.imagesUri.size }
+    val pagerState = rememberPagerState { auction.item.imagesUri.size }
 
     Column(
         Modifier
@@ -84,14 +106,14 @@ fun AuctionView(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (auctionState.item.imagesUri.isNotEmpty()) {
+        if (auction.item.imagesUri.isNotEmpty()) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
             ) { page ->
-                val imageUrl = auctionState.item.imagesUri[page]
+                val imageUrl = auction.item.imagesUri[page]
                 Image(
                     painter = rememberAsyncImagePainter(
                         model = imageUrl,
@@ -116,9 +138,9 @@ fun AuctionView(
             )
         }
         AuctionHeader(
-            itemName = auctionState.item.name,
+            itemName = auction.item.name,
             insertionistName = insertionist.name,
-            type = auctionState.type,
+            type = auction.type,
             onUserInfo = { userInfo = true }
         )
 
@@ -126,9 +148,9 @@ fun AuctionView(
             Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            when (auctionState.type) {
-                AuctionType.English -> EnglishAuctionBody(lastBid = auctionState.bids.lastOrNull())
-                AuctionType.Silent -> auctionState.endingDate?.let { SilentAuctionBody(endingDate = it) }
+            when (auction.type) {
+                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
+                AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
                 else ->{
 
                 }
@@ -147,7 +169,6 @@ fun AuctionView(
         if (!isOwner) {
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = { /* TODO Navigates to Make A Bid View */
-                viewModel.changeAuctionType(AuctionType.Silent)
                 navController.navigate(Screen.MakeABid.route)
             }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
@@ -155,14 +176,13 @@ fun AuctionView(
             Spacer(modifier = Modifier.size(12.dp))
         }
 
-        DescriptionAuctionItem(description = auctionState.description)
+        DescriptionAuctionItem(description = auction.description)
         if(userInfo) {
             UserInfoBottomSheet(
                 user = insertionist,
                 onDismissRequest = { userInfo = false }
             )
         }
-        ViewTitle(title = "State: ${sharedState.type.name}")
     }
 }
 
@@ -269,6 +289,5 @@ fun AuctionViewPreview() {
         type = AuctionType.English
     )
     val viewModel = SharedViewModel(Application())
-    viewModel.setAuction(auction)
-    AuctionView(auctionId = "1" ,sharedState = auction, viewModel = viewModel, navController = rememberNavController())
+    AuctionView(auctionId = "1" , auctionState = auction, viewModel = viewModel, navController = rememberNavController())
 }

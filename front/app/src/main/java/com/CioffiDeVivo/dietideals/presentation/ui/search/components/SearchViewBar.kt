@@ -17,8 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable
 fun SearchViewBar(
@@ -26,7 +28,7 @@ fun SearchViewBar(
     categoriesToHide: Set<String>,
     updateCategories: (Set<String>) -> (Unit),
     updateSearchWord: (String) -> (Unit),
-    navController: NavHostController
+    navController: NavController
 ) {
     var state by remember { mutableStateOf("") }
 
@@ -40,7 +42,7 @@ fun SearchViewBar(
         modifier = modifier.fillMaxWidth(),
         leadingIcon = {
             IconButton(onClick = {
-                //pop navigation back to home
+                navController.navigate(Screen.Home.route)
             }) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,

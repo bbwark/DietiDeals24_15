@@ -8,6 +8,7 @@ import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.utils.AuthService
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateLogInForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -25,8 +26,9 @@ class LogInCredentialsViewModel(
     private val validateLogInForms: ValidateLogInForm = ValidateLogInForm()
 ) : AndroidViewModel(application) {
 
-    private val _userLogInState = MutableStateFlow(LogInState())
-    val userLogInState: StateFlow<LogInState> = _userLogInState.asStateFlow()
+    private val _logInCredentialsUiState = MutableStateFlow<LogInCredentialsUiState>(LogInCredentialsUiState.LogInParams())
+    val logInCredentialsUiState: StateFlow<LogInCredentialsUiState> = _logInCredentialsUiState.asStateFlow()
+
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
 
@@ -55,84 +57,106 @@ class LogInCredentialsViewModel(
     }
 
     private fun updateEmail(email: String) {
-        _userLogInState.value = _userLogInState.value.copy(
-            email = email
-        )
+        try {
+            val currentState = _logInCredentialsUiState.value
+            if(currentState is LogInCredentialsUiState.LogInParams){
+                _logInCredentialsUiState.value = currentState.copy(
+                    email = email
+                )
+            }
+        } catch (e: Exception){
+            _logInCredentialsUiState.value = LogInCredentialsUiState.Error
+        }
     }
 
     private fun deleteEmail() {
-        _userLogInState.value = _userLogInState.value.copy(
-            email = ""
-        )
+       updateEmail("")
     }
 
     private fun updatePassword(password: String) {
-        _userLogInState.value = _userLogInState.value.copy(
-            password = password
-        )
+        try {
+            val currentState = _logInCredentialsUiState.value
+            if(currentState is LogInCredentialsUiState.LogInParams){
+                _logInCredentialsUiState.value = currentState.copy(
+                    password = password
+                )
+            }
+        } catch (e: Exception){
+            _logInCredentialsUiState.value = LogInCredentialsUiState.Error
+        }
     }
 
     private fun submitLogIn() {
         if (validationBlock()) {
-            viewModelScope.launch {
-                try {
-                    val loginResponse = AuthService.loginUser(
-                        _userLogInState.value.email,
-                        _userLogInState.value.password
-                    )
-                    if (loginResponse.status.isSuccess()) {
-                        val jsonObject =
-                            Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
-                        val token = jsonObject.get("jwt").asString
-                        if (token.isNotEmpty()) {
-                            val userId = jsonObject.getAsJsonObject("user").get("id").asString
+            val currentState = _logInCredentialsUiState.value
+            if(currentState is LogInCredentialsUiState.LogInParams){
+                _logInCredentialsUiState.value = LogInCredentialsUiState.Loading
+                viewModelScope.launch {
+                    _logInCredentialsUiState.value = try {
+                        val loginResponse = AuthService.loginUser(
+                            currentState.email,
+                            currentState.password
+                        )
+                        if (loginResponse.status.isSuccess()) {
+                            val jsonObject =
+                                Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
+                            val token = jsonObject.get("jwt").asString
+                            if (token.isNotEmpty()) {
+                                val userId = jsonObject.getAsJsonObject("user").get("id").asString
 
-                            sharedPreferences.edit().apply {
-                                putString("userId", userId)
-                                apply()
+                                sharedPreferences.edit().apply {
+                                    putString("userId", userId)
+                                    apply()
+                                }
+
+                                val encryptedSharedPreferences =
+                                    EncryptedPreferencesManager.getEncryptedPreferences()
+                                encryptedSharedPreferences.edit().apply {
+                                    putString("email", currentState.email)
+                                    putString("password", currentState.password)
+                                    apply()
+                                }
+
+                                ApiService.initialize(
+                                    token,
+                                    getApplication<Application>().applicationContext
+                                )
+
                             }
-
-                            val encryptedSharedPreferences =
-                                EncryptedPreferencesManager.getEncryptedPreferences()
-                            encryptedSharedPreferences.edit().apply {
-                                putString("email", _userLogInState.value.email)
-                                putString("password", _userLogInState.value.password)
-                                apply()
-                            }
-
-                            ApiService.initialize(
-                                token,
-                                getApplication<Application>().applicationContext
-                            )
-
                         }
+                        LogInCredentialsUiState.Success
+                    } catch (e: Exception) {
+                        LogInCredentialsUiState.Error
                     }
-                } catch (e: Exception) {
-                    //TODO error handling
                 }
             }
         }
     }
 
     private fun validationBlock() : Boolean {
-        val emailValidation = validateLogInForms.validateEmail(userLogInState.value.email)
-        val passwordValidation = validateLogInForms.validatePassword(userLogInState.value.password)
+        val currentState = _logInCredentialsUiState.value
+        if(currentState is LogInCredentialsUiState.LogInParams){
+            val emailValidation = validateLogInForms.validateEmail(currentState.email)
+            val passwordValidation = validateLogInForms.validatePassword(currentState.password)
 
-        val hasError = listOf(
-            emailValidation,
-            passwordValidation,
-        ).any { !it.positiveResult }
+            val hasError = listOf(
+                emailValidation,
+                passwordValidation,
+            ).any { !it.positiveResult }
 
-        if (hasError) {
-            _userLogInState.value = _userLogInState.value.copy(
-                emailErrorMsg = emailValidation.errorMessage,
-                passwordErrorMsg = passwordValidation.errorMessage,
-            )
+            if (hasError) {
+                _logInCredentialsUiState.value = currentState.copy(
+                    emailErrorMsg = emailValidation.errorMessage,
+                    passwordErrorMsg = passwordValidation.errorMessage,
+                )
+                return false
+            }
+            viewModelScope.launch {
+                validationEventChannel.send(ValidationState.Success)
+            }
+            return true
+        } else{
             return false
         }
-        viewModelScope.launch {
-            validationEventChannel.send(ValidationState.Success)
-        }
-        return true
     }
 }

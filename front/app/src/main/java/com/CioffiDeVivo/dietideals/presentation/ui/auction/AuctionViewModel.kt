@@ -33,6 +33,9 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
     private val _insertionistState = MutableStateFlow(User())
     val insertionsState = _insertionistState.asStateFlow()
 
+    private val _auctionUiState = MutableStateFlow<AuctionUiState>(AuctionUiState.Loading)
+    val auctionUiState: StateFlow<AuctionUiState> = _auctionUiState.asStateFlow()
+
     var user by mutableStateOf(
         User(
             "",
