@@ -27,11 +27,13 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCa
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 
 @Composable
 fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
-    val userCard by viewModel.userCardState.collectAsState()
+    val addCardUiState by viewModel.addCardUiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
         viewModel.validationAddCardEvent.collect { event ->
@@ -45,36 +47,46 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        CreditCardComponents(
-            userState = userCard,
-            onNumberChange = { viewModel.addCardAction(AddCardEvents.CreditCardNumberChanged(it)) },
-            onDateChange = { viewModel.addCardAction(AddCardEvents.ExpirationDateChanged(it)) },
-            onCvvChange = { viewModel.addCardAction(AddCardEvents.CvvChanged(it)) },
-            onIbanChange = { viewModel.addCardAction(AddCardEvents.IBANChanged(it)) },
-            onDeleteCardNumber = { viewModel.addCardAction(AddCardEvents.CreditCardNumberDeleted(it)) },
-            onDeleteExpirationDate = { viewModel.addCardAction(AddCardEvents.ExpirationDateDeleted(it)) },
-            onDeleteCvv = { viewModel.addCardAction(AddCardEvents.CvvDeleted(it)) },
-            onDeleteIban = { viewModel.addCardAction(AddCardEvents.IBANDeleted(it)) }
-        )
-        Button(
-            onClick = {
-                      viewModel.addCardAction(AddCardEvents.Submit())
-            },
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(bottom = 8.dp)
-                .pulsateClick(),
-        ) {
-            Text(text = stringResource(id = R.string.saveCard))
+    when(addCardUiState){
+        is AddCardUiState.Error -> RetryView()
+        is AddCardUiState.Loading -> LoadingView()
+        is AddCardUiState.Success -> {
+            
+        }
+        is AddCardUiState.AddCardParams -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                CreditCardComponents(
+                    userState = addCardUiState,
+                    onNumberChange = { viewModel.addCardAction(AddCardEvents.CreditCardNumberChanged(it)) },
+                    onDateChange = { viewModel.addCardAction(AddCardEvents.ExpirationDateChanged(it)) },
+                    onCvvChange = { viewModel.addCardAction(AddCardEvents.CvvChanged(it)) },
+                    onIbanChange = { viewModel.addCardAction(AddCardEvents.IBANChanged(it)) },
+                    onDeleteCardNumber = { viewModel.addCardAction(AddCardEvents.CreditCardNumberDeleted(it)) },
+                    onDeleteExpirationDate = { viewModel.addCardAction(AddCardEvents.ExpirationDateDeleted(it)) },
+                    onDeleteCvv = { viewModel.addCardAction(AddCardEvents.CvvDeleted(it)) },
+                    onDeleteIban = { viewModel.addCardAction(AddCardEvents.IBANDeleted(it)) }
+                )
+                Button(
+                    onClick = {
+                        viewModel.addCardAction(AddCardEvents.Submit())
+                    },
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(bottom = 8.dp)
+                        .pulsateClick(),
+                ) {
+                    Text(text = stringResource(id = R.string.saveCard))
+                }
+            }
         }
     }
+
 }
 
 @Preview(showBackground = true)

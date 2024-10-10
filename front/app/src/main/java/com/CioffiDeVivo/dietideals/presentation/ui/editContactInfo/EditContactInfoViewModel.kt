@@ -7,6 +7,7 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +18,8 @@ import kotlinx.coroutines.launch
 
 class EditContactInfoViewModel(application: Application, private val validateEditContactInfoForm: ValidateEditContactInfoForm = ValidateEditContactInfoForm() ): AndroidViewModel(application) {
 
-    private val _userEditContactInfoState = MutableStateFlow(EditContactInfoState())
-    val userEditContactInfoState: StateFlow<EditContactInfoState> = _userEditContactInfoState.asStateFlow()
+    private val _editContactInfoUiState = MutableStateFlow<EditContactInfoUiState>(EditContactInfoUiState.EditContactInfoParams())
+    val editContactInfoUiState: StateFlow<EditContactInfoUiState> = _editContactInfoUiState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationEditContactInfoEvents = validationEventChannel.receiveAsFlow()
 
@@ -53,47 +54,67 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
 
     private fun submitEditContactInfo(){
         if (validationBlock()) {
-            viewModelScope.launch {
-                val requestUser = _userEditContactInfoState.value.user.toRequestModel()
-                val updateUserResponse = ApiService.updateUser(requestUser)
-                //TODO handling response
+            val currentState = _editContactInfoUiState.value
+            if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                viewModelScope.launch {
+                    val requestUser = currentState.user.toRequestModel()
+                    val updateUserResponse = ApiService.updateUser(requestUser)
+                    //TODO handling response
+                }
             }
         }
     }
 
     private fun validationBlock() : Boolean {
-        val addressValidation = validateEditContactInfoForm.validateAddress(userEditContactInfoState.value.user.address)
-        val zipCodeValidation = validateEditContactInfoForm.validateZipCode(userEditContactInfoState.value.user.zipCode)
-        val phoneNumberValidation = validateEditContactInfoForm.validatePhoneNumber(userEditContactInfoState.value.user.phoneNumber)
+        val currentState = _editContactInfoUiState.value
+        if(currentState is EditContactInfoUiState.EditContactInfoParams){
+            try {
+                val addressValidation = validateEditContactInfoForm.validateAddress(currentState.user.address)
+                val zipCodeValidation = validateEditContactInfoForm.validateZipCode(currentState.user.zipCode)
+                val phoneNumberValidation = validateEditContactInfoForm.validatePhoneNumber(currentState.user.phoneNumber)
 
-        val hasError = listOf(
-            addressValidation,
-            zipCodeValidation,
-            phoneNumberValidation
-        ).any { it.positiveResult }
+                val hasError = listOf(
+                    addressValidation,
+                    zipCodeValidation,
+                    phoneNumberValidation
+                ).any { it.positiveResult }
 
-        if(hasError){
-            _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-                addressErrorMsg = addressValidation.errorMessage,
-                zipCodeErrorMsg = zipCodeValidation.errorMessage,
-                phoneNumberErrorMsg = phoneNumberValidation.errorMessage
-            )
+                if(hasError){
+                    _editContactInfoUiState.value = currentState.copy(
+                        addressErrorMsg = addressValidation.errorMessage,
+                        zipCodeErrorMsg = zipCodeValidation.errorMessage,
+                        phoneNumberErrorMsg = phoneNumberValidation.errorMessage
+                    )
+                    return false
+                }
+                viewModelScope.launch {
+                    validationEventChannel.send(ValidationState.Success)
+                }
+                return true
+            } catch (e: Exception){
+                _editContactInfoUiState.value = EditContactInfoUiState.Error
+                return false
+            }
+        } else{
             return false
         }
-        viewModelScope.launch {
-            validationEventChannel.send(ValidationState.Success)
-        }
-        return true
     }
 
     //Update & Delete State
 
     private fun updateAddress(address: String){
-        _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-            user = _userEditContactInfoState.value.user.copy(
-                address = address
-            )
-        )
+        try {
+            val currentState = _editContactInfoUiState.value
+            if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                _editContactInfoUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        address = address
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editContactInfoUiState.value = EditContactInfoUiState.Error
+        }
     }
 
     private fun deleteAddress() {
@@ -101,11 +122,18 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
     }
 
     private fun updateZipCode(zipCode: String){
-        _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-            user = _userEditContactInfoState.value.user.copy(
-                zipCode = zipCode
-            )
-        )
+        try {
+            val currentState = _editContactInfoUiState.value
+            if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                _editContactInfoUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        zipCode = zipCode
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editContactInfoUiState.value = EditContactInfoUiState.Error
+        }
     }
 
     private fun deleteZipCode(){
@@ -113,19 +141,33 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
     }
 
     private fun updateCountry(country: Country){
-        _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-            user = _userEditContactInfoState.value.user.copy(
-                country = country
-            )
-        )
+        try {
+            val currentState = _editContactInfoUiState.value
+            if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                _editContactInfoUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        country = country
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editContactInfoUiState.value = EditContactInfoUiState.Error
+        }
     }
 
     private fun updatePhoneNumber(phoneNumber: String){
-        _userEditContactInfoState.value = _userEditContactInfoState.value.copy(
-            user = _userEditContactInfoState.value.user.copy(
-                phoneNumber = phoneNumber
-            )
-        )
+        try {
+            val currentState = _editContactInfoUiState.value
+            if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                _editContactInfoUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        phoneNumber = phoneNumber
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editContactInfoUiState.value = EditContactInfoUiState.Error
+        }
     }
 
     private fun deletePhoneNumber(){

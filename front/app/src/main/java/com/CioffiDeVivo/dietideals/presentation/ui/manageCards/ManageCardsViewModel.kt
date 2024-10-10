@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.domain.repository.UserRepository
 import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
