@@ -276,7 +276,7 @@ class CreateAuctionViewModel(
                         endingDate = Instant
                             .ofEpochMilli(endingDate)
                             .atZone(ZoneId.of("UTC"))
-                            .toLocalDate()
+                            .toLocalDateTime()
                     )
                 )
             }
