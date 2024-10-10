@@ -8,6 +8,7 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
@@ -31,9 +32,7 @@ class RegisterCredentialsViewModel(
     private val validateRegistrationForms: ValidateRegistrationForms = ValidateRegistrationForms()
 ) : AndroidViewModel(application) {
 
-    private val _userRegistrationState = MutableStateFlow(RegistrationState())
-    val userRegistrationState: StateFlow<RegistrationState> = _userRegistrationState.asStateFlow()
-    private val _registerCredentialsUiState = MutableStateFlow<RegisterCredentialsUiState>(RegisterCredentialsUiState.Loading)
+    private val _registerCredentialsUiState = MutableStateFlow<RegisterCredentialsUiState>(RegisterCredentialsUiState.RegisterParams())
     val registerCredentialsUiState: StateFlow<RegisterCredentialsUiState> = _registerCredentialsUiState.asStateFlow()
 
     private val validationEventChannel = Channel<ValidationState>()
@@ -125,148 +124,166 @@ class RegisterCredentialsViewModel(
 
     private fun submitForm() {
         if (validationBlock()) {
-            viewModelScope.launch {
-                _registerCredentialsUiState.value = try {
-                    if (_userRegistrationState.value.user.isSeller) {
-                        var cards = _userRegistrationState.value.user.creditCards
-                        cards += _userRegistrationState.value.card
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = RegisterCredentialsUiState.Loading
+                viewModelScope.launch {
+                    _registerCredentialsUiState.value = try {
+                        if (currentState.user.isSeller) {
+                            var cards = currentState.user.creditCards
+                            cards += currentState.creditCard
 
-                        _userRegistrationState.value = _userRegistrationState.value.copy(
-                            user = _userRegistrationState.value.user.copy(
-                                creditCards = cards
+                            _registerCredentialsUiState.value = currentState.copy(
+                                user = currentState.user.copy(
+                                    creditCards = cards
+                                )
                             )
-                        )
-                    }
-                    val user = _userRegistrationState.value.user.toRequestModel()
-                    val registerResponse = AuthService.registerUser(user)
-                    if (registerResponse.status.isSuccess()) {
-                        val loginResponse = user.email?.let {
-                            user.password?.let { it1 ->
-                                AuthService.loginUser(
-                                    it,
-                                    it1
+                        }
+                        val user = currentState.user.toRequestModel()
+                        val registerResponse = AuthService.registerUser(user)
+                        if (registerResponse.status.isSuccess()) {
+                            val loginResponse = user.email?.let {
+                                user.password?.let { it1 ->
+                                    AuthService.loginUser(
+                                        it,
+                                        it1
+                                    )
+                                }
+                            }
+                            if (loginResponse != null && loginResponse.status.isSuccess()) {
+                                val registerJsonObject = Gson().fromJson(
+                                    registerResponse.bodyAsText(),
+                                    JsonObject::class.java
+                                )
+                                val loginJsonObject =
+                                    Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
+                                val userId = registerJsonObject.get("id").asString
+                                val token = loginJsonObject.get("jwt").asString
+
+                                sharedPreferences.edit().apply {
+                                    putString("userId", userId)
+                                    apply()
+                                }
+
+                                val encryptedSharedPreferences =
+                                    EncryptedPreferencesManager.getEncryptedPreferences()
+                                encryptedSharedPreferences.edit().apply() {
+                                    putString("email", currentState.user.email)
+                                    putString("password", currentState.user.password)
+                                    apply()
+                                }
+
+                                ApiService.initialize(
+                                    token,
+                                    getApplication<Application>().applicationContext
                                 )
                             }
                         }
-                        if (loginResponse != null && loginResponse.status.isSuccess()) {
-                            val registerJsonObject = Gson().fromJson(
-                                registerResponse.bodyAsText(),
-                                JsonObject::class.java
-                            )
-                            val loginJsonObject =
-                                Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
-                            val userId = registerJsonObject.get("id").asString
-                            val token = loginJsonObject.get("jwt").asString
-
-                            sharedPreferences.edit().apply {
-                                putString("userId", userId)
-                                apply()
-                            }
-
-                            val encryptedSharedPreferences =
-                                EncryptedPreferencesManager.getEncryptedPreferences()
-                            encryptedSharedPreferences.edit().apply() {
-                                putString("email", _userRegistrationState.value.user.email)
-                                putString("password", _userRegistrationState.value.user.password)
-                                apply()
-                            }
-
-                            ApiService.initialize(
-                                token,
-                                getApplication<Application>().applicationContext
-                            )
-                        }
+                        RegisterCredentialsUiState.Success
+                    } catch (e: Exception) {
+                        RegisterCredentialsUiState.Error
                     }
-                    RegisterCredentialsUiState.Success
-                } catch (e: Exception) {
-                    RegisterCredentialsUiState.Error
                 }
             }
+
         }
     }
 
     private fun validationBlock(): Boolean {
-        val emailValidation = validateRegistrationForms.validateEmail(userRegistrationState.value.user.email)
-        val nameValidation = validateRegistrationForms.validateName(userRegistrationState.value.user.name)
-        val surnameValidation = validateRegistrationForms.validateSurname(userRegistrationState.value.user.surname)
-        val passwordValidation = validateRegistrationForms.validatePassword(userRegistrationState.value.user.password)
-        val newPasswordValidation = validateRegistrationForms.validateRetypePassword(userRegistrationState.value.user.password, userRegistrationState.value.retypePassword)
-        val addressValidation = validateRegistrationForms.validateAddress(userRegistrationState.value.user.address)
-        val zipCodeValidation = validateRegistrationForms.validateZipCode(userRegistrationState.value.user.zipCode)
-        val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(userRegistrationState.value.user.phoneNumber)
-        val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(userRegistrationState.value.card.creditCardNumber)
-        val expirationDateValidation = validateRegistrationForms.validateExpirationDate(userRegistrationState.value.expirationDate)
-        val cvvValidation = validateRegistrationForms.validateCvv(userRegistrationState.value.card.cvv)
-        val ibanValidation = validateRegistrationForms.validateIban(userRegistrationState.value.card.iban)
+        val currentState = _registerCredentialsUiState.value
+        if(currentState is RegisterCredentialsUiState.RegisterParams){
+            try {
+                val emailValidation = validateRegistrationForms.validateEmail(currentState.user.email)
+                val nameValidation = validateRegistrationForms.validateName(currentState.user.name)
+                val surnameValidation = validateRegistrationForms.validateSurname(currentState.user.surname)
+                val passwordValidation = validateRegistrationForms.validatePassword(currentState.user.password)
+                val newPasswordValidation = validateRegistrationForms.validateRetypePassword(currentState.user.password, currentState.retypePassword)
+                val addressValidation = validateRegistrationForms.validateAddress(currentState.user.address)
+                val zipCodeValidation = validateRegistrationForms.validateZipCode(currentState.user.zipCode)
+                val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(currentState.user.phoneNumber)
+                val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
+                val expirationDateValidation = validateRegistrationForms.validateExpirationDate(currentState.expirationDate)
+                val cvvValidation = validateRegistrationForms.validateCvv(currentState.creditCard.cvv)
+                val ibanValidation = validateRegistrationForms.validateIban(currentState.creditCard.iban)
 
-        val hasErrorNotSeller = listOf(
-            emailValidation,
-            nameValidation,
-            surnameValidation,
-            passwordValidation,
-            newPasswordValidation
-        ).any { !it.positiveResult }
+                val hasErrorNotSeller = listOf(
+                    emailValidation,
+                    nameValidation,
+                    surnameValidation,
+                    passwordValidation,
+                    newPasswordValidation
+                ).any { !it.positiveResult }
 
-        val hasErrorSeller = listOf(
-            emailValidation,
-            nameValidation,
-            surnameValidation,
-            passwordValidation,
-            newPasswordValidation,
-            addressValidation,
-            zipCodeValidation,
-            phoneNumberValidation,
-            creditCardNumberValidation,
-            expirationDateValidation,
-            cvvValidation,
-            ibanValidation
-        ).any { !it.positiveResult }
+                val hasErrorSeller = listOf(
+                    emailValidation,
+                    nameValidation,
+                    surnameValidation,
+                    passwordValidation,
+                    newPasswordValidation,
+                    addressValidation,
+                    zipCodeValidation,
+                    phoneNumberValidation,
+                    creditCardNumberValidation,
+                    expirationDateValidation,
+                    cvvValidation,
+                    ibanValidation
+                ).any { !it.positiveResult }
 
-        if(hasErrorNotSeller && !userRegistrationState.value.user.isSeller){
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                emailErrorMsg = emailValidation.errorMessage,
-                nameErrorMsg = nameValidation.errorMessage,
-                surnameErrorMsg = surnameValidation.errorMessage,
-                passwordErrorMsg = passwordValidation.errorMessage,
-                retypePasswordErrorMsg = newPasswordValidation.errorMessage
-            )
+                if(hasErrorNotSeller && !currentState.user.isSeller){
+                    _registerCredentialsUiState.value = currentState.copy(
+                        emailErrorMsg = emailValidation.errorMessage,
+                        nameErrorMsg = nameValidation.errorMessage,
+                        surnameErrorMsg = surnameValidation.errorMessage,
+                        passwordErrorMsg = passwordValidation.errorMessage,
+                        retypePasswordErrorMsg = newPasswordValidation.errorMessage
+                    )
+                    return false
+                }
+                if (hasErrorSeller && currentState.user.isSeller){
+                    _registerCredentialsUiState.value = currentState.copy(
+                        emailErrorMsg = emailValidation.errorMessage,
+                        nameErrorMsg = nameValidation.errorMessage,
+                        surnameErrorMsg = surnameValidation.errorMessage,
+                        passwordErrorMsg = passwordValidation.errorMessage,
+                        retypePasswordErrorMsg = newPasswordValidation.errorMessage,
+                        addressErrorMsg = addressValidation.errorMessage,
+                        zipCodeErrorMsg = zipCodeValidation.errorMessage,
+                        phoneNumberErrorMsg = phoneNumberValidation.errorMessage,
+                        creditCardNumberErrorMsg = creditCardNumberValidation.errorMessage,
+                        expirationDateErrorMsg = expirationDateValidation.errorMessage,
+                        cvvErrorMsg = cvvValidation.errorMessage,
+                        ibanErrorMsg = ibanValidation.errorMessage,
+                    )
+                    return false
+                }
+
+                viewModelScope.launch {
+                    validationEventChannel.send(ValidationState.Success)
+                }
+                return true
+            } catch (e: Exception){
+                _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
+                return false
+            }
+        } else{
             return false
         }
-        if (hasErrorSeller && userRegistrationState.value.user.isSeller){
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                emailErrorMsg = emailValidation.errorMessage,
-                nameErrorMsg = nameValidation.errorMessage,
-                surnameErrorMsg = surnameValidation.errorMessage,
-                passwordErrorMsg = passwordValidation.errorMessage,
-                retypePasswordErrorMsg = newPasswordValidation.errorMessage,
-                addressErrorMsg = addressValidation.errorMessage,
-                zipCodeErrorMsg = zipCodeValidation.errorMessage,
-                phoneNumberErrorMsg = phoneNumberValidation.errorMessage,
-                creditCardNumberErrorMsg = creditCardNumberValidation.errorMessage,
-                expirationDateErrorMsg = expirationDateValidation.errorMessage,
-                cvvErrorMsg = cvvValidation.errorMessage,
-                ibanErrorMsg = ibanValidation.errorMessage,
-            )
-            return false
-        }
-
-        viewModelScope.launch {
-            validationEventChannel.send(ValidationState.Success)
-        }
-        return true
     }
 
     /*Update & Delete for RegistrationState*/
 
     private fun updateEmail(email: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    email = email
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        email = email
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -276,13 +293,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateName(name: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    name = name
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        name = name
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -292,13 +312,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateSurname(surname: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    surname = surname
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        surname = surname
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -308,47 +331,59 @@ class RegisterCredentialsViewModel(
 
     private fun updatePassword(password: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    password = password
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        password = password
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
     private fun updateNewPassword(newPassword: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                retypePassword = newPassword
-            )
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    retypePassword = newPassword
+                )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
     private fun updateIsSeller(isSeller: Boolean){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    isSeller = isSeller
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        isSeller = isSeller
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
     private fun updateAddress(address: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    address = address
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        address = address
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -358,13 +393,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateZipCode(zipCode: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    zipCode = zipCode
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        zipCode = zipCode
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -374,25 +412,31 @@ class RegisterCredentialsViewModel(
 
     private fun updateCountry(country: Country){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    country = country
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        country = country
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
     private fun updatePhoneNumber(phoneNumber: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                user = _userRegistrationState.value.user.copy(
-                    phoneNumber = phoneNumber
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        phoneNumber = phoneNumber
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -402,13 +446,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateCreditCardNumber(creditCardNumber: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                card = _userRegistrationState.value.card.copy(
-                    creditCardNumber = creditCardNumber
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    creditCard = currentState.creditCard.copy(
+                        creditCardNumber = creditCardNumber
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -418,11 +465,14 @@ class RegisterCredentialsViewModel(
 
     private fun updateExpirationDate(expirationDate: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                expirationDate = expirationDate
-            )
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    expirationDate = expirationDate
+                )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -432,13 +482,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateCvv(cvv: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                card = _userRegistrationState.value.card.copy(
-                    cvv = cvv
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    creditCard = currentState.creditCard.copy(
+                        cvv = cvv
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 
@@ -448,13 +501,16 @@ class RegisterCredentialsViewModel(
 
     private fun updateIban(iban: String){
         try {
-            _userRegistrationState.value = _userRegistrationState.value.copy(
-                card = _userRegistrationState.value.card.copy(
-                    iban = iban
+            val currentState = _registerCredentialsUiState.value
+            if(currentState is RegisterCredentialsUiState.RegisterParams){
+                _registerCredentialsUiState.value = currentState.copy(
+                    creditCard = currentState.creditCard.copy(
+                        iban = iban
+                    )
                 )
-            )
+            }
         } catch (e: Exception){
-
+            _registerCredentialsUiState.value = RegisterCredentialsUiState.Error
         }
     }
 

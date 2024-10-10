@@ -19,14 +19,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
-import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardState
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationState
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 import com.CioffiDeVivo.dietideals.utils.ExpirationDateTrasformation
 
 @Composable
 fun CreditCardComponents(
-    userState: RegistrationState,
+    userState: RegisterCredentialsUiState,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
     onCvvChange: (String) -> Unit,
@@ -39,7 +39,7 @@ fun CreditCardComponents(
     val pattern = remember { Regex("^\\d+\$") }
 
     InputTextField(
-        value = userState.card.creditCardNumber,
+        value = (userState as RegisterCredentialsUiState.RegisterParams).creditCard.creditCardNumber,
         onValueChanged = { onNumberChange(it) },
         label = stringResource(R.string.creditcard),
         isError = userState.creditCardNumberErrorMsg != null,
@@ -71,7 +71,7 @@ fun CreditCardComponents(
         )
         Spacer(modifier = Modifier.width(10.dp))
         InputTextField(
-            value = userState.card.cvv,
+            value = userState.creditCard.cvv,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onCvvChange(it)
@@ -88,7 +88,7 @@ fun CreditCardComponents(
         )
     }
     InputTextField(
-        value = userState.card.iban,
+        value = userState.creditCard.iban,
         onValueChanged = { onIbanChange(it) },
         label = stringResource(R.string.iban),
         isError = userState.ibanErrorMsg != null,
@@ -100,7 +100,7 @@ fun CreditCardComponents(
 
 @Composable
 fun CreditCardComponents(
-    userState: AddCardState,
+    userState: AddCardUiState,
     onNumberChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
     onCvvChange: (String) -> Unit,
@@ -113,7 +113,7 @@ fun CreditCardComponents(
     val pattern = remember { Regex("^\\d+\$") }
 
     InputTextField(
-        value = userState.card.creditCardNumber,
+        value = (userState as AddCardUiState.AddCardParams).creditCard.creditCardNumber,
         onValueChanged = { onNumberChange(it) },
         label = stringResource(R.string.creditcard),
         isError = userState.creditCardNumberErrorMsg != null,
@@ -144,7 +144,7 @@ fun CreditCardComponents(
                 .padding(end = 4.dp)
         )
         InputTextField(
-            value = userState.card.cvv,
+            value = userState.creditCard.cvv,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onCvvChange(it)
@@ -161,7 +161,7 @@ fun CreditCardComponents(
         )
     }
     InputTextField(
-        value = userState.card.iban,
+        value = userState.creditCard.iban,
         onValueChanged = { onIbanChange(it) },
         label = stringResource(R.string.iban),
         isError = userState.ibanErrorMsg != null,
@@ -169,28 +169,4 @@ fun CreditCardComponents(
         onTrailingIconClick = { onDeleteIban(it) },
         modifier = modifierStandard
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CreditCardComponentPreview(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CreditCardComponents(
-            userState = AddCardState(),
-            onNumberChange = {},
-            onDateChange = {},
-            onCvvChange = {},
-            onIbanChange = {},
-            onDeleteCardNumber = {},
-            onDeleteExpirationDate = {},
-            onDeleteCvv = {},
-            onDeleteIban = {}
-        )
-    }
 }

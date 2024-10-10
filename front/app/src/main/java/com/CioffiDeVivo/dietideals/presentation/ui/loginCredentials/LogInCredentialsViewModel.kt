@@ -136,25 +136,30 @@ class LogInCredentialsViewModel(
     private fun validationBlock() : Boolean {
         val currentState = _logInCredentialsUiState.value
         if(currentState is LogInCredentialsUiState.LogInParams){
-            val emailValidation = validateLogInForms.validateEmail(currentState.email)
-            val passwordValidation = validateLogInForms.validatePassword(currentState.password)
+            try {
+                val emailValidation = validateLogInForms.validateEmail(currentState.email)
+                val passwordValidation = validateLogInForms.validatePassword(currentState.password)
 
-            val hasError = listOf(
-                emailValidation,
-                passwordValidation,
-            ).any { !it.positiveResult }
+                val hasError = listOf(
+                    emailValidation,
+                    passwordValidation,
+                ).any { !it.positiveResult }
 
-            if (hasError) {
-                _logInCredentialsUiState.value = currentState.copy(
-                    emailErrorMsg = emailValidation.errorMessage,
-                    passwordErrorMsg = passwordValidation.errorMessage,
-                )
+                if (hasError) {
+                    _logInCredentialsUiState.value = currentState.copy(
+                        emailErrorMsg = emailValidation.errorMessage,
+                        passwordErrorMsg = passwordValidation.errorMessage,
+                    )
+                    return false
+                }
+                viewModelScope.launch {
+                    validationEventChannel.send(ValidationState.Success)
+                }
+                return true
+            } catch (e: Exception){
+                _logInCredentialsUiState.value = LogInCredentialsUiState.Error
                 return false
             }
-            viewModelScope.launch {
-                validationEventChannel.send(ValidationState.Success)
-            }
-            return true
         } else{
             return false
         }

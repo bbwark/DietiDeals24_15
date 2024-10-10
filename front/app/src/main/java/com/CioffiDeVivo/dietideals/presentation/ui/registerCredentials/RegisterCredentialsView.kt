@@ -46,6 +46,8 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitl
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 val modifierStandard: Modifier = Modifier
     .fillMaxWidth()
@@ -53,7 +55,7 @@ val modifierStandard: Modifier = Modifier
 @Composable
 fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navController: NavHostController){
 
-    val userRegistrationState by viewModel.userRegistrationState.collectAsState()
+    val registerCredentialsUiState by viewModel.registerCredentialsUiState.collectAsState()
     var isSeller by remember { mutableStateOf(false) }
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
@@ -67,94 +69,103 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         }
     }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Spacer(modifier = Modifier.height(40.dp))
-        ViewTitle(title = stringResource(id = R.string.createAccount))
-        Spacer(modifier = Modifier.height(30.dp))
-        PersonalInfoOnRegisterCredentials(
-            userRegistrationState = userRegistrationState,
-            onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
-            onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
-            onSurnameChange = { viewModel.registrationAction(RegistrationEvents.SurnameChanged(it)) },
-            onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
-            onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
-            onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
-            onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) },
-            onDeleteSurname = { viewModel.registrationAction(RegistrationEvents.SurnameDeleted(it)) }
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Switch(
-                checked = isSeller,
-                onCheckedChange = {
-                    isSeller = it
-                    viewModel.registrationAction(RegistrationEvents.SellerChange(it))
-                },
-                thumbContent = {
-                    if (isSeller){
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(SwitchDefaults.IconSize)
-                                .pulsateClick(),
-                        )
+    when(registerCredentialsUiState){
+        is RegisterCredentialsUiState.Error -> RetryView()
+        is RegisterCredentialsUiState.Loading -> LoadingView()
+        is RegisterCredentialsUiState.Success -> {
+
+        }
+        is RegisterCredentialsUiState.RegisterParams -> {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
+                ViewTitle(title = stringResource(id = R.string.createAccount))
+                Spacer(modifier = Modifier.height(30.dp))
+                PersonalInfoOnRegisterCredentials(
+                    userState = registerCredentialsUiState,
+                    onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
+                    onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
+                    onSurnameChange = { viewModel.registrationAction(RegistrationEvents.SurnameChanged(it)) },
+                    onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
+                    onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
+                    onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
+                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) },
+                    onDeleteSurname = { viewModel.registrationAction(RegistrationEvents.SurnameDeleted(it)) }
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Switch(
+                        checked = isSeller,
+                        onCheckedChange = {
+                            isSeller = it
+                            viewModel.registrationAction(RegistrationEvents.SellerChange(it))
+                        },
+                        thumbContent = {
+                            if (isSeller){
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(SwitchDefaults.IconSize)
+                                        .pulsateClick(),
+                                )
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(stringResource(R.string.areYouSeller))
+                }
+                if(isSeller){
+                    ContactInfo(
+                        userState = registerCredentialsUiState,
+                        onAddressChange = { viewModel.registrationAction(RegistrationEvents.AddressChanged(it)) },
+                        onCountryChange = { viewModel.registrationAction(RegistrationEvents.CountryChanged(it)) },
+                        onZipCodeChange = { viewModel.registrationAction(RegistrationEvents.ZipCodeChanged(it)) },
+                        onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvents.PhoneNumberChanged(it)) },
+                        onDeleteAddress = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                        onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                        onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
+                    )
+                    CreditCardComponents(
+                        userState = registerCredentialsUiState,
+                        onNumberChange = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberChanged(it)) },
+                        onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },
+                        onCvvChange = { viewModel.registrationAction(RegistrationEvents.CvvChanged(it)) },
+                        onIbanChange = { viewModel.registrationAction(RegistrationEvents.IbanChanged(it)) },
+                        onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                        onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvents.ExpirationDateDeleted(it)) },
+                        onDeleteCvv = { viewModel.registrationAction(RegistrationEvents.CvvDeleted(it)) },
+                        onDeleteIban = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
+                    )
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                Button(
+                    onClick = { viewModel.registrationAction(RegistrationEvents.Submit()) },
+                    modifier = Modifier
+                        .size(width = 330.dp, height = 50.dp)
+                        .pulsateClick(),
+                    content = {
+                        Text(stringResource(R.string.createAccount), fontSize = 20.sp)
+                    }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row (
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Text("Do you have an Account? ")
+                    TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+                        Text("Log In")
                     }
                 }
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(stringResource(R.string.areYouSeller))
-        }
-        if(isSeller){
-            ContactInfo(
-                userState = userRegistrationState,
-                onAddressChange = { viewModel.registrationAction(RegistrationEvents.AddressChanged(it)) },
-                onCountryChange = { viewModel.registrationAction(RegistrationEvents.CountryChanged(it)) },
-                onZipCodeChange = { viewModel.registrationAction(RegistrationEvents.ZipCodeChanged(it)) },
-                onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvents.PhoneNumberChanged(it)) },
-                onDeleteAddress = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
-            )
-            CreditCardComponents(
-                userState = userRegistrationState,
-                onNumberChange = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberChanged(it)) },
-                onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },
-                onCvvChange = { viewModel.registrationAction(RegistrationEvents.CvvChanged(it)) },
-                onIbanChange = { viewModel.registrationAction(RegistrationEvents.IbanChanged(it)) },
-                onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvents.ExpirationDateDeleted(it)) },
-                onDeleteCvv = { viewModel.registrationAction(RegistrationEvents.CvvDeleted(it)) },
-                onDeleteIban = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
-            )
-        }
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            onClick = { viewModel.registrationAction(RegistrationEvents.Submit()) },
-            modifier = Modifier
-                .size(width = 330.dp, height = 50.dp)
-                .pulsateClick(),
-            content = {
-                Text(stringResource(R.string.createAccount), fontSize = 20.sp)
-            }
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text("Do you have an Account? ")
-            TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
-                Text("Log In")
             }
         }
     }

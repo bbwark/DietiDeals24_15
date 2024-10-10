@@ -8,6 +8,7 @@ import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditProfileForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.utils.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
@@ -23,10 +24,10 @@ import kotlinx.coroutines.launch
 
 class EditProfileViewModel(application: Application, private val validateEditProfileForm: ValidateEditProfileForm = ValidateEditProfileForm() ): AndroidViewModel(application) {
 
-    private val _userEditProfileState = MutableStateFlow(EditProfileState())
-    val userEditProfileState: StateFlow<EditProfileState> = _userEditProfileState.asStateFlow()
+    private val _editUiProfileState = MutableStateFlow<EditProfileUiState>(EditProfileUiState.EditProfileParams())
+    val editUiProfileState: StateFlow<EditProfileUiState> = _editUiProfileState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
-    val validationLogInEvent = validationEventChannel.receiveAsFlow()
+    val validationEditProfileEvent = validationEventChannel.receiveAsFlow()
 
     fun editProfileAction(editProfileEvent: EditProfileEvent){
         when(editProfileEvent){
@@ -68,26 +69,35 @@ class EditProfileViewModel(application: Application, private val validateEditPro
 
     private fun submitEditProfile(){
         if (validationBlock()) {
-            viewModelScope.launch {
-                val requestUser = _userEditProfileState.value.user.toRequestModel()
-                val updateUserResponse = ApiService.updateUser(requestUser)
-                if (updateUserResponse.status.isSuccess()) {
-                    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-                    encryptedSharedPreferences.edit().apply {
-                        putString("email", _userEditProfileState.value.user.email)
-                        putString("password", _userEditProfileState.value.user.password)
-                        apply()
-                    }
-                    val userId = extractKeyFromJson(updateUserResponse.bodyAsText(), "id")
-                    val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                    sharedPreferences.edit().apply {
-                        putString("userId", userId)
-                        apply()
-                    }
-                    val loginResponse = AuthService.loginUser(_userEditProfileState.value.user.email,  _userEditProfileState.value.user.password)
-                    val sessionToken = extractKeyFromJson(loginResponse.bodyAsText(), "jwt")
-                    if (sessionToken.isNotEmpty()) {
-                        ApiService.initialize(sessionToken, getApplication<Application>().applicationContext)
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = EditProfileUiState.Loading
+                viewModelScope.launch {
+                    _editUiProfileState.value = try {
+                        val requestUser = currentState.user.toRequestModel()
+                        val updateUserResponse = ApiService.updateUser(requestUser)
+                        if (updateUserResponse.status.isSuccess()) {
+                            val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
+                            encryptedSharedPreferences.edit().apply {
+                                putString("email", currentState.user.email)
+                                putString("password", currentState.user.password)
+                                apply()
+                            }
+                            val userId = extractKeyFromJson(updateUserResponse.bodyAsText(), "id")
+                            val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                putString("userId", userId)
+                                apply()
+                            }
+                            val loginResponse = AuthService.loginUser(currentState.user.email,  currentState.user.password)
+                            val sessionToken = extractKeyFromJson(loginResponse.bodyAsText(), "jwt")
+                            if (sessionToken.isNotEmpty()) {
+                                ApiService.initialize(sessionToken, getApplication<Application>().applicationContext)
+                            }
+                        }
+                        EditProfileUiState.Success
+                    } catch (e: Exception){
+                        EditProfileUiState.Error
                     }
                 }
             }
@@ -95,50 +105,61 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun validationBlock() : Boolean {
-        val emailValidation = validateEditProfileForm.validateEmail(userEditProfileState.value.user.email)
-        val nameValidation = validateEditProfileForm.validateName(userEditProfileState.value.user.name)
-        val surnameValidation = validateEditProfileForm.validateSurname(userEditProfileState.value.user.surname)
-        val passwordValidation = validateEditProfileForm.validatePassword(userEditProfileState.value.user.password)
-        val newPasswordValidation = validateEditProfileForm.validateRetypePassword(userEditProfileState.value.user.password, userEditProfileState.value.retypePassword)
+        val currentState = _editUiProfileState.value
+        if(currentState is EditProfileUiState.EditProfileParams){
+            try {
+                val emailValidation = validateEditProfileForm.validateEmail(currentState.user.email)
+                val nameValidation = validateEditProfileForm.validateName(currentState.user.name)
+                val surnameValidation = validateEditProfileForm.validateSurname(currentState.user.surname)
+                val passwordValidation = validateEditProfileForm.validatePassword(currentState.user.password)
+                val newPasswordValidation = validateEditProfileForm.validateRetypePassword(currentState.user.password, currentState.retypePassword)
 
-        val hasError = listOf(
-            emailValidation,
-            nameValidation,
-            surnameValidation,
-            passwordValidation,
-            newPasswordValidation
-        ).any { !it.positiveResult }
+                val hasError = listOf(
+                    emailValidation,
+                    nameValidation,
+                    surnameValidation,
+                    passwordValidation,
+                    newPasswordValidation
+                ).any { !it.positiveResult }
 
-        if(hasError){
-            _userEditProfileState.value = _userEditProfileState.value.copy(
-                emailErrorMsg = emailValidation.errorMessage,
-                nameErrorMsg = nameValidation.errorMessage,
-                surnameErrorMsg = surnameValidation.errorMessage,
-                passwordErrorMsg = passwordValidation.errorMessage,
-                retypePasswordErrorMsg = newPasswordValidation.errorMessage
-            )
+                if(hasError){
+                    _editUiProfileState.value = currentState.copy(
+                        emailErrorMsg = emailValidation.errorMessage,
+                        nameErrorMsg = nameValidation.errorMessage,
+                        surnameErrorMsg = surnameValidation.errorMessage,
+                        passwordErrorMsg = passwordValidation.errorMessage,
+                        retypePasswordErrorMsg = newPasswordValidation.errorMessage
+                    )
+                    return false
+                }
+                viewModelScope.launch {
+                    validationEventChannel.send(ValidationState.Success)
+                }
+                return true
+            } catch (e: Exception){
+                _editUiProfileState.value = EditProfileUiState.Error
+                return false
+            }
+        } else{
             return false
         }
-        viewModelScope.launch {
-            validationEventChannel.send(ValidationState.Success)
-        }
-        return true
     }
 
     //Update & Delete State
 
-    fun setUser(user: User) {
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = user
-        )
-    }
-
     private fun updateEmail(email: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = _userEditProfileState.value.user.copy(
-                email = email
-            )
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        email = email
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
     private fun deleteEmail(){
@@ -146,11 +167,18 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun updateName(name: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = _userEditProfileState.value.user.copy(
-                name = name
-            )
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        name = name
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
     private fun deleteName(){
@@ -158,11 +186,18 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun updateSurname(surname: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = _userEditProfileState.value.user.copy(
-                surname = surname
-            )
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        surname = surname
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
     private fun deleteSurname(){
@@ -170,11 +205,18 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun updateDescription(description: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = _userEditProfileState.value.user.copy(
-                bio = description
-            )
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        bio = description
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
     private fun deleteDescription(){
@@ -182,17 +224,31 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun updatePassword(password: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            user = _userEditProfileState.value.user.copy(
-                password = password
-            )
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    user = currentState.user.copy(
+                        password = password
+                    )
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
     private fun updateRetypePassword(retypePassword: String){
-        _userEditProfileState.value = _userEditProfileState.value.copy(
-            retypePassword = retypePassword
-        )
+        try {
+            val currentState = _editUiProfileState.value
+            if(currentState is EditProfileUiState.EditProfileParams){
+                _editUiProfileState.value = currentState.copy(
+                    retypePassword = retypePassword
+                )
+            }
+        } catch (e: Exception){
+            _editUiProfileState.value = EditProfileUiState.Error
+        }
     }
 
 }

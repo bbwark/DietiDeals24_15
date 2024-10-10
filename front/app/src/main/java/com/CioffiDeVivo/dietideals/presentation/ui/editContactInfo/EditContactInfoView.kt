@@ -29,11 +29,13 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactI
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
 fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavHostController){
     
-    val userContactInfoState by viewModel.userEditContactInfoState.collectAsState()
+    val editContactInfoUiState by viewModel.editContactInfoUiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
         viewModel.validationEditContactInfoEvents.collect { event ->
@@ -47,33 +49,42 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        ContactInfo(
-            userState = userContactInfoState,
-            onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-            onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },
-            onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
-            onPhoneNumberChange = { viewModel.editProfileAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
-            onDeleteAddress = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-            onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-            onDeletePhoneNumber = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) }
-        )
-        Button(
-            onClick = {
-                viewModel.editProfileAction(EditContactInfoEvents.Submit())
-            },
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(bottom = 8.dp)
-                .pulsateClick(),
-        ) {
-            Text(text = stringResource(id = R.string.saveChanges))
+    when(editContactInfoUiState){
+        is EditContactInfoUiState.Error -> RetryView()
+        is EditContactInfoUiState.Loading -> LoadingView()
+        is EditContactInfoUiState.Success -> {
+
+        }
+        is EditContactInfoUiState.EditContactInfoParams -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                ContactInfo(
+                    userState = editContactInfoUiState,
+                    onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },
+                    onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
+                    onPhoneNumberChange = { viewModel.editProfileAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
+                    onDeleteAddress = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onDeletePhoneNumber = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) }
+                )
+                Button(
+                    onClick = {
+                        viewModel.editProfileAction(EditContactInfoEvents.Submit())
+                    },
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(bottom = 8.dp)
+                        .pulsateClick(),
+                ) {
+                    Text(text = stringResource(id = R.string.saveChanges))
+                }
+            }
         }
     }
 }
