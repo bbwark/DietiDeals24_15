@@ -8,6 +8,8 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import com.CioffiDeVivo.dietideals.utils.ApiService
 import com.CioffiDeVivo.dietideals.utils.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
@@ -31,6 +33,8 @@ class RegisterCredentialsViewModel(
 
     private val _userRegistrationState = MutableStateFlow(RegistrationState())
     val userRegistrationState: StateFlow<RegistrationState> = _userRegistrationState.asStateFlow()
+    private val _registerCredentialsUiState = MutableStateFlow<RegisterCredentialsUiState>(RegisterCredentialsUiState.Loading)
+    val registerCredentialsUiState: StateFlow<RegisterCredentialsUiState> = _registerCredentialsUiState.asStateFlow()
 
     private val validationEventChannel = Channel<ValidationState>()
     val validationRegistrationEvent = validationEventChannel.receiveAsFlow()
@@ -122,8 +126,7 @@ class RegisterCredentialsViewModel(
     private fun submitForm() {
         if (validationBlock()) {
             viewModelScope.launch {
-                try {
-
+                _registerCredentialsUiState.value = try {
                     if (_userRegistrationState.value.user.isSeller) {
                         var cards = _userRegistrationState.value.user.creditCards
                         cards += _userRegistrationState.value.card
@@ -134,7 +137,6 @@ class RegisterCredentialsViewModel(
                             )
                         )
                     }
-
                     val user = _userRegistrationState.value.user.toRequestModel()
                     val registerResponse = AuthService.registerUser(user)
                     if (registerResponse.status.isSuccess()) {
@@ -175,9 +177,9 @@ class RegisterCredentialsViewModel(
                             )
                         }
                     }
-
+                    RegisterCredentialsUiState.Success
                 } catch (e: Exception) {
-                    //TODO error handling
+                    RegisterCredentialsUiState.Error
                 }
             }
         }
@@ -257,11 +259,15 @@ class RegisterCredentialsViewModel(
     /*Update & Delete for RegistrationState*/
 
     private fun updateEmail(email: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                email = email
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    email = email
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteEmail(){
@@ -269,11 +275,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateName(name: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                name = name
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    name = name
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteName(){
@@ -281,11 +291,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateSurname(surname: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                surname = surname
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    surname = surname
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteSurname(){
@@ -293,33 +307,49 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updatePassword(password: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                password = password
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    password = password
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun updateNewPassword(newPassword: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            retypePassword = newPassword
-        )
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                retypePassword = newPassword
+            )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun updateIsSeller(isSeller: Boolean){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                isSeller = isSeller
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    isSeller = isSeller
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun updateAddress(address: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                address = address
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    address = address
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteAddress(){
@@ -327,11 +357,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateZipCode(zipCode: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                zipCode = zipCode
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    zipCode = zipCode
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteZipCode(){
@@ -339,19 +373,27 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateCountry(country: Country){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                country = country
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    country = country
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun updatePhoneNumber(phoneNumber: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            user = _userRegistrationState.value.user.copy(
-                phoneNumber = phoneNumber
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                user = _userRegistrationState.value.user.copy(
+                    phoneNumber = phoneNumber
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deletePhoneNumber(){
@@ -359,11 +401,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateCreditCardNumber(creditCardNumber: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            card = _userRegistrationState.value.card.copy(
-                creditCardNumber = creditCardNumber
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                card = _userRegistrationState.value.card.copy(
+                    creditCardNumber = creditCardNumber
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteCreditCardNumber(){
@@ -371,9 +417,13 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateExpirationDate(expirationDate: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            expirationDate = expirationDate
-        )
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                expirationDate = expirationDate
+            )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteExpirationDate(){
@@ -381,11 +431,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateCvv(cvv: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            card = _userRegistrationState.value.card.copy(
-                cvv = cvv
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                card = _userRegistrationState.value.card.copy(
+                    cvv = cvv
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteCvv(){
@@ -393,11 +447,15 @@ class RegisterCredentialsViewModel(
     }
 
     private fun updateIban(iban: String){
-        _userRegistrationState.value = _userRegistrationState.value.copy(
-            card = _userRegistrationState.value.card.copy(
-                iban = iban
+        try {
+            _userRegistrationState.value = _userRegistrationState.value.copy(
+                card = _userRegistrationState.value.card.copy(
+                    iban = iban
+                )
             )
-        )
+        } catch (e: Exception){
+
+        }
     }
 
     private fun deleteIban(){

@@ -21,18 +21,19 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.Floating
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.components.ManageCardsElement
 import com.CioffiDeVivo.dietideals.domain.models.CreditCard
 import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import java.time.LocalDate
 
 @Composable
 fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavController) {
-    val userCardsState by viewModel.userCardsState.collectAsState()
+    val userState by viewModel.userState.collectAsState()
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 12.dp),
             content = {
-                itemsIndexed(userCardsState.user.creditCards) { index, item ->
+                itemsIndexed(userState.creditCards) { index, item ->
                     if (index == 0) {
                         Spacer(modifier = Modifier.height(10.dp))
                     }
@@ -43,7 +44,7 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
                 }
             })
         FloatingAddButton(onClick = {
-            /*TODO navigate to add credit card view*/
+            navController.navigate(Screen.AddCard.route)
         })
     }
 }
@@ -63,8 +64,6 @@ fun ManageCardsViewPreview() {
             CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
         )
     )
-    viewModel.setUser(user)
-
     ManageCardsView(
         viewModel = viewModel,
         navController = rememberNavController()

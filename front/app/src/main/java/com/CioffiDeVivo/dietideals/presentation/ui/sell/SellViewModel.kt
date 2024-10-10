@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class SellViewModel: ViewModel() {
 
-    private val _sellUiState = MutableStateFlow<SellState>(SellState.Loading)
-    val sellUiState: StateFlow<SellState> = _sellUiState.asStateFlow()
+    private val _sellUiState = MutableStateFlow<SellUiState>(SellUiState.Loading)
+    val sellUiState: StateFlow<SellUiState> = _sellUiState.asStateFlow()
     val loggedUser: StateFlow<User?> = UserRepository.loggedUser
 
     fun fetchAuctions() {
@@ -29,21 +29,21 @@ class SellViewModel: ViewModel() {
                     val getUserResponse = ApiService.getUser(userId)
                     if (getUserResponse.status.isSuccess()) {
                         val user = Gson().fromJson(getUserResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
-                        SellState.Success(user.ownedAuctions.toCollection(ArrayList()))
+                        SellUiState.Success(user.ownedAuctions.toCollection(ArrayList()))
                     } else{
-                        SellState.Error
+                        SellUiState.Error
                     }
                 } else{
-                    SellState.Error
+                    SellUiState.Error
                 }
             } catch(e: Exception){
-                SellState.Error
+                SellUiState.Error
             }
         }
     }
 
     private fun setLoadingState(){
-        _sellUiState.value = SellState.Loading
+        _sellUiState.value = SellUiState.Loading
     }
 
 }

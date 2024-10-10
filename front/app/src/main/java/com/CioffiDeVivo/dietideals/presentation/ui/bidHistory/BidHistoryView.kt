@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.components.BidHistoryElement
@@ -36,14 +37,44 @@ import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
+import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import java.time.ZonedDateTime
 
 @Composable
 fun BidHistoryView(
-    sharedState: Auction,
+    auctionState: Auction,
     viewModel: SharedViewModel,
-    navController: NavHostController
+    navController: NavController
 ) {
+
+    val bidHistoryUiState by viewModel.bidHistoryUiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchAuctionBidders()
+    }
+
+    when(bidHistoryUiState){
+        is BidHistoryUiState.Loading -> LoadingView()
+        is BidHistoryUiState.Success -> {
+            BidHistoryLayout(
+                auctionState = auctionState,
+                bidders = (bidHistoryUiState as BidHistoryUiState.Success).bidders
+            )
+        }
+        is BidHistoryUiState.Error -> RetryView()
+    }
+
+
+}
+
+@Composable
+fun BidHistoryLayout(
+    auctionState: Auction,
+    bidders: List<User>
+){
     var showDetails by remember { mutableStateOf(false) }
     var acceptOffer by remember { mutableStateOf(false) }
     var userInfo by remember { mutableStateOf(false) }
@@ -51,16 +82,6 @@ fun BidHistoryView(
     var bidderName by remember { mutableStateOf("") }
     var selectedBid by remember { mutableStateOf(Bid("", 0f, "", ZonedDateTime.now())) }
     var selectedUser by remember { mutableStateOf(User("", "")) }
-
-    val auctionState by viewModel.auctionState.collectAsState()
-    val bidState by viewModel.bidState.collectAsState()
-
-    val bidders = viewModel.auctionBidders.collectAsState().value
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchAuctionBidders()
-    }
-
     Box {
         LazyColumn(
             modifier = Modifier
@@ -190,5 +211,5 @@ fun AcceptOfferDialog(
 @Preview(showBackground = true)
 @Composable
 fun BidHistoryViewPreview() {
-    BidHistoryView(sharedState = Auction() ,viewModel = SharedViewModel(Application()), navController = rememberNavController())
+    BidHistoryView(auctionState = Auction() ,viewModel = SharedViewModel(Application()), navController = rememberNavController())
 }

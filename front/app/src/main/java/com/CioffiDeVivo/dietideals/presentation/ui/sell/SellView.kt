@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
-import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
@@ -41,9 +39,12 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
     }
 
     when(sellUiState){
-        is SellState.Loading -> LoadingView()
-        is SellState.Success -> SellGridView(auctions = (sellUiState as SellState.Success).auctions, navController = navController)
-        is SellState.Error -> RetryView()
+        is SellUiState.Loading -> LoadingView()
+        is SellUiState.Success -> SellGridView(
+            auctions = (sellUiState as SellUiState.Success).auctions,
+            navController = navController
+        )
+        is SellUiState.Error -> RetryView()
     }
 
 }
