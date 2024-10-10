@@ -71,20 +71,3 @@ fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
         )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun AuctionsListElementPreview() {
-    
-    val testAuction = Auction(
-        id = "", 
-        ownerId = "",
-        item = Item(id = "", imagesUri = listOf(), name = "Desktop Computer"),
-        endingDate = LocalDate.of(2025, 10, 15),
-        expired = false,
-        type = AuctionType.Silent)
-    
-    DietiDealsTheme {
-        AuctionsListElement(auction = testAuction, navController = rememberNavController())
-    }
-}

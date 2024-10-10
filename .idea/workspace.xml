@@ -10,8 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d535ca49-4a7c-4fe2-8d12-55272ad48ce6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/loading/LoadingView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/loading/LoadingView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/DietiDeals.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/DietiDeals.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/AuctionList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/AuctionList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/AuctionsListElement.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/AuctionsListElement.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/SharedViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/SharedViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/retry/RetryView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/retry/RetryView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/search/components/SearchAuctionsList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/search/components/SearchAuctionsList.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

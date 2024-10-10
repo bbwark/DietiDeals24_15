@@ -61,6 +61,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Composable
 fun AuctionView(
@@ -248,7 +249,7 @@ fun EnglishAuctionBody(lastBid: Bid?) {
 }
 
 @Composable
-fun SilentAuctionBody(endingDate: LocalDate) {
+fun SilentAuctionBody(endingDate: LocalDateTime) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         Row(verticalAlignment = Alignment.Bottom){
             Text(text = "Ending Date: ", fontSize = 12.sp)
@@ -284,7 +285,7 @@ fun AuctionViewPreview() {
         "",
         "",
         Item(id = "", name = "Temporary Item"),
-        endingDate = LocalDate.now().plusMonths(1),
+        endingDate = LocalDateTime.now().plusMonths(1),
         expired = false,
         type = AuctionType.English
     )

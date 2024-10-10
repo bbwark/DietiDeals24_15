@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 class AuctionViewModel(application: Application) : AndroidViewModel(application){
@@ -63,7 +64,7 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
                     ZonedDateTime.now().minusDays(5)
                 )
             ),
-            endingDate = LocalDate.now(),
+            endingDate = LocalDateTime.now(),
             expired = false,
             type = AuctionType.English
         )
