@@ -14,6 +14,7 @@ data class Auction(
     @SerializedName("interval"          ) var interval:         String?             = null,
     @SerializedName("expired"           ) var expired:          Boolean?            = false,
     @SerializedName("startingPrice"     ) var startingPrice:    String?             = null,
+    @SerializedName("maxBid"          ) var maxBid:          String?             = null,
     @SerializedName("type"              ) var type:             AuctionType?        = null,
     @SerializedName("category"          ) var category:         AuctionCategory?    = AuctionCategory.Other,
     @SerializedName("buyoutPrice"       ) var buyoutPrice:      String?             = null,

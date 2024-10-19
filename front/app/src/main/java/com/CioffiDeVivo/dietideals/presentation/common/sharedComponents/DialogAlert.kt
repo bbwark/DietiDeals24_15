@@ -28,3 +28,24 @@ fun DialogAlert(
         )
     }
 }
+
+@Composable
+fun DialogInfo(
+    showDialog: MutableState<Boolean>,
+    dialogText: String
+){
+    if(showDialog.value){
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text(stringResource(R.string.info)) },
+            text = { Text(dialogText) },
+            confirmButton = {
+                TextButton(
+                    onClick = { showDialog.value = false }
+                ) {
+                    Text("Dismiss")
+                }
+            }
+        )
+    }
+}

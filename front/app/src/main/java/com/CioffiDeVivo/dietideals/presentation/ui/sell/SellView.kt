@@ -44,7 +44,7 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
             auctions = (sellUiState as SellUiState.Success).auctions,
             navController = navController
         )
-        is SellUiState.Error -> RetryView()
+        is SellUiState.Error -> RetryView(onClick = {})
     }
 
 }

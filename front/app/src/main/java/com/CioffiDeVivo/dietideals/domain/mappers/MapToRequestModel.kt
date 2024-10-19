@@ -18,6 +18,7 @@ fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.domain.requestModels.A
         interval = this.interval,
         expired = this.expired,
         startingPrice = this.minAccepted,
+        maxBid = this.maxBid,
         type = this.type,
         category = this.category
     )

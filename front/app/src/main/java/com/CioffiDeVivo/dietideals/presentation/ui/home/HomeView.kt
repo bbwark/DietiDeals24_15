@@ -100,7 +100,7 @@ fun HomeView(
                 Spacer(modifier = Modifier.height(35.dp))
                 ParticipatedAuctions((homeUiState as HomeUiState.Success).participatedAuction, navController)
             }
-            is HomeUiState.Error -> RetryView()
+            is HomeUiState.Error -> RetryView(onClick = {})
         }
     }
 }

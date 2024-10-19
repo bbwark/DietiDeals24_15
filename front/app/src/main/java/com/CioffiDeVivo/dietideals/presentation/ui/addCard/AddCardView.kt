@@ -48,7 +48,7 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
     }
 
     when(addCardUiState){
-        is AddCardUiState.Error -> RetryView()
+        is AddCardUiState.Error -> RetryView(onClick = {})
         is AddCardUiState.Loading -> LoadingView()
         is AddCardUiState.Success -> {
             

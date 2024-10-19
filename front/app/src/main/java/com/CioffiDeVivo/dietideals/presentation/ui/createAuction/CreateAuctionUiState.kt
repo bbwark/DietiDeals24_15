@@ -16,6 +16,7 @@ sealed interface CreateAuctionUiState {
         val minStepErrorMsg: String? = null,
         val intervalErrorMsg: String? = null,
         val minAcceptedErrorMsg: String? = null,
+        val maxBidErrorMsg: String? = null,
         val auction: Auction = Auction()
     ): CreateAuctionUiState
 }

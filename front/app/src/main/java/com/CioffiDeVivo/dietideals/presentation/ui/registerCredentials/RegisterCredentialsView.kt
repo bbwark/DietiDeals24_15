@@ -70,7 +70,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
     }
 
     when(registerCredentialsUiState){
-        is RegisterCredentialsUiState.Error -> RetryView()
+        is RegisterCredentialsUiState.Error -> RetryView(onClick = {})
         is RegisterCredentialsUiState.Loading -> LoadingView()
         is RegisterCredentialsUiState.Success -> {
 

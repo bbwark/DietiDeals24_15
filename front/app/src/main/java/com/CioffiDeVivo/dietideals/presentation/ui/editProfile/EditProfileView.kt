@@ -50,7 +50,7 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
     }
 
     when(editProfileUiState){
-        is EditProfileUiState.Error -> RetryView()
+        is EditProfileUiState.Error -> RetryView(onClick = {})
         is EditProfileUiState.Loading -> LoadingView()
         is EditProfileUiState.Success -> {
 

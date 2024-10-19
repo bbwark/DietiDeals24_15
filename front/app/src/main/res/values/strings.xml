@@ -12,6 +12,7 @@
     <string name="logInAccount">Log into an Account</string>
     <string name="lastBid">Last Bid</string>
     <string name="minimumBid">Min.Bid</string>
+    <string name="maxBid">Max.Bid</string>
     <string name="contactInfo">Contact Info</string>
     <string name="editProfile">Edit Profile</string>
     <string name="saveChanges">Save Changes</string>
@@ -47,4 +48,6 @@
     <string name="base_url">http://16.171.206.112</string>
     <string name="port">8181</string>
     <string name="alert">Alert</string>
+    <string name="info">Information</string>
+    <string name="maxBidInfo">It is the Maximum Bid, beyond that input, the Auction is automatically accepted!</string>
 </resources>

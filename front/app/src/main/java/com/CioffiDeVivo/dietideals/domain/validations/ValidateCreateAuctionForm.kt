@@ -26,6 +26,16 @@ class ValidateCreateAuctionForm{
         return ValidationResult(positiveResult = true)
     }
 
+    fun validateMaxBid(maxBid: String): ValidationResult{
+        if (maxBid.isEmpty() || maxBid.toFloat() == 0.0f) {
+            return ValidationResult(
+                positiveResult = false,
+                errorMessage = "The field cannot be empty"
+            )
+        }
+        return ValidationResult(positiveResult = true)
+    }
+
     fun validateMinStep(minStep: String): ValidationResult{
         if (minStep.isEmpty() || minStep.toFloat() == 0.0f) {
             return ValidationResult(
