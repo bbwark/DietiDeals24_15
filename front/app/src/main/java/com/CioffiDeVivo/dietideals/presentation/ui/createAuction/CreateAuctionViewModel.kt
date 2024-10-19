@@ -77,6 +77,9 @@ class CreateAuctionViewModel(
             is CreateAuctionEvents.MinAcceptedChanged -> {
                 updateMinAccepted(createAuctionEvents.minAccepted)
             }
+            is CreateAuctionEvents.MaxBidChanged -> {
+                updateMaxBid(createAuctionEvents.maxBid)
+            }
             is CreateAuctionEvents.Submit -> {
                 submitCreateAuction()
             }
@@ -142,10 +145,12 @@ class CreateAuctionViewModel(
                 val intervalValidation = validateCreateAuctionForm.validateInterval(currentState.auction.interval)
                 val minStepValidation = validateCreateAuctionForm.validateMinStep(currentState.auction.minStep)
                 val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(currentState.auction.minAccepted)
+                val maxBidValidation = validateCreateAuctionForm.validateMaxBid(currentState.auction.maxBid)
 
                 val hasErrorAuctionSilent = listOf(
                     itemNameValidation,
                     minAcceptedValidation,
+                    maxBidValidation
                 ).any { !it.positiveResult }
 
                 val hasErrorAuctionEnglish = listOf(
@@ -164,7 +169,8 @@ class CreateAuctionViewModel(
                 if(hasErrorAuctionSilent && currentState.auction.type == AuctionType.Silent){
                     _createAuctionUiState.value = currentState.copy(
                         itemNameErrorMsg = itemNameValidation.errorMessage,
-                        minAcceptedErrorMsg = minAcceptedValidation.errorMessage
+                        minAcceptedErrorMsg = minAcceptedValidation.errorMessage,
+                        maxBidErrorMsg = maxBidValidation.errorMessage
                     )
                     return false
                 }
@@ -341,6 +347,29 @@ class CreateAuctionViewModel(
                     _createAuctionUiState.value = currentState.copy(
                         auction = currentState.auction.copy(
                             minAccepted = minAccepted
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception){
+            _createAuctionUiState.value = CreateAuctionUiState.Error
+        }
+    }
+
+    private fun updateMaxBid(maxBid: String){
+        try {
+            val currentState = _createAuctionUiState.value
+            if(currentState is CreateAuctionUiState.CreateAuctionParams){
+                if(maxBid.isEmpty()){
+                    _createAuctionUiState.value = currentState.copy(
+                        auction = currentState.auction.copy(
+                            maxBid = "0"
+                        )
+                    )
+                } else{
+                    _createAuctionUiState.value = currentState.copy(
+                        auction = currentState.auction.copy(
+                            maxBid = maxBid
                         )
                     )
                 }

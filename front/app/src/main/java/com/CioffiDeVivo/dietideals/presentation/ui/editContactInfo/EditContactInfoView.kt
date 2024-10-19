@@ -50,7 +50,7 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavH
     }
 
     when(editContactInfoUiState){
-        is EditContactInfoUiState.Error -> RetryView()
+        is EditContactInfoUiState.Error -> RetryView(onClick = {})
         is EditContactInfoUiState.Loading -> LoadingView()
         is EditContactInfoUiState.Success -> {
 

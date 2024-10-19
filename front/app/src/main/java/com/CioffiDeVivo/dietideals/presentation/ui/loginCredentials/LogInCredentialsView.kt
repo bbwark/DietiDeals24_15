@@ -66,7 +66,7 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
     }
     when(loginUiState){
         is LogInCredentialsUiState.Loading -> LoadingView()
-        is LogInCredentialsUiState.Error -> RetryView()
+        is LogInCredentialsUiState.Error -> RetryView(onClick = {})
         is LogInCredentialsUiState.Success -> {}
         is LogInCredentialsUiState.LogInParams -> {
             Column(

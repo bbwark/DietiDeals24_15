@@ -39,7 +39,7 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
             updateCategories = { viewModel.setCategoriesToHide(categoriesToHide) },
             updateSearchWord = { viewModel.searchWordUpdate(it) }
         )
-        is SearchUiState.Error -> RetryView()
+        is SearchUiState.Error -> RetryView(onClick = {})
     }
 }
 

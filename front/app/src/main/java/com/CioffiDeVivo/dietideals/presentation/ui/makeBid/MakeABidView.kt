@@ -65,7 +65,7 @@ fun MakeABid(
                 onBidChange = { viewModel.updateBidValue(it) }
             )
         }
-        is MakeABidUiState.Error -> RetryView()
+        is MakeABidUiState.Error -> RetryView(onClick = {})
     }
 
 }

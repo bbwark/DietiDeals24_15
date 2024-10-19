@@ -64,7 +64,7 @@ fun BidHistoryView(
                 bidders = (bidHistoryUiState as BidHistoryUiState.Success).bidders
             )
         }
-        is BidHistoryUiState.Error -> RetryView()
+        is BidHistoryUiState.Error -> RetryView(onClick = {})
     }
 
 

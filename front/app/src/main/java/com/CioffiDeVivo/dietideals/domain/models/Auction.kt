@@ -13,6 +13,7 @@ data class Auction (
     val interval: String = "",
     val expired: Boolean = false,
     val minAccepted: String = "",
+    val maxBid: String = "",
     val type: AuctionType = AuctionType.None,
     val category: AuctionCategory = AuctionCategory.Other,
     val buyoutPrice: String = "",

@@ -86,7 +86,7 @@ fun AuctionView(
                 navController = navController
             )
         }
-        is AuctionUiState.Error -> RetryView()
+        is AuctionUiState.Error -> RetryView(onClick = {})
     }
 
 }

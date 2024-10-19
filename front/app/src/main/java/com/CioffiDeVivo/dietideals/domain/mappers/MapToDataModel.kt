@@ -26,6 +26,7 @@ fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.domain.models.Auction {
         interval = this.interval ?: "",
         expired = this.expired ?: false,
         minAccepted = this.startingPrice ?: "",
+        maxBid = this.maxBid ?: "",
         type = this.type ?: AuctionType.None,
         category = this.category ?: AuctionCategory.Other
     )

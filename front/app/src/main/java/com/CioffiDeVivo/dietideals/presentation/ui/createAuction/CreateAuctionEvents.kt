@@ -18,6 +18,7 @@ sealed class CreateAuctionEvents {
     data class DescriptionChanged(val description: String): CreateAuctionEvents()
     data class DescriptionDeleted(val description: String): CreateAuctionEvents()
     data class MinAcceptedChanged(val minAccepted: String): CreateAuctionEvents()
+    data class MaxBidChanged(val maxBid: String): CreateAuctionEvents()
     data class Submit(val submitted: Boolean = true) : CreateAuctionEvents()
 
 }

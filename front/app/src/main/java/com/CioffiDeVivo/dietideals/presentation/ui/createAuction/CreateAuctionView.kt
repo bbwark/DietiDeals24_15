@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Euro
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -49,19 +50,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,6 +74,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogInfo
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -94,6 +90,7 @@ import java.time.format.DateTimeFormatter
 fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostController){
 
     val showDatePicker = remember { mutableStateOf(false) }
+    val showMaxBidInfo = remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(AuctionCategory.Other) }
     val createAuctionUiState by viewModel.createAuctionUiState.collectAsState()
     val context = LocalContext.current
@@ -118,7 +115,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     }
 
     when(createAuctionUiState){
-        is CreateAuctionUiState.Error -> RetryView()
+        is CreateAuctionUiState.Error -> RetryView(onClick = {})
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
 
@@ -196,7 +193,9 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     AuctionType.Silent -> {
                         SilentAuction(
                             auctionState = createAuctionUiState,
-                            onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
+                            onMinBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
+                            onMaxBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MaxBidChanged(it)) },
+                            onInfoClick = { showMaxBidInfo.value = true },
                             onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
                             onDeleteDescription = { viewModel.deleteDescriptionAuction() },
                             onCalendarClick = { showDatePicker.value = true }
@@ -217,6 +216,14 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
 
                     }
                 }
+
+                if(showMaxBidInfo.value){
+                    DialogInfo(
+                        showDialog = showMaxBidInfo,
+                        dialogText = stringResource(R.string.maxBidInfo)
+                    )
+                }
+
                 if(showDatePicker.value){
                     CustomDatePickerDialog(
                         onAccept = {
@@ -268,12 +275,15 @@ fun CreateAuctionPreview(){
 @Composable
 fun SilentAuction(
     auctionState: CreateAuctionUiState,
-    onBidChange: (String) -> Unit,
+    onMinBidChange: (String) -> Unit,
+    onMaxBidChange: (String) -> Unit,
+    onInfoClick: () -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
     onCalendarClick: () -> Unit
 ){
     var minAccepted by rememberSaveable { mutableStateOf("") }
+    var maxBid by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
     (auctionState as CreateAuctionUiState.CreateAuctionParams)
     Row (
@@ -283,10 +293,10 @@ fun SilentAuction(
             value = minAccepted,
             onValueChange = { newBid ->
                 val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
-                if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
+                if(trimmed.isEmpty() || trimmed.toInt() < 10000) {
                     minAccepted = trimmed
                 }
-                onBidChange(minAccepted)
+                onMinBidChange(minAccepted)
             },
             singleLine = true,
             trailingIcon = {
@@ -314,18 +324,51 @@ fun SilentAuction(
                 .padding(end = 4.dp)
         )
         Spacer(modifier = Modifier.width(30.dp))
-        InputTextField(
-            value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            onValueChanged = { },
-            label = stringResource(R.string.endingDate),
-            onTrailingIconClick = { onCalendarClick() },
-            readOnly = true,
-            trailingIcon = Icons.Filled.CalendarMonth,
+        OutlinedTextField(
+            value = maxBid,
+            onValueChange = { newBid ->
+                val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
+                if(trimmed.isEmpty() || trimmed.toInt() < 10000) {
+                    maxBid = trimmed
+                }
+                onMaxBidChange(maxBid)
+            },
+            singleLine = true,
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.Info,
+                    contentDescription = null,
+                    modifier = Modifier.clickable { onInfoClick() }
+                )
+            },
+            visualTransformation = currencyVisualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = {
+                Text(
+                    stringResource(R.string.maxBid),
+                    fontSize = 14.sp
+                )
+            },
+            isError = auctionState.maxBidErrorMsg != null,
+            supportingText = {
+                if(auctionState.maxBidErrorMsg != null){
+                    Text(text = auctionState.maxBidErrorMsg, color = Color.Red)
+                }
+            },
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 4.dp)
+                .padding(end = 4.dp)
         )
     }
+    InputTextField(
+        value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        onValueChanged = { },
+        label = stringResource(R.string.endingDate),
+        onTrailingIconClick = { onCalendarClick() },
+        readOnly = true,
+        trailingIcon = Icons.Filled.CalendarMonth,
+        modifier = modifierStandard
+    )
     DescriptionTextfield(
         description = auctionState.auction.description,
         onDescriptionChange = { onDescriptionChange(it) },
@@ -355,7 +398,7 @@ fun EnglishAuction(
             value = auctionState.auction.minStep,
             onValueChange = { newBid ->
                 val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
-                if(trimmed.isEmpty() || trimmed.toInt() <= 10000) {
+                if(trimmed.isEmpty() || trimmed.toInt() < 10000) {
                     minStep = trimmed
                 }
                 onBidChange(minStep)
