@@ -61,7 +61,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "zipCode")
     private String zipCode;
 
-    @Column(name = "country")
+    @Enumerated(EnumType.STRING)
     private Country country;
 
     @Column(name = "phoneNumber")
