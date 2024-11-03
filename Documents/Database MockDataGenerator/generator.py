@@ -73,7 +73,7 @@ for _ in range(NUM_AUCTIONS):
     description = fake.text(max_nb_chars=200)
     min_step = str(random.randint(1, 10))
     interval = str(random.randint(1, 5))
-    starting_price = str(random.uniform(10, 1000))
+    starting_price = str(round(random.uniform(10, 1000), 2))
     
     auctions.append((auction_id, user_id, auction_type, category, ending_date, expired, description, min_step, interval, starting_price))
     
