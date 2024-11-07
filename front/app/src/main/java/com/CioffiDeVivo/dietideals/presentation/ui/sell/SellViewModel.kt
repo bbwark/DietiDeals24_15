@@ -1,11 +1,11 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.domain.repository.UserRepository
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
@@ -14,17 +14,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SellViewModel: ViewModel() {
+class SellViewModel(application: Application): AndroidViewModel(application) {
 
     private val _sellUiState = MutableStateFlow<SellUiState>(SellUiState.Loading)
     val sellUiState: StateFlow<SellUiState> = _sellUiState.asStateFlow()
-    val loggedUser: StateFlow<User?> = UserRepository.loggedUser
+
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    }
 
     fun fetchAuctions() {
         viewModelScope.launch {
             setLoadingState()
             _sellUiState.value = try {
-                val userId = loggedUser.value?.id
+                val userId = sharedPreferences.getString("userId", null)
                 if (userId != null) {
                     val getUserResponse = ApiService.getUser(userId)
                     if (getUserResponse.status.isSuccess()) {

@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.CioffiDeVivo.dietideals.presentation.navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
-import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.utils.AuthService
+import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.google.gson.Gson
 import com.google.gson.JsonObject

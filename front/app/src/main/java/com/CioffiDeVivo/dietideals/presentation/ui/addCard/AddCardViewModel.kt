@@ -7,15 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class AddCardViewModel(application: Application, private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm() ): AndroidViewModel(application) {
 

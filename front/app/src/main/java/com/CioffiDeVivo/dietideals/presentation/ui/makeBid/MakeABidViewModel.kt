@@ -8,7 +8,7 @@ import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

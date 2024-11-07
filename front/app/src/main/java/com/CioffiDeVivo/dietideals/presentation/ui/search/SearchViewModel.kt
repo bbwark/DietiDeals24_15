@@ -5,8 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

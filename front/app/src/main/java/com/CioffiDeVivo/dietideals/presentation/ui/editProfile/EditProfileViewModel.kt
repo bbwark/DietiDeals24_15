@@ -4,13 +4,11 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditProfileForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.utils.AuthService
+import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.CioffiDeVivo.dietideals.utils.extractKeyFromJson
 import io.ktor.client.statement.bodyAsText

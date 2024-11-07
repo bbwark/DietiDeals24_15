@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
+import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +30,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.sell.components.SellGridEleme
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
 @Composable
 fun SellView(viewModel: SellViewModel, navController: NavController) {
@@ -54,38 +57,57 @@ fun SellGridView(
     auctions: ArrayList<Auction>,
     navController: NavController
 ){
-    Box {
-        if (auctions.isNotEmpty()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                content = {
-                    //view model userCreatedAuction
-                    itemsIndexed(auctions) { index, item ->
-                        SellGridElement(
-                            auction = item,
-                            navController = navController
-                        )
-                    }
-                })
-        } else {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(
-                    text = "You haven't created any auctions yet!",
-                    color = Color.Gray,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight(600),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 25.dp, end = 25.dp)
-                )
-            }
+    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
+    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
+
+    if(isSeller){
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "Not a Seller Account!",
+                color = Color.Gray,
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 25.dp, end = 25.dp)
+            )
         }
-        FloatingAddButton{
-            navController.navigate(Screen.CreateAuction.route)
+    } else{
+        Box {
+            if (auctions.isNotEmpty()) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    content = {
+                        //view model userCreatedAuction
+                        itemsIndexed(auctions) { index, item ->
+                            SellGridElement(
+                                auction = item,
+                                navController = navController
+                            )
+                        }
+                    })
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = "You haven't created any auctions yet!",
+                        color = Color.Gray,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight(600),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 25.dp, end = 25.dp)
+                    )
+                }
+            }
+            FloatingAddButton{
+                navController.navigate(Screen.CreateAuction.route)
+            }
         }
     }
 }
@@ -93,5 +115,5 @@ fun SellGridView(
 @Preview(showBackground = true)
 @Composable
 fun SellViewPreview() {
-    SellView(viewModel = SellViewModel(), rememberNavController())
+    SellView(viewModel = SellViewModel(Application()), rememberNavController())
 }

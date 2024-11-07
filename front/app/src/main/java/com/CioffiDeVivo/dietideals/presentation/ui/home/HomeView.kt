@@ -38,6 +38,7 @@ import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
 @Composable
 fun HomeView(
@@ -70,7 +71,6 @@ fun HomeView(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))

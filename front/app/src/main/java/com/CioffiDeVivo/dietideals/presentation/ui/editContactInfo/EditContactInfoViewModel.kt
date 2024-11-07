@@ -7,8 +7,7 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

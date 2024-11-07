@@ -14,7 +14,7 @@ import com.CioffiDeVivo.dietideals.domain.models.CreditCard
 import com.CioffiDeVivo.dietideals.domain.models.Item
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess

@@ -8,11 +8,8 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsUiState
-import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsUiState
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.utils.AuthService
+import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -24,8 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class RegisterCredentialsViewModel(
     application: Application,
@@ -178,8 +173,10 @@ class RegisterCredentialsViewModel(
                                     getApplication<Application>().applicationContext
                                 )
                             }
+                            RegisterCredentialsUiState.Success
+                        } else{
+                            RegisterCredentialsUiState.Error
                         }
-                        RegisterCredentialsUiState.Success
                     } catch (e: Exception) {
                         RegisterCredentialsUiState.Error
                     }

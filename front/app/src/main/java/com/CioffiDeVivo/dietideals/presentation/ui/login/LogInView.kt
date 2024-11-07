@@ -61,7 +61,7 @@ fun LoginView(navController: NavController) {
         )
         GoogleButton(navController = navController)
         Spacer(modifier = Modifier.height(5.dp))
-        TextButton(onClick = { /*TODO*/ }) {
+        TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
             Text(
                 "Create an Account",
             )

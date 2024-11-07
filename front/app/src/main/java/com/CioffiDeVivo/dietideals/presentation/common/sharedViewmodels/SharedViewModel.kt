@@ -18,7 +18,7 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidUiState
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess

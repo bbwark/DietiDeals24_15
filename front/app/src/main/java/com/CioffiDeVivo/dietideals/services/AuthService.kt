@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.utils
+package com.CioffiDeVivo.dietideals.services
 
 import android.content.Context
 import com.CioffiDeVivo.dietideals.R

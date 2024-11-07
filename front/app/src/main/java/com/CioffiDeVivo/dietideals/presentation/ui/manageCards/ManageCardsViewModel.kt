@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.domain.repository.UserRepository
-import com.CioffiDeVivo.dietideals.utils.ApiService
+import com.CioffiDeVivo.dietideals.services.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,17 +12,11 @@ import kotlinx.coroutines.launch
 
 class ManageCardsViewModel(application: Application) : AndroidViewModel(application){
 
-    val loggedUser: StateFlow<User?> = UserRepository.loggedUser
-
     private val _userState = MutableStateFlow(User())
     val userState: StateFlow<User> = _userState.asStateFlow()
 
     private val _manageCardsUiState = MutableStateFlow<ManageCardsUiState>(ManageCardsUiState.Loading)
     val manageCardsUiState: StateFlow<ManageCardsUiState> = _manageCardsUiState.asStateFlow()
-
-    fun setUserState(){
-        _userState.value = loggedUser.value!!
-    }
 
     fun deleteCard(creditCardNumber: String) {
         viewModelScope.launch {
