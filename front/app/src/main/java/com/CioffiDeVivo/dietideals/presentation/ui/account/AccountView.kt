@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.presentation.theme.md_theme_light_secondaryContainer
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.LocalUserState
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
@@ -108,7 +107,6 @@ fun AccountViewTopBar(userName: String, userEmail: String) {
         modifier = Modifier
             .fillMaxWidth()
             .size(0.dp, 100.dp)
-            .background(md_theme_light_secondaryContainer)
             .padding(horizontal = 12.dp)
     ) {
         Icon(
