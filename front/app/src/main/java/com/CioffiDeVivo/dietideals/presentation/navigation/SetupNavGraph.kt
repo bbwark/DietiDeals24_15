@@ -78,7 +78,7 @@ fun SetupNavGraph() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Screen.CreateAuction.route
+            startDestination = Screen.Login.route
         ) {
             composable(
                 route = Screen.Account.route
@@ -183,7 +183,7 @@ fun SetupNavGraph() {
                     }
                 ) {
                     Box(modifier = Modifier.padding(it)) {
-                        val viewModel = SellViewModel()
+                        val viewModel: SellViewModel = viewModel(factory = viewModelFactory)
                         SellView(viewModel = viewModel, navController = navController)
                     }
                 }
@@ -213,8 +213,18 @@ fun SetupNavGraph() {
             composable(
                 route = Screen.LogInCredentials.route
             ) {
-                val viewModel: LogInCredentialsViewModel = viewModel(factory = viewModelFactory)
-                LogInCredentialsView(viewModel = viewModel, navController = navController)
+                Scaffold(topBar = {
+                    DetailsViewTopBar(
+                        caption = stringResource(id = R.string.logIn),
+                        destinationRoute = Screen.Login.route,
+                        navController = navController
+                    )
+                }) {
+                    Box(modifier = Modifier.padding(it)) {
+                        val viewModel: LogInCredentialsViewModel = viewModel(factory = viewModelFactory)
+                        LogInCredentialsView(viewModel = viewModel, navController = navController)
+                    }
+                }
             }
             composable(
                 route = Screen.Home.route

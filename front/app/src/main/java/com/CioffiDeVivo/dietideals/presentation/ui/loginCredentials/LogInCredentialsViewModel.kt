@@ -4,11 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.utils.ApiService
-import com.CioffiDeVivo.dietideals.utils.AuthService
+import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateLogInForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -103,17 +102,14 @@ class LogInCredentialsViewModel(
                             val token = jsonObject.get("jwt").asString
                             if (token.isNotEmpty()) {
                                 val userId = jsonObject.getAsJsonObject("user").get("id").asString
-
                                 sharedPreferences.edit().apply {
                                     putString("userId", userId)
                                     apply()
                                 }
-
                                 val encryptedSharedPreferences =
                                     EncryptedPreferencesManager.getEncryptedPreferences()
                                 encryptedSharedPreferences.edit().apply {
                                     putString("email", currentState.email)
-                                    putString("password", currentState.password)
                                     apply()
                                 }
 
@@ -123,8 +119,10 @@ class LogInCredentialsViewModel(
                                 )
 
                             }
+                            LogInCredentialsUiState.Success
+                        } else{
+                            LogInCredentialsUiState.Error
                         }
-                        LogInCredentialsUiState.Success
                     } catch (e: Exception) {
                         LogInCredentialsUiState.Error
                     }

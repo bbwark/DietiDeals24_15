@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.utils
+package com.CioffiDeVivo.dietideals.services
 
 
 import android.content.Context
@@ -375,7 +375,7 @@ object ApiService {
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
-                url("${URL}/auctions/bidders/$auctionId")
+                url("$URL/auctions/bidders/$auctionId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             if (response.status.isSuccess()) {
@@ -396,7 +396,7 @@ object ApiService {
     suspend fun uploadImage(file: File, fileName: String): HttpResponse {
         return HttpClient(CIO).use { client ->
             client.post {
-                url("${URL}/images/upload")
+                url("$URL/images/upload")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
 
                 setBody(MultiPartFormDataContent(

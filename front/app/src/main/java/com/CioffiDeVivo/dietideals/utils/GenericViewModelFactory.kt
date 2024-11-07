@@ -65,6 +65,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
             modelClass.isAssignableFrom(SharedViewModel::class.java) ->
                 SharedViewModel(application) as T
 
+            modelClass.isAssignableFrom(SellViewModel::class.java) ->
+                SellViewModel(application) as T
+
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

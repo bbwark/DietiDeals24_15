@@ -29,7 +29,7 @@ fun DetailsViewTopBar(
     CenterAlignedTopAppBar(
         title = { Text(text = caption, fontSize = 30.sp, fontWeight = FontWeight(500)) },
         navigationIcon = {
-            IconButton(onClick = { /*Navigate Back To DestinationRoute*/ }) {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.Default.ChevronLeft,
                     contentDescription = null,

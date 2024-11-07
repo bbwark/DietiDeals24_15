@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,21 +39,25 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.theme.md_theme_light_secondaryContainer
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.LocalUserState
+import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
 
     val userState by viewModel.userState.collectAsState()
-    val auctionState by viewModel.auctionState.collectAsState()
-    val userViewModel = LocalUserState.current
-    val loggedUserState by userViewModel.userState.collectAsState()
+    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
+    val name = encryptedSharedPreferences.getString("name", null)
+    val email = encryptedSharedPreferences.getString("email", null)
+
 
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        AccountViewTopBar(loggedUserState.name, loggedUserState.email)
+        if (name != null && email != null) {
+            AccountViewTopBar(name, email)
+        }
         Spacer(modifier = Modifier.size(24.dp))
         AccountViewButton(
             navController = navController,

@@ -62,7 +62,6 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
         viewModel.validationRegistrationEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {
-                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
                 else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
             }
@@ -70,11 +69,12 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
     }
 
     when(registerCredentialsUiState){
-        is RegisterCredentialsUiState.Error -> RetryView(onClick = {})
+        is RegisterCredentialsUiState.Error -> RetryView(onClick = {
+            navController.popBackStack()
+            navController.navigate(Screen.RegisterCredentials.route)
+        })
         is RegisterCredentialsUiState.Loading -> LoadingView()
-        is RegisterCredentialsUiState.Success -> {
-
-        }
+        is RegisterCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
         is RegisterCredentialsUiState.RegisterParams -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

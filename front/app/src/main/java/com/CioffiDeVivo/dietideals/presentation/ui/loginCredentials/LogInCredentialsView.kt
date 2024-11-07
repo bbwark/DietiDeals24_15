@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Visibility
@@ -24,12 +25,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTex
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
@@ -55,9 +59,7 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
         viewModel.validationLogInEvent.collect { event ->
             when (event) {
                 is ValidationState.Success -> {
-                    Toast.makeText(context, "Log In Success!", Toast.LENGTH_SHORT).show()
                 }
-
                 else -> {
                     Toast.makeText(context, "Invalid Field!", Toast.LENGTH_SHORT).show()
                 }
@@ -66,8 +68,11 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
     }
     when(loginUiState){
         is LogInCredentialsUiState.Loading -> LoadingView()
-        is LogInCredentialsUiState.Error -> RetryView(onClick = {})
-        is LogInCredentialsUiState.Success -> {}
+        is LogInCredentialsUiState.Error -> RetryView(onClick = {
+            navController.popBackStack()
+            navController.navigate(Screen.LogInCredentials.route)
+        })
+        is LogInCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
         is LogInCredentialsUiState.LogInParams -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -126,6 +131,7 @@ fun LoginInputs(
         label = stringResource(R.string.email),
         isError = userState.emailErrorMsg != null,
         trailingIcon = Icons.Filled.Clear,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         onTrailingIconClick = { onDeleteEmail(it) },
         supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
