@@ -1,13 +1,20 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerUiState
 import com.CioffiDeVivo.dietideals.services.ApiService
+import com.google.gson.Gson
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +28,10 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
     val editContactInfoUiState: StateFlow<EditContactInfoUiState> = _editContactInfoUiState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationEditContactInfoEvents = validationEventChannel.receiveAsFlow()
+
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    }
 
     fun editProfileAction(editContactInfoEvents: EditContactInfoEvents){
         when(editContactInfoEvents){
@@ -55,10 +66,21 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
         if (validationBlock()) {
             val currentState = _editContactInfoUiState.value
             if(currentState is EditContactInfoUiState.EditContactInfoParams){
+                _editContactInfoUiState.value = EditContactInfoUiState.Loading
                 viewModelScope.launch {
-                    val requestUser = currentState.user.toRequestModel()
-                    val updateUserResponse = ApiService.updateUser(requestUser)
-                    //TODO handling response
+                    _editContactInfoUiState.value = try {
+                        val requestUser = currentState.user.toRequestModel()
+                        val updateUserResponse = ApiService.updateUser(requestUser)
+                        if(updateUserResponse.status.isSuccess()){
+                            EditContactInfoUiState.Success
+                        } else{
+                            Log.e("Error", "Error: Error on Update User!")
+                            EditContactInfoUiState.Error
+                        }
+                    } catch(e: Exception){
+                        Log.e("Error", "Error: ${e.message}")
+                        EditContactInfoUiState.Error
+                    }
                 }
             }
         }
@@ -97,6 +119,32 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
         } else{
             return false
         }
+    }
+
+    fun getUserInfo(){
+        val userId = sharedPreferences.getString("userId", null)
+        if(userId != null){
+            viewModelScope.launch {
+                setLoadingState()
+                _editContactInfoUiState.value = try {
+                    val userInfoResponse = ApiService.getUser(userId)
+                    if(userInfoResponse.status.isSuccess()){
+                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        EditContactInfoUiState.EditContactInfoParams(user = user)
+                    } else{
+                        Log.e("Error", "Error: Error on GET User!")
+                        EditContactInfoUiState.Error
+                    }
+                } catch (e: Exception){
+                    Log.e("Error", "Error: ${e.message}")
+                    EditContactInfoUiState.Error
+                }
+            }
+        }
+    }
+
+    private fun setLoadingState(){
+        _editContactInfoUiState.value = EditContactInfoUiState.Loading
     }
 
     //Update & Delete State
