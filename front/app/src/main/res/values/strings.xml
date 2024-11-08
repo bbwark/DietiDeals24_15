@@ -50,4 +50,5 @@
     <string name="alert">Alert</string>
     <string name="info">Information</string>
     <string name="maxBidInfo">It is the Maximum Bid, beyond that input, the Auction is automatically accepted!</string>
+    <string name="becomeSeller">Become a Seller</string>
 </resources>

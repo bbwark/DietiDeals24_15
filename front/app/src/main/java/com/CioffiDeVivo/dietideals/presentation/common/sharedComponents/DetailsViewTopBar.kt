@@ -23,7 +23,6 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun DetailsViewTopBar(
     caption: String,
-    destinationRoute: String,
     navController: NavHostController
 ) {
     CenterAlignedTopAppBar(
@@ -40,13 +39,11 @@ fun DetailsViewTopBar(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview (showBackground = true)
 @Composable
 fun DetailsViewTopBarPreview() {
     DetailsViewTopBar(
         caption = "Manage Cards",
-        destinationRoute = "Test",
         navController = rememberNavController()
     )
 }

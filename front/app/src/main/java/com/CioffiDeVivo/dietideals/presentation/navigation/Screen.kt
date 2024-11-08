@@ -18,4 +18,5 @@ sealed class Screen(val route: String) {
     object BidHistory: Screen("bid_history_view")
     object MakeABid: Screen("make_bid_view")
     object AddCard: Screen("add_card_view")
+    object BecomeSeller: Screen("become_seller")
 }

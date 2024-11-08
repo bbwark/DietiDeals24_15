@@ -68,6 +68,8 @@ import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
+import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -87,7 +89,8 @@ fun SetupNavGraph() {
                     BottomNavigationBar(navController = navController)
                 }) {
                     Box(modifier = Modifier.padding(it)) {
-                        AccountView(viewModel = AccountViewModel(), navController = navController)
+                        val viewModel: AccountViewModel = viewModel(factory = viewModelFactory)
+                        AccountView(viewModel = viewModel, navController = navController)
                     }
                 }
             }
@@ -97,7 +100,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(id = R.string.editProfile),
-                        destinationRoute = Screen.Account.route,
                         navController = navController
                     )
                 },
@@ -116,7 +118,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(id = R.string.contactInfo),
-                        destinationRoute = Screen.Account.route,
                         navController = navController
                     )
                 },
@@ -135,7 +136,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(id = R.string.manageCards),
-                        destinationRoute = Screen.Account.route,
                         navController = navController
                     )
                 },
@@ -194,7 +194,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(id = R.string.createAuction),
-                        destinationRoute = Screen.Sell.route,
                         navController = navController
                     )
                 }) {
@@ -216,7 +215,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(id = R.string.logIn),
-                        destinationRoute = Screen.Login.route,
                         navController = navController
                     )
                 }) {
@@ -313,7 +311,6 @@ fun SetupNavGraph() {
                     Scaffold(topBar = {
                         DetailsViewTopBar(
                             caption = stringResource(id = R.string.bidHistory),
-                            destinationRoute = Screen.Auction.route,
                             navController = navController
                         )
                     },
@@ -332,7 +329,6 @@ fun SetupNavGraph() {
                 Scaffold(topBar = {
                     DetailsViewTopBar(
                         caption = stringResource(R.string.addCard),
-                        destinationRoute = Screen.ManageCards.route,
                         navController = navController
                     )
                 },
@@ -345,6 +341,23 @@ fun SetupNavGraph() {
                         AddCardView(viewModel = viewModel, navController = navController)
                     }
 
+                }
+            }
+            composable(
+                route = Screen.BecomeSeller.route
+            ) {
+                Scaffold(
+                    topBar = {
+                        DetailsViewTopBar(
+                            caption = stringResource(R.string.becomeSeller),
+                            navController = navController
+                        )
+                    }
+                ) {
+                    Box(modifier = Modifier.padding(it)){
+                        val viewModel : BecomeSellerViewModel = viewModel(factory = viewModelFactory)
+                        BecomeSellerView(viewModel = viewModel, navController = navController)
+                    }
                 }
             }
         }
