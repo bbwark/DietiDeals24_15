@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.services.ApiService
@@ -96,40 +97,35 @@ class CreateAuctionViewModel(
                         )
                         val userId = sharedPreferences.getString("userId", null)
 
-                        _createAuctionUiState.value = currentState.copy(
-                            auction = currentState.auction.copy(
-                                ownerId = userId ?: ""
-                            )
-                        )
-
-                        val item = currentState.auction.item
-                        val uploadedUrls = item.imagesUri.map { uriString ->
+                        val uploadedUrls = currentState.auction.item.imagesUri.map { uriString ->
                             val file = File(Uri.parse(uriString).path ?: throw IllegalArgumentException("Invalid URI"))
                             ApiService.uploadImage(file, "img").bodyAsText()
                         }
 
-                        _createAuctionUiState.value = currentState.copy(
+                        val updatedAuctionParams = currentState.copy(
                             auction = currentState.auction.copy(
+                                ownerId = userId ?: "",
                                 item = currentState.auction.item.copy(
                                     imagesUri = uploadedUrls
                                 )
                             )
                         )
-
+                        
                         val auctionRequest: com.CioffiDeVivo.dietideals.domain.requestModels.Auction =
-                            currentState.auction.toRequestModel()
+                            updatedAuctionParams.auction.toRequestModel()
                         val response = ApiService.createAuction(auctionRequest)
                         if (response.status.isSuccess()) {
                             CreateAuctionUiState.Success
                         } else{
+                            Log.e("Error", "Error: REST Unsuccessful")
                             CreateAuctionUiState.Error
                         }
                     } catch (e: Exception){
+                        Log.e("Error", "Error: ${e.message}")
                         CreateAuctionUiState.Error
                     }
                 }
             }
-
         }
     }
 

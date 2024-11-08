@@ -75,6 +75,7 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogInfo
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -102,7 +103,6 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         viewModel.validationCreateAuctionEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {
-                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show()
@@ -118,7 +118,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         is CreateAuctionUiState.Error -> RetryView(onClick = {})
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
-
+            navController.navigate(Screen.Home.route)
         }
         is CreateAuctionUiState.CreateAuctionParams -> {
             Column(
@@ -128,8 +128,11 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     .verticalScroll(rememberScrollState())
             ) {
 
-                AddingImagesOnCreateAuction(viewModel = viewModel)
-
+                AddingImagesOnCreateAuction(
+                    imagesList = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri,
+                    onImageChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(it)) },
+                    onDeleteImage = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesDeleted(it)) }
+                )
                 Spacer(modifier = Modifier.height(30.dp))
 
                 InputTextField(
@@ -504,16 +507,18 @@ fun ImageItem(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
+fun AddingImagesOnCreateAuction(
+    imagesList: List<String>,
+    onImageChange: (String) -> Unit,
+    onDeleteImage: (Int) -> Unit
+) {
 
-    val auctionState by viewModel.createAuctionUiState.collectAsState()
-    (auctionState as CreateAuctionUiState.CreateAuctionParams)
     val context = LocalContext.current
     val multiPhotosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let { selectedUri ->
-            viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(selectedUri.toString()))
+            onImageChange(selectedUri.toString())
         }
     }
     val permissionState = rememberPermissionState(
@@ -524,12 +529,12 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
     }
 
     LazyRow {
-        itemsIndexed((auctionState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri) { index, uri ->
+        itemsIndexed(imagesList) { index, uri ->
             Spacer(modifier = Modifier.width(10.dp))
             ImageItem(
                 uri = uri,
                 onClick = {
-                    viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesDeleted(index))
+                    onDeleteImage(index)
                     Toast.makeText(context, "Image Removed", Toast.LENGTH_SHORT).show()
                           },
                 context = context,
@@ -549,7 +554,7 @@ fun AddingImagesOnCreateAuction(viewModel: CreateAuctionViewModel) {
                       permissionState.launchPermissionRequest()
                   }
         },
-        enabled = (auctionState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri.size < 5
+        enabled = imagesList.size < 5
     ) {
         Icon(imageVector = Icons.Default.ImageSearch, contentDescription = "Gallery Icon")
         Text(text = "Add Image")
