@@ -11,8 +11,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d535ca49-4a7c-4fe2-8d12-55272ad48ce6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/home/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/home/HomeViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/loginCredentials/LogInCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/loginCredentials/LogInCredentialsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/sell/SellView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/sell/SellView.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
