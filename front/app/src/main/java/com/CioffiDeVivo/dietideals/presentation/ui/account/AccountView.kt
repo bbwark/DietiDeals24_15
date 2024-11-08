@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
     val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
     val name = encryptedSharedPreferences.getString("name", null)
     val email = encryptedSharedPreferences.getString("email", null)
+    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
 
 
     Column(
@@ -59,43 +61,41 @@ fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
         }
         Spacer(modifier = Modifier.size(24.dp))
         AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.EditProfile.route,
             caption = "Edit Profile",
-            icon = Icons.Default.Settings
+            icon = Icons.Default.Settings,
+            onClick = { navController.navigate(Screen.EditProfile.route) }
         )
         AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.EditContactInfo.route,
             caption = "Change Contact Informations",
-            icon = Icons.Default.Mail
+            icon = Icons.Default.Mail,
+            onClick = { navController.navigate(Screen.EditContactInfo.route) }
         )
         AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.ManageCards.route,
             caption = "Manage Cards",
-            icon = Icons.Default.CreditCard
+            icon = Icons.Default.CreditCard,
+            onClick = { navController.navigate(Screen.ManageCards.route) }
         )
         AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.Favourites.route,
             caption = "Favourite Auctions",
-            icon = Icons.Default.Bookmark
+            icon = Icons.Default.Bookmark,
+            onClick = { navController.navigate(Screen.Favourites.route) }
         )
+        if(isSeller){
+            AccountViewButton(
+                caption = "Your Auctions",
+                icon = Icons.Default.Sell,
+                onClick = { navController.navigate(Screen.Sell.route) }
+            )
+        }
         AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.Sell.route,
-            caption = "Your Auctions",
-            icon = Icons.Default.Sell,
-            onClick = { viewModel.selectedNavBarItem.value = 1 }
-        )
-        AccountViewButton(
-            navController = navController,
-            destinationRoute = Screen.Home.route,
-            caption = "Sign Out",
+            caption = "Log Out",
             icon = Icons.AutoMirrored.Filled.ExitToApp,
             showChevron = false,
-            destructiveAction = true
+            destructiveAction = true,
+            onClick = {
+                viewModel.logOut()
+                navController.navigate(Screen.Login.route)
+            }
         )
     }
 }
@@ -124,20 +124,18 @@ fun AccountViewTopBar(userName: String, userEmail: String) {
 
 @Composable
 fun AccountViewButton(
-    navController: NavHostController,
-    destinationRoute: String,
     caption: String,
     icon: ImageVector,
     showChevron: Boolean = true,
     destructiveAction: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 14.dp)
-            .clickable { navController.navigate(destinationRoute) }
+            .clickable { onClick() }
     ) {
         Icon(
             imageVector = icon,
@@ -163,5 +161,5 @@ fun AccountViewButton(
 @Preview (showBackground = true)
 @Composable
 fun AccountViewPreview() {
-    AccountView(viewModel = AccountViewModel(), navController = rememberNavController())
+    AccountView(viewModel = AccountViewModel(Application()), navController = rememberNavController())
 }
