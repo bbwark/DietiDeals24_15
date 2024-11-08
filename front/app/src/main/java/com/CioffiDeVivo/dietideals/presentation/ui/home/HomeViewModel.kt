@@ -53,11 +53,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             val userResponse = ApiService.getUser(userId)
             if(userResponse.status.isSuccess()){
                 val jsonObject = Gson().fromJson(userResponse.bodyAsText(), JsonObject::class.java)
+                val email = jsonObject.get("email").asString
                 val name = jsonObject.get("name").asString
+                val isSeller = jsonObject.get("isSeller").asBoolean
                 val encryptedSharedPreferences =
                     EncryptedPreferencesManager.getEncryptedPreferences()
                 encryptedSharedPreferences.edit().apply {
+                    putString("email", email)
                     putString("name", name)
+                    putBoolean("isSeller", isSeller)
                     apply()
                 }
             }

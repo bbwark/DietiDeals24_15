@@ -2,8 +2,11 @@ package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateLogInForm
@@ -106,13 +109,6 @@ class LogInCredentialsViewModel(
                                     putString("userId", userId)
                                     apply()
                                 }
-                                val encryptedSharedPreferences =
-                                    EncryptedPreferencesManager.getEncryptedPreferences()
-                                encryptedSharedPreferences.edit().apply {
-                                    putString("email", currentState.email)
-                                    apply()
-                                }
-
                                 ApiService.initialize(
                                     token,
                                     getApplication<Application>().applicationContext
@@ -121,9 +117,11 @@ class LogInCredentialsViewModel(
                             }
                             LogInCredentialsUiState.Success
                         } else{
+                            Log.e("Error", "Error: REST Unsuccessful")
                             LogInCredentialsUiState.Error
                         }
                     } catch (e: Exception) {
+                        Log.e("Error", "Error: ${e.message}")
                         LogInCredentialsUiState.Error
                     }
                 }

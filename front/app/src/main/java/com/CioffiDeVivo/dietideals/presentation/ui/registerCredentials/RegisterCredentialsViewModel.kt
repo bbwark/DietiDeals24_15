@@ -2,12 +2,14 @@ package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateRegistrationForms
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsUiState
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
@@ -124,60 +126,38 @@ class RegisterCredentialsViewModel(
                 _registerCredentialsUiState.value = RegisterCredentialsUiState.Loading
                 viewModelScope.launch {
                     _registerCredentialsUiState.value = try {
-                        if (currentState.user.isSeller) {
-                            var cards = currentState.user.creditCards
-                            cards += currentState.creditCard
-
-                            _registerCredentialsUiState.value = currentState.copy(
-                                user = currentState.user.copy(
-                                    creditCards = cards
-                                )
-                            )
-                        }
-                        val user = currentState.user.toRequestModel()
-                        val registerResponse = AuthService.registerUser(user)
+                        val userRequest = currentState.user.toRequestModel()
+                        val registerResponse = AuthService.registerUser(userRequest)
                         if (registerResponse.status.isSuccess()) {
-                            val loginResponse = user.email?.let {
-                                user.password?.let { it1 ->
-                                    AuthService.loginUser(
-                                        it,
-                                        it1
+                            val loginResponse = AuthService.loginUser(
+                                currentState.user.email,
+                                currentState.user.password
+                            )
+                            if (loginResponse.status.isSuccess()) {
+                                val jsonObject = Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
+                                val token = jsonObject.get("jwt").asString
+                                if (token.isNotEmpty()) {
+                                    val userId = jsonObject.getAsJsonObject("user").get("id").asString
+                                    sharedPreferences.edit().apply {
+                                        putString("userId", userId)
+                                        apply()
+                                    }
+                                    ApiService.initialize(
+                                        token,
+                                        getApplication<Application>().applicationContext
                                     )
                                 }
+                                RegisterCredentialsUiState.Success
+                            } else{
+                                Log.e("Error", "Error: REST Unsuccessful on Login")
+                                RegisterCredentialsUiState.Error
                             }
-                            if (loginResponse != null && loginResponse.status.isSuccess()) {
-                                val registerJsonObject = Gson().fromJson(
-                                    registerResponse.bodyAsText(),
-                                    JsonObject::class.java
-                                )
-                                val loginJsonObject =
-                                    Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
-                                val userId = registerJsonObject.get("id").asString
-                                val token = loginJsonObject.get("jwt").asString
-
-                                sharedPreferences.edit().apply {
-                                    putString("userId", userId)
-                                    apply()
-                                }
-
-                                val encryptedSharedPreferences =
-                                    EncryptedPreferencesManager.getEncryptedPreferences()
-                                encryptedSharedPreferences.edit().apply() {
-                                    putString("email", currentState.user.email)
-                                    putString("password", currentState.user.password)
-                                    apply()
-                                }
-
-                                ApiService.initialize(
-                                    token,
-                                    getApplication<Application>().applicationContext
-                                )
-                            }
-                            RegisterCredentialsUiState.Success
                         } else{
+                            Log.e("Error", "Error: REST Unsuccessful on Register")
                             RegisterCredentialsUiState.Error
                         }
                     } catch (e: Exception) {
+                        Log.e("Error", "Error: ${e.message}")
                         RegisterCredentialsUiState.Error
                     }
                 }

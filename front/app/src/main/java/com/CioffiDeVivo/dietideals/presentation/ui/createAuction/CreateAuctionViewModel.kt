@@ -110,7 +110,7 @@ class CreateAuctionViewModel(
                                 )
                             )
                         )
-                        
+
                         val auctionRequest: com.CioffiDeVivo.dietideals.domain.requestModels.Auction =
                             updatedAuctionParams.auction.toRequestModel()
                         val response = ApiService.createAuction(auctionRequest)

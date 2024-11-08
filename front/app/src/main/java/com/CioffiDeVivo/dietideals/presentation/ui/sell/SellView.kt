@@ -60,7 +60,7 @@ fun SellGridView(
     val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
     val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
 
-    if(isSeller){
+    if(!isSeller){
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
