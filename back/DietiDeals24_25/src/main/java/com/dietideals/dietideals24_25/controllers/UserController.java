@@ -110,6 +110,9 @@ public class UserController {
             }
 
             userDto.setId(id);
+            if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+                userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            }
             UserEntity userEntity = userMapper.mapFrom(userDto);
             UserEntity savedUserEntity = userService.save(userEntity);
             return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
