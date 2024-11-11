@@ -39,7 +39,7 @@ class BecomeSellerViewModel(application: Application): AndroidViewModel(applicat
                     val userInfoResponse = ApiService.getUser(userId)
                     if(userInfoResponse.status.isSuccess()){
                         val user = Gson().fromJson(userInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
-                        BecomeSellerUiState.BecomeSellerParams(user = user, creditCard = user.creditCards[0])
+                        BecomeSellerUiState.BecomeSellerParams(user = user)
                     } else{
                         Log.e("Error", "Error: Error on GET User!")
                         BecomeSellerUiState.Error

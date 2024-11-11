@@ -41,6 +41,8 @@ import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 fun SellView(viewModel: SellViewModel, navController: NavController) {
 
     val sellUiState by viewModel.sellUiState.collectAsState()
+    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
+    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
 
     LaunchedEffect(Unit) {
         viewModel.fetchAuctions()
@@ -50,7 +52,8 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
         is SellUiState.Loading -> LoadingView()
         is SellUiState.Success -> SellGridView(
             auctions = (sellUiState as SellUiState.Success).auctions,
-            navController = navController
+            navController = navController,
+            isSeller = isSeller
         )
         is SellUiState.Error -> RetryView(onClick = {})
     }
@@ -60,11 +63,9 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
 @Composable
 fun SellGridView(
     auctions: ArrayList<Auction>,
-    navController: NavController
+    navController: NavController,
+    isSeller: Boolean
 ){
-    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
-
     if(!isSeller){
         Column(
             modifier = Modifier.fillMaxSize(),

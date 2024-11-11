@@ -115,7 +115,10 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     }
 
     when(createAuctionUiState){
-        is CreateAuctionUiState.Error -> RetryView(onClick = {})
+        is CreateAuctionUiState.Error -> RetryView(onClick = {
+            navController.popBackStack()
+            navController.navigate(Screen.CreateAuction.route)
+        })
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
             navController.navigate(Screen.Home.route)
