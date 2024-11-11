@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -46,15 +45,12 @@ public class SchedulerNotification {
     @Transactional
     public void pollAndNotify() {
         try {
-
+            System.out.println("\nPolling and notifying at: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS")));
             List<AuctionEntity> expiredAuctionsEntities = auctionService.findExpiredAuctions();
-            expiredAuctionsEntities.forEach(auction -> Hibernate.initialize(auction.getBids()));
-
-            List<AuctionDto> expiredAuctions = expiredAuctionsEntities.stream()
-                    .map(auctionMapper::mapTo)
-                    .collect(Collectors.toList());
-
-            for (AuctionDto auction : expiredAuctions) {
+            System.out.println("Number of expired auctions found: " + expiredAuctionsEntities.size() + "\n");
+            
+            for (AuctionEntity auctionEntity : expiredAuctionsEntities) {
+                AuctionDto auction = auctionMapper.mapTo(auctionEntity);
                 if (auction.getId() == null) {
                     continue;
                 }
@@ -86,8 +82,8 @@ public class SchedulerNotification {
                 notifyWinner(deviceTokensForWinner, auction);
                 notifyParticipants(deviceTokensForUsersInvolved, auction, buyoutPriceReached);
 
-                auction.setExpired(true);
-                auctionService.save(auctionMapper.mapFrom(auction));
+                auctionEntity.setExpired(true);
+                auctionService.save(auctionEntity);
             }
         } catch (Exception e) {
             throw e; // Rethrow to trigger transaction rollback
