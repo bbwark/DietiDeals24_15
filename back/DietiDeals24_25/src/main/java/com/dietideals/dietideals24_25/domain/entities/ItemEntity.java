@@ -24,6 +24,6 @@ public class ItemEntity {
 
     private String imageUrl;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     private AuctionEntity auction;
 }
