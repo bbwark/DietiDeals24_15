@@ -42,7 +42,7 @@ for _ in range(NUM_USERS):
     bio = fake.sentence(nb_words=6)
     address = fake.address().replace("\n", ", ")
     zip_code = fake.zipcode()
-    country = fake.country().replace("'", "")
+    country = random.choice(["Italy", "Spain", "Germany", "France", "Belgium"])
     phone_number = fake.phone_number()
     users.append((user_id, email, name, surname, password, is_seller, bio, address, zip_code, country, phone_number))
     
