@@ -27,11 +27,11 @@ public class AuctionEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auction", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
     private ItemEntity item;
 
     @Builder.Default
