@@ -2,7 +2,9 @@ package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,9 +66,10 @@ fun SellGridView(
     val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
 
     if(!isSeller){
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Not a Seller Account!",
@@ -74,9 +77,8 @@ fun SellGridView(
                 fontSize = 20.sp,
                 fontWeight = FontWeight(600),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(start = 25.dp, end = 25.dp)
+                modifier = Modifier.padding(start = 25.dp, end = 25.dp, bottom = 10.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
             Button(onClick = { navController.navigate(Screen.BecomeSeller.route) }) {
                 Text(text = "Become a Seller")
             }
