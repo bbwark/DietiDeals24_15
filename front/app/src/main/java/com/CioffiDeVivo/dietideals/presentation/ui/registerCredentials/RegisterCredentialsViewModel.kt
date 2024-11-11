@@ -126,7 +126,8 @@ class RegisterCredentialsViewModel(
                 _registerCredentialsUiState.value = RegisterCredentialsUiState.Loading
                 viewModelScope.launch {
                     _registerCredentialsUiState.value = try {
-                        val userRequest = currentState.user.toRequestModel()
+                        val updatedUser = currentState.user.copy(creditCards = currentState.user.creditCards + currentState.creditCard)
+                        val userRequest = updatedUser.toRequestModel()
                         val registerResponse = AuthService.registerUser(userRequest)
                         if (registerResponse.status.isSuccess()) {
                             val loginResponse = AuthService.loginUser(
