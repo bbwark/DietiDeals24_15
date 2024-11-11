@@ -6,4 +6,5 @@ sealed interface SearchUiState {
     data class Success(val auctions: ArrayList<Auction>): SearchUiState
     object Error: SearchUiState
     object Loading: SearchUiState
+    object Idle: SearchUiState
 }

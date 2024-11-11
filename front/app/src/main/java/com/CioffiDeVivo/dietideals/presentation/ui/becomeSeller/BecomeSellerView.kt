@@ -65,17 +65,19 @@ fun BecomeSellerView(
                     onDeleteZipCode = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ZipCodeDeleted(it)) },
                     onDeletePhoneNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.PhoneNumberDeleted(it)) }
                 )
-                CreditCardComponents(
-                    userState = becomeSellerUiState,
-                    onNumberChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberChanged(it)) },
-                    onDateChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateChanged(it)) },
-                    onCvvChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvChanged(it)) },
-                    onIbanChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanChanged(it)) },
-                    onDeleteCardNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberDeleted(it)) },
-                    onDeleteExpirationDate = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateDeleted(it)) },
-                    onDeleteCvv = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvDeleted(it)) },
-                    onDeleteIban = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanDeleted(it)) }
-                )
+                if((becomeSellerUiState as BecomeSellerUiState.BecomeSellerParams).user.creditCards.isEmpty()){
+                    CreditCardComponents(
+                        userState = becomeSellerUiState,
+                        onNumberChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberChanged(it)) },
+                        onDateChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateChanged(it)) },
+                        onCvvChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvChanged(it)) },
+                        onIbanChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanChanged(it)) },
+                        onDeleteCardNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberDeleted(it)) },
+                        onDeleteExpirationDate = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateDeleted(it)) },
+                        onDeleteCvv = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvDeleted(it)) },
+                        onDeleteIban = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanDeleted(it)) }
+                    )
+                }
                 Button(
                     onClick = { viewModel.becomeSellerOnAction(BecomeSellerEvents.Submit()) },
                     modifier = Modifier

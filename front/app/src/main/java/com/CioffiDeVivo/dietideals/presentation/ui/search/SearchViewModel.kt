@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(application: Application): AndroidViewModel(application) {
 
-    private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Loading)
+    private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
     val searchUiState: StateFlow<SearchUiState> = _searchUiState.asStateFlow()
 
     private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
@@ -24,15 +24,22 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun searchWordUpdate(searchWord: String) {
+        if(searchWord.isBlank()){
+            return
+        }
         viewModelScope.launch {
             setLoadingState()
             _searchUiState.value = try {
                 val auctions = ApiService.getAuctionsByItemName(searchWord)
-                val list: ArrayList<Auction> = arrayListOf()
-                for (auction in auctions) {
-                    list.add(auction.toDataModel())
+                if(auctions.isNotEmpty()){
+                    val list: ArrayList<Auction> = arrayListOf()
+                    for (auction in auctions) {
+                        list.add(auction.toDataModel())
+                    }
+                    SearchUiState.Success(list)
+                } else{
+                    SearchUiState.Error
                 }
-                SearchUiState.Success(list)
             } catch (e: Exception){
                 SearchUiState.Error
             }
