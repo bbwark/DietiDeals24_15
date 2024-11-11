@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.presentation.ui.search.components.SearchAuctionsList
@@ -19,27 +20,40 @@ import com.CioffiDeVivo.dietideals.presentation.ui.search.components.SearchViewB
 
 @Composable
 fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
+
     val searchUiState by viewModel.searchUiState.collectAsState()
     val categoriesToHide by viewModel.categoriesToHide.collectAsState()
 
-    when(searchUiState){
-        is SearchUiState.Loading -> {
-            SearchViewBar(
-                categoriesToHide = categoriesToHide,
-                updateCategories = { viewModel.setCategoriesToHide(categoriesToHide) },
-                updateSearchWord = { viewModel.searchWordUpdate(it) },
-                navController = navController
-            )
-            LoadingView()
-        }
-        is SearchUiState.Success -> SearchAuctionsListView(
-            auctions = (searchUiState as SearchUiState.Success).auctions,
-            navController = navController,
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        SearchViewBar(
             categoriesToHide = categoriesToHide,
-            updateCategories = { viewModel.setCategoriesToHide(categoriesToHide) },
-            updateSearchWord = { viewModel.searchWordUpdate(it) }
+            updateCategories = { viewModel.setCategoriesToHide(it) },
+            updateSearchWord = { viewModel.searchWordUpdate(it) },
+            navController = navController
         )
-        is SearchUiState.Error -> RetryView(onClick = {})
+        when(searchUiState){
+            is SearchUiState.Loading -> {
+                LoadingView()
+            }
+            is SearchUiState.Success -> {
+                SearchAuctionsListView(
+                    auctions = (searchUiState as SearchUiState.Success).auctions,
+                    navController = navController,
+                    categoriesToHide = categoriesToHide
+                )
+            }
+            is SearchUiState.Error -> RetryView(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Search.route)
+                }
+            )
+            is SearchUiState.Idle -> {
+
+            }
+        }
     }
 }
 
@@ -47,24 +61,13 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
 fun SearchAuctionsListView(
     auctions: ArrayList<Auction>,
     navController: NavController,
-    categoriesToHide: Set<String>,
-    updateCategories: (Set<String>) -> (Unit),
-    updateSearchWord: (String) -> (Unit),
+    categoriesToHide: Set<String>
 ){
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        SearchViewBar(
-            categoriesToHide = categoriesToHide,
-            updateCategories = { updateCategories(it) },
-            updateSearchWord = { updateSearchWord(it) },
-            navController = navController)
-        SearchAuctionsList(
-            auctions = auctions,
-            categoriesToHide = categoriesToHide,
-            navController = navController
-        )
-    }
+    SearchAuctionsList(
+        auctions = auctions,
+        categoriesToHide = categoriesToHide,
+        navController = navController
+    )
 }
 
 @Preview(showBackground = true)
