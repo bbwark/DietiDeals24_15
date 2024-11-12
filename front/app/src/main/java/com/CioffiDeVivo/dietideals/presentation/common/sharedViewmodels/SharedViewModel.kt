@@ -130,7 +130,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         return auctionResponse
     }
 
-    fun fetchInsertionist(): User {
+    private fun fetchInsertionist(): User {
         var ownerResponse = User()
         viewModelScope.launch {
             val getUserInfoResponse = ApiService.getUserInfo(_auctionState.value.ownerId)

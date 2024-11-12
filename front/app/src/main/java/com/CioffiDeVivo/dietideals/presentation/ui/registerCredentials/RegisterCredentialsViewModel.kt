@@ -127,6 +127,7 @@ class RegisterCredentialsViewModel(
                 viewModelScope.launch {
                     _registerCredentialsUiState.value = try {
                         val updatedUser = currentState.user.copy(creditCards = currentState.user.creditCards + currentState.creditCard)
+                        Log.i("INFORMATION USER", updatedUser.creditCards[0].creditCardNumber)
                         val userRequest = updatedUser.toRequestModel()
                         val registerResponse = AuthService.registerUser(userRequest)
                         if (registerResponse.status.isSuccess()) {
@@ -140,6 +141,7 @@ class RegisterCredentialsViewModel(
                                 if (token.isNotEmpty()) {
                                     val userId = jsonObject.getAsJsonObject("user").get("id").asString
                                     sharedPreferences.edit().apply {
+                                        putString("token", token)
                                         putString("userId", userId)
                                         apply()
                                     }

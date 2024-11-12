@@ -31,8 +31,8 @@ class ManageCardsViewModel(application: Application) : AndroidViewModel(applicat
                 if(userId != null){
                     val creditCardResponse = ApiService.getUser(userId)
                     if(creditCardResponse.status.isSuccess()){
-                        val creditCards = Gson().fromJson(creditCardResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel().creditCards
-                        ManageCardsUiState.Success(creditCards)
+                        val user = Gson().fromJson(creditCardResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        ManageCardsUiState.Success(user.creditCards)
                     } else{
                         ManageCardsUiState.Error
                     }
