@@ -62,7 +62,7 @@ public class AuctionController {
             AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
             AuctionDto responseAuction = auctionMapper.mapTo(savedAuctionEntity);
 
-            if (itemExists) {
+            if (itemExists && item != null) {
                 item.setAuction(savedAuctionEntity);
                 item = itemService.save(item);
                 responseAuction.setItem(itemMapper.mapTo(item));
