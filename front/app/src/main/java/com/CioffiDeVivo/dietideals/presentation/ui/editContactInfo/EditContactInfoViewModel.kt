@@ -10,7 +10,6 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.models.Country
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditContactInfoForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerUiState
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -33,7 +32,7 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
         application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
     }
 
-    fun editProfileAction(editContactInfoEvents: EditContactInfoEvents){
+    fun editContactInfoAction(editContactInfoEvents: EditContactInfoEvents){
         when(editContactInfoEvents){
             is EditContactInfoEvents.AddressChanged -> {
                 updateAddress(editContactInfoEvents.address)
@@ -63,7 +62,7 @@ class EditContactInfoViewModel(application: Application, private val validateEdi
     }
 
     private fun submitEditContactInfo(){
-        if (validationBlock()) {
+        if (true) {
             val currentState = _editContactInfoUiState.value
             if(currentState is EditContactInfoUiState.EditContactInfoParams){
                 _editContactInfoUiState.value = EditContactInfoUiState.Loading

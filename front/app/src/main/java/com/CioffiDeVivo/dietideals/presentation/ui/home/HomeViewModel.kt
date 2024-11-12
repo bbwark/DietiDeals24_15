@@ -69,12 +69,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun getLatestAuctions(userId: String): Array<Auction> {
-        var randomAuctionsData: Array<Auction> = arrayOf()
+        /*var randomAuctionsData: Array<Auction> = arrayOf()
         viewModelScope.launch {
             val randomAuctionsRequest = ApiService.getRandomAuctions(userId)
             randomAuctionsData = randomAuctionsRequest.map { it.toDataModel() }.toTypedArray()
         }
-        return randomAuctionsData
+        return randomAuctionsData*/
+        return arrayOf()
     }
 
     private fun getEndingAuctions(): Array<Auction> {

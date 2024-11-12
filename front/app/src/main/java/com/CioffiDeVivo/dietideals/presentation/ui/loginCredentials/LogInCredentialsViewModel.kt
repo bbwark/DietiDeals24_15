@@ -106,6 +106,7 @@ class LogInCredentialsViewModel(
                             if (token.isNotEmpty()) {
                                 val userId = jsonObject.getAsJsonObject("user").get("id").asString
                                 sharedPreferences.edit().apply {
+                                    putString("token", token)
                                     putString("userId", userId)
                                     apply()
                                 }
@@ -117,7 +118,7 @@ class LogInCredentialsViewModel(
                             }
                             LogInCredentialsUiState.Success
                         } else{
-                            Log.e("Error", "Error: REST Unsuccessful")
+                            Log.e("Error", "Error: $loginResponse")
                             LogInCredentialsUiState.Error
                         }
                     } catch (e: Exception) {

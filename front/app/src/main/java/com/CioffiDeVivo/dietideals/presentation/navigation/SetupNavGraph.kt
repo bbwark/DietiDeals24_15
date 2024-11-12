@@ -70,6 +70,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedVi
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -239,7 +240,8 @@ fun SetupNavGraph() {
             composable(
                 route = Screen.Login.route
             ) {
-                LoginView(navController = navController)
+                val viewModel : LogInViewModel = viewModel(factory = viewModelFactory)
+                LoginView(viewModel = viewModel ,navController = navController)
             }
             composable(
                 route = Screen.Register.route
