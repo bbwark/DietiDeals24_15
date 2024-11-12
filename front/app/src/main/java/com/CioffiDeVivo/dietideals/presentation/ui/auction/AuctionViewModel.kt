@@ -51,24 +51,23 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
         )
     )
 
-    var selectedAuction by mutableStateOf(
-        Auction(
-            "",
-            "",
-            Item(id = "", name = ""),
-            bids = arrayOf(
-                Bid(
-                    "",
-                    11f,
-                    "",
-                    ZonedDateTime.now().minusDays(5)
-                )
-            ),
-            endingDate = LocalDateTime.now(),
-            expired = false,
-            type = AuctionType.English
-        )
-    )
+    fun fetchAuctionUiState(auctionId: String){
+        viewModelScope.launch {
+            setLoadingState()
+            _auctionUiState.value = try{
+                val auctionResponse = ApiService.getAuction(auctionId)
+                if(auctionResponse.status.isSuccess()){
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    
+                    AuctionUiState.Success(auction, User(), false)
+                } else{
+                    AuctionUiState.Error
+                }
+            } catch (e: Exception){
+                AuctionUiState.Error
+            }
+        }
+    }
 
     fun setAuction(auction: Auction) {
         _auctionState.value = auction
@@ -99,5 +98,9 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
                 _insertionistState.value = Gson().fromJson(getUserInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
             }
         }
+    }
+
+    private fun setLoadingState(){
+        _auctionUiState.value = AuctionUiState.Loading
     }
 }
