@@ -21,14 +21,13 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedVi
 @Composable
 fun AuctionTopBar(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
-    viewModel: SharedViewModel
+    navController: NavHostController
 ) {
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
             IconButton(onClick = {
-                //pop navigation back to home
+                navController.popBackStack()
             }) {
                 Icon(
                     Icons.Default.ArrowBack,
@@ -37,7 +36,7 @@ fun AuctionTopBar(
             }
         },
         actions = {
-            if (viewModel.user.favouriteAuctions.contains(viewModel.selectedAuction)) {
+            if (true) {
                 IconButton(onClick = {
                     //Code to call the function that removes the auction from user's favourites
                 }) {
@@ -63,5 +62,5 @@ fun AuctionTopBar(
 @Preview
 @Composable
 fun AuctionTopBarPreview() {
-    AuctionTopBar(navController = rememberNavController(), viewModel = SharedViewModel(application = Application()))
+    AuctionTopBar(navController = rememberNavController())
 }

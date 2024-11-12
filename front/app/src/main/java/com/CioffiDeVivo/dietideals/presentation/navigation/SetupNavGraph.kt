@@ -68,6 +68,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
@@ -273,12 +274,10 @@ fun SetupNavGraph() {
                     )
                 ) { entry ->
                     val auctionId = entry.arguments?.getString("auctionId") ?: ""
-                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
+                    val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
                     Scaffold(topBar = {
                         AuctionTopBar(
-                            navController = navController,
-                            viewModel = viewModel
+                            navController = navController
                         )
                     },
                         bottomBar = {
@@ -287,7 +286,6 @@ fun SetupNavGraph() {
                         Box(modifier = Modifier.padding(it)) {
                             AuctionView(
                                 auctionId = auctionId,
-                                auctionState = auctionState,
                                 viewModel = viewModel,
                                 navController = navController
                             )
