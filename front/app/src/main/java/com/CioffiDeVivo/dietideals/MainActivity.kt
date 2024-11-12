@@ -25,29 +25,6 @@ class MainActivity : ComponentActivity() {
         EncryptedPreferencesManager.initialize(this)
         AuthService.initialize(this)
 
-        val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-
-        // ONLY FOR TESTING PURPOSE WE WIPE OUT PREFERENCES EACH TIME
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        encryptedSharedPreferences.edit().apply {
-            clear()
-            apply()
-        }
-        sharedPreferences.edit().apply {
-            clear()
-            apply()
-        }
-
-
-        val email = encryptedSharedPreferences.getString("email", null)
-        val password = encryptedSharedPreferences.getString("password", null)
-        if (email != null && password != null) {
-            lifecycleScope.launch {//change to runBlocking if you want to block main thread to wait for login (safer)
-                val loginResponse = AuthService.loginUser(email, password)
-                val sessionToken = Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java).get("jwt").asString
-                ApiService.initialize(sessionToken, this@MainActivity)
-            }
-        }
         setContent {
             DietiDealsTheme {
                 Surface(

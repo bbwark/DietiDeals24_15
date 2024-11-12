@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
@@ -69,17 +68,17 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
             ){
                 ContactInfo(
                     userState = editContactInfoUiState,
-                    onAddressChange = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-                    onCountryChange = { viewModel.editProfileAction(EditContactInfoEvents.CountryChanged(it)) },
-                    onZipCodeChange = { viewModel.editProfileAction(EditContactInfoEvents.ZipCodeChanged(it)) },
-                    onPhoneNumberChange = { viewModel.editProfileAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
-                    onDeleteAddress = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-                    onDeleteZipCode = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) },
-                    onDeletePhoneNumber = { viewModel.editProfileAction(EditContactInfoEvents.AddressChanged(it)) }
+                    onAddressChange = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onCountryChange = { viewModel.editContactInfoAction(EditContactInfoEvents.CountryChanged(it)) },
+                    onZipCodeChange = { viewModel.editContactInfoAction(EditContactInfoEvents.ZipCodeChanged(it)) },
+                    onPhoneNumberChange = { viewModel.editContactInfoAction(EditContactInfoEvents.PhoneNumberChanged(it)) },
+                    onDeleteAddress = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onDeleteZipCode = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) },
+                    onDeletePhoneNumber = { viewModel.editContactInfoAction(EditContactInfoEvents.AddressChanged(it)) }
                 )
                 Button(
                     onClick = {
-                        viewModel.editProfileAction(EditContactInfoEvents.Submit())
+                        viewModel.editContactInfoAction(EditContactInfoEvents.Submit())
                     },
                     modifier = Modifier
                         .wrapContentWidth()

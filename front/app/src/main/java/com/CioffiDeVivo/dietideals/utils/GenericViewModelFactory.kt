@@ -20,6 +20,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.account.AccountViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 
 
 class GenericViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
@@ -75,6 +76,9 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(BecomeSellerViewModel::class.java) ->
                 BecomeSellerViewModel(application) as T
+
+            modelClass.isAssignableFrom(LogInViewModel::class.java) ->
+                LogInViewModel(application) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
