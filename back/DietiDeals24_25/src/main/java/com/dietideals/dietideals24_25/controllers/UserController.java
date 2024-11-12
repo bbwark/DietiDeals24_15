@@ -112,6 +112,9 @@ public class UserController {
             userDto.setId(id);
             if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
                 userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            } else {
+                UserEntity existingUser = userService.findById(id).get();
+                userDto.setPassword(existingUser.getPassword());
             }
             UserEntity userEntity = userMapper.mapFrom(userDto);
             UserEntity savedUserEntity = userService.save(userEntity);
