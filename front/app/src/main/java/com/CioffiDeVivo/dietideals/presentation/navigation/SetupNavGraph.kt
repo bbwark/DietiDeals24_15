@@ -71,6 +71,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -304,10 +305,15 @@ fun SetupNavGraph() {
                     )
                 }
                 composable(
-                    route = Screen.BidHistory.route
+                    route = Screen.BidHistory.route + "/{auctionId}",
+                    arguments = listOf(
+                        navArgument("auctionId"){
+                            type = NavType.StringType
+                        }
+                    )
                 ) {entry ->
-                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
+                    val auctionId = entry.arguments?.getString("auctionId") ?: ""
+                    val viewModel: BidHistoryViewModel = viewModel(factory = viewModelFactory)
                     Scaffold(topBar = {
                         DetailsViewTopBar(
                             caption = stringResource(id = R.string.bidHistory),
@@ -318,7 +324,7 @@ fun SetupNavGraph() {
                             BottomNavigationBar(navController = navController)
                         }) {
                         Box(modifier = Modifier.padding(it)) {
-                            BidHistoryView(auctionState = auctionState, viewModel = viewModel, navController = navController)
+                            BidHistoryView(auctionId = auctionId ,viewModel = viewModel, navController = navController)
                         }
                     }
                 }

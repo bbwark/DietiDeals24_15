@@ -143,7 +143,7 @@ fun AuctionViewLayout(
         }
         AuctionHeader(
             itemName = auction.item.name,
-            insertionistName = owner.name,
+            ownerName = owner.name,
             type = auction.type,
             onUserInfo = { userInfo = true }
         )
@@ -159,18 +159,16 @@ fun AuctionViewLayout(
 
                 }
             }
-            if (isOwner) {
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "View bid history",
-                    Modifier.clickable { navController.navigate(Screen.BidHistory.route) },
-                    Color.Blue,
-                    fontSize = 12.sp
-                )
-            }
         }
-
-        if (!isOwner) {
+        if(isOwner){
+            Spacer(modifier = Modifier.size(12.dp))
+            Button(onClick = {
+                navController.navigate(Screen.BidHistory.route + "/${auction.id}")
+            }) {
+                Text(text = "Bid History", fontSize = 18.sp)
+            }
+            Spacer(modifier = Modifier.size(12.dp))
+        } else{
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = {
                 navController.navigate(Screen.MakeABid.route)
@@ -179,7 +177,6 @@ fun AuctionViewLayout(
             }
             Spacer(modifier = Modifier.size(12.dp))
         }
-
         DescriptionAuctionItem(description = auction.description)
         if(userInfo) {
             UserInfoBottomSheet(
@@ -191,7 +188,13 @@ fun AuctionViewLayout(
 }
 
 @Composable
-fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistName: String, type: AuctionType, onUserInfo: () -> Unit) {
+fun AuctionHeader(
+    modifier: Modifier = Modifier,
+    itemName: String,
+    ownerName: String,
+    type: AuctionType,
+    onUserInfo: () -> Unit
+) {
     Row(
         Modifier.padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -211,7 +214,7 @@ fun AuctionHeader(modifier: Modifier = Modifier, itemName: String, insertionistN
                     contentDescription = null,
                     modifier = Modifier.size(14.dp)
                 )
-                Text(text = insertionistName, fontSize = 12.sp)
+                Text(text = ownerName, fontSize = 12.sp)
             }
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -272,13 +275,11 @@ fun SilentAuctionBody(endingDate: LocalDateTime) {
 
 @Composable
 fun DescriptionAuctionItem(description: String) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier.padding(horizontal = 12.dp)) {
-        Text(text = "About this item", fontSize = 16.sp, fontWeight = FontWeight(600))
-        Spacer(modifier = Modifier.size(3.dp))
-        Text(text = description, fontSize = 12.sp)
-    }
+
+    Text(text = "About this item", fontSize = 16.sp, fontWeight = FontWeight(600))
+    Spacer(modifier = Modifier.size(3.dp))
+    Text(text = description, fontSize = 12.sp)
+
 }
 
 @Preview(showBackground = true)
