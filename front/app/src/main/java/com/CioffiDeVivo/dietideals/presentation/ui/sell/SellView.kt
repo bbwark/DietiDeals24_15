@@ -92,7 +92,6 @@ fun SellGridView(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(16.dp),
                     content = {
-                        //view model userCreatedAuction
                         itemsIndexed(auctions) { index, item ->
                             SellGridElement(
                                 auction = item,

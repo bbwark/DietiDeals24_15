@@ -8,6 +8,7 @@ import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
 import com.CioffiDeVivo.dietideals.services.ApiService
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,15 +62,28 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
                 val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
                 val userId = sharedPreferences.getString("userId", null)
                 if(userId != null) {
-                    val creditCardRequest = currentState.creditCard.toRequestModel()
-                    creditCardRequest.ownerId = userId
+                    val cardRequest = currentState.creditCard.toRequestModel()
+                    cardRequest.ownerId = userId
                     viewModelScope.launch {
-                        val createCreditCardResponse = ApiService.createCreditCard(creditCardRequest)
-                        //TODO create credit card response handling
+                        setLoadingState()
+                        _addCardUiState.value = try {
+                            val cardResponse = ApiService.createCreditCard(cardRequest)
+                            if(cardResponse.status.isSuccess()){
+                                AddCardUiState.Success
+                            } else{
+                                AddCardUiState.Error
+                            }
+                        } catch (e: Exception){
+                            AddCardUiState.Error
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun setLoadingState(){
+        _addCardUiState.value = AddCardUiState.Loading
     }
 
     private fun validationBock() : Boolean {

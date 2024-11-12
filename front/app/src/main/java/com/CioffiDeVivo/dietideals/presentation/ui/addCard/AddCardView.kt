@@ -27,6 +27,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCa
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
@@ -51,7 +52,8 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
         is AddCardUiState.Error -> RetryView(onClick = {})
         is AddCardUiState.Loading -> LoadingView()
         is AddCardUiState.Success -> {
-            
+            navController.popBackStack()
+            navController.navigate(Screen.ManageCards.route)
         }
         is AddCardUiState.AddCardParams -> {
             Column(
