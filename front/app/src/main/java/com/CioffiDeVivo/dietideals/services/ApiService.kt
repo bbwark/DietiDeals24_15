@@ -61,23 +61,6 @@ object ApiService {
 *
 * */
 
-    //post mapping create user /users
-    suspend fun createUser(user: User): HttpResponse {
-        var resultResponse: HttpResponse
-        HttpClient(CIO).use {
-            val gson = Gson()
-            val postedUser = gson.toJson(user)
-            val response = it.post {
-                url("$URL/users")
-                header(HttpHeaders.Authorization, "Bearer $TOKEN")
-                header(HttpHeaders.ContentType, ContentType.Application.Json)
-                setBody(postedUser)
-            }
-            resultResponse = response
-        }
-        return resultResponse;
-    }
-
     //put mapping update user /users/{id}
     suspend fun updateUser(user: User): HttpResponse {
         var resultResponse: HttpResponse
