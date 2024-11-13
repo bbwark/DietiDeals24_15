@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.bidHistory
 
 import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +39,7 @@ import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
@@ -45,26 +48,31 @@ import java.time.ZonedDateTime
 
 @Composable
 fun BidHistoryView(
-    auctionState: Auction,
-    viewModel: SharedViewModel,
+    auctionId: String,
+    viewModel: BidHistoryViewModel,
     navController: NavController
 ) {
 
     val bidHistoryUiState by viewModel.bidHistoryUiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchAuctionBidders()
+        viewModel.fetchAuctionBidders(auctionId)
     }
 
     when(bidHistoryUiState){
         is BidHistoryUiState.Loading -> LoadingView()
         is BidHistoryUiState.Success -> {
             BidHistoryLayout(
-                auctionState = auctionState,
+                auctionState = (bidHistoryUiState as BidHistoryUiState.Success).auction,
                 bidders = (bidHistoryUiState as BidHistoryUiState.Success).bidders
             )
         }
-        is BidHistoryUiState.Error -> RetryView(onClick = {})
+        is BidHistoryUiState.Error -> RetryView(
+            onClick = {
+                navController.popBackStack()
+                navController.navigate(Screen.BidHistory.route)
+            }
+        )
     }
 
 
@@ -82,61 +90,78 @@ fun BidHistoryLayout(
     var bidderName by remember { mutableStateOf("") }
     var selectedBid by remember { mutableStateOf(Bid("", 0f, "", ZonedDateTime.now())) }
     var selectedUser by remember { mutableStateOf(User("", "")) }
-    Box {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            content = {
-                itemsIndexed(auctionState.bids) { index, bid ->
-                    if (index == 0) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                    }
-                    bidders.find { it.id == bid.userId }?.let {
-                        BidHistoryElement(
-                            bidderName = it.name,
-                            bidValue = bid.value,
-                            onShowDetails = {
-                                bidderName = it.name
-                                selectedBid = bid
-                                showDetails = true
-                            },
-                            onAcceptOffer = {
-                                bidderName = it.name
-                                selectedBid = bid
-                                acceptOffer = true
-                            },
-                            onUserInfo = {
-                                selectedUser = it
-                                userInfo = true
-                            }
-                        )
-                    }
-                    HorizontalDivider()
-                }
-            })
-        if (showDetails) {
-            ShowDetailsDialog(
-                selectedBid = selectedBid,
-                bidderName = bidderName,
-                onDismissRequest = { showDetails = false })
-        }
-        if (acceptOffer) {
-            AcceptOfferDialog(
-                selectedBid = selectedBid,
-                bidderName = bidderName,
-                onDismissRequest = { acceptOffer = false },
-                onAcceptOffer = {
-                    acceptOffer = false
-                    //todo backend management of accepting a bid
-                }
+    if(bidders.isEmpty()){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "No Bidders Yet!",
+                color = Color.Gray,
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 25.dp, end = 25.dp)
             )
         }
-        if (userInfo) {
-            UserInfoBottomSheet(
-                user = selectedUser,
-                onDismissRequest = { userInfo = false }
-            )
+    } else{
+        Box {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp),
+                content = {
+                    itemsIndexed(auctionState.bids) { index, bid ->
+                        if (index == 0) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
+                        bidders.find { it.id == bid.userId }?.let {
+                            BidHistoryElement(
+                                bidderName = it.name,
+                                bidValue = bid.value,
+                                onShowDetails = {
+                                    bidderName = it.name
+                                    selectedBid = bid
+                                    showDetails = true
+                                },
+                                onAcceptOffer = {
+                                    bidderName = it.name
+                                    selectedBid = bid
+                                    acceptOffer = true
+                                },
+                                onUserInfo = {
+                                    selectedUser = it
+                                    userInfo = true
+                                }
+                            )
+                        }
+                        HorizontalDivider()
+                    }
+                })
+            if (showDetails) {
+                ShowDetailsDialog(
+                    selectedBid = selectedBid,
+                    bidderName = bidderName,
+                    onDismissRequest = { showDetails = false })
+            }
+            if (acceptOffer) {
+                AcceptOfferDialog(
+                    selectedBid = selectedBid,
+                    bidderName = bidderName,
+                    onDismissRequest = { acceptOffer = false },
+                    onAcceptOffer = {
+                        acceptOffer = false
+                        //todo backend management of accepting a bid
+                    }
+                )
+            }
+            if (userInfo) {
+                UserInfoBottomSheet(
+                    user = selectedUser,
+                    onDismissRequest = { userInfo = false }
+                )
+            }
         }
     }
 }
@@ -211,5 +236,5 @@ fun AcceptOfferDialog(
 @Preview(showBackground = true)
 @Composable
 fun BidHistoryViewPreview() {
-    BidHistoryView(auctionState = Auction() ,viewModel = SharedViewModel(Application()), navController = rememberNavController())
+    BidHistoryView(auctionId = "1" ,viewModel = BidHistoryViewModel(Application()), navController = rememberNavController())
 }

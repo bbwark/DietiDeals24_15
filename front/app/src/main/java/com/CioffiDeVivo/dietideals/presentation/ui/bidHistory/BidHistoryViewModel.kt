@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.bidHistory
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.Auction
@@ -18,30 +19,32 @@ import kotlinx.coroutines.launch
 
 class BidHistoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _auctionState = MutableStateFlow(Auction())
-    val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
-    private val _bidState = MutableStateFlow(Bid())
-    val bidState: StateFlow<Bid> = _bidState.asStateFlow()
+    private val _bidHistoryUiState = MutableStateFlow<BidHistoryUiState>(BidHistoryUiState.Loading)
+    val bidHistoryUiState: StateFlow<BidHistoryUiState> = _bidHistoryUiState.asStateFlow()
 
-    private val _auctionBidders = MutableStateFlow<List<User>>(emptyList())
-    val auctionBidders: StateFlow<List<User>> = _auctionBidders.asStateFlow()
-
-    fun setAuction(auction: Auction){
-        _auctionState.value = auction
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
     }
 
     fun fetchAuctionBidders(auctionId: String) {
         viewModelScope.launch {
-            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
-            if (getAuctionResponse.status.isSuccess()) {
-                _auctionState.value = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
-                val bidders = getBiddersFromServer(_auctionState.value.id)
-                _auctionBidders.value = bidders
+            setLoadingState()
+            _bidHistoryUiState.value = try {
+                val auctionResponse = ApiService.getAuction(auctionId)
+                if (auctionResponse.status.isSuccess()) {
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    val bidders = getBiddersFromServer(auctionId)
+                    BidHistoryUiState.Success(auction, bidders)
+                } else{
+                    BidHistoryUiState.Error
+                }
+            } catch (e: Exception){
+                BidHistoryUiState.Error
             }
         }
     }
 
-    private suspend fun getBiddersFromServer(auctionId: String): List<User> {
+    private suspend fun getBiddersFromServer(auctionId: String): MutableList<User> {
         val result = emptyList<User>().toMutableList()
         val requestUsers = ApiService.getAuctionBidders(auctionId)
         for (user in requestUsers) {
@@ -50,5 +53,8 @@ class BidHistoryViewModel(application: Application) : AndroidViewModel(applicati
         return result
     }
 
+    private fun setLoadingState(){
+        _bidHistoryUiState.value = BidHistoryUiState.Loading
+    }
 
 }
