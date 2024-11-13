@@ -53,6 +53,10 @@ public class UserController {
                 UserEntity existingUser = userService.findById(id).get();
                 userDto.setPassword(existingUser.getPassword());
             }
+
+            boolean hasSellerAuthority = userService.checkAuthorities(id, "SELLER");
+            userDto.setIsSeller(hasSellerAuthority);
+
             UserEntity userEntity = userMapper.mapFrom(userDto);
             UserEntity savedUserEntity = userService.save(userEntity);
             return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
