@@ -72,48 +72,44 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun deleteBidValue(){
-        try {
-            val currentState = _makeABidUiState.value
-            if(currentState is MakeABidUiState.MakeABidParams){
-                _makeABidUiState.value = currentState.copy(
-                    bid = currentState.bid.copy(
-                        value = 0F
-                    )
-                )
-
-            }
-        } catch (e: Exception){
-            _makeABidUiState.value = MakeABidUiState.Error
-        }
-    }
-
-    fun submitBid() : Boolean {
-        var createBidCallSuccessful  = false
-        var validationSuccessful = false
-        when(_auctionState.value.type){
-            AuctionType.English -> {
-                validationSuccessful = validateBidEnglish(_bidState.value, _auctionState.value)
-            }
-            AuctionType.Silent -> {
-                validationSuccessful = validateBidSilent(_bidState.value, _auctionState.value)
-            }
-            else -> {}
-        }
-        if(validationSuccessful){
-            val bid = _bidState.value.toRequestModel()
-            val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            bid.userId = sharedPreferences.getString("userId", null)
-            bid.auctionId = _auctionState.value.id
-
-            if (bid.userId != null) {
-                viewModelScope.launch {
-                    val createBidResponse = ApiService.createBid(bid)
-                    createBidCallSuccessful = createBidResponse.status.isSuccess()
+    fun submitBid(auctionId: String){
+        val currentState = _makeABidUiState.value
+        if(currentState is MakeABidUiState.MakeABidParams){
+            setLoadingState()
+            viewModelScope.launch {
+                _makeABidUiState.value = try {
+                    val validator: Boolean = if(currentState.auction.type == AuctionType.English){
+                        validateBidEnglish(currentState.bid, currentState.auction)
+                    } else{
+                        validateBidSilent(currentState.bid, currentState.auction)
+                    }
+                    if(validator){
+                        val userId = sharedPreferences.getString("userId", null)
+                        if(userId != null){
+                            val updatedBid = currentState.bid.copy(
+                                userId = userId,
+                                auctionId = auctionId
+                            )
+                            val bidRequest = updatedBid.toRequestModel()
+                            val bidResponse = ApiService.createBid(bidRequest)
+                            if(bidResponse.status.isSuccess()){
+                                MakeABidUiState.Success
+                            } else{
+                                MakeABidUiState.Error
+                            }
+                        } else{
+                            MakeABidUiState.Error
+                        }
+                    } else{
+                        MakeABidUiState.Error
+                    }
+                } catch (e: Exception){
+                    MakeABidUiState.Error
                 }
             }
+        } else{
+            _makeABidUiState.value = MakeABidUiState.Error
         }
-        return createBidCallSuccessful && validationSuccessful
     }
 
     private fun validateBidEnglish(bid: Bid, auction: Auction) : Boolean {

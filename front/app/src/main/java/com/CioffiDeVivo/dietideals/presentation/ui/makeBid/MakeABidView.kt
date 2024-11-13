@@ -75,8 +75,9 @@ fun MakeABid(
         )
         is MakeABidUiState.MakeABidParams -> {
             MakeABidLayout(
-                auctionState = (makeABidUiState as MakeABidUiState.MakeABidParams).auction,
-                onBidChange = { viewModel.updateBidValue(it) }
+                auction = (makeABidUiState as MakeABidUiState.MakeABidParams).auction,
+                onBidChange = { viewModel.updateBidValue(it) },
+                onSubmitBid = { viewModel.submitBid(auctionId) }
             )
         }
     }
@@ -85,8 +86,9 @@ fun MakeABid(
 
 @Composable
 fun MakeABidLayout(
-    auctionState: Auction,
-    onBidChange: (String) -> Unit
+    auction: Auction,
+    onBidChange: (String) -> Unit,
+    onSubmitBid: (String) -> Unit
 ){
     var bid by rememberSaveable { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
@@ -104,15 +106,19 @@ fun MakeABidLayout(
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Text(
-                if (auctionState.type == AuctionType.English)
-                    (auctionState.bids.last().value + auctionState.minStep.toFloat()).toString()
-                else auctionState.minAccepted,
+                if (auction.type == AuctionType.English)
+                        if(auction.bids.isEmpty()){
+                            auction.minStep
+                        } else{
+                            (auction.bids.last().value + auction.minStep.toFloat()).toString()
+                        }
+                else auction.minAccepted,
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
             )
             Text(
-                "EUR",
+                " EUR",
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold
@@ -139,8 +145,9 @@ fun MakeABidLayout(
             modifier = modifierStandard,
             label = { Text("Your Bid") },
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick =  /*TODO If submitBid is true then navigate viewModel.submitBid()*/{},
+            onClick = { onSubmitBid(auction.id) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
