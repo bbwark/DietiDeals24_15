@@ -2,15 +2,19 @@ package com.CioffiDeVivo.dietideals.presentation.ui.editProfile
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditProfileForm
 import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoUiState
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.CioffiDeVivo.dietideals.services.AuthService
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import com.CioffiDeVivo.dietideals.utils.extractKeyFromJson
+import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
@@ -26,6 +30,10 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     val editUiProfileState: StateFlow<EditProfileUiState> = _editUiProfileState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationEditProfileEvent = validationEventChannel.receiveAsFlow()
+
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    }
 
     fun editProfileAction(editProfileEvent: EditProfileEvent){
         when(editProfileEvent){
@@ -66,7 +74,7 @@ class EditProfileViewModel(application: Application, private val validateEditPro
     }
 
     private fun submitEditProfile(){
-        if (validationBlock()) {
+        if (true) {
             val currentState = _editUiProfileState.value
             if(currentState is EditProfileUiState.EditProfileParams){
                 _editUiProfileState.value = EditProfileUiState.Loading
@@ -74,24 +82,11 @@ class EditProfileViewModel(application: Application, private val validateEditPro
                     _editUiProfileState.value = try {
                         val requestUser = currentState.user.toRequestModel()
                         val updateUserResponse = ApiService.updateUser(requestUser)
-                        if (updateUserResponse.status.isSuccess()) {
-                            val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-                            encryptedSharedPreferences.edit().apply {
-                                putString("email", currentState.user.email)
-                                putString("password", currentState.user.password)
-                                apply()
-                            }
-                            val userId = extractKeyFromJson(updateUserResponse.bodyAsText(), "id")
-                            val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                            sharedPreferences.edit().apply {
-                                putString("userId", userId)
-                                apply()
-                            }
-                            val loginResponse = AuthService.loginUser(currentState.user.email,  currentState.user.password)
-                            val sessionToken = extractKeyFromJson(loginResponse.bodyAsText(), "jwt")
-                            if (sessionToken.isNotEmpty()) {
-                                ApiService.initialize(sessionToken, getApplication<Application>().applicationContext)
-                            }
+                        if(updateUserResponse.status.isSuccess()){
+                            EditProfileUiState.Success
+                        } else{
+                            Log.e("Error", "Error: Error on Update User!")
+                            EditProfileUiState.Error
                         }
                         EditProfileUiState.Success
                     } catch (e: Exception){
@@ -141,6 +136,32 @@ class EditProfileViewModel(application: Application, private val validateEditPro
         } else{
             return false
         }
+    }
+
+    fun getUserInfo(){
+        val userId = sharedPreferences.getString("userId", null)
+        if(userId != null){
+            viewModelScope.launch {
+                setLoadingState()
+                _editUiProfileState.value = try {
+                    val userInfoResponse = ApiService.getUser(userId)
+                    if(userInfoResponse.status.isSuccess()){
+                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        EditProfileUiState.EditProfileParams(user = user)
+                    } else{
+                        Log.e("Error", "Error: Error on GET User!")
+                        EditProfileUiState.Error
+                    }
+                } catch (e: Exception){
+                    Log.e("Error", "Error: ${e.message}")
+                    EditProfileUiState.Error
+                }
+            }
+        }
+    }
+
+    private fun setLoadingState(){
+        _editUiProfileState.value = EditProfileUiState.Loading
     }
 
     //Update & Delete State

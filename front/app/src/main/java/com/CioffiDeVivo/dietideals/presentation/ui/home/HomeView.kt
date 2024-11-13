@@ -50,21 +50,6 @@ fun HomeView(
         viewModel.fetchHomeAuctions()
         viewModel.fetchTestAuctions()
     }
-
-    Column(
-        horizontalAlignment = Alignment.End,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Spacer(modifier = Modifier.height(18.dp))
-        IconButton(
-            onClick = { navController.navigate(Screen.Favourites.route) },
-            modifier = Modifier.pulsateClick()
-            ) {
-            Icon(Icons.Rounded.Favorite, contentDescription = null)
-        }
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
