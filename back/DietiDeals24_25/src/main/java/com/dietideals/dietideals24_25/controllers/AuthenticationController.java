@@ -5,11 +5,9 @@ import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.LoginRequest;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
-import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.CreditCardService;
-import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.services.impl.AuthenticationServiceImpl;
 
@@ -19,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,7 +28,6 @@ public class AuthenticationController {
 
     private UserService userService;
     private CreditCardService creditCardService;
-    private RoleService roleService;
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
     private Mapper<UserEntity, UserDto> userMapper;
     private AuthenticationServiceImpl authenticationService;
@@ -39,12 +36,11 @@ public class AuthenticationController {
     private PasswordEncoder passwordEncoder;
 
     public AuthenticationController(UserService userService, CreditCardService creditCardService,
-            RoleService roleService, Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
+            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
             Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService,
             PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.creditCardService = creditCardService;
-        this.roleService = roleService;
         this.creditCardMapper = creditCardMapper;
         this.userMapper = userMapper;
         this.authenticationService = authenticationService;
@@ -75,9 +71,7 @@ public class AuthenticationController {
                 user.setIsSeller(false);
             }
 
-            Set<RoleEntity> authorities = new HashSet<>();
-            authorities.add(roleService.findByAuthority("USER").get());
-            user.setAuthorities(authorities);
+            user.setAuthorities(new HashSet<>(Collections.singleton("BUYER")));
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
             UserEntity userEntity = userMapper.mapFrom(user);

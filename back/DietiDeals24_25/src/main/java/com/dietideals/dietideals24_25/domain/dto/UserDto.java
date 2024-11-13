@@ -1,7 +1,6 @@
 package com.dietideals.dietideals24_25.domain.dto;
 
 import com.dietideals.dietideals24_25.domain.Country;
-import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,9 +46,9 @@ public class UserDto {
     @Builder.Default
     private List<CreditCardDto> creditCards = new ArrayList<>();
 
-    private Set<RoleEntity> authorities;
+    private Set<String> authorities;
 
-    public UserDto(UUID id, String email, String name, Set<RoleEntity> authorities) {
+    public UserDto(UUID id, String email, String name, Set<String> authorities) {
         this.id = id;
         this.email = email;
         this.name = name;
