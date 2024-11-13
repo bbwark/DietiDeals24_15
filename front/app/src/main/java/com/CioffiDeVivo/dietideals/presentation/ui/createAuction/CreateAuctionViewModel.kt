@@ -34,6 +34,10 @@ class CreateAuctionViewModel(
     private val validationEventChannel = Channel<ValidationState>()
     val validationCreateAuctionEvent = validationEventChannel.receiveAsFlow()
 
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    }
+
     fun createAuctionOnAction(createAuctionEvents: CreateAuctionEvents){
         when(createAuctionEvents){
             is CreateAuctionEvents.ItemNameChanged -> {
@@ -91,17 +95,12 @@ class CreateAuctionViewModel(
                 _createAuctionUiState.value = CreateAuctionUiState.Loading
                 viewModelScope.launch {
                     _createAuctionUiState.value = try {
-                        val sharedPreferences = getApplication<Application>().getSharedPreferences(
-                            "AppPreferences",
-                            Context.MODE_PRIVATE
-                        )
                         val userId = sharedPreferences.getString("userId", null)
-
                         val uploadedUrls = currentState.auction.item.imagesUri.map { uriString ->
-                            val file = File(Uri.parse(uriString).path ?: throw IllegalArgumentException("Invalid URI"))
+                            val uri = Uri.parse(uriString)
+                            val file = createTemporaryFileFromUri(uri)
                             ApiService.uploadImage(file, "img").bodyAsText()
                         }
-
                         val updatedAuctionParams = currentState.copy(
                             auction = currentState.auction.copy(
                                 ownerId = userId ?: "",
@@ -110,9 +109,7 @@ class CreateAuctionViewModel(
                                 )
                             )
                         )
-
-                        val auctionRequest: com.CioffiDeVivo.dietideals.domain.requestModels.Auction =
-                            updatedAuctionParams.auction.toRequestModel()
+                        val auctionRequest = updatedAuctionParams.auction.toRequestModel()
                         val response = ApiService.createAuction(auctionRequest)
                         if (response.status.isSuccess()) {
                             CreateAuctionUiState.Success
@@ -127,6 +124,18 @@ class CreateAuctionViewModel(
                 }
             }
         }
+    }
+
+    private fun createTemporaryFileFromUri(uri: Uri): File{
+        val contentResolver = getApplication<Application>().contentResolver
+        val inputStream = contentResolver.openInputStream(uri)
+        val tempFile = File.createTempFile("temp_image", null, getApplication<Application>().cacheDir)
+        inputStream?.use { input ->
+            tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        return tempFile
     }
 
     private fun validationBlock(): Boolean {

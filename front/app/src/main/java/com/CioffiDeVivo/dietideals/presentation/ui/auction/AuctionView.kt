@@ -102,7 +102,6 @@ fun AuctionViewLayout(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = auction.id)
         if (auction.item.imagesUri.isNotEmpty()) {
             HorizontalPager(
                 state = pagerState,
