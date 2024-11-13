@@ -18,7 +18,7 @@ public interface UserService {
 
     Boolean exists(UUID id);
 
-    Boolean authenticateUser(String email, String password);
+    UUID findUserIdByEmailPassword(String email, String password);
 
     void delete(UUID id);
 

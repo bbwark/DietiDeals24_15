@@ -31,9 +31,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Boolean authenticateUser(String email, String password) {
+    public UUID findUserIdByEmailPassword(String email, String password) {
         Optional<UserEntity> userEntity = userRepository.findByEmailAndPassword(email, password);
-        return userEntity.isPresent();
+        if (userEntity.isPresent()) {
+            return userEntity.get().getId();
+        }
+        return null;
     }
 
     @Override
