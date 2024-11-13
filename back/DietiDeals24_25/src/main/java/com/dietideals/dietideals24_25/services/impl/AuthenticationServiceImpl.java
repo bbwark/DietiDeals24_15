@@ -1,83 +1,49 @@
 package com.dietideals.dietideals24_25.services.impl;
 
-import com.dietideals.dietideals24_25.domain.Country;
 import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
-import com.dietideals.dietideals24_25.domain.entities.CreditCardEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
-import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
-import com.dietideals.dietideals24_25.repositories.RoleRepository;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import com.dietideals.dietideals24_25.services.AuthenticationService;
+import com.dietideals.dietideals24_25.services.UserService;
+import com.dietideals.dietideals24_25.utils.jwtUtilities.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class AuthenticationServiceImpl {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
+    private UserService userService;
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenServiceImpl tokenService;
-
-    @Autowired
     private Mapper<UserEntity, UserDto> userMapper;
+    private JwtTokenProvider jwtTokenProvider;
 
-    private NetHttpTransport transport = new NetHttpTransport();
-    private JsonFactory jsonFactory = new GsonFactory();
-
-    public UserEntity registerUserBuyer(String email, String name, String surname, String password, String address,
-                                        String zipCode, Country country, String phoneNumber, List<CreditCardEntity> creditCards) {
-
-        boolean isSeller = true;
-        String encodedPassword = passwordEncoder.encode(password);
-        RoleEntity userRole = roleRepository.findByAuthority("USER").get();
-
-        Set<RoleEntity> authorities = new HashSet<>();
-
-        authorities.add(userRole);
-
-        if (address == null || zipCode == null || country == null || phoneNumber == null || creditCards == null) {
-            isSeller = false;
-        }
-
-        return userRepository.save(new UserEntity(UUID.randomUUID(), email, name, surname, encodedPassword, authorities,
-                isSeller, address, zipCode, country, phoneNumber, creditCards));
+    public AuthenticationServiceImpl(UserRepository userRepository, UserService userService,
+            PasswordEncoder passwordEncoder,
+            Mapper<UserEntity, UserDto> userMapper, JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @Override
     public LoginDto loginUser(String email, String password) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            String token = tokenService.generateJwt(authentication);
+
+            String encodedPassword = passwordEncoder.encode(password);
+            UUID userId = userService.findUserIdByEmailPassword(email, encodedPassword);
+            if (userId == null) {
+                return new LoginDto(null, "");
+            }
+
+            String token = jwtTokenProvider.generateToken(userId.toString());
             UserEntity userEntity = userRepository.findByEmail(email).get();
             Optional<UserDto> userResponse = Optional.ofNullable(userMapper.mapTo(userEntity));
             return new LoginDto(userResponse, token);
@@ -86,24 +52,4 @@ public class AuthenticationServiceImpl {
         }
 
     }
-
-    public UserDto registerWithGoogle(String googleIdToken) throws GeneralSecurityException, IOException {
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier(transport, jsonFactory);
-        GoogleIdToken idToken = verifier.verify(googleIdToken);
-        if (idToken != null) {
-            GoogleIdToken.Payload payload = idToken.getPayload();
-            String email = payload.getEmail();
-            String name = (String) payload.get("name");
-
-            RoleEntity userRole = roleRepository.findByAuthority("USER").get();
-            Set<RoleEntity> authorities = new HashSet<>();
-            authorities.add(userRole);
-
-            return new UserDto(UUID.randomUUID(), email, name, authorities);
-        } else {
-            System.out.println("Invalid Token");
-            return new UserDto();
-        }
-    }
-
 }
