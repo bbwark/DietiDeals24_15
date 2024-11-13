@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.makeBid
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
@@ -85,25 +86,23 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
                     }
                     if(validator){
                         val userId = sharedPreferences.getString("userId", null)
-                        if(userId != null){
-                            val updatedBid = currentState.bid.copy(
-                                userId = userId,
-                                auctionId = auctionId
-                            )
-                            val bidRequest = updatedBid.toRequestModel()
-                            val bidResponse = ApiService.createBid(bidRequest)
-                            if(bidResponse.status.isSuccess()){
-                                MakeABidUiState.Success
-                            } else{
-                                MakeABidUiState.Error
-                            }
+                        val updatedBid = currentState.bid.copy()
+                        val bidRequest = updatedBid.toRequestModel()
+                        bidRequest.userId = userId
+                        bidRequest.auctionId = auctionId
+                        val bidResponse = ApiService.createBid(bidRequest)
+                        if(bidResponse.status.isSuccess()){
+                            MakeABidUiState.Success
                         } else{
+                            Log.e("Error", "Error: $bidResponse")
                             MakeABidUiState.Error
                         }
                     } else{
+                        Log.e("Error", "Error: Validator Error")
                         MakeABidUiState.Error
                     }
                 } catch (e: Exception){
+                    Log.e("Error", "Error: ${e.message}")
                     MakeABidUiState.Error
                 }
             }

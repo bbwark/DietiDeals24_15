@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.search
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.domain.models.Auction
@@ -38,9 +39,11 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                     }
                     SearchUiState.Success(list)
                 } else{
+                    Log.e("Error", "Error: REST Unsuccessful")
                     SearchUiState.Error
                 }
             } catch (e: Exception){
+                Log.e("Error", "Error: ${e.message}")
                 SearchUiState.Error
             }
         }

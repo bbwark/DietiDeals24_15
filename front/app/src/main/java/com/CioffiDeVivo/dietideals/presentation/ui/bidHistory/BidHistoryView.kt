@@ -31,19 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
 import java.time.ZonedDateTime
 
 @Composable
