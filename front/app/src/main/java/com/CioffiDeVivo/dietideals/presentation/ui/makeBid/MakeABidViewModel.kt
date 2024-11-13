@@ -4,11 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.services.ApiService
+import com.google.gson.Gson
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,26 +25,67 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
     private val _bidState = MutableStateFlow(Bid())
     val bidState: StateFlow<Bid> = _bidState.asStateFlow()
 
+    private val _makeABidUiState = MutableStateFlow<MakeABidUiState>(MakeABidUiState.Loading)
+    val makeABidUiState: StateFlow<MakeABidUiState> = _makeABidUiState.asStateFlow()
+
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    }
+
+    fun fetchAuction(auctionId: String){
+        viewModelScope.launch {
+            setLoadingState()
+            _makeABidUiState.value = try {
+                val auctionResponse = ApiService.getAuction(auctionId)
+                if(auctionResponse.status.isSuccess()){
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    MakeABidUiState.MakeABidParams(auction, Bid())
+                } else{
+                    MakeABidUiState.Error
+                }
+            } catch (e: Exception){
+                MakeABidUiState.Error
+            }
+        }
+    }
+
     fun updateBidValue(value: String){
-        if(value.isEmpty()){
-            _bidState.value = _bidState.value.copy(
-                value = 0F
-            )
-        } else{
-            _bidState.value = _bidState.value.copy(
-                value = value.toFloat()
-            )
+        try {
+            val currentState = _makeABidUiState.value
+            if(currentState is MakeABidUiState.MakeABidParams){
+                if(value.isEmpty()){
+                    _makeABidUiState.value = currentState.copy(
+                        bid = currentState.bid.copy(
+                            value = 0F
+                        )
+                    )
+                } else{
+                    _makeABidUiState.value = currentState.copy(
+                        bid = currentState.bid.copy(
+                            value = value.toFloat()
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception){
+            _makeABidUiState.value = MakeABidUiState.Error
         }
     }
 
     fun deleteBidValue(){
-        _bidState.value = _bidState.value.copy(
-            value = 0.0f
-        )
-    }
+        try {
+            val currentState = _makeABidUiState.value
+            if(currentState is MakeABidUiState.MakeABidParams){
+                _makeABidUiState.value = currentState.copy(
+                    bid = currentState.bid.copy(
+                        value = 0F
+                    )
+                )
 
-    fun setAuction(auction: Auction){
-        _auctionState.value = auction
+            }
+        } catch (e: Exception){
+            _makeABidUiState.value = MakeABidUiState.Error
+        }
     }
 
     fun submitBid() : Boolean {
@@ -78,5 +122,9 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
 
     private fun validateBidSilent(bid: Bid, auction: Auction) : Boolean {
         return bid.value > auction.minAccepted.toFloat()
+    }
+
+    private fun setLoadingState(){
+        _makeABidUiState.value = MakeABidUiState.Loading
     }
 }

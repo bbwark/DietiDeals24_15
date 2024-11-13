@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
 import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -51,21 +53,32 @@ import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
 
 @Composable
 fun MakeABid(
-    auctionState: Auction,
-    viewModel: SharedViewModel,
+    auctionId: String,
+    viewModel: MakeABidViewModel,
     navController: NavController,
 ){
     val makeABidUiState by viewModel.makeABidUiState.collectAsState()
 
+    LaunchedEffect(Unit){
+        viewModel.fetchAuction(auctionId)
+    }
+
     when(makeABidUiState){
         is MakeABidUiState.Loading -> LoadingView()
         is MakeABidUiState.Success -> {
+            navController.popBackStack()
+        }
+        is MakeABidUiState.Error -> RetryView(
+            onClick = {
+                navController.popBackStack()
+            }
+        )
+        is MakeABidUiState.MakeABidParams -> {
             MakeABidLayout(
-                auctionState = auctionState,
+                auctionState = (makeABidUiState as MakeABidUiState.MakeABidParams).auction,
                 onBidChange = { viewModel.updateBidValue(it) }
             )
         }
-        is MakeABidUiState.Error -> RetryView(onClick = {})
     }
 
 }
@@ -142,10 +155,5 @@ fun MakeABidLayout(
 @Preview(showBackground = true)
 @Composable
 fun MakeABidSilentPreview(){
-    val viewModel = SharedViewModel(Application())
-    val bid1 = Bid(value = 10f)
-    val bid2 = Bid(value = 20f)
-    val auction = Auction(bids = arrayOf(bid1, bid2), type = AuctionType.English, minAccepted = "10", minStep = "1")
-
-    MakeABid(auctionState = auction, viewModel = viewModel, navController = rememberNavController())
+    MakeABid(auctionId = "1", viewModel = MakeABidViewModel(Application()), navController = rememberNavController())
 }
