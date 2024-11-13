@@ -80,7 +80,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             _bidHistoryUiState.value = try {
                 val bidders = getBiddersFromServer(_auctionState.value.id)
-                BidHistoryUiState.Success(bidders)
+                BidHistoryUiState.Success(Auction() ,bidders)
             } catch (e: Exception){
                 BidHistoryUiState.Error
             }

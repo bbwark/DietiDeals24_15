@@ -27,77 +27,43 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 class AuctionViewModel(application: Application) : AndroidViewModel(application){
-    private val _auctionState = MutableStateFlow(Auction())
-    val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
-    private val _isOwnerState = MutableStateFlow(false)
-    val isOwnerState: StateFlow<Boolean> = _isOwnerState.asStateFlow()
-    private val _insertionistState = MutableStateFlow(User())
-    val insertionsState = _insertionistState.asStateFlow()
 
     private val _auctionUiState = MutableStateFlow<AuctionUiState>(AuctionUiState.Loading)
     val auctionUiState: StateFlow<AuctionUiState> = _auctionUiState.asStateFlow()
 
-    var user by mutableStateOf(
-        User(
-            "",
-            "Nametest Surnametest",
-            "",
-            "passwordtest",
-            creditCards = arrayOf(
-                CreditCard("556666666666", LocalDate.now().plusYears(1),"222"),
-                CreditCard("456666666666", LocalDate.now().plusYears(2), "222"),
-                CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
-            )
-        )
-    )
-
-    var selectedAuction by mutableStateOf(
-        Auction(
-            "",
-            "",
-            Item(id = "", name = ""),
-            bids = arrayOf(
-                Bid(
-                    "",
-                    11f,
-                    "",
-                    ZonedDateTime.now().minusDays(5)
-                )
-            ),
-            endingDate = LocalDateTime.now(),
-            expired = false,
-            type = AuctionType.English
-        )
-    )
-
-    fun setAuction(auction: Auction) {
-        _auctionState.value = auction
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
     }
 
-    fun fetchIsOwnerState() {
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("userId", null)
-        if(userId != null) {
-            _isOwnerState.value = _auctionState.value.ownerId == userId
-        }
-    }
-
-    fun fetchAuctionState() {
+    fun fetchAuctionUiState(auctionId: String){
         viewModelScope.launch {
-            val getAuctionResponse = ApiService.getAuction(_auctionState.value.id)
-            if(getAuctionResponse.status.isSuccess()) {
-                val auctionResponse = Gson().fromJson(getAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java)
-                setAuction(auctionResponse.toDataModel())
+            setLoadingState()
+            _auctionUiState.value = try{
+                val auctionResponse = ApiService.getAuction(auctionId)
+                if(auctionResponse.status.isSuccess()){
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    val ownerResponse = ApiService.getUser(auction.ownerId)
+                    if(ownerResponse.status.isSuccess()){
+                        val owner = Gson().fromJson(ownerResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val userId = sharedPreferences.getString("userId", null)
+                        if(owner.id == userId){
+                            AuctionUiState.Success(auction, owner, true)
+                        } else{
+                            AuctionUiState.Success(auction, owner, false)
+                        }
+                    } else{
+                        AuctionUiState.Error
+                    }
+                } else{
+                    AuctionUiState.Error
+                }
+            } catch (e: Exception){
+                AuctionUiState.Error
             }
         }
     }
 
-    fun fetchInsertionist() {
-        viewModelScope.launch {
-            val getUserInfoResponse = ApiService.getUserInfo(_auctionState.value.ownerId)
-            if (getUserInfoResponse.status.isSuccess()) {
-                _insertionistState.value = Gson().fromJson(getUserInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
-            }
-        }
+    private fun setLoadingState(){
+        _auctionUiState.value = AuctionUiState.Loading
     }
 }

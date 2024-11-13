@@ -68,9 +68,12 @@ import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
 import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -260,68 +263,70 @@ fun SetupNavGraph() {
                     }
                 }
             }
-            navigation(
-                startDestination = Screen.Auction.route,
-                route = "auction",
-            ){
-                composable(
-                    route = Screen.Auction.route + "/{auctionId}",
-                    arguments = listOf(
-                        navArgument("auctionId"){
-                            type = NavType.StringType
-                        }
-                    )
-                ) { entry ->
-                    val auctionId = entry.arguments?.getString("auctionId") ?: ""
-                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
-                    Scaffold(topBar = {
-                        AuctionTopBar(
-                            navController = navController,
-                            viewModel = viewModel
-                        )
-                    },
-                        bottomBar = {
-                            BottomNavigationBar(navController = navController)
-                        }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            AuctionView(
-                                auctionId = auctionId,
-                                auctionState = auctionState,
-                                viewModel = viewModel,
-                                navController = navController
-                            )
-                        }
+            composable(
+                route = Screen.Auction.route + "/{auctionId}",
+                arguments = listOf(
+                    navArgument("auctionId"){
+                        type = NavType.StringType
                     }
-                }
-                composable(
-                    route = Screen.MakeABid.route
-                ) { entry ->
-                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
-                    MakeABid(
-                        auctionState = auctionState,
-                        viewModel = viewModel,
+                )
+            ) { entry ->
+                val auctionId = entry.arguments?.getString("auctionId") ?: ""
+                val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
+                Scaffold(topBar = {
+                    AuctionTopBar(
                         navController = navController
                     )
-                }
-                composable(
-                    route = Screen.BidHistory.route
-                ) {entry ->
-                    val viewModel = entry.sharedViewModel<SharedViewModel>(navController = navController)
-                    val auctionState by viewModel.auctionState.collectAsStateWithLifecycle()
-                    Scaffold(topBar = {
-                        DetailsViewTopBar(
-                            caption = stringResource(id = R.string.bidHistory),
+                },
+                    bottomBar = {
+                        BottomNavigationBar(navController = navController)
+                    }) {
+                    Box(modifier = Modifier.padding(it)) {
+                        AuctionView(
+                            auctionId = auctionId,
+                            viewModel = viewModel,
                             navController = navController
                         )
-                    },
-                        bottomBar = {
-                            BottomNavigationBar(navController = navController)
-                        }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            BidHistoryView(auctionState = auctionState, viewModel = viewModel, navController = navController)
-                        }
+                    }
+                }
+            }
+            composable(
+                route = Screen.MakeABid.route + "/{auctionId}",
+                arguments = listOf(
+                    navArgument("auctionId"){
+                        type = NavType.StringType
+                    }
+                )
+            ) { entry ->
+                val auctionId = entry.arguments?.getString("auctionId") ?: ""
+                val viewModel: MakeABidViewModel = viewModel(factory = viewModelFactory)
+                MakeABid(
+                    auctionId = auctionId,
+                    viewModel = viewModel,
+                    navController = navController
+                )
+            }
+            composable(
+                route = Screen.BidHistory.route + "/{auctionId}",
+                arguments = listOf(
+                    navArgument("auctionId"){
+                        type = NavType.StringType
+                    }
+                )
+            ) {entry ->
+                val auctionId = entry.arguments?.getString("auctionId") ?: ""
+                val viewModel: BidHistoryViewModel = viewModel(factory = viewModelFactory)
+                Scaffold(topBar = {
+                    DetailsViewTopBar(
+                        caption = stringResource(id = R.string.bidHistory),
+                        navController = navController
+                    )
+                },
+                    bottomBar = {
+                        BottomNavigationBar(navController = navController)
+                    }) {
+                    Box(modifier = Modifier.padding(it)) {
+                        BidHistoryView(auctionId = auctionId ,viewModel = viewModel, navController = navController)
                     }
                 }
             }
