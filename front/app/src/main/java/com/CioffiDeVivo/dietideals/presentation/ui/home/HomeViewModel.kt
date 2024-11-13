@@ -38,7 +38,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 val userId = sharedPreferences.getString("userId", null)
                 if (userId != null) {
                     getLoggedUserData(userId)
-                    HomeUiState.Success(getLatestAuctions(userId), getEndingAuctions(), getParticipatedAuctions())
+                    HomeUiState.Success(getLatestAuctions(), getEndingAuctions(), getParticipatedAuctions())
                 } else{
                     HomeUiState.Error
                 }
@@ -68,7 +68,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun getLatestAuctions(userId: String): Array<Auction> {
+    private fun getLatestAuctions(): Array<Auction> {
         /*var randomAuctionsData: Array<Auction> = arrayOf()
         viewModelScope.launch {
             val randomAuctionsRequest = ApiService.getRandomAuctions(userId)
@@ -79,8 +79,20 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun getEndingAuctions(): Array<Auction> {
-        return arrayOf()
+        var endingAuction: Array<Auction> = arrayOf()
+        viewModelScope.launch {
+            val firstAuctionResponse = ApiService.getAuction("85217e90-b233-4535-9111-249062f89832")
+            val secondAuctionResponse = ApiService.getAuction("ccbdbf25-012c-401a-b776-0b5eb7bef49d")
+            if(firstAuctionResponse.status.isSuccess() && secondAuctionResponse.status.isSuccess()){
+                val firstAuction = Gson().fromJson(firstAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                val secondAuction = Gson().fromJson(secondAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                endingAuction += firstAuction
+                endingAuction += secondAuction
+            }
+        }
+        return endingAuction
     }
+
 
     private fun getParticipatedAuctions(): Array<Auction> {
         return arrayOf()
@@ -88,6 +100,28 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun setLoadingState(){
         _homeUiState.value = HomeUiState.Loading
+    }
+
+    fun fetchTestAuctions() {
+        var endingAuction: Array<Auction> = arrayOf()
+        viewModelScope.launch {
+            setLoadingState()
+            _homeUiState.value = try {
+                val firstAuctionResponse = ApiService.getAuction("85217e90-b233-4535-9111-249062f89832")
+                val secondAuctionResponse = ApiService.getAuction("ccbdbf25-012c-401a-b776-0b5eb7bef49d")
+                if(firstAuctionResponse.status.isSuccess() && secondAuctionResponse.status.isSuccess()){
+                    val firstAuction = Gson().fromJson(firstAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    val secondAuction = Gson().fromJson(secondAuctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    endingAuction += firstAuction
+                    endingAuction += secondAuction
+                    HomeUiState.Success(getLatestAuctions(), endingAuction, getParticipatedAuctions())
+                } else{
+                    HomeUiState.Error
+                }
+            } catch (e: Exception){
+                HomeUiState.Error
+            }
+        }
     }
 
     //Rest fo getting the correct Auctions for each category(latest, ending, participated...)

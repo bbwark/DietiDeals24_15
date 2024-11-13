@@ -17,7 +17,6 @@ import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsViewMo
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.account.AccountViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
@@ -64,9 +63,6 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             modelClass.isAssignableFrom(SearchViewModel::class.java) ->
                 SearchViewModel(application) as T
-
-            modelClass.isAssignableFrom(SharedViewModel::class.java) ->
-                SharedViewModel(application) as T
 
             modelClass.isAssignableFrom(SellViewModel::class.java) ->
                 SellViewModel(application) as T

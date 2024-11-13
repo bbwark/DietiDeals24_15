@@ -11,17 +11,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuctionTopBar(
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavController,
+    viewModel: AuctionViewModel
 ) {
     TopAppBar(
         title = { Text(text = "") },
@@ -38,7 +37,7 @@ fun AuctionTopBar(
         actions = {
             if (true) {
                 IconButton(onClick = {
-                    //Code to call the function that removes the auction from user's favourites
+                    viewModel.addOnFavourites()
                 }) {
                     Icon(
                         Icons.Default.Bookmark,
@@ -47,7 +46,7 @@ fun AuctionTopBar(
                 }
             } else {
                 IconButton(onClick = {
-                    //Code to call the function that adds the auction to user's favourites
+                    viewModel.removeFromFavourites()
                 }) {
                     Icon(
                         Icons.Default.BookmarkBorder,
@@ -62,5 +61,5 @@ fun AuctionTopBar(
 @Preview
 @Composable
 fun AuctionTopBarPreview() {
-    AuctionTopBar(navController = rememberNavController())
+    AuctionTopBar(rememberNavController(), AuctionViewModel(Application()))
 }

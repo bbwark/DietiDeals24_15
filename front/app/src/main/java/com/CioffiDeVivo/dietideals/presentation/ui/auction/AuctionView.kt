@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
 import android.app.Application
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -37,30 +36,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
-import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.models.Item
-import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellGridView
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -71,7 +63,7 @@ fun AuctionView(
 ) {
     val auctionUiState by viewModel.auctionUiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = auctionId) {
         viewModel.fetchAuctionUiState(auctionId)
     }
 
@@ -110,6 +102,7 @@ fun AuctionViewLayout(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(text = auction.id)
         if (auction.item.imagesUri.isNotEmpty()) {
             HorizontalPager(
                 state = pagerState,
@@ -177,15 +170,6 @@ fun AuctionViewLayout(
             }
             Spacer(modifier = Modifier.size(12.dp))
         }
-        //For TESTING
-        Spacer(modifier = Modifier.size(12.dp))
-        Button(onClick = {
-            navController.navigate(Screen.MakeABid.route + "/${auction.id}")
-        }) {
-            Text(text = "Make a Bid", fontSize = 18.sp)
-        }
-        Spacer(modifier = Modifier.size(12.dp))
-
         DescriptionAuctionItem(description = auction.description)
         if(userInfo) {
             UserInfoBottomSheet(

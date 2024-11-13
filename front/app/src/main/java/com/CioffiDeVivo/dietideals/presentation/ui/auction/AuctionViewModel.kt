@@ -66,4 +66,12 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
     private fun setLoadingState(){
         _auctionUiState.value = AuctionUiState.Loading
     }
+
+    fun addOnFavourites(){
+
+    }
+
+    fun removeFromFavourites(){
+
+    }
 }

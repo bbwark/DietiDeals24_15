@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Euro
@@ -35,17 +33,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.utils.CurrencyVisualTransformation
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.SharedViewModel
-import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -98,7 +91,11 @@ fun MakeABidLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        ViewTitle(title = stringResource(R.string.minStep))
+        if(auction.type == AuctionType.English){
+            ViewTitle(title = stringResource(R.string.minStep))
+        } else{
+            ViewTitle(title = stringResource(R.string.minimumBid))
+        }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.padding(bottom = 8.dp),

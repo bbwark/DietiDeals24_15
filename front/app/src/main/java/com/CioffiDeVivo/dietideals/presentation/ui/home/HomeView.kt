@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
@@ -39,17 +38,17 @@ import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
-import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel,
-    navController: NavHostController
+    navController: NavController
 ){
     val homeUiState by viewModel.homeUiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchHomeAuctions()
+        viewModel.fetchTestAuctions()
     }
 
     Column(
@@ -101,7 +100,12 @@ fun HomeView(
                 Spacer(modifier = Modifier.height(35.dp))
                 ParticipatedAuctions((homeUiState as HomeUiState.Success).participatedAuction, navController)
             }
-            is HomeUiState.Error -> RetryView(onClick = {})
+            is HomeUiState.Error -> RetryView(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Home.route)
+                }
+            )
         }
     }
 }
@@ -109,7 +113,7 @@ fun HomeView(
 @Composable
 fun LatestAuctions(
     latestAuctions: Array<Auction>,
-    navController: NavHostController,
+    navController: NavController,
 ){
     Text(
         "Latest Auctions",
@@ -126,7 +130,7 @@ fun LatestAuctions(
 @Composable
 fun EndingAuctions(
     endingAuctions: Array<Auction>,
-    navController: NavHostController,
+    navController: NavController,
 ) {
     Text(
         "Ending Auctions",
@@ -143,7 +147,7 @@ fun EndingAuctions(
 @Composable
 fun ParticipatedAuctions(
     participatedAuctions: Array<Auction>,
-    navController: NavHostController,
+    navController: NavController,
 ){
     Text(
         "Participated Auctions",

@@ -17,23 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Item
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
-import java.time.LocalDate
 
 @Composable
 fun AuctionsListElement(auction: Auction, navController: NavController) {
     Row(modifier = Modifier.padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically){
-        iconPlaceholder()
+        IconPlaceholder()
         Spacer(modifier = Modifier.width(7.dp))
         Text(
             modifier = Modifier
@@ -45,7 +39,7 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
 
 //Waiting for image system to implement images
 @Composable
-fun iconPlaceholder() {
+fun IconPlaceholder() {
     Box(
         modifier = Modifier
             .size(32.dp)

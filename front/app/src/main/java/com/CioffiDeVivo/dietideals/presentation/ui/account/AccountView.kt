@@ -38,13 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.presentation.common.sharedViewmodels.LocalUserState
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
 
-    val userState by viewModel.userState.collectAsState()
     val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
     val name = encryptedSharedPreferences.getString("name", null)
     val email = encryptedSharedPreferences.getString("email", null)
