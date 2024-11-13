@@ -37,13 +37,12 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
     val editProfileUiState by viewModel.editUiProfileState.collectAsState()
 
     val context = LocalContext.current
-    LaunchedEffect(key1 = context){
+    LaunchedEffect(Unit){
+        viewModel.getUserInfo()
         viewModel.validationEditProfileEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {
-                    Toast.makeText(context, "Correct Registration", Toast.LENGTH_SHORT).show()
                 }
-
                 else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
             }
         }

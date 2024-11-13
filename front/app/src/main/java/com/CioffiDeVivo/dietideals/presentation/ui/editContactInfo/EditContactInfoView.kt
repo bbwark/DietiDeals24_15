@@ -42,7 +42,6 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
             when(event){
                 is ValidationState.Success -> {
                 }
-
                 else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
             }
         }
