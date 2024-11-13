@@ -6,13 +6,12 @@ import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.services.AuthenticationService;
+import com.dietideals.dietideals24_25.services.JwtService;
 import com.dietideals.dietideals24_25.services.UserService;
-import com.dietideals.dietideals24_25.utils.jwtUtilities.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -21,16 +20,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private UserService userService;
     private PasswordEncoder passwordEncoder;
     private Mapper<UserEntity, UserDto> userMapper;
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtService jwtService;
 
     public AuthenticationServiceImpl(UserRepository userRepository, UserService userService,
             PasswordEncoder passwordEncoder,
-            Mapper<UserEntity, UserDto> userMapper, JwtTokenProvider jwtTokenProvider) {
+            Mapper<UserEntity, UserDto> userMapper, JwtService jwtService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -38,12 +37,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
 
             String encodedPassword = passwordEncoder.encode(password);
-            UUID userId = userService.findUserIdByEmailPassword(email, encodedPassword);
-            if (userId == null) {
-                return new LoginDto(null, "");
-            }
+            UserEntity user = userService.findUserByEmailPassword(email, encodedPassword)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            UserDto userDto = userMapper.mapTo(user);
 
-            String token = jwtTokenProvider.generateToken(userId.toString());
+            String token = jwtService.generateToken(userDto.getId().toString(), userDto.getAuthorities());
             UserEntity userEntity = userRepository.findByEmail(email).get();
             Optional<UserDto> userResponse = Optional.ofNullable(userMapper.mapTo(userEntity));
             return new LoginDto(userResponse, token);
