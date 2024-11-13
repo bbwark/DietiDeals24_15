@@ -171,12 +171,21 @@ fun AuctionViewLayout(
         } else{
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = {
-                navController.navigate(Screen.MakeABid.route)
+                navController.navigate(Screen.MakeABid.route + "/${auction.id}")
             }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.size(12.dp))
         }
+        //For TESTING
+        Spacer(modifier = Modifier.size(12.dp))
+        Button(onClick = {
+            navController.navigate(Screen.MakeABid.route + "/${auction.id}")
+        }) {
+            Text(text = "Make a Bid", fontSize = 18.sp)
+        }
+        Spacer(modifier = Modifier.size(12.dp))
+
         DescriptionAuctionItem(description = auction.description)
         if(userInfo) {
             UserInfoBottomSheet(
