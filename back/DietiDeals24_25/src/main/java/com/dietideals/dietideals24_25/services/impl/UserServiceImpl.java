@@ -31,12 +31,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UUID findUserIdByEmailPassword(String email, String password) {
-        Optional<UserEntity> userEntity = userRepository.findByEmailAndPassword(email, password);
-        if (userEntity.isPresent()) {
-            return userEntity.get().getId();
-        }
-        return null;
+    public Optional<UserEntity> findUserByEmailPassword(String email, String password) {
+        return userRepository.findByEmailAndPassword(email, password);
     }
 
     @Override
@@ -57,6 +53,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void delete(UUID id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean checkAuthorities(UUID userId, String authority) {
+        return userRepository.checkAuthorities(userId, authority);
     }
 
     @Override

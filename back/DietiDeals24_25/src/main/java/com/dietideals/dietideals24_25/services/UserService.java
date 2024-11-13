@@ -18,7 +18,9 @@ public interface UserService {
 
     Boolean exists(UUID id);
 
-    UUID findUserIdByEmailPassword(String email, String password);
+    Optional<UserEntity> findUserByEmailPassword(String email, String password);
+
+    Boolean checkAuthorities(UUID userId, String authority);
 
     void delete(UUID id);
 
