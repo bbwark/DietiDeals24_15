@@ -121,7 +121,9 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         })
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
-            navController.navigate(Screen.Home.route)
+            navController.navigate(Screen.Sell.route){
+                popUpTo(Screen.CreateAuction.route){ inclusive = true }
+            }
         }
         is CreateAuctionUiState.CreateAuctionParams -> {
             Column(
@@ -253,8 +255,6 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     onClick = {
                         showDialog.value = true
                         viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
-
-                        /*ADD AUCTION WITH A SPECIFIC METHOD FOR DIFFERENCES BETWEEN ENGLISH AND SILENT*/
                     },
                     modifier = Modifier
                         .wrapContentWidth()
