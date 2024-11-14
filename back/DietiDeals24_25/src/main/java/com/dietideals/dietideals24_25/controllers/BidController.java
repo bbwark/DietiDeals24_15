@@ -93,9 +93,10 @@ public class BidController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteBid(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteBid(@PathVariable("id") String id) {
         try {
-            bidService.delete(id);
+            UUID idConverted = UUID.fromString(id);
+            bidService.delete(idConverted);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -103,9 +104,10 @@ public class BidController {
     }
 
     @GetMapping(path = "/auction/{auctionId}")
-    public ResponseEntity<List<BidDto>> getBidsByAuctionId(@PathVariable("auctionId") UUID auctionId) {
+    public ResponseEntity<List<BidDto>> getBidsByAuctionId(@PathVariable("auctionId") String auctionId) {
         try {
-            List<BidEntity> bidEntities = bidService.findByAuctionId(auctionId);
+            UUID id = UUID.fromString(auctionId);
+            List<BidEntity> bidEntities = bidService.findByAuctionId(id);
             List<BidDto> result = bidEntities.stream()
                     .map(bidEntity -> bidMapper.mapTo(bidEntity))
                     .collect(java.util.stream.Collectors.toList());
