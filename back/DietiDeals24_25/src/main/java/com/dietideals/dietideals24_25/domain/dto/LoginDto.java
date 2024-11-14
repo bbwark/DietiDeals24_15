@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class LoginDto {
 
-    private Optional<UserDto> user;
+    private UserDto user;
     private String jwt;
 
 }
