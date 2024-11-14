@@ -77,7 +77,11 @@ public class BidController {
             }
 
             if (auctionDto.getType() == AuctionType.Silent) {
-                if (bid.getValue() >= Float.parseFloat(auctionDto.getBuyoutPrice())) {
+                Float buyoutPrice = null;
+                if (auctionDto.getBuyoutPrice() != null && !auctionDto.getBuyoutPrice().isEmpty()) {
+                    buyoutPrice = Float.parseFloat(auctionDto.getBuyoutPrice());
+                }
+                if (buyoutPrice != null && bid.getValue() >= buyoutPrice) {
                     auctionDto.setEndingDate(Optional.of(LocalDateTime.now().minus(1, ChronoUnit.DAYS))); // if buyout price is reached, auction ends
                     auctionService.save(auctionMapper.mapFrom(auctionDto));
                 }
