@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -21,12 +20,11 @@ public class DietiDeals2425Application {
     }
 
     @Bean
-    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
+    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository) {
         return args -> {
             if (roleRepository.count() == 0) {
-                roleRepository.save(new RoleEntity("ADMIN"));
-                roleRepository.save(new RoleEntity("USER"));
+                roleRepository.save(new RoleEntity("BUYER"));
+                roleRepository.save(new RoleEntity("SELLER"));
             }
         };
     }
