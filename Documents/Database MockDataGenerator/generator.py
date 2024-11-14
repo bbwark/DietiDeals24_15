@@ -15,13 +15,13 @@ def generate_uuid():
     return str(uuid.uuid4())
 
 # Genera UUID per i ruoli
-role_user_uuid = generate_uuid()
-role_admin_uuid = generate_uuid()
+role_buyer_uuid = generate_uuid()
+role_seller_uuid = generate_uuid()
 
 # Creazione dei ruoli con UUID validi
 roles = [
-    (role_user_uuid, 'USER'),
-    (role_admin_uuid, 'ADMIN')
+    (role_buyer_uuid, 'BUYER'),
+    (role_seller_uuid, 'SELLER')
 ]
 
 
@@ -38,16 +38,20 @@ for _ in range(NUM_USERS):
     surname = fake.last_name()
     email = fake.email()
     password = fake.password()
-    is_seller = fake.boolean(chance_of_getting_true=50)
+    is_seller = False
     bio = fake.sentence(nb_words=6)
     address = fake.address().replace("\n", ", ")
     zip_code = fake.zipcode()
     country = random.choice(["Italy", "Spain", "Germany", "France", "Belgium"])
     phone_number = fake.phone_number()
-    users.append((user_id, email, name, surname, password, is_seller, bio, address, zip_code, country, phone_number))
     
-    # Collegamento con il ruolo USER
-    user_role_junction.append((user_id, role_user_uuid))
+    # Collegamento con il ruolo BUYER o SELLER
+    user_role_junction.append((user_id, role_buyer_uuid))
+    if random.random() > 0.3:
+        user_role_junction.append((user_id, role_seller_uuid))
+        is_seller = True
+        
+    users.append((user_id, email, name, surname, password, is_seller, bio, address, zip_code, country, phone_number))
 
 # Generazione carte di credito
 credit_cards = []
