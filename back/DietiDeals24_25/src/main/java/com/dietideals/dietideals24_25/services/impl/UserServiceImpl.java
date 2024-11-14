@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<UserEntity> findUserByEmailPassword(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password);
+    public Optional<UserEntity> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
