@@ -44,9 +44,10 @@ public class ItemController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable("id") String id) {
         try {
-            itemService.delete(id);
+            UUID idConverted = UUID.fromString(id);
+            itemService.delete(idConverted);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

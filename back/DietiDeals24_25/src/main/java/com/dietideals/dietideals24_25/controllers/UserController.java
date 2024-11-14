@@ -40,21 +40,22 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         try {
-            if (!userService.exists(id)) {
+            UUID idConverted = UUID.fromString(id);
+            if (!userService.exists(idConverted)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            userDto.setId(id);
+            userDto.setId(idConverted);
             if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
                 userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             } else {
-                UserEntity existingUser = userService.findById(id).get();
+                UserEntity existingUser = userService.findById(idConverted).get();
                 userDto.setPassword(existingUser.getPassword());
             }
 
-            boolean hasSellerAuthority = userService.checkAuthorities(id, "SELLER");
+            boolean hasSellerAuthority = userService.checkAuthorities(idConverted, "SELLER");
             userDto.setIsSeller(hasSellerAuthority);
 
             UserEntity userEntity = userMapper.mapFrom(userDto);
@@ -66,9 +67,10 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("id") UUID id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") String id) {
         try {
-            Optional<UserEntity> foundUser = userService.findById(id);
+            UUID idConverted = UUID.fromString(id);
+            Optional<UserEntity> foundUser = userService.findById(idConverted);
             return foundUser.map(userEntity -> {
                 UserDto userDto = userMapper.mapTo(userEntity);
                 userDto.setPassword("");
@@ -80,9 +82,10 @@ public class UserController {
     }
 
     @GetMapping(path = "/info/{id}")
-    public ResponseEntity<UserDto> getUserInfo(@PathVariable("id") UUID id) {
+    public ResponseEntity<UserDto> getUserInfo(@PathVariable("id") String id) {
         try {
-            Optional<UserEntity> foundUser = userService.findById(id);
+            UUID idConverted = UUID.fromString(id);
+            Optional<UserEntity> foundUser = userService.findById(idConverted);
             return foundUser.map(userEntity -> {
                 UserDto userDto = userMapper.mapTo(userEntity);
                 userDto = new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(), userDto.getBio());
@@ -105,9 +108,10 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         try {
-            userService.delete(id);
+            UUID idConverted = UUID.fromString(id);
+            userService.delete(idConverted);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

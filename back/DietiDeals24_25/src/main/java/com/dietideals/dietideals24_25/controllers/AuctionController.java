@@ -75,13 +75,14 @@ public class AuctionController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") UUID id, @RequestBody AuctionDto auction) {
+    public ResponseEntity<AuctionDto> updateAuction(@PathVariable("id") String id, @RequestBody AuctionDto auction) {
         try {
-            if (!auctionService.exists(id)) {
+            UUID idConverted = UUID.fromString(id);
+            if (!auctionService.exists(idConverted)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            auction.setId(id);
+            auction.setId(idConverted);
             AuctionEntity auctionEntity = auctionMapper.mapFrom(auction);
             AuctionEntity savedAuctionEntity = auctionService.save(auctionEntity);
             return new ResponseEntity<>(auctionMapper.mapTo(savedAuctionEntity), HttpStatus.OK);
@@ -91,9 +92,10 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") UUID id) {
+    public ResponseEntity<AuctionDto> getAuction(@PathVariable("id") String id) {
         try {
-            Optional<AuctionEntity> foundAuction = auctionService.findById(id);
+            UUID idConverted = UUID.fromString(id);
+            Optional<AuctionEntity> foundAuction = auctionService.findById(idConverted);
             return foundAuction.map(auctionEntity -> {
                 AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
                 return new ResponseEntity<>(auctionDto, HttpStatus.OK);
@@ -104,9 +106,10 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/bidders/{id}")
-    public ResponseEntity<List<UserDto>> getAuctionBidders(@PathVariable("id") UUID id) {
+    public ResponseEntity<List<UserDto>> getAuctionBidders(@PathVariable("id") String id) {
         try {
-            List<UserEntity> bidders = auctionService.findBiddersByAuctionId(id);
+            UUID idConverted = UUID.fromString(id);
+            List<UserEntity> bidders = auctionService.findBiddersByAuctionId(idConverted);
             List<UserDto> result = bidders.stream()
                     .map(bidder -> userMapper.mapTo(bidder))
                     .collect(Collectors.toList());
@@ -134,8 +137,9 @@ public class AuctionController {
     }
 
     @GetMapping(path = "/owner/{id}")
-    public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") UUID ownerId) {
+    public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") String id) {
         try {
+            UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))

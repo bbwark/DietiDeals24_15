@@ -50,8 +50,9 @@ public class CreditCardController {
     }
 
     @GetMapping(path = "/user/{userId}")
-    public ResponseEntity<List<CreditCardDto>> getCreditCardsByUserId(@PathVariable("userId") UUID userId) {
+    public ResponseEntity<List<CreditCardDto>> getCreditCardsByUserId(@PathVariable("userId") String id) {
         try {
+            UUID userId = UUID.fromString(id);
             List<CreditCardEntity> creditCardEntities = creditCardService.findByUserId(userId);
             List<CreditCardDto> result = creditCardEntities.stream()
                     .map(creditCardEntity -> creditCardMapper.mapTo(creditCardEntity))
