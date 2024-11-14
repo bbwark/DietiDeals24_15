@@ -18,7 +18,7 @@ public interface UserService {
 
     Boolean exists(UUID id);
 
-    Optional<UserEntity> findUserByEmailPassword(String email, String password);
+    Optional<UserEntity> findUserByEmail(String email) ;
 
     Boolean checkAuthorities(UUID userId, String authority);
 
