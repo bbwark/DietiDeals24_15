@@ -1,6 +1,7 @@
 import uuid
 import random
 from faker import Faker
+from datetime import datetime
 
 # Utilizzare Faker per generare dati casuali realistici
 fake = Faker()
@@ -72,12 +73,17 @@ for _ in range(NUM_AUCTIONS):
     user_id = random.choice(user_uuids)  # owner scelto casualmente tra gli utenti
     auction_type = random.choice(['English', 'Silent'])
     category = random.choice(['Electronic', 'Games', 'House', 'Engine', 'Book', 'Fashion', 'Sport', 'Music', 'Other'])
-    ending_date = fake.date_between(start_date='today', end_date='+30d')
-    expired = fake.boolean(chance_of_getting_true=20)
+    ending_date = fake.date_time_between(start_date='-2y', end_date='+2y').strftime('%Y-%m-%dT%H:%M:%S.%f')
     description = fake.text(max_nb_chars=200)
     min_step = str(random.randint(1, 10))
     interval = str(random.randint(1, 5))
     starting_price = str(round(random.uniform(10, 1000), 2))
+    
+    ending_date_dt = datetime.strptime(ending_date, '%Y-%m-%dT%H:%M:%S.%f')
+    if ending_date_dt > datetime.now():
+        expired = False
+    else:
+        expired = random.random() < 0.9
     
     auctions.append((auction_id, user_id, auction_type, category, ending_date, expired, description, min_step, interval, starting_price))
     
