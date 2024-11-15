@@ -33,6 +33,8 @@ public class AuctionController {
     private Mapper<ItemEntity, ItemDto> itemMapper;
     private Mapper<UserEntity, UserDto> userMapper;
 
+    private final int MAX_PAGE_SIZE = 5;
+
     public AuctionController(AuctionService auctionService, UserService userService, ItemService itemService,
             Mapper<AuctionEntity, AuctionDto> auctionMapper, Mapper<ItemEntity, ItemDto> itemMapper,
             Mapper<UserEntity, UserDto> userMapper) {
@@ -140,7 +142,35 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") String id) {
         try {
             UUID ownerId = UUID.fromString(id);
-            List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId);
+            List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId, MAX_PAGE_SIZE);
+            List<AuctionDto> result = auctions.stream()
+                    .map(auction -> auctionMapper.mapTo(auction))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/participated/{id}")
+    public ResponseEntity<List<AuctionDto>> listParticipatedAuctions(@PathVariable("id") String id) {
+        try {
+            UUID ownerId = UUID.fromString(id);
+            List<AuctionEntity> auctions = auctionService.findParticipatedAuctions(ownerId, MAX_PAGE_SIZE);
+            List<AuctionDto> result = auctions.stream()
+                    .map(auction -> auctionMapper.mapTo(auction))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(result, HttpStatus.OK); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/ending/{id}")
+    public ResponseEntity<List<AuctionDto>> listEndingAuctions(@PathVariable("id") String id) {
+        try {
+            UUID ownerId = UUID.fromString(id);
+            List<AuctionEntity> auctions = auctionService.findEndingAuctions(ownerId, MAX_PAGE_SIZE);
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))
                     .collect(Collectors.toList());
