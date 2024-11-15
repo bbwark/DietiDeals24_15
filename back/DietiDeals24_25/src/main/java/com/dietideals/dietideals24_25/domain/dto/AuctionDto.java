@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -27,7 +26,7 @@ public class AuctionDto {
     @Builder.Default
     private ArrayList<BidDto> bids = new ArrayList<>();
 
-    private Optional<LocalDateTime> endingDate;
+    private LocalDateTime endingDate;
 
     private Boolean expired;
 
