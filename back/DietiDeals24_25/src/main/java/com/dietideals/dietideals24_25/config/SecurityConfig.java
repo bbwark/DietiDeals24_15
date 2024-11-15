@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().hasAuthority("BUYER"))
-                .exceptionHandling(handling -> handling //TODO still handling as unauthorized things such as 400 json parse error when create auction with wrong Date format
+                .exceptionHandling(handling -> handling
                         .accessDeniedHandler(new AccessDeniedHandlerImpl() {
                             @Override
                             public void handle(HttpServletRequest request, HttpServletResponse response,

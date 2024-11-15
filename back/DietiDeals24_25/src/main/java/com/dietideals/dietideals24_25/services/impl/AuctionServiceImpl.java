@@ -38,8 +38,8 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<AuctionEntity> findRandomAuctions(UUID ownerId) {
-        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by("id"));
+    public List<AuctionEntity> findRandomAuctions(UUID ownerId, int maxNumberOfAuctions) {
+        PageRequest pageRequest = PageRequest.of(0, maxNumberOfAuctions, Sort.by("id"));
         return auctionRepository.findRandomAuctions(ownerId, pageRequest);
     }
 
@@ -61,5 +61,17 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void delete(UUID id) {
         auctionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<AuctionEntity> findParticipatedAuctions(UUID ownerId, int maxNumberOfAuctions) {
+        PageRequest pageRequest = PageRequest.of(0, maxNumberOfAuctions, Sort.by("id"));
+        return auctionRepository.findParticipatedAuctions(ownerId, pageRequest);
+    }
+
+    @Override
+    public List<AuctionEntity> findEndingAuctions(UUID ownerId, int maxNumberOfAuctions) {
+        PageRequest pageRequest = PageRequest.of(0, maxNumberOfAuctions, Sort.by("id"));
+        return auctionRepository.findEndingAuctions(ownerId, pageRequest);
     }
 }

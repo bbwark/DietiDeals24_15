@@ -25,4 +25,10 @@ public interface AuctionRepository extends CrudRepository<AuctionEntity, UUID> {
 
     @Query("SELECT a FROM AuctionEntity a WHERE a.endingDate < CURRENT_TIMESTAMP AND a.expired = false")
     List<AuctionEntity> findExpiredAuctions();
+
+    @Query("SELECT DISTINCT a FROM AuctionEntity a INNER JOIN a.bids b WHERE b.user.id = :id ")
+    List<AuctionEntity> findParticipatedAuctions(@Param("id") UUID userId, Pageable pageable);
+
+    @Query("SELECT a FROM AuctionEntity a WHERE a.endingDate < DATEADD(MINUTE, -30, CURRENT_TIMESTAMP) AND a.owner.id != :id ORDER BY a.endingDate DESC")
+    List<AuctionEntity> findEndingAuctions(@Param("id") UUID id, Pageable pageable);
 }
