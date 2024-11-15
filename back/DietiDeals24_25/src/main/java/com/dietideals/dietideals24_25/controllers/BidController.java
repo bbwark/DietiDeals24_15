@@ -14,7 +14,6 @@ import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.utils.SNSService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -59,9 +58,14 @@ public class BidController {
                     .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + " not found"));
             AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
 
+            if (auctionDto.getEndingDate().isBefore(LocalDateTime.now()) || auctionDto.getExpired()) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+
             if (auctionDto.getOwnerId().equals(bid.getUserId())) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
+
 
             if (auctionDto.getType() == AuctionType.English) {
                 List<BidEntity> bidEntities = bidService.findByAuctionId(auctionDto.getId());
@@ -74,22 +78,26 @@ public class BidController {
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
                     }
                 }
+                auctionEntity.setEndingDate(LocalDateTime.now().plus(Long.parseLong(auctionDto.getInterval()), ChronoUnit.HOURS));
             }
-
+            boolean buyoutPriceReached = false;
             if (auctionDto.getType() == AuctionType.Silent) {
                 Float buyoutPrice = null;
                 if (auctionDto.getBuyoutPrice() != null && !auctionDto.getBuyoutPrice().isEmpty()) {
                     buyoutPrice = Float.parseFloat(auctionDto.getBuyoutPrice());
                 }
                 if (buyoutPrice != null && bid.getValue() >= buyoutPrice) {
-                    auctionDto.setEndingDate(Optional.of(LocalDateTime.now().minus(1, ChronoUnit.DAYS))); // if buyout price is reached, auction ends
-                    auctionService.save(auctionMapper.mapFrom(auctionDto));
+                    auctionEntity.setEndingDate(LocalDateTime.now().minus(1, ChronoUnit.HOURS)); // if buyout price is reached, auction ends
+                    buyoutPriceReached = true;
                 }
             }
 
             BidEntity bidEntity = bidMapper.mapFrom(bid);
             BidEntity savedBidEntity = bidService.save(bidEntity);
             BidDto responseBid = bidMapper.mapTo(savedBidEntity);
+            if (auctionDto.getType() == AuctionType.English || buyoutPriceReached) {
+                auctionService.save(auctionMapper.mapFrom(auctionDto));
+            }
             return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
