@@ -20,8 +20,6 @@ public interface UserService {
 
     Optional<UserEntity> findUserByEmail(String email) ;
 
-    Boolean checkAuthorities(UUID userId, String authority);
-
     void delete(UUID id);
 
 }

@@ -56,11 +56,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Boolean checkAuthorities(UUID userId, String authority) {
-        return userRepository.checkAuthorities(userId, authority);
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }

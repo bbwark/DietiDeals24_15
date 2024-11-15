@@ -1,20 +1,21 @@
 package com.dietideals.dietideals24_25.controllers;
 
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
+import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
+import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -22,21 +23,18 @@ import java.util.UUID;
 public class UserController {
 
     private UserService userService;
+    private RoleService roleService;
     private Mapper<UserEntity, UserDto> userMapper;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper,
+    public UserController(UserService userService, RoleService roleService, Mapper<UserEntity, UserDto> userMapper,
             PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.roleService = roleService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @GetMapping("/google")
-    public ResponseEntity<?> getOAuthUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        return ResponseEntity.ok(oAuth2User.getAttributes());
     }
 
     @PutMapping(path = "/{id}")
@@ -55,10 +53,27 @@ public class UserController {
                 userDto.setPassword(existingUser.getPassword());
             }
 
-            boolean hasSellerAuthority = userService.checkAuthorities(idConverted, "SELLER");
-            userDto.setIsSeller(hasSellerAuthority);
+            if (userDto.getIsSeller() &&
+                    (userDto.getAddress() == null || userDto.getAddress().isEmpty() ||
+                            userDto.getZipcode() == null || userDto.getZipcode().isEmpty() ||
+                            userDto.getCountry() == null || userDto.getCountry().isEmpty() ||
+                            userDto.getPhoneNumber() == null || userDto.getPhoneNumber().isEmpty() ||
+                            userDto.getCreditCards() == null || userDto.getCreditCards().isEmpty())) {
+                userDto.setIsSeller(false);
+            }
+
+            Set<RoleEntity> authorities = new HashSet<>();
+            RoleEntity buyerRole = roleService.findByAuthority("BUYER")
+                    .orElseThrow(() -> new RuntimeException("BUYER role not found"));
+            if (userDto.getIsSeller()) {
+                RoleEntity sellerRole = roleService.findByAuthority("SELLER")
+                        .orElseThrow(() -> new RuntimeException("SELLER role not found"));
+                authorities.add(sellerRole);
+            }
+            authorities.add(buyerRole);
 
             UserEntity userEntity = userMapper.mapFrom(userDto);
+            userEntity.setAuthorities(authorities);
             UserEntity savedUserEntity = userService.save(userEntity);
             return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.OK);
         } catch (Exception e) {
@@ -93,17 +108,6 @@ public class UserController {
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/loginSuccesful")
-    public String logInGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-        UUID id = oAuth2AuthenticationToken.getPrincipal().getAttribute("id");
-        Optional<UserEntity> userEntity = userService.findById(id);
-        if (userEntity.isPresent()) {
-            return "Benvenuto";
-        } else {
-            return "Utente non trovato";
         }
     }
 
