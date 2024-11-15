@@ -73,10 +73,14 @@ public class AuthenticationController {
                 user.setIsSeller(false);
             }
 
+            Set<RoleEntity> authorities = new HashSet<>();
             RoleEntity buyerRole = roleService.findByAuthority("BUYER")
                     .orElseThrow(() -> new RuntimeException("BUYER role not found"));
-
-            Set<RoleEntity> authorities = new HashSet<>();
+            if (user.getIsSeller()) {
+                RoleEntity sellerRole = roleService.findByAuthority("SELLER")
+                        .orElseThrow(() -> new RuntimeException("SELLER role not found"));
+                authorities.add(sellerRole);
+            }
             authorities.add(buyerRole);
 
             // Map to UserEntity and set proper authorities
