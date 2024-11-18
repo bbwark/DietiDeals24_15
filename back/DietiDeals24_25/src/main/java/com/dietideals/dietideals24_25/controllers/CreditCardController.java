@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,7 @@ public class CreditCardController {
         this.creditCardMapper = creditCardMapper;
     }
 
+    @PreAuthorize("hasRole('BUYER')")
     @PostMapping
     public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
         try {
@@ -38,6 +40,7 @@ public class CreditCardController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorizedByCardNumber(#creditCardNumber)")
     @DeleteMapping(path = "/{creditCardNumber}")
     public ResponseEntity<Void> deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber) {
         try {
@@ -49,6 +52,7 @@ public class CreditCardController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/user/{userId}")
     public ResponseEntity<List<CreditCardDto>> getCreditCardsByUserId(@PathVariable("userId") String id) {
         try {

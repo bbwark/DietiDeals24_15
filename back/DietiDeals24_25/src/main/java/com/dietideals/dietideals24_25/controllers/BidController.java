@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +49,7 @@ public class BidController {
         this.userMapper = userMapper;
     }
 
+    @PreAuthorize("hasRole('BUYER')")
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         try {
@@ -107,6 +109,7 @@ public class BidController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorizedByBidId(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteBid(@PathVariable("id") String id) {
         try {
@@ -118,6 +121,7 @@ public class BidController {
         }
     }
 
+    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#auctionId)")
     @GetMapping(path = "/auction/{auctionId}")
     public ResponseEntity<List<BidDto>> getBidsByAuctionId(@PathVariable("auctionId") String auctionId) {
         try {
@@ -132,6 +136,7 @@ public class BidController {
         }
     }
 
+    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#bid.getAuctionId())")
     @PostMapping(path = "/chooseWinningBid")
     public ResponseEntity<Void> chooseWinningBid(@RequestBody BidDto bid) {
         try {
