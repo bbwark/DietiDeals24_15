@@ -55,7 +55,6 @@ public class UserController {
                 userDto.setPassword(existingUser.getPassword());
             }
 
-            if (userDto.getIsSeller() &&
             if (userDto.getIsSeller() != null && userDto.getIsSeller() &&
                     (userDto.getAddress() == null || userDto.getAddress().isEmpty() ||
                             userDto.getZipcode() == null || userDto.getZipcode().isEmpty() ||
