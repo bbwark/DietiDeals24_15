@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +29,7 @@ public class ItemController {
         this.itemMapper = itemMapper;
     }
 
+    @PreAuthorize("hasRole('SELLER')")
     @PostMapping
     public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto item) {
         try {
@@ -43,6 +45,7 @@ public class ItemController {
         }
     }
 
+    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByItemId(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable("id") String id) {
         try {

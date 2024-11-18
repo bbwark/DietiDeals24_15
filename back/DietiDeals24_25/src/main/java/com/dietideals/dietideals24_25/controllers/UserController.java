@@ -10,6 +10,7 @@ import com.dietideals.dietideals24_25.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PreAuthorize("hasRole('BUYER') && #id == #userDto.getId().toString() && @userSecurityService.isUserAuthorized(#id)")
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         try {
@@ -81,6 +83,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") String id) {
         try {
@@ -96,6 +99,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER')")
     @GetMapping(path = "/info/{id}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable("id") String id) {
         try {
@@ -111,6 +115,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         try {
