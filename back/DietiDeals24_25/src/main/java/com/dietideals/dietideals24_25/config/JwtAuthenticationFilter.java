@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,11 +13,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
+import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.JwtService;
 import com.dietideals.dietideals24_25.services.UserService;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,10 +27,12 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserService userService;
+    private final Mapper<UserEntity, UserDto> userMapper;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserService userService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserService userService, Mapper<UserEntity, UserDto> userMapper) {
         this.jwtService = jwtService;
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -47,15 +51,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         List<String> roles = jwtService.extractRolesFromToken(token);
 
         Optional<UserEntity> userEntityOpt = userService.findById(UUID.fromString(userId));
-        
-        if (userEntityOpt.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDto userDto = null;
+        if (userEntityOpt.isPresent()) {
             UserEntity userEntity = userEntityOpt.get();
-            UserDto userDto = new UserDto(
-                userEntity.getId(),
-                userEntity.getEmail(),
-                userEntity.getName(),
-                new HashSet<>(roles)
-            );
+            userDto = userMapper.mapTo(userEntity);
+        }
+
+        if (userDto != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDto,
