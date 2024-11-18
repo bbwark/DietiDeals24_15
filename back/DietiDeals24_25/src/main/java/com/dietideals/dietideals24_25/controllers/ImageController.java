@@ -18,7 +18,7 @@ public class ImageController {
     @Autowired
     private S3Service s3Service;
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAuthority('SELLER')")
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {

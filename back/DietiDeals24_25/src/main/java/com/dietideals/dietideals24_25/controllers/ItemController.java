@@ -29,7 +29,7 @@ public class ItemController {
         this.itemMapper = itemMapper;
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAuthority('SELLER')")
     @PostMapping
     public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto item) {
         try {
@@ -45,7 +45,7 @@ public class ItemController {
         }
     }
 
-    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByItemId(#id)")
+    @PreAuthorize("hasAuthority('SELLER') && @userSecurityService.isUserAuthorizedByItemId(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable("id") String id) {
         try {

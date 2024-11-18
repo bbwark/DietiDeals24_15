@@ -27,7 +27,7 @@ public class CreditCardController {
         this.creditCardMapper = creditCardMapper;
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     @PostMapping
     public ResponseEntity<CreditCardDto> createCreditCard(@RequestBody CreditCardDto creditCard) {
         try {
@@ -40,7 +40,7 @@ public class CreditCardController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorizedByCardNumber(#creditCardNumber)")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorizedByCardNumber(#creditCardNumber)")
     @DeleteMapping(path = "/{creditCardNumber}")
     public ResponseEntity<Void> deleteCreditCard(@PathVariable("creditCardNumber") String creditCardNumber) {
         try {
@@ -52,7 +52,7 @@ public class CreditCardController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/user/{userId}")
     public ResponseEntity<List<CreditCardDto>> getCreditCardsByUserId(@PathVariable("userId") String id) {
         try {

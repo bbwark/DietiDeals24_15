@@ -49,7 +49,7 @@ public class BidController {
         this.userMapper = userMapper;
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         try {
@@ -109,7 +109,7 @@ public class BidController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorizedByBidId(#id)")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorizedByBidId(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteBid(@PathVariable("id") String id) {
         try {
@@ -121,7 +121,7 @@ public class BidController {
         }
     }
 
-    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#auctionId)")
+    @PreAuthorize("hasAuthority('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#auctionId)")
     @GetMapping(path = "/auction/{auctionId}")
     public ResponseEntity<List<BidDto>> getBidsByAuctionId(@PathVariable("auctionId") String auctionId) {
         try {
@@ -136,7 +136,7 @@ public class BidController {
         }
     }
 
-    @PreAuthorize("hasRole('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#bid.getAuctionId())")
+    @PreAuthorize("hasAuthority('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#bid.getAuctionId())")
     @PostMapping(path = "/chooseWinningBid")
     public ResponseEntity<Void> chooseWinningBid(@RequestBody BidDto bid) {
         try {

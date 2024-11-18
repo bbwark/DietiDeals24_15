@@ -38,7 +38,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PreAuthorize("hasRole('BUYER') && #id == #userDto.getId().toString() && @userSecurityService.isUserAuthorized(#id)")
+    @PreAuthorize("hasAuthority('BUYER') && #id == #userDto.getId().toString() && @userSecurityService.isUserAuthorized(#id)")
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         try {
@@ -83,7 +83,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") String id) {
         try {
@@ -99,7 +99,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     @GetMapping(path = "/info/{id}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable("id") String id) {
         try {
@@ -115,7 +115,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('BUYER') && @userSecurityService.isUserAuthorized(#id)")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         try {
