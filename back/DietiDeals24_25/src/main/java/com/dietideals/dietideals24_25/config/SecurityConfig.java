@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().hasAuthority("BUYER"))
+                        .anyRequest().hasAuthority("BUYER")) //TODO: Complete routes
                 .exceptionHandling(handling -> handling
                         .accessDeniedHandler(new AccessDeniedHandlerImpl() {
                             @Override

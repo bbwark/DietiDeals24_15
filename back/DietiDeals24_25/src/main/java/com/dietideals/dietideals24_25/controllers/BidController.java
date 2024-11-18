@@ -66,20 +66,23 @@ public class BidController {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
-
+            // ENGLISH AUCTION HANDLING
             if (auctionDto.getType() == AuctionType.English) {
                 List<BidEntity> bidEntities = bidService.findByAuctionId(auctionDto.getId());
                 List<BidDto> bidDtos = bidEntities.stream()
                         .map(bidEntity -> bidMapper.mapTo(bidEntity))
                         .collect(java.util.stream.Collectors.toList());
 
+                Float minStep = (auctionDto.getMinStep() != null && !auctionDto.getMinStep().isEmpty()) ? Float.parseFloat(auctionDto.getMinStep()) : 0;
                 for (BidDto bidDto : bidDtos) {
-                    if (bidDto.getValue() >= bid.getValue()) {
+                    if (bidDto.getValue() >= minStep) {
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
                     }
                 }
                 auctionEntity.setEndingDate(LocalDateTime.now().plus(Long.parseLong(auctionDto.getInterval()), ChronoUnit.HOURS));
             }
+
+            // SILENT AUCTION HANDLING
             boolean buyoutPriceReached = false;
             if (auctionDto.getType() == AuctionType.Silent) {
                 Float buyoutPrice = null;
@@ -96,7 +99,7 @@ public class BidController {
             BidEntity savedBidEntity = bidService.save(bidEntity);
             BidDto responseBid = bidMapper.mapTo(savedBidEntity);
             if (auctionDto.getType() == AuctionType.English || buyoutPriceReached) {
-                auctionService.save(auctionMapper.mapFrom(auctionDto));
+                auctionService.save(auctionMapper.mapFrom(auctionDto)); //only if new bid is placed in English auction or buyout price is reached in Silent auction
             }
             return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
         } catch (Exception e) {
