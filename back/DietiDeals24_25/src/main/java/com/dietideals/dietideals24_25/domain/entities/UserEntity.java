@@ -38,16 +38,16 @@ public class UserEntity implements UserDetails {
     private Boolean isSeller;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.ALL)
     private List<AuctionEntity> ownedAuctions = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_favourite_auctions", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "auction_id"))
     private Set<AuctionEntity> favouriteAuctions = new HashSet<>();
 
     @Builder.Default
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_device_tokens", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "device_token")
     private List<String> deviceTokens = new ArrayList<>();
@@ -68,11 +68,11 @@ public class UserEntity implements UserDetails {
     private String phoneNumber;
 
     @Builder.Default
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.ALL)
     private List<CreditCardEntity> creditCards = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private List<BidEntity> bids = new ArrayList<>();
 
     @Builder.Default
