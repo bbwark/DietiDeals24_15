@@ -1,6 +1,5 @@
 package com.dietideals.dietideals24_25.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,26 +24,32 @@ import jakarta.transaction.Transactional;
 
 import java.util.UUID;
 
-@Service
+@Service("userSecurityService")
 public class UserSecurityServiceImpl implements UserSecurityService {
 
-    @Autowired
     private AuctionService auctionService;
-    @Autowired
     private BidService bidService;
-    @Autowired
     private ItemService itemService;
-    @Autowired
     private CreditCardService creditCardService;
 
-    @Autowired
     private Mapper<AuctionEntity, AuctionDto> auctionMapper;
-    @Autowired
     private Mapper<BidEntity, BidDto> bidMapper;
-    @Autowired
     private Mapper<ItemEntity, ItemDto> itemMapper;
-    @Autowired
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
+
+    public UserSecurityServiceImpl(AuctionService auctionService, BidService bidService, ItemService itemService,
+            CreditCardService creditCardService, Mapper<AuctionEntity, AuctionDto> auctionMapper,
+            Mapper<BidEntity, BidDto> bidMapper, Mapper<ItemEntity, ItemDto> itemMapper,
+            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper) {
+        this.auctionService = auctionService;
+        this.bidService = bidService;
+        this.itemService = itemService;
+        this.creditCardService = creditCardService;
+        this.auctionMapper = auctionMapper;
+        this.bidMapper = bidMapper;
+        this.itemMapper = itemMapper;
+        this.creditCardMapper = creditCardMapper;
+    }
 
     @Override
     public boolean isUserAuthorized(String targetUserId) {
