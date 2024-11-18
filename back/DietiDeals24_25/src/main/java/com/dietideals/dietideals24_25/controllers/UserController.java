@@ -56,6 +56,7 @@ public class UserController {
             }
 
             if (userDto.getIsSeller() &&
+            if (userDto.getIsSeller() != null && userDto.getIsSeller() &&
                     (userDto.getAddress() == null || userDto.getAddress().isEmpty() ||
                             userDto.getZipcode() == null || userDto.getZipcode().isEmpty() ||
                             userDto.getCountry() == null || userDto.getCountry().isEmpty() ||
@@ -67,7 +68,7 @@ public class UserController {
             Set<RoleEntity> authorities = new HashSet<>();
             RoleEntity buyerRole = roleService.findByAuthority("BUYER")
                     .orElseThrow(() -> new RuntimeException("BUYER role not found"));
-            if (userDto.getIsSeller()) {
+            if (userDto.getIsSeller() != null && userDto.getIsSeller()) {
                 RoleEntity sellerRole = roleService.findByAuthority("SELLER")
                         .orElseThrow(() -> new RuntimeException("SELLER role not found"));
                 authorities.add(sellerRole);
