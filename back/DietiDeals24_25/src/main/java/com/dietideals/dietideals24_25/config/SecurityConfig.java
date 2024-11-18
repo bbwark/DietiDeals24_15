@@ -34,38 +34,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .exceptionHandling(handling -> handling
-                        .accessDeniedHandler(new AccessDeniedHandlerImpl() {
-                            @Override
-                            public void handle(HttpServletRequest request, HttpServletResponse response,
-                                    AccessDeniedException accessDeniedException) throws IOException {
-                                if (accessDeniedException instanceof AccessDeniedException) {
-                                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                                } else {
-                                    throw accessDeniedException;
-                                }
+                .csrf(csrf -> {
+                    csrf.disable();
+                })
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/auth/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .exceptionHandling(handling -> {
+                    handling.accessDeniedHandler(new AccessDeniedHandlerImpl() {
+                        @Override
+                        public void handle(HttpServletRequest request, HttpServletResponse response,
+                                AccessDeniedException accessDeniedException) throws IOException {
+                            if (accessDeniedException instanceof AccessDeniedException) {
+                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            } else {
+                                throw accessDeniedException;
                             }
-                        })
-                        .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                            @Override
-                            public void commence(HttpServletRequest request, HttpServletResponse response,
-                                    AuthenticationException authException) throws IOException {
-                                if (authException instanceof AuthenticationException) {
-                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                    response.getWriter().write("Invalid Token");
-                                } else {
-                                    throw authException;
-                                }
+                        }
+                    });
+                    handling.authenticationEntryPoint(new AuthenticationEntryPoint() {
+                        @Override
+                        public void commence(HttpServletRequest request, HttpServletResponse response,
+                                AuthenticationException authException) throws IOException {
+                            if (authException instanceof AuthenticationException) {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.getWriter().write("Invalid Token");
+                            } else {
+                                throw authException;
                             }
-                        }))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        }
+                    });
+                })
+                .sessionManagement(session -> {
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
