@@ -5,6 +5,7 @@ import com.dietideals.dietideals24_25.repositories.BidRepository;
 import com.dietideals.dietideals24_25.services.BidService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -30,5 +31,10 @@ public class BidServiceImpl implements BidService {
     @Override
     public List<BidEntity> findByAuctionId(UUID auctionId) {
         return bidRepository.findByAuctionId(auctionId);
+    }
+
+    @Override
+    public Optional<BidEntity> findById(UUID id) {
+        return bidRepository.findById(id);
     }
 }

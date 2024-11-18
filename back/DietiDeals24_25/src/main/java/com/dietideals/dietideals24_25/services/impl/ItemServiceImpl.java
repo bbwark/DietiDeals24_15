@@ -4,6 +4,7 @@ import com.dietideals.dietideals24_25.domain.entities.ItemEntity;
 import com.dietideals.dietideals24_25.repositories.ItemRepository;
 import com.dietideals.dietideals24_25.services.ItemService;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -25,5 +26,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void delete(UUID id) {
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<ItemEntity> findById(UUID id) {
+        return itemRepository.findById(id);
     }
 }

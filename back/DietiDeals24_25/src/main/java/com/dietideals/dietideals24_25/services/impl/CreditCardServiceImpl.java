@@ -5,6 +5,7 @@ import com.dietideals.dietideals24_25.repositories.CreditCardRepository;
 import com.dietideals.dietideals24_25.services.CreditCardService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -31,5 +32,10 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     public List<CreditCardEntity> findByUserId(UUID userId) {
         return creditCardRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Optional<CreditCardEntity> findByCardNumber(String cardNumber) {
+        return creditCardRepository.findByCreditCardNumber(cardNumber);
     }
 }
