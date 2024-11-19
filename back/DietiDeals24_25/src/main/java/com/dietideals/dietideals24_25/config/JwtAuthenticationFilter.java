@@ -12,27 +12,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
-import com.dietideals.dietideals24_25.domain.entities.UserEntity;
-import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.JwtService;
-import com.dietideals.dietideals24_25.services.UserService;
+import com.dietideals.dietideals24_25.utils.UserLoaderHelper;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserService userService;
-    private final Mapper<UserEntity, UserDto> userMapper;
+    private final UserLoaderHelper userLoaderHelper;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserService userService, Mapper<UserEntity, UserDto> userMapper) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserLoaderHelper userLoaderHelper) {
         this.jwtService = jwtService;
-        this.userService = userService;
-        this.userMapper = userMapper;
+        this.userLoaderHelper = userLoaderHelper;
     }
 
     @Override
@@ -50,13 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userId = jwtService.extractUserIdFromToken(token);
         List<String> roles = jwtService.extractRolesFromToken(token);
 
-        Optional<UserEntity> userEntityOpt = userService.findById(UUID.fromString(userId));
-        UserDto userDto = null;
-        if (userEntityOpt.isPresent()) {
-            UserEntity userEntity = userEntityOpt.get();
-            userDto = userMapper.mapTo(userEntity);
-        }
-
+        UserDto userDto = userLoaderHelper.userLoader(userId);
         if (userDto != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
