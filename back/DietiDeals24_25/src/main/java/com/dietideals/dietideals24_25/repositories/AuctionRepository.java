@@ -17,7 +17,7 @@ public interface AuctionRepository extends CrudRepository<AuctionEntity, UUID> {
     @Query("SELECT a FROM AuctionEntity a WHERE lower(a.item.name) LIKE lower(concat('%', :itemName,'%'))")
     List<AuctionEntity> findByItemName(@Param("itemName") String itemName);
 
-    @Query("SELECT a FROM AuctionEntity a WHERE a.owner.id != :ownerUuid")
+    @Query("SELECT a FROM AuctionEntity a WHERE a.owner.id != :ownerUuid AND a.expired = false ORDER BY RANDOM()")
     List<AuctionEntity> findRandomAuctions(@Param("ownerUuid") UUID ownerUuid, Pageable pageable);
 
     @Query("SELECT DISTINCT u FROM BidEntity b JOIN b.user u WHERE b.auction.id = :auctionId")
