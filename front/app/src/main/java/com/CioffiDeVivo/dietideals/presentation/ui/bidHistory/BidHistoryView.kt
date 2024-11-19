@@ -114,6 +114,8 @@ fun BidHistoryLayout(
                         }
                         bidders.find { it.id == bid.userId }?.let {
                             BidHistoryElement(
+                                auctionType = auctionState.type,
+                                auctionExpired = auctionState.expired,
                                 bidderName = it.name,
                                 bidValue = bid.value,
                                 onShowDetails = {
@@ -148,7 +150,10 @@ fun BidHistoryLayout(
                     onDismissRequest = { acceptOffer = false },
                     onAcceptOffer = {
                         acceptOffer = false
-                        //todo backend management of accepting a bid
+                        //TODO: chooseWinningBid here - puoi metterla sia prima che dopo l'acceptOffer.
+                        //Se la metti prima, la funzione viene eseguita prima di chiudere il Dialog
+                        //Se la metti dopo, la funzione viene eseguita dopo la chiusura del Dialog
+                        //Scegli tu quale pensi sia più giusto
                     }
                 )
             }
