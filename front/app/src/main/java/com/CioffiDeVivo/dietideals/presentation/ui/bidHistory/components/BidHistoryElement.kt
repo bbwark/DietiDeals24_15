@@ -24,9 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.CioffiDeVivo.dietideals.domain.models.AuctionType
 
 @Composable
 fun BidHistoryElement(
+    auctionType: AuctionType,
+    auctionExpired: Boolean,
     bidderName: String,
     bidValue: Float,
     onShowDetails: () -> Unit,
@@ -66,10 +69,12 @@ fun BidHistoryElement(
                     expanded = false
                     onShowDetails()
                 })
-                DropdownMenuItem(text = { Text(text = "Accept This Offer") }, onClick = {
-                    expanded = false
-                    onAcceptOffer()
-                })
+                if (auctionExpired && auctionType != AuctionType.English) {
+                    DropdownMenuItem(text = { Text(text = "Accept This Offer") }, onClick = {
+                        expanded = false
+                        onAcceptOffer()
+                    })
+                }
                 DropdownMenuItem(text = { Text(text = "User Info") }, onClick = {
                     expanded = false
                     onUserInfo()
