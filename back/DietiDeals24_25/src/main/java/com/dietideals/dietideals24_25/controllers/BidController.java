@@ -77,7 +77,7 @@ public class BidController {
 
                 Float minStep = (auctionDto.getMinStep() != null && !auctionDto.getMinStep().isEmpty()) ? Float.parseFloat(auctionDto.getMinStep()) : 0;
                 for (BidDto bidDto : bidDtos) {
-                    if (bidDto.getValue() >= minStep) {
+                    if (bid.getValue() < bidDto.getValue() + minStep) {
                         return new ResponseEntity<>(HttpStatus.CONFLICT);
                     }
                 }
@@ -101,7 +101,7 @@ public class BidController {
             BidEntity savedBidEntity = bidService.save(bidEntity);
             BidDto responseBid = bidMapper.mapTo(savedBidEntity);
             if (auctionDto.getType() == AuctionType.English || buyoutPriceReached) {
-                auctionService.save(auctionMapper.mapFrom(auctionDto)); //only if new bid is placed in English auction or buyout price is reached in Silent auction
+                auctionService.save(auctionEntity); //only if new bid is placed in English auction or buyout price is reached in Silent auction
             }
             return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
         } catch (Exception e) {
