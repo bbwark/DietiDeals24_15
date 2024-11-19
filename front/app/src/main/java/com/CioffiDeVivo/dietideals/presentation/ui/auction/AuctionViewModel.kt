@@ -42,7 +42,7 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
                 val auctionResponse = ApiService.getAuction(auctionId)
                 if(auctionResponse.status.isSuccess()){
                     val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
-                    val ownerResponse = ApiService.getUser(auction.ownerId)
+                    val ownerResponse = ApiService.getUserInfo(auction.ownerId)
                     if(ownerResponse.status.isSuccess()){
                         val owner = Gson().fromJson(ownerResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
                         val userId = sharedPreferences.getString("userId", null)
