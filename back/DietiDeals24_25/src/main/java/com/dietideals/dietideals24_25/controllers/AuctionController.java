@@ -144,7 +144,7 @@ public class AuctionController {
         }
     }
 
-    @PreAuthorize("hasAuthority('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/owner/{id}")
     public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") String id) {
         try {
@@ -159,7 +159,7 @@ public class AuctionController {
         }
     }
 
-    @PreAuthorize("hasAuthority('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/participated/{id}")
     public ResponseEntity<List<AuctionDto>> listParticipatedAuctions(@PathVariable("id") String id) {
         try {
@@ -174,7 +174,7 @@ public class AuctionController {
         }
     }
 
-    @PreAuthorize("hasAuthority('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @GetMapping(path = "/ending/{id}")
     public ResponseEntity<List<AuctionDto>> listEndingAuctions(@PathVariable("id") String id) {
         try {
