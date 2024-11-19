@@ -22,7 +22,7 @@ public class BidEntity {
 
     private Float value;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
