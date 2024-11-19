@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.controllers;
 
+import com.dietideals.dietideals24_25.domain.AuctionType;
 import com.dietideals.dietideals24_25.domain.dto.AuctionDto;
 import com.dietideals.dietideals24_25.domain.dto.ItemDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
@@ -16,6 +17,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -104,6 +107,15 @@ public class AuctionController {
             Optional<AuctionEntity> foundAuction = auctionService.findById(idConverted);
             return foundAuction.map(auctionEntity -> {
                 AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
+                if (auctionDto.getType() == AuctionType.Silent) {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    if (auth != null && auth.getPrincipal() instanceof UserDto) {
+                        UserDto user = (UserDto) auth.getPrincipal();
+                        if (!user.getId().equals(auctionDto.getOwnerId())) {
+                            auctionDto.getBids().clear(); //if the user who's making the request is not the owner, he can't see the bids
+                        }
+                    }
+                }
                 return new ResponseEntity<>(auctionDto, HttpStatus.OK);
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
@@ -168,7 +180,7 @@ public class AuctionController {
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))
                     .collect(Collectors.toList());
-            return new ResponseEntity<>(result, HttpStatus.OK); 
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
