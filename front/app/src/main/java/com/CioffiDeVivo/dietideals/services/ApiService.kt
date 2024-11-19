@@ -262,6 +262,23 @@ object ApiService {
         return resultBids
     }
 
+    //post mapping choose winning bid /bids/chooseWinningBid
+    suspend fun chooseWinningBid(bid: Bid): HttpResponse {
+        var resultResponse: HttpResponse
+        HttpClient(CIO).use {
+            val gson = Gson()
+            val postedBid = gson.toJson(bid)
+            val response = it.post {
+                url("${URL}/bids/chooseWinningBid")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+                setBody(postedBid)
+            }
+            resultResponse = response
+        }
+        return resultResponse;
+    }
+
 
 /*
 * ================== AUCTION APIs ==================
@@ -368,6 +385,34 @@ object ApiService {
             }
         }
         return resultUsers
+    }
+
+    //get mapping get endingAuctions /auctions/ending/{userId}
+    suspend fun getEndingAuctions(userId: String): Array<Auction> {
+        var resultAuctions: Array<Auction> = emptyArray()
+        HttpClient(CIO).use {
+            val gson = Gson()
+            val response = it.get {
+                url("${URL}/auctions/ending/$userId")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+            }
+            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+        }
+        return resultAuctions
+    }
+
+    //get mapping get participatedAuctions /auctions/participated/{userId}
+    suspend fun getParticipatedAuctions(userId: String): Array<Auction> {
+        var resultAuctions: Array<Auction> = emptyArray()
+        HttpClient(CIO).use {
+            val gson = Gson()
+            val response = it.get {
+                url("${URL}/auctions/participated/$userId")
+                header(HttpHeaders.Authorization, "Bearer $TOKEN")
+            }
+            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+        }
+        return resultAuctions
     }
 
 /*
