@@ -148,9 +148,3 @@ fun LoginInputs(
         modifier = modifierStandard
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun LogInCredentialsPreview(){
-    LogInCredentialsView(viewModel = LogInCredentialsViewModel(application = Application()), navController = rememberNavController())
-}

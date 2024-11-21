@@ -101,9 +101,3 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
 
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun LogInPreview(){
-    LoginView(viewModel = LogInViewModel(Application()) ,navController = rememberNavController())
-}

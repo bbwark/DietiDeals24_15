@@ -213,7 +213,7 @@ fun SetupNavGraph() {
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: LogInCredentialsViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: LogInCredentialsViewModel = viewModel(factory = LogInCredentialsViewModel.Factory)
                     LogInCredentialsView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -225,7 +225,7 @@ fun SetupNavGraph() {
                 BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel : HomeViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel : HomeViewModel = viewModel(factory = HomeViewModel.Factory)
                     HomeView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -233,7 +233,7 @@ fun SetupNavGraph() {
         composable(
             route = Screen.Login.route
         ) {
-            val viewModel : LogInViewModel = viewModel(factory = viewModelFactory)
+            val viewModel : LogInViewModel = LogInViewModel()
             LoginView(viewModel = viewModel ,navController = navController)
         }
         composable(

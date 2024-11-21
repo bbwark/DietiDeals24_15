@@ -23,13 +23,13 @@ import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 
 
 class GenericViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    /*override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(RegisterCredentialsViewModel::class.java) ->
                 RegisterCredentialsViewModel(application) as T
 
-            modelClass.isAssignableFrom(LogInCredentialsViewModel::class.java) ->
-                LogInCredentialsViewModel(application) as T
+            /*modelClass.isAssignableFrom(LogInCredentialsViewModel::class.java) ->
+                LogInCredentialsViewModel(application) as T*/
 
             modelClass.isAssignableFrom(CreateAuctionViewModel::class.java) ->
                 CreateAuctionViewModel(application) as T
@@ -55,8 +55,8 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
             modelClass.isAssignableFrom(FavouritesViewModel::class.java) ->
                 FavouritesViewModel(application) as T
 
-            modelClass.isAssignableFrom(HomeViewModel::class.java) ->
-                HomeViewModel(application) as T
+            /*modelClass.isAssignableFrom(HomeViewModel::class.java) ->
+                HomeViewModel(application) as T*/
 
             modelClass.isAssignableFrom(ManageCardsViewModel::class.java) ->
                 ManageCardsViewModel(application) as T
@@ -78,5 +78,5 @@ class GenericViewModelFactory(private val application: Application) : ViewModelP
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
-    }
+    }*/
 }
