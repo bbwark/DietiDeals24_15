@@ -6,9 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.models.Country
+import com.CioffiDeVivo.dietideals.data.requestModels.User
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationEvents
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellUiState
@@ -38,7 +39,7 @@ class BecomeSellerViewModel(application: Application): AndroidViewModel(applicat
                 _becomeSellerUiState.value = try {
                     val userInfoResponse = ApiService.getUser(userId)
                     if(userInfoResponse.status.isSuccess()){
-                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), User::class.java).toDataModel()
                         BecomeSellerUiState.BecomeSellerParams(user = user)
                     } else{
                         Log.e("Error", "Error: Error on GET User!")

@@ -5,11 +5,11 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -39,7 +39,7 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
             _makeABidUiState.value = try {
                 val auctionResponse = ApiService.getAuction(auctionId)
                 if(auctionResponse.status.isSuccess()){
-                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.data.requestModels.Auction::class.java).toDataModel()
                     MakeABidUiState.MakeABidParams(auction, Bid())
                 } else{
                     MakeABidUiState.Error

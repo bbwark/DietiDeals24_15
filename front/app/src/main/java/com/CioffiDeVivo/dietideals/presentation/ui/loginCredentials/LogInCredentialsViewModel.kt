@@ -1,10 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
-import android.app.Application
-import android.content.Context
-import android.text.Spannable.Factory
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -13,19 +9,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
-import com.CioffiDeVivo.dietideals.data.UserRepository
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.domain.requestModels.LogInRequest
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.CioffiDeVivo.dietideals.services.AuthService
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateLogInForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
+import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
+import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
+import com.CioffiDeVivo.dietideals.data.validations.ValidateLogInForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -86,8 +73,12 @@ class LogInCredentialsViewModel(
                 viewModelScope.launch {
                     _logInCredentialsUiState.value = try {
                         val logInRequest = LogInRequest(currentState.email, currentState.password)
-                        val userLogin = userRepository.login(logInRequest)
-                        userPreferencesRepository.saveUserId(userLogin.id)
+                        val loginResponse = userRepository.login(logInRequest)
+                        userPreferencesRepository.saveUserId(loginResponse.user.id)
+                        userPreferencesRepository.saveToken(loginResponse.jwt)
+                        userPreferencesRepository.saveEmail(loginResponse.user.email)
+                        userPreferencesRepository.saveName(loginResponse.user.name)
+                        userPreferencesRepository.saveIsSeller(loginResponse.user.isSeller)
                         LogInCredentialsUiState.Success
                     } catch (e: Exception) {
                         Log.e("Error", "Error: ${e.message}")

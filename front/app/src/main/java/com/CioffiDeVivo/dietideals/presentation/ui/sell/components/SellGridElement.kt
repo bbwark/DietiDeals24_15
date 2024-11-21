@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.Item
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable

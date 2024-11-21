@@ -7,11 +7,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.services.ApiService
-import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateCreateAuctionForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.validations.ValidateCreateAuctionForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel

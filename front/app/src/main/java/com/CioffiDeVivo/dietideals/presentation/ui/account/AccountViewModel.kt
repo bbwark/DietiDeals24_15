@@ -6,8 +6,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

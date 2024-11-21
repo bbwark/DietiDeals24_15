@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller
 
-import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.data.models.Country
 
 sealed class BecomeSellerEvents {
     data class AddressChanged(val address: String): BecomeSellerEvents()

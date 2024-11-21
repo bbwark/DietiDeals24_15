@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateAddCardForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.validations.ValidateAddCardForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.services.ApiService
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel

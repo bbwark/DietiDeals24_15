@@ -12,9 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.AuctionsListElement
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Item
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
 import java.time.LocalDate
 

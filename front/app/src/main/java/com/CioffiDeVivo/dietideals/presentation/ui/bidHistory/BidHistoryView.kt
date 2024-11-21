@@ -34,9 +34,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView

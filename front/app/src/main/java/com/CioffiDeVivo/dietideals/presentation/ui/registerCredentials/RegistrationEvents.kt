@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
-import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.data.models.Country
 
 open class RegistrationEvents {
     data class EmailChanged(val email: String): RegistrationEvents()

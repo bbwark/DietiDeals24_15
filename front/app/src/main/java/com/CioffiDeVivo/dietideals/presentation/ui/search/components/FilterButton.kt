@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
 
 @Composable
 fun FilterButton(selectedOptions: Set<String>, updateCategories: (MutableSet<String>) -> (Unit)) {

@@ -69,10 +69,10 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTex
 import com.CioffiDeVivo.dietideals.presentation.ui.createAuction.components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DropDownMenuField
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogInfo
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -163,7 +163,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     ElevatedButton(
                         onClick = {
                             viewModel.removeErrorMsgAuctionType()
-                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent))
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(
+                                AuctionType.Silent))
                         },
                         colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.Silent){
                             ButtonDefaults.buttonColors()
@@ -181,7 +182,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     ElevatedButton(
                         onClick = {
                             viewModel.removeErrorMsgAuctionType()
-                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English))
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(
+                                AuctionType.English))
                         },
                         colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.English){
                             ButtonDefaults.buttonColors()

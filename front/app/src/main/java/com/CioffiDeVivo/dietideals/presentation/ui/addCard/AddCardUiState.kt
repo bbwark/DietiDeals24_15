@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.addCard
 
-import com.CioffiDeVivo.dietideals.domain.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
 
 sealed interface AddCardUiState {
     object Success: AddCardUiState

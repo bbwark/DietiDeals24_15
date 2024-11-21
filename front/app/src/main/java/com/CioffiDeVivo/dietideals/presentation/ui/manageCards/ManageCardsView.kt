@@ -20,8 +20,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.components.ManageCardsElement
-import com.CioffiDeVivo.dietideals.domain.models.CreditCard
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView

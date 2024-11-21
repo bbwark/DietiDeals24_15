@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.components.SellGridElement
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen

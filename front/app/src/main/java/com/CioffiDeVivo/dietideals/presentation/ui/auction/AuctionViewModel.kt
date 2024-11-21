@@ -7,13 +7,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.models.CreditCard
-import com.CioffiDeVivo.dietideals.domain.models.Item
-import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.models.Item
+import com.CioffiDeVivo.dietideals.data.models.User
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -41,10 +41,10 @@ class AuctionViewModel(application: Application) : AndroidViewModel(application)
             _auctionUiState.value = try{
                 val auctionResponse = ApiService.getAuction(auctionId)
                 if(auctionResponse.status.isSuccess()){
-                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
+                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.data.requestModels.Auction::class.java).toDataModel()
                     val ownerResponse = ApiService.getUserInfo(auction.ownerId)
                     if(ownerResponse.status.isSuccess()){
-                        val owner = Gson().fromJson(ownerResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val owner = Gson().fromJson(ownerResponse.bodyAsText(), com.CioffiDeVivo.dietideals.data.requestModels.User::class.java).toDataModel()
                         val userId = sharedPreferences.getString("userId", null)
                         if(owner.id == userId){
                             AuctionUiState.Success(auction, owner, true)

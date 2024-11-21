@@ -2,7 +2,7 @@ package com.CioffiDeVivo.dietideals.services
 
 import android.content.Context
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.requestModels.User
+import com.CioffiDeVivo.dietideals.data.requestModels.User
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
