@@ -5,10 +5,11 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateEditProfileForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.requestModels.User
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.validations.ValidateEditProfileForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoUiState
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.CioffiDeVivo.dietideals.services.AuthService
@@ -146,7 +147,7 @@ class EditProfileViewModel(application: Application, private val validateEditPro
                 _editUiProfileState.value = try {
                     val userInfoResponse = ApiService.getUser(userId)
                     if(userInfoResponse.status.isSuccess()){
-                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val user = Gson().fromJson(userInfoResponse.bodyAsText(), User::class.java).toDataModel()
                         EditProfileUiState.EditProfileParams(user = user)
                     } else{
                         Log.e("Error", "Error: Error on GET User!")

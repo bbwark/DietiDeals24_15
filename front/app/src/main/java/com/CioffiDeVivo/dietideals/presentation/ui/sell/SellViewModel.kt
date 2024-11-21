@@ -4,7 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.requestModels.User
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
 import io.ktor.client.statement.bodyAsText
@@ -31,7 +32,7 @@ class SellViewModel(application: Application): AndroidViewModel(application) {
                 if (userId != null) {
                     val getUserResponse = ApiService.getUser(userId)
                     if (getUserResponse.status.isSuccess()) {
-                        val user = Gson().fromJson(getUserResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val user = Gson().fromJson(getUserResponse.bodyAsText(), User::class.java).toDataModel()
                         SellUiState.Success(user.ownedAuctions.toCollection(ArrayList()))
                     } else{
                         SellUiState.Error

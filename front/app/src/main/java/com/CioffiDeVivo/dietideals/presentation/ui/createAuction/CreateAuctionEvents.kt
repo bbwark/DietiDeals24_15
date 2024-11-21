@@ -1,8 +1,8 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
 import android.net.Uri
-import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
 
 sealed class CreateAuctionEvents {
     data class ItemNameChanged(val itemName: String): CreateAuctionEvents()

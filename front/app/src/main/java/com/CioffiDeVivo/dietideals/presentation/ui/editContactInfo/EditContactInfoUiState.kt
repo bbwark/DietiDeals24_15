@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo
 
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.User
 
 sealed interface EditContactInfoUiState {
     object Success: EditContactInfoUiState

@@ -2,7 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.favourites
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

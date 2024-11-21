@@ -1,7 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
-import com.CioffiDeVivo.dietideals.domain.models.CreditCard
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.models.User
 
 sealed interface RegisterCredentialsUiState {
     object Success: RegisterCredentialsUiState

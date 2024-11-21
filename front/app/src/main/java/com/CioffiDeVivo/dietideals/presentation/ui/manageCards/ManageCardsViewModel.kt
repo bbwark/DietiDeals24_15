@@ -4,7 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
+import com.CioffiDeVivo.dietideals.data.requestModels.User
+import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.services.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +32,7 @@ class ManageCardsViewModel(application: Application) : AndroidViewModel(applicat
                 if(userId != null){
                     val creditCardResponse = ApiService.getUser(userId)
                     if(creditCardResponse.status.isSuccess()){
-                        val user = Gson().fromJson(creditCardResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.User::class.java).toDataModel()
+                        val user = Gson().fromJson(creditCardResponse.bodyAsText(), User::class.java).toDataModel()
                         ManageCardsUiState.Success(user.creditCards)
                     } else{
                         ManageCardsUiState.Error

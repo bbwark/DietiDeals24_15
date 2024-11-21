@@ -19,7 +19,7 @@ class DietiDealsApplication: Application() {
     lateinit var userPreferencesRepository: UserPreferencesRepository
     override fun onCreate() {
         super.onCreate()
-        container = DefaultAppContainer()
         userPreferencesRepository = UserPreferencesRepository(dataStore)
+        container = DefaultAppContainer(userPreferencesRepository)
     }
 }
