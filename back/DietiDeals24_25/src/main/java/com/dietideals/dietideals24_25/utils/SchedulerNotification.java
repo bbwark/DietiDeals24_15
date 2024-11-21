@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,10 @@ public class SchedulerNotification {
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toSet()));
 
-                boolean buyoutPriceReached = false;
-                BidDto highestBid = findHighestBid(auction, buyoutPriceReached);
+                AtomicBoolean wrapperBuyoutPriceReached = new AtomicBoolean(false);
+                BidDto highestBid = findHighestBid(auction, wrapperBuyoutPriceReached);
+                boolean buyoutPriceReached = wrapperBuyoutPriceReached.get();
+
 
                 collectUserTokens(auction, usersInvolvedInAuction, deviceTokensForOwner,
                         deviceTokensForWinner, deviceTokensForUsersInvolved,
@@ -125,7 +128,8 @@ public class SchedulerNotification {
         }
     }
 
-    private BidDto findHighestBid(AuctionDto auction, boolean buyoutPriceReached) {
+    //Protected access for testing
+    BidDto findHighestBid(AuctionDto auction, AtomicBoolean buyoutPriceReached) {
         BidDto highestBid = new BidDto();
         highestBid.setValue(0f);
         for (BidDto bid : auction.getBids()) {
@@ -133,7 +137,7 @@ public class SchedulerNotification {
                 highestBid = bid;
             }
             if (auction.getBuyoutPrice() != null && bid.getValue() >= Float.parseFloat(auction.getBuyoutPrice())) {
-                buyoutPriceReached = true;
+                buyoutPriceReached.set(true);;
             }
         }
         return highestBid;
