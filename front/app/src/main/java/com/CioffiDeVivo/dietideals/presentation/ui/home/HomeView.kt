@@ -34,6 +34,7 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.HomeView
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.data.UserRepository
 import com.CioffiDeVivo.dietideals.domain.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
@@ -46,10 +47,6 @@ fun HomeView(
 ){
     val homeUiState by viewModel.homeUiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchHomeAuctions()
-        viewModel.fetchTestAuctions()
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -144,10 +141,4 @@ fun ParticipatedAuctions(
         auctions = participatedAuctions,
         navController = navController
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeViewPreview(){
-    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController())
 }

@@ -69,6 +69,9 @@ fun BidHistoryView(
                 navController.navigate(Screen.BidHistory.route)
             }
         )
+        is BidHistoryUiState.SuccessOnWinningBid -> {
+            navController.popBackStack()
+        }
     }
 
 

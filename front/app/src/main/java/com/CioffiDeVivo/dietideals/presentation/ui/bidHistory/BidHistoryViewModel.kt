@@ -60,8 +60,7 @@ class BidHistoryViewModel(application: Application) : AndroidViewModel(applicati
             _bidHistoryUiState.value = try {
                 val chooseWinningBidResponse = ApiService.chooseWinningBid(bid.toRequestModel())
                 if (chooseWinningBidResponse.status.isSuccess()) {
-                    //questa response non ritorna nulla, manda solo le notifiche a chi ha vinto e chi ha perso
-                    BidHistoryUiState.Success()
+                    BidHistoryUiState.SuccessOnWinningBid
                 } else {
                     BidHistoryUiState.Error
                 }
