@@ -70,6 +70,9 @@ public class SecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.requiresChannel(channel -> {channel.anyRequest().requiresSecure();});
+        
         return http.build();
     }
 
