@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.BottomNavigationBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DetailsViewTopBar
@@ -66,12 +67,12 @@ import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SetupNavGraph() {
+fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppViewModelFactory) {
     val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
-    val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route
@@ -213,7 +214,7 @@ fun SetupNavGraph() {
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: LogInCredentialsViewModel = viewModel(factory = LogInCredentialsViewModel.Factory)
+                    val viewModel: LogInCredentialsViewModel = viewModel(factory = appViewModelFactory)
                     LogInCredentialsView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -225,7 +226,7 @@ fun SetupNavGraph() {
                 BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel : HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+                    val viewModel : HomeViewModel = viewModel(factory = appViewModelFactory)
                     HomeView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -233,7 +234,7 @@ fun SetupNavGraph() {
         composable(
             route = Screen.Login.route
         ) {
-            val viewModel : LogInViewModel = LogInViewModel()
+            val viewModel : LogInViewModel = viewModel(factory = appViewModelFactory)
             LoginView(viewModel = viewModel ,navController = navController)
         }
         composable(

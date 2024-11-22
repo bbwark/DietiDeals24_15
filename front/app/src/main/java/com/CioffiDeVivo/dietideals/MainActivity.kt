@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.SetupNavGraph
 import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
 import com.CioffiDeVivo.dietideals.services.ApiService
@@ -25,13 +26,16 @@ class MainActivity : ComponentActivity() {
         EncryptedPreferencesManager.initialize(this)
         AuthService.initialize(this)
 
+        val application = application as DietiDealsApplication
+        val appViewModelFactory = application.appViewModelFactory
+
         setContent {
             DietiDealsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SetupNavGraph()
+                    SetupNavGraph(navController = rememberNavController(), appViewModelFactory = appViewModelFactory)
                 }
             }
         }

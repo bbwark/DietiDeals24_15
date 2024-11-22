@@ -14,6 +14,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,6 +39,12 @@ fun HomeView(
     navController: NavController
 ){
     val homeUiState by viewModel.homeUiState.collectAsState()
+    val userState by viewModel.userState.collectAsState()
+    
+    LaunchedEffect(Unit){
+        viewModel.loadUser()
+    }
+    
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -46,6 +53,9 @@ fun HomeView(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.dietideals))
+        userState?.let { Text(text = it.name) }
+        userState?.let { Text(text = it.address) }
+        userState?.let { Text(text = it.email) }
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
             onClick = { navController.navigate(Screen.Search.route) },
