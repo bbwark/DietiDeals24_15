@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.CioffiDeVivo.dietideals.services.TokenService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LogInViewModel(): ViewModel() {
+class LogInViewModel(private val userPreferencesRepository: UserPreferencesRepository): ViewModel() {
 
     private val _isUserAuthenticated = MutableStateFlow<Boolean?>(null)
     val isUserAuthenticated: StateFlow<Boolean?> = _isUserAuthenticated.asStateFlow()
@@ -20,9 +21,9 @@ class LogInViewModel(): ViewModel() {
 
     /*init {
         checkUserAuthentication()
-    }*/
+    }
 
-    /*private fun checkUserAuthentication(){
+    private fun checkUserAuthentication(){
         viewModelScope.launch {
             setLoadingState()
             try {

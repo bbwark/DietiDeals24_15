@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
 import com.CioffiDeVivo.dietideals.data.validations.ValidateLogInForm
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class LogInCredentialsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
     private val validateLogInForms: ValidateLogInForm = ValidateLogInForm()
 ) : ViewModel() {
 
@@ -31,15 +32,6 @@ class LogInCredentialsViewModel(
 
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
-
-    companion object{
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as DietiDealsApplication)
-                LogInCredentialsViewModel(application.userPreferencesRepository, application.container.userRepository)
-            }
-        }
-    }
 
     fun loginOnAction(loginEvent: LoginEvent) {
         try {
@@ -73,7 +65,7 @@ class LogInCredentialsViewModel(
                 viewModelScope.launch {
                     _logInCredentialsUiState.value = try {
                         val logInRequest = LogInRequest(currentState.email, currentState.password)
-                        val loginResponse = userRepository.login(logInRequest)
+                        val loginResponse = authRepository.loginUser(logInRequest)
                         userPreferencesRepository.saveUserId(loginResponse.user.id)
                         userPreferencesRepository.saveToken(loginResponse.jwt)
                         userPreferencesRepository.saveEmail(loginResponse.user.email)

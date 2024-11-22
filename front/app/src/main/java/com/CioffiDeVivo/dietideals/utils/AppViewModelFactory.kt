@@ -3,24 +3,31 @@ package com.CioffiDeVivo.dietideals.utils
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.createAuction.CreateAuctionViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.favourites.FavouritesViewModel
+import com.CioffiDeVivo.dietideals.data.AppContainer
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.presentation.ui.home.HomeViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.account.AccountViewModel
-import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsViewModel
 
+class AppViewModelFactory(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val appContainer: AppContainer
+): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return when {
+            modelClass.isAssignableFrom(LogInViewModel::class.java) ->
+                LogInViewModel(userPreferencesRepository) as T
+
+            modelClass.isAssignableFrom(LogInCredentialsViewModel::class.java) ->
+                LogInCredentialsViewModel(userPreferencesRepository, appContainer.authRepository) as T
+
+            modelClass.isAssignableFrom(HomeViewModel::class.java) ->
+                HomeViewModel(userPreferencesRepository, appContainer.userRepository) as T
+
+            else -> throw IllegalArgumentException("Unknown ViewModel Class!")
+        }
+    }
+}
 
 class GenericViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     /*override fun <T : ViewModel> create(modelClass: Class<T>): T {

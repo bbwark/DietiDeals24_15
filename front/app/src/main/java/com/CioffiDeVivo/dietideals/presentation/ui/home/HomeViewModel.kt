@@ -11,6 +11,8 @@ import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.User
+import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.services.ApiService
 import com.google.gson.Gson
@@ -22,20 +24,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val userRepository: UserRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    companion object{
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as DietiDealsApplication)
-                HomeViewModel(application.container.userRepository, application.userPreferencesRepository)
-            }
-        }
-    }
 
     private val _homeUiState = MutableStateFlow<HomeUiState>(HomeUiState.Success(arrayOf(), arrayOf(), arrayOf()))
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
+    private val _userState = MutableStateFlow<User?>(null)
+    val userState: StateFlow<User?> = _userState.asStateFlow()
+
+    fun loadUser(){
+        viewModelScope.launch {
+            try {
+                val user = userRepository.getUser(userPreferencesRepository.userId.toString())
+                _userState.value = user
+            } catch (e: Exception){
+                Log.e("Error", "Error: ${e.message}")
+            }
+        }
+    }
 
     /*fun fetchHomeAuctions(){
         viewModelScope.launch {
