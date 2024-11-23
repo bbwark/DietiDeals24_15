@@ -135,7 +135,7 @@ class UserPreferencesRepository(
     }
 
     suspend fun getEmailPreference(): String {
-        return userId.first()
+        return email.first()
     }
 
     suspend fun getIsSellerPreference(): Boolean {

@@ -42,7 +42,7 @@ class AppViewModelFactory(
                 RegisterCredentialsViewModel(userPreferencesRepository, appContainer.authRepository) as T
 
             modelClass.isAssignableFrom(CreateAuctionViewModel::class.java) ->
-                CreateAuctionViewModel(userPreferencesRepository, appContainer.auctionRepository) as T
+                CreateAuctionViewModel(userPreferencesRepository, appContainer.auctionRepository, appContainer.imageRepository) as T
 
             modelClass.isAssignableFrom(MakeABidViewModel::class.java) ->
                 MakeABidViewModel(userPreferencesRepository, appContainer.auctionRepository, appContainer.bidRepository) as T

@@ -51,10 +51,10 @@ class EditContactInfoViewModel(
                         _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(address = ""))
                     }
                     is EditContactInfoEvents.ZipCodeChanged -> {
-                        _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(zipCode = editContactInfoEvents.zipCode))
+                        _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(zipcode = editContactInfoEvents.zipCode))
                     }
                     is EditContactInfoEvents.ZipCodeDeleted -> {
-                        _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(zipCode = ""))
+                        _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(zipcode = ""))
                     }
                     is EditContactInfoEvents.CountryChanged -> {
                         _editContactInfoUiState.value = currentState.copy(user = currentState.user.copy(country = editContactInfoEvents.country))
@@ -100,7 +100,7 @@ class EditContactInfoViewModel(
         if(currentState is EditContactInfoUiState.EditContactInfoParams){
             try {
                 val addressValidation = validateEditContactInfoForm.validateAddress(currentState.user.address)
-                val zipCodeValidation = validateEditContactInfoForm.validateZipCode(currentState.user.zipCode)
+                val zipCodeValidation = validateEditContactInfoForm.validateZipCode(currentState.user.zipcode)
                 val phoneNumberValidation = validateEditContactInfoForm.validatePhoneNumber(currentState.user.phoneNumber)
 
                 val hasError = listOf(

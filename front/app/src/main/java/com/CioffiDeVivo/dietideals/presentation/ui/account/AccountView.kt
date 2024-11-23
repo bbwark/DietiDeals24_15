@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,10 @@ import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.example.compose.inversePrimaryLight
+import com.example.compose.inversePrimaryLightMediumContrast
+import com.example.compose.primaryContainerLight
+import com.example.compose.surfaceDimLight
 
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavController) {
@@ -102,7 +107,9 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
                     destructiveAction = true,
                     onClick = {
                         viewModel.logOut()
-                        navController.navigate(Screen.Login.route)
+                        navController.navigate(Screen.Login.route){
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             }

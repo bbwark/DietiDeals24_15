@@ -20,8 +20,8 @@ class HomeViewModel(
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     fun fetchHomeAuctions(){
+        _homeUiState.value = HomeUiState.Loading
         viewModelScope.launch {
-            setLoadingState()
             _homeUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val randomAuctions = async { auctionRepository.getRandomAuctions(userId) }
@@ -38,9 +38,4 @@ class HomeViewModel(
             }
         }
     }
-
-    private fun setLoadingState(){
-        _homeUiState.value = HomeUiState.Loading
-    }
-
 }

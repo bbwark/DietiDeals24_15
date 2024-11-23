@@ -24,7 +24,11 @@ class BecomeSellerViewModel(
             _becomeSellerUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
-                BecomeSellerUiState.BecomeSellerParams(user = user)
+                if(user.creditCards[0].creditCardNumber.isBlank()){
+                    BecomeSellerUiState.BecomeSellerParams(user, user.creditCards[0])
+                } else{
+                    BecomeSellerUiState.BecomeSellerParams(user)
+                }
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 BecomeSellerUiState.Error
@@ -45,10 +49,10 @@ class BecomeSellerViewModel(
                         _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(address = becomeSellerEvents.address))
                     }
                     is BecomeSellerEvents.ZipCodeChanged -> {
-                        _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(zipCode = becomeSellerEvents.zipCode))
+                        _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(zipcode = becomeSellerEvents.zipCode))
                     }
                     is BecomeSellerEvents.ZipCodeDeleted -> {
-                        _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(zipCode = ""))
+                        _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(zipcode = ""))
                     }
                     is BecomeSellerEvents.CountryChanged -> {
                         _becomeSellerUiState.value = currentState.copy(user = currentState.user.copy(country = becomeSellerEvents.country))
@@ -95,9 +99,9 @@ class BecomeSellerViewModel(
 
     private fun submitForm(){
         if(validationBlock()){
-            _becomeSellerUiState.value = BecomeSellerUiState.Loading
             val currentState = _becomeSellerUiState.value
             if(currentState is BecomeSellerUiState.BecomeSellerParams){
+                _becomeSellerUiState.value = BecomeSellerUiState.Loading
                 viewModelScope.launch {
                     _becomeSellerUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()

@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.manageCards
 
-import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,18 +13,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.components.ManageCardsElement
-import com.CioffiDeVivo.dietideals.data.models.CreditCard
-import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
-import java.time.LocalDate
 
 @Composable
 fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavController) {
@@ -33,25 +27,27 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
     val manageCardsUiState by viewModel.manageCardsUiState.collectAsState()
 
     LaunchedEffect(Unit){
-        viewModel.fetchCreditCards()
+        if(manageCardsUiState is ManageCardsUiState.Loading){
+            viewModel.fetchCreditCards()
+        }
     }
 
     when(manageCardsUiState){
         is ManageCardsUiState.Loading -> LoadingView()
         is ManageCardsUiState.Error -> RetryView(
             onClick = {
-                navController.popBackStack()
-                navController.navigate(Screen.ManageCards.route)
+                viewModel.fetchCreditCards()
             }
         )
         is ManageCardsUiState.Success -> {
+            val creditCards = (manageCardsUiState as ManageCardsUiState.Success).creditCards
             Box {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 12.dp),
                     content = {
-                        itemsIndexed((manageCardsUiState as ManageCardsUiState.Success).creditCards) { index, item ->
+                        itemsIndexed(creditCards) { index, item ->
                             if (index == 0) {
                                 Spacer(modifier = Modifier.height(10.dp))
                             }

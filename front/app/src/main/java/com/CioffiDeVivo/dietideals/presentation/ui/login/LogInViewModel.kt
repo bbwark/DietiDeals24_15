@@ -15,9 +15,9 @@ class LogInViewModel(private val userPreferencesRepository: UserPreferencesRepos
     private val _logInUiState = MutableStateFlow<LogInUiState>(LogInUiState.Success)
     val logInUiState: StateFlow<LogInUiState> = _logInUiState.asStateFlow()
 
-    /*init {
+    init {
         checkUserAuthentication()
-    }*/
+    }
 
     private fun checkUserAuthentication(){
         _logInUiState.value = LogInUiState.Loading

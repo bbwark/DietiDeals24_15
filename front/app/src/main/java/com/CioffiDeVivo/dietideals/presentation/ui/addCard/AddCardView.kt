@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.addCard
 
-import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardComponents
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
@@ -33,7 +30,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 
 @Composable
-fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
+fun AddCardView(viewModel: AddCardViewModel, navController: NavController){
     val addCardUiState by viewModel.addCardUiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(key1 = context){
@@ -52,8 +49,7 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
         is AddCardUiState.Error -> RetryView(onClick = {})
         is AddCardUiState.Loading -> LoadingView()
         is AddCardUiState.Success -> {
-            navController.popBackStack()
-            navController.navigate(Screen.ManageCards.route)
+            navController.popBackStack(Screen.ManageCards.route, inclusive = true)
         }
         is AddCardUiState.AddCardParams -> {
             Column(

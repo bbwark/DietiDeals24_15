@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.data.repositories
 
+import android.util.Log
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
