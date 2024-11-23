@@ -1,3 +1,5 @@
+![DietiDeals](/Documents/Logo%20DietiDeals.png=50%x)
+
 DietiDeals is an online auction management platform. The system consists of a performant and reliable mobile application through which users can access the system's functionalities in an intuitive, quick, and enjoyable way.
 
 # Features
