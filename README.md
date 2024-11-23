@@ -157,8 +157,10 @@ Since these services are constantly evolving, it is recommended to do research o
 1. Send the compressed folder to your EC2 instance:
 
     ```sh
-    scp -i path/to/your/private/key DietiDeals24_25.zip EC2_distribution@XXX.XXX.XXX.XXX:/path/in/the/EC2Instance
+    scp -i path/to/your/private/key/for/EC2/access DietiDeals24_25.zip EC2_distribution@XXX.XXX.XXX.XXX:/path/in/the/EC2Instance
     ```
+
+    Instead of `EC2_distribution` there must be the distribution of the chosen EC2 instance, while instead of `XXX.XXX.XXX.XXX` there must be the public IP address of the instance.
 
 1. Open an SSH Session with your EC2 Instance
 
