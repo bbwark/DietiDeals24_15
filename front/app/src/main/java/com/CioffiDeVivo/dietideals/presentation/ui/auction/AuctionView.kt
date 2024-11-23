@@ -273,9 +273,3 @@ fun DescriptionAuctionItem(description: String) {
     Text(text = description, fontSize = 12.sp)
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun AuctionViewPreview() {
-    AuctionView(auctionId = "1" , viewModel = AuctionViewModel(Application()), navController = rememberNavController())
-}

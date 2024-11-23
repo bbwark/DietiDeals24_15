@@ -6,13 +6,13 @@ import com.CioffiDeVivo.dietideals.data.models.CreditCard
 import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.data.models.User
 
-fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.Auction {
-    return com.CioffiDeVivo.dietideals.data.requestModels.Auction(
+/*fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.AuctionRequest {
+    return com.CioffiDeVivo.dietideals.data.requestModels.AuctionRequest(
         id = this.id,
         ownerId = this.ownerId,
         item = this.item.toRequestModel(),
         description = this.description,
-        bids = this.bids.map { it.toRequestModel() }.toCollection(ArrayList()),
+        bidRequests = this.bids.map { it.toRequestModel() }.toCollection(ArrayList()),
         endingDate = this.endingDate?.toString(),
         minStep = this.minStep,
         interval = this.interval,
@@ -24,8 +24,8 @@ fun Auction.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.Auc
     )
 }
 
-fun Bid.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.Bid {
-    return com.CioffiDeVivo.dietideals.data.requestModels.Bid(
+fun Bid.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.BidRequest {
+    return com.CioffiDeVivo.dietideals.data.requestModels.BidRequest(
         id = this.id,
         value = this.value,
         userId = this.userId,
@@ -34,8 +34,8 @@ fun Bid.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.Bid {
     )
 }
 
-fun CreditCard.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.CreditCard {
-    return com.CioffiDeVivo.dietideals.data.requestModels.CreditCard(
+fun CreditCard.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest {
+    return com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest(
         creditCardNumber = this.creditCardNumber,
         expirationDate = this.expirationDate.toString(),
         cvv = this.cvv.toIntOrNull(),
@@ -60,15 +60,16 @@ fun User.toRequestModel(): com.CioffiDeVivo.dietideals.data.requestModels.User {
         email = this.email,
         password = this.password,
         isSeller = this.isSeller,
-        favouriteAuctions = this.favouriteAuctions.map { it.toRequestModel() }
+        favouriteAuctionRequests = this.favouriteAuctions.map { it.toRequestModel() }
             .toCollection(ArrayList()),
-        ownedAuctions = this.ownedAuctions.map { it.toRequestModel() }.toCollection(ArrayList()),
+        ownedAuctionRequests = this.ownedAuctions.map { it.toRequestModel() }.toCollection(ArrayList()),
         bio = this.bio,
         address = this.address,
         zipcode = this.zipCode,
         country = this.country,
         phoneNumber = this.phoneNumber,
-        creditCards = this.creditCards.map { it.toRequestModel() }.toCollection(ArrayList()),
+        creditCardRequests = this.creditCards.map { it.toRequestModel() }.toCollection(ArrayList()),
         deviceTokens = this.deviceTokens.map { it } as ArrayList<String>
     )
 }
+ */

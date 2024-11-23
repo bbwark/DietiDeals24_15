@@ -3,12 +3,12 @@ import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.google.gson.annotations.SerializedName
 
-data class Auction(
+data class AuctionRequest(
     @SerializedName("id"                ) var id:               String?             = null,
     @SerializedName("ownerId"           ) var ownerId:          String?             = null,
     @SerializedName("item"              ) var item:             Item?               = null,
     @SerializedName("description"       ) var description:      String?             = null,
-    @SerializedName("bids"              ) var bids:             ArrayList<Bid>      = arrayListOf(),
+    @SerializedName("bids"              ) var bidRequests:             ArrayList<BidRequest>      = arrayListOf(),
     @SerializedName("endingDate"       ) var endingDate:       String?             = null,
     @SerializedName("minStep"          ) var minStep:          String?             = null,
     @SerializedName("interval"          ) var interval:         String?             = null,

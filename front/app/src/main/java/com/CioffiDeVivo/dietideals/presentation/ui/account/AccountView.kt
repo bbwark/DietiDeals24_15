@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
-import android.app.Application
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,70 +30,85 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun AccountView(viewModel: AccountViewModel, navController: NavHostController) {
+fun AccountView(viewModel: AccountViewModel, navController: NavController) {
 
-    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-    val name = encryptedSharedPreferences.getString("name", null)
-    val email = encryptedSharedPreferences.getString("email", null)
-    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
+    val accountUiState by viewModel.accountUiState.collectAsState()
 
+    LaunchedEffect(Unit){
+        viewModel.setUserState()
+    }
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        if (name != null && email != null) {
-            AccountViewTopBar(name, email)
-        }
-        Spacer(modifier = Modifier.size(24.dp))
-        AccountViewButton(
-            caption = "Edit Profile",
-            icon = Icons.Default.Settings,
-            onClick = { navController.navigate(Screen.EditProfile.route) }
-        )
-        AccountViewButton(
-            caption = "Change Contact Informations",
-            icon = Icons.Default.Mail,
-            onClick = { navController.navigate(Screen.EditContactInfo.route) }
-        )
-        AccountViewButton(
-            caption = "Manage Cards",
-            icon = Icons.Default.CreditCard,
-            onClick = { navController.navigate(Screen.ManageCards.route) }
-        )
-        AccountViewButton(
-            caption = "Favourite Auctions",
-            icon = Icons.Default.Bookmark,
-            onClick = { navController.navigate(Screen.Favourites.route) }
-        )
-        if(isSeller){
-            AccountViewButton(
-                caption = "Your Auctions",
-                icon = Icons.Default.Sell,
-                onClick = { navController.navigate(Screen.Sell.route) }
-            )
-        }
-        AccountViewButton(
-            caption = "Log Out",
-            icon = Icons.AutoMirrored.Filled.ExitToApp,
-            showChevron = false,
-            destructiveAction = true,
+    when(accountUiState){
+        is AccountUiState.Loading -> LoadingView()
+        is AccountUiState.Error -> RetryView(
             onClick = {
-                viewModel.logOut()
-                navController.navigate(Screen.Login.route)
+                navController.popBackStack()
+                navController.navigate(Screen.Account.route)
             }
         )
+        is AccountUiState.SuccessLogout -> {
+            navController.navigate(Screen.Login.route){
+                popUpTo(Screen.Account.route){ inclusive = true }
+            }
+        }
+        is AccountUiState.Success -> {
+            val accountState = accountUiState as AccountUiState.Success
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                AccountViewTopBar(accountState.name, accountState.email)
+                Spacer(modifier = Modifier.size(24.dp))
+                AccountViewButton(
+                    caption = "Edit Profile",
+                    icon = Icons.Default.Settings,
+                    onClick = { navController.navigate(Screen.EditProfile.route) }
+                )
+                AccountViewButton(
+                    caption = "Change Contact Informations",
+                    icon = Icons.Default.Mail,
+                    onClick = { navController.navigate(Screen.EditContactInfo.route) }
+                )
+                AccountViewButton(
+                    caption = "Manage Cards",
+                    icon = Icons.Default.CreditCard,
+                    onClick = { navController.navigate(Screen.ManageCards.route) }
+                )
+                AccountViewButton(
+                    caption = "Favourite Auctions",
+                    icon = Icons.Default.Bookmark,
+                    onClick = { navController.navigate(Screen.Favourites.route) }
+                )
+                if(accountState.isSeller){
+                    AccountViewButton(
+                        caption = "Your Auctions",
+                        icon = Icons.Default.Sell,
+                        onClick = { navController.navigate(Screen.Sell.route) }
+                    )
+                }
+                AccountViewButton(
+                    caption = "Log Out",
+                    icon = Icons.AutoMirrored.Filled.ExitToApp,
+                    showChevron = false,
+                    destructiveAction = true,
+                    onClick = {
+                        viewModel.logOut()
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
+        }
     }
+
 }
 
 @Composable
@@ -154,10 +167,4 @@ fun AccountViewButton(
             )
         }
     }
-}
-
-@Preview (showBackground = true)
-@Composable
-fun AccountViewPreview() {
-    AccountView(viewModel = AccountViewModel(Application()), navController = rememberNavController())
 }

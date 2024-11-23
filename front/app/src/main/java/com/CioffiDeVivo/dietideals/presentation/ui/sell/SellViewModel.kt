@@ -1,45 +1,30 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.data.requestModels.User
-import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.google.gson.Gson
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SellViewModel(application: Application): AndroidViewModel(application) {
+class SellViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userRepository: UserRepository
+): ViewModel() {
 
     private val _sellUiState = MutableStateFlow<SellUiState>(SellUiState.Loading)
     val sellUiState: StateFlow<SellUiState> = _sellUiState.asStateFlow()
-
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-    }
 
     fun fetchAuctions() {
         viewModelScope.launch {
             setLoadingState()
             _sellUiState.value = try {
-                val userId = sharedPreferences.getString("userId", null)
-                if (userId != null) {
-                    val getUserResponse = ApiService.getUser(userId)
-                    if (getUserResponse.status.isSuccess()) {
-                        val user = Gson().fromJson(getUserResponse.bodyAsText(), User::class.java).toDataModel()
-                        SellUiState.Success(user.ownedAuctions.toCollection(ArrayList()))
-                    } else{
-                        SellUiState.Error
-                    }
-                } else{
-                    SellUiState.Error
-                }
+                val userId = userPreferencesRepository.getUserIdPreference()
+                val isSeller = userPreferencesRepository.getIsSellerPreference()
+                val user = userRepository.getUser(userId)
+                SellUiState.Success(user.ownedAuctions.toCollection(ArrayList()), isSeller)
             } catch(e: Exception){
                 SellUiState.Error
             }

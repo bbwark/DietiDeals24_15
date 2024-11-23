@@ -68,24 +68,3 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
         }
     }
 }
-
-@Preview (showBackground = true)
-@Composable
-fun ManageCardsViewPreview() {
-    val viewModel = ManageCardsViewModel(Application())
-    val user = User(
-        "",
-        "Nametest Surnametest",
-        "",
-        "emailtest",
-        creditCards = arrayOf(
-            CreditCard("556666666666", LocalDate.now().plusYears(1), "222"),
-            CreditCard("456666666666", LocalDate.now().plusYears(2), "222"),
-            CreditCard("356666666666", LocalDate.now().plusYears(2), "222")
-        )
-    )
-    ManageCardsView(
-        viewModel = viewModel,
-        navController = rememberNavController()
-    )
-}

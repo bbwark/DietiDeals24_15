@@ -2,15 +2,9 @@ package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
-import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
 import com.CioffiDeVivo.dietideals.data.validations.ValidateLogInForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState

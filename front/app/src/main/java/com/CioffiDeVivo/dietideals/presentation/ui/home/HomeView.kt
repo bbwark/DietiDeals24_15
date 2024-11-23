@@ -34,15 +34,11 @@ import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun HomeView(
-    viewModel: HomeViewModel,
-    navController: NavController
-){
+fun HomeView(viewModel: HomeViewModel, navController: NavController){
     val homeUiState by viewModel.homeUiState.collectAsState()
-    val userState by viewModel.userState.collectAsState()
-    
+
     LaunchedEffect(Unit){
-        viewModel.loadUser()
+        viewModel.fetchHomeAuctions()
     }
     
     Column(
@@ -53,9 +49,6 @@ fun HomeView(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         ViewTitle(title = stringResource(id = R.string.dietideals))
-        userState?.let { Text(text = it.name) }
-        userState?.let { Text(text = it.address) }
-        userState?.let { Text(text = it.email) }
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
             onClick = { navController.navigate(Screen.Search.route) },

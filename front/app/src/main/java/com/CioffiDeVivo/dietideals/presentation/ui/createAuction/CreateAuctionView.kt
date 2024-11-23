@@ -206,8 +206,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                             onMinBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
                             onMaxBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MaxBidChanged(it)) },
                             onInfoClick = { showMaxBidInfo.value = true },
-                            onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                            onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                            onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
+                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
                             onCalendarClick = { showDatePicker.value = true }
                         )
                     }
@@ -272,13 +272,6 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun CreateAuctionPreview(){
-    CreateAuction(viewModel = CreateAuctionViewModel(application = Application()), navController = rememberNavController())
-}
-
 
 @Composable
 fun SilentAuction(
