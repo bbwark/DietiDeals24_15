@@ -84,7 +84,7 @@ Run the following command to generate it:
 1. Create the application-secret.properties file
 
     ```sh
-    cat application-secret.properties
+    nano application-secret.properties
     ```
 
 1. Fill in the file with the following fields:
