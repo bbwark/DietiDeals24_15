@@ -52,7 +52,7 @@ This is a list of technologies used for the development of the project, necessar
 
 # Getting Started
 
-Obviously the Local Installation will lack the image loading and reading functionality, and the platform user notification functionality, furthermore it is not possible to use a mobile device that connects to the endpoint of the application launched locally, unless the port where the application connects locally is made reachable on the internet [The instructions for performing this operation will not be provided in this guide and can be found in other sources if necessary].
+Obviously the Local Installation will lack the image loading and reading functionality, and the platform user notification functionality, since they depend from AWS, furthermore it is not possible to use a mobile device that connects to the endpoint of the application launched locally, unless the port where the application connects locally is made reachable on the internet [The instructions for performing this operation will not be provided in this guide and can be found in other sources if necessary].
 
 1. This is a common step. Clone the repository:
     ```sh
