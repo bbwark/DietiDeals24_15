@@ -150,11 +150,7 @@ Since these services are constantly evolving, it is recommended to do research o
     ```
     The use of the Alpine distribution was chosen due to the lightness of Alpine
 
-1. Return to parent folder:
-
-    ```sh
-    cd ..
-    ```
+1. Return to parent folder (`cd ..`)
 
 1. Compress the folder into a zip file
 
