@@ -1,4 +1,14 @@
-![DietiDeals](/Documents/Logo%20DietiDeals.png)
+<div align="center">
+    <h1>DietiDeals</h1>
+    <div>
+    <img alt="Static Badge" src="https://img.shields.io/badge/Java-17-red">
+    <img alt="Static Badge" src="https://img.shields.io/badge/SpringBoot-3.2.2-green">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Kotlin-1.9-darkblue">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Android-14-brightgreen">
+    <img alt="Static Badge" src="https://img.shields.io/badge/JetpackCompose-green">
+    </div>
+    <img src="/Documents/Logo%20DietiDeals.png" width="25%" alt="DietiDeals">
+</div>
 
 DietiDeals is an online auction management platform. The system consists of a performant and reliable mobile application through which users can access the system's functionalities in an intuitive, quick, and enjoyable way.
 
