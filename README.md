@@ -130,7 +130,7 @@ Precise guidance for AWS Console will not be provided as the service is continua
 1. After creating the EC2 instance create an S3 bucket, access to this bucket can be set as you like but it is important that the URLs can be visible to your users, since Coil (in Front-End) will take care of showing the images by loading them from the S3 URL.  
 As a minimum security suggestion, the upload to the bucket must be accessible only from the EC2 instance.
 
-1. The use of the SNS service is necessary for the correct functioning of the application.  
+1. The use of the SNS service is necessary for the correct functioning of the notification system.  
 At the time of the development of the project it was necessary to obtain permissions from the FireBase console by registering the Android Studio project and then configuring a Topic on SNS.  
 Since these services are constantly evolving, it is recommended to do research outside of this guide to complete this step.
 
