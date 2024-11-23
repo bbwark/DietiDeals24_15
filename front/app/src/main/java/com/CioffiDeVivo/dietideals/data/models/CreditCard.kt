@@ -1,10 +1,8 @@
 package com.CioffiDeVivo.dietideals.data.models
 
-import java.time.LocalDate
-
-data class CreditCard constructor(
+data class CreditCard(
     val creditCardNumber: String = "",
-    val expirationDate: LocalDate = LocalDate.now(),
+    val expirationDate: String = "",
     val cvv: String = "",
     val iban: String = "",
 )

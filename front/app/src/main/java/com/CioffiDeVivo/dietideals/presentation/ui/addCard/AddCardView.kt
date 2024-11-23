@@ -90,9 +90,3 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavHostController){
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun AddCardPreview(){
-    AddCardView(viewModel = AddCardViewModel(Application()), navController = rememberNavController())
-}

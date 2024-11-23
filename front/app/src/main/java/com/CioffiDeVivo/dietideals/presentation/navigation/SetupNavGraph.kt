@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.navigation
 
-import android.annotation.SuppressLint
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -10,23 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.CioffiDeVivo.dietideals.DietiDealsApplication
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.components.AuctionTopBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.BottomNavigationBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DetailsViewTopBar
@@ -48,7 +40,6 @@ import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterC
 import com.CioffiDeVivo.dietideals.presentation.ui.register.RegisterView
 import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchView
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellView
-import com.CioffiDeVivo.dietideals.utils.GenericViewModelFactory
 import com.CioffiDeVivo.dietideals.presentation.ui.account.AccountViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.createAuction.CreateAuctionViewModel
@@ -69,10 +60,8 @@ import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppViewModelFactory) {
-    val viewModelFactory = GenericViewModelFactory(LocalContext.current.applicationContext as Application)
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route
@@ -84,7 +73,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: AccountViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: AccountViewModel = viewModel(factory = appViewModelFactory)
                     AccountView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -102,7 +91,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                     BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: EditProfileViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: EditProfileViewModel = viewModel(factory = appViewModelFactory)
                     EditProfile(viewModel = viewModel, navController = navController)
                 }
             }
@@ -120,7 +109,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                     BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: EditContactInfoViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: EditContactInfoViewModel = viewModel(factory = appViewModelFactory)
                     EditContactInfoView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -138,7 +127,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                     BottomNavigationBar(navController = navController)
                 }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel : ManageCardsViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel : ManageCardsViewModel = viewModel(factory = appViewModelFactory)
                     ManageCardsView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -150,7 +139,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: FavouritesViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: FavouritesViewModel = viewModel(factory = appViewModelFactory)
                     FavouritesView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -178,7 +167,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 }
             ) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: SellViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: SellViewModel = viewModel(factory = appViewModelFactory)
                     SellView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -193,7 +182,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 )
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: CreateAuctionViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: CreateAuctionViewModel = viewModel(factory = appViewModelFactory)
                     CreateAuction(viewModel = viewModel, navController = navController)
                 }
             }
@@ -201,7 +190,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
         composable(
             route = Screen.RegisterCredentials.route
         ) {
-            val viewModel: RegisterCredentialsViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: RegisterCredentialsViewModel = viewModel(factory = appViewModelFactory)
             RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
@@ -249,7 +238,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 BottomNavigationBar(navController = navController)
             }) {
                 Box(modifier = Modifier.padding(it)) {
-                    val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel: SearchViewModel = viewModel(factory = appViewModelFactory)
                     SearchView(viewModel = viewModel, navController = navController)
                 }
             }
@@ -263,7 +252,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
             )
         ) { entry ->
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
-            val viewModel: AuctionViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: AuctionViewModel = viewModel(factory = appViewModelFactory)
             Scaffold(topBar = {
                 AuctionTopBar(
                     navController = navController,
@@ -291,7 +280,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
             )
         ) { entry ->
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
-            val viewModel: MakeABidViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: MakeABidViewModel = viewModel(factory = appViewModelFactory)
             MakeABid(
                 auctionId = auctionId,
                 viewModel = viewModel,
@@ -307,7 +296,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
             )
         ) {entry ->
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
-            val viewModel: BidHistoryViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: BidHistoryViewModel = viewModel(factory = appViewModelFactory)
             Scaffold(topBar = {
                 DetailsViewTopBar(
                     caption = stringResource(id = R.string.bidHistory),
@@ -336,7 +325,7 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 }
             ){
                 Box(modifier = Modifier.padding(it)){
-                    val viewModel : AddCardViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel : AddCardViewModel = viewModel(factory = appViewModelFactory)
                     AddCardView(viewModel = viewModel, navController = navController)
                 }
 
@@ -354,17 +343,10 @@ fun SetupNavGraph(navController: NavHostController, appViewModelFactory: AppView
                 }
             ) {
                 Box(modifier = Modifier.padding(it)){
-                    val viewModel : BecomeSellerViewModel = viewModel(factory = viewModelFactory)
+                    val viewModel : BecomeSellerViewModel = viewModel(factory = appViewModelFactory)
                     BecomeSellerView(viewModel = viewModel, navController = navController)
                 }
             }
         }
     }
-}
-
-@Composable
-inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavHostController): T{
-    val navGraphRoute = destination.parent?.route ?: return viewModel()
-    val parentEntry = remember(this) { navController.getBackStackEntry(navGraphRoute) }
-    return viewModel(parentEntry)
 }

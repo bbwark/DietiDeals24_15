@@ -155,9 +155,3 @@ fun MakeABidLayout(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun MakeABidSilentPreview(){
-    MakeABid(auctionId = "1", viewModel = MakeABidViewModel(Application()), navController = rememberNavController())
-}

@@ -21,7 +21,7 @@ open class RegistrationEvents {
     data class CreditCardNumberChanged(val creditCardNumber: String): RegistrationEvents()
     data class CreditCardNumberDeleted(val address: String): RegistrationEvents()
     data class ExpirationDateChanged(val expirationDate: String): RegistrationEvents()
-    data class ExpirationDateDeleted(val address: String): RegistrationEvents()
+    data class ExpirationDateDeleted(val expirationDate: String): RegistrationEvents()
     data class CvvChanged(val cvv: String): RegistrationEvents()
     data class CvvDeleted(val address: String): RegistrationEvents()
     data class IbanChanged(val iban: String): RegistrationEvents()

@@ -69,9 +69,3 @@ fun SearchAuctionsListView(
         navController = navController
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun SearchViewPreview() {
-    SearchView(viewModel = SearchViewModel(Application()), navController = rememberNavController())
-}

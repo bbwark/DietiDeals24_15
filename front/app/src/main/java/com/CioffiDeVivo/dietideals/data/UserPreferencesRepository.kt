@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class UserPreferencesRepository(
@@ -24,6 +25,7 @@ class UserPreferencesRepository(
         const val TAG = "UserPreferencesRepo"
     }
 
+    //Save Data Preferences
     suspend fun saveUserId(userId: String){
         dataStore.edit { preferences ->
             preferences[USER_ID] = userId
@@ -118,4 +120,31 @@ class UserPreferencesRepository(
         .map { preferences ->
             preferences[IS_SELLER] ?: false
         }
+
+    //Save Data Preferences
+    suspend fun getUserIdPreference(): String {
+        return userId.first()
+    }
+
+    suspend fun getTokenPreference(): String {
+        return token.first()
+    }
+
+    suspend fun getNamePreference(): String {
+        return name.first()
+    }
+
+    suspend fun getEmailPreference(): String {
+        return userId.first()
+    }
+
+    suspend fun getIsSellerPreference(): Boolean {
+        return isSeller.first()
+    }
+
+    suspend fun clearPreferences() {
+        dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 }

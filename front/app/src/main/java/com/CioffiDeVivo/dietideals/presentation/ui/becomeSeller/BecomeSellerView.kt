@@ -91,9 +91,3 @@ fun BecomeSellerView(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun BecomeSellerPreview(){
-    BecomeSellerView(viewModel = BecomeSellerViewModel(Application()), navController = rememberNavController())
-}

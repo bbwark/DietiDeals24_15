@@ -1,12 +1,8 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.login
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.CioffiDeVivo.dietideals.services.TokenService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,34 +17,20 @@ class LogInViewModel(private val userPreferencesRepository: UserPreferencesRepos
 
     /*init {
         checkUserAuthentication()
-    }
-
-    private fun checkUserAuthentication(){
-        viewModelScope.launch {
-            setLoadingState()
-            try {
-                val token = TokenService.getToken(getApplication())
-                _isUserAuthenticated.value = token != null
-                if (token != null) {
-                    ApiService.initialize(token, getApplication())
-                }
-                setSuccessState()
-            } catch (e: Exception){
-                setErrorState()
-            }
-        }
     }*/
 
-    private fun setLoadingState(){
+    private fun checkUserAuthentication(){
         _logInUiState.value = LogInUiState.Loading
-    }
-
-    private fun setErrorState(){
-        _logInUiState.value = LogInUiState.Error
-    }
-
-    private fun setSuccessState(){
-        _logInUiState.value = LogInUiState.Success
+        viewModelScope.launch {
+            try {
+                if(userPreferencesRepository.getTokenPreference().isNotEmpty()){
+                    _isUserAuthenticated.value = true
+                }
+                _logInUiState.value = LogInUiState.Success
+            } catch (e: Exception){
+                _logInUiState.value = LogInUiState.Error
+            }
+        }
     }
 
 }

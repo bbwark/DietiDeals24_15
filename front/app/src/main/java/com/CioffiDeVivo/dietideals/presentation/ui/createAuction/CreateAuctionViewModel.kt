@@ -1,122 +1,103 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
-import android.app.Application
-import android.content.Context
-import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
-import com.CioffiDeVivo.dietideals.data.mappers.toRequestModel
+import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.validations.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 
 class CreateAuctionViewModel(
-    application: Application,
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val auctionRepository: AuctionRepository,
     private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm()
-): AndroidViewModel(application) {
+): ViewModel() {
 
     private val _createAuctionUiState = MutableStateFlow<CreateAuctionUiState>(CreateAuctionUiState.CreateAuctionParams())
     val createAuctionUiState: StateFlow<CreateAuctionUiState> = _createAuctionUiState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationCreateAuctionEvent = validationEventChannel.receiveAsFlow()
 
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-    }
-
     fun createAuctionOnAction(createAuctionEvents: CreateAuctionEvents){
-        when(createAuctionEvents){
-            is CreateAuctionEvents.ItemNameChanged -> {
-                updateItemName(createAuctionEvents.itemName)
+        try {
+            val currentState = _createAuctionUiState.value
+            if(currentState is CreateAuctionUiState.CreateAuctionParams){
+                when(createAuctionEvents){
+                    is CreateAuctionEvents.ItemNameChanged -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(item = currentState.auction.item.copy(name = createAuctionEvents.itemName)))
+                    }
+                    is CreateAuctionEvents.ItemNameDeleted -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(item = currentState.auction.item.copy(name = "")))
+                    }
+                    is CreateAuctionEvents.ImagesChanged -> {
+                        updateImagesUri(createAuctionEvents.image)
+                    }
+                    is CreateAuctionEvents.ImagesDeleted -> {
+                        deleteImageUri(createAuctionEvents.index)
+                    }
+                    is CreateAuctionEvents.AuctionTypeChanged -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(type = createAuctionEvents.auctionType))
+                    }
+                    is CreateAuctionEvents.AuctionCategoryChanged -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(category = createAuctionEvents.auctionCategory))
+                    }
+                    is CreateAuctionEvents.IntervalChanged -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(interval = createAuctionEvents.interval))
+                    }
+                    is CreateAuctionEvents.IntervalDeleted -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(interval = ""))
+                    }
+                    is CreateAuctionEvents.MinStepChanged -> {
+                        updateMinStep(createAuctionEvents.minStep)
+                    }
+                    is CreateAuctionEvents.EndingDateChanged -> {
+                        updateEndingDate(createAuctionEvents.endingDate)
+                    }
+                    is CreateAuctionEvents.DescriptionChanged -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(description = createAuctionEvents.description))
+                    }
+                    is CreateAuctionEvents.DescriptionDeleted -> {
+                        _createAuctionUiState.value = currentState.copy(auction = currentState.auction.copy(description = ""))
+                    }
+                    is CreateAuctionEvents.MinAcceptedChanged -> {
+                        updateMinAccepted(createAuctionEvents.minAccepted)
+                    }
+                    is CreateAuctionEvents.MaxBidChanged -> {
+                        updateMaxBid(createAuctionEvents.maxBid)
+                    }
+                    is CreateAuctionEvents.Submit -> {
+                        submitCreateAuction()
+                    }
+                }
             }
-            is CreateAuctionEvents.ItemNameDeleted -> {
-                deleteItemName()
-            }
-            is CreateAuctionEvents.ImagesChanged -> {
-                updateImagesUri(createAuctionEvents.image)
-            }
-            is CreateAuctionEvents.ImagesDeleted -> {
-                deleteImageUri(createAuctionEvents.index)
-            }
-            is CreateAuctionEvents.AuctionTypeChanged -> {
-                updateAuctionType(createAuctionEvents.auctionType)
-            }
-            is CreateAuctionEvents.AuctionCategoryChanged -> {
-                updateAuctionCategory(createAuctionEvents.auctionCategory)
-            }
-            is CreateAuctionEvents.IntervalChanged -> {
-                updateInterval(createAuctionEvents.interval)
-            }
-            is CreateAuctionEvents.IntervalDeleted -> {
-                deleteInterval()
-            }
-            is CreateAuctionEvents.MinStepChanged -> {
-                updateMinStep(createAuctionEvents.minStep)
-            }
-            is CreateAuctionEvents.EndingDateChanged -> {
-                updateEndingDate(createAuctionEvents.endingDate)
-            }
-            is CreateAuctionEvents.DescriptionChanged -> {
-                updateDescriptionAuction(createAuctionEvents.description)
-            }
-            is CreateAuctionEvents.DescriptionDeleted -> {
-                deleteDescriptionAuction()
-            }
-            is CreateAuctionEvents.MinAcceptedChanged -> {
-                updateMinAccepted(createAuctionEvents.minAccepted)
-            }
-            is CreateAuctionEvents.MaxBidChanged -> {
-                updateMaxBid(createAuctionEvents.maxBid)
-            }
-            is CreateAuctionEvents.Submit -> {
-                submitCreateAuction()
-            }
+        } catch (e: Exception){
+            _createAuctionUiState.value = CreateAuctionUiState.Error
         }
     }
 
     private fun submitCreateAuction() {
         if (validationBlock()) {
             val currentState = _createAuctionUiState.value
+            _createAuctionUiState.value = CreateAuctionUiState.Loading
             if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = CreateAuctionUiState.Loading
                 viewModelScope.launch {
                     _createAuctionUiState.value = try {
-                        val userId = sharedPreferences.getString("userId", null)
-                        val uploadedUrls = currentState.auction.item.imagesUri.map { uriString ->
-                            val uri = Uri.parse(uriString)
-                            val file = createTemporaryFileFromUri(uri)
-                            ApiService.uploadImage(file, "img").bodyAsText()
-                        }
-                        val updatedAuctionParams = currentState.copy(
-                            auction = currentState.auction.copy(
-                                ownerId = userId ?: "",
-                                item = currentState.auction.item.copy(
-                                    imagesUri = uploadedUrls
-                                )
-                            )
+                        val userId = userPreferencesRepository.getUserIdPreference()
+                        val updatedAuction = currentState.auction.copy(
+                            ownerId = userId
                         )
-                        val auctionRequest = updatedAuctionParams.auction.toRequestModel()
-                        val response = ApiService.createAuction(auctionRequest)
-                        if (response.status.isSuccess()) {
-                            CreateAuctionUiState.Success
-                        } else{
-                            Log.e("Error", "Error: REST Unsuccessful")
-                            CreateAuctionUiState.Error
-                        }
+                        auctionRepository.createAuction(updatedAuction)
+                        CreateAuctionUiState.Success
                     } catch (e: Exception){
                         Log.e("Error", "Error: ${e.message}")
                         CreateAuctionUiState.Error
@@ -124,18 +105,6 @@ class CreateAuctionViewModel(
                 }
             }
         }
-    }
-
-    private fun createTemporaryFileFromUri(uri: Uri): File{
-        val contentResolver = getApplication<Application>().contentResolver
-        val inputStream = contentResolver.openInputStream(uri)
-        val tempFile = File.createTempFile("temp_image", null, getApplication<Application>().cacheDir)
-        inputStream?.use { input ->
-            tempFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        return tempFile
     }
 
     private fun validationBlock(): Boolean {
@@ -197,27 +166,6 @@ class CreateAuctionViewModel(
         }
     }
 
-    private fun updateItemName(itemName: String) {
-        try {
-            val currentState = _createAuctionUiState.value
-            if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = currentState.copy(
-                    auction = currentState.auction.copy(
-                        item = currentState.auction.item.copy(
-                            name = itemName
-                        )
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _createAuctionUiState.value = CreateAuctionUiState.Error
-        }
-    }
-
-    private fun deleteItemName(){
-        updateItemName("")
-    }
-
     private fun updateImagesUri(imagesUri: String){
         try {
             val currentState = _createAuctionUiState.value
@@ -256,25 +204,6 @@ class CreateAuctionViewModel(
         }
     }
 
-    fun updateDescriptionAuction(description: String){
-        try {
-            val currentState = _createAuctionUiState.value
-            if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = currentState.copy(
-                    auction = currentState.auction.copy(
-                        description = description
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _createAuctionUiState.value = CreateAuctionUiState.Error
-        }
-    }
-
-    fun deleteDescriptionAuction(){
-        updateDescriptionAuction("")
-    }
-
     fun updateEndingDate(endingDate: Long){
         try {
             val currentState = _createAuctionUiState.value
@@ -291,25 +220,6 @@ class CreateAuctionViewModel(
         } catch (e: Exception){
             _createAuctionUiState.value = CreateAuctionUiState.Error
         }
-    }
-
-    private fun updateInterval(interval: String){
-        try {
-            val currentState = _createAuctionUiState.value
-            if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = currentState.copy(
-                    auction = currentState.auction.copy(
-                        interval = interval
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _createAuctionUiState.value = CreateAuctionUiState.Error
-        }
-    }
-
-    private fun deleteInterval(){
-        updateInterval("")
     }
 
     private fun updateMinStep(minStep: String){
@@ -375,36 +285,6 @@ class CreateAuctionViewModel(
                         )
                     )
                 }
-            }
-        } catch (e: Exception){
-            _createAuctionUiState.value = CreateAuctionUiState.Error
-        }
-    }
-
-    private fun updateAuctionType(auctionType: AuctionType){
-        try {
-            val currentState = _createAuctionUiState.value
-            if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = currentState.copy(
-                    auction = currentState.auction.copy(
-                        type = auctionType
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _createAuctionUiState.value = CreateAuctionUiState.Error
-        }
-    }
-
-    private fun updateAuctionCategory(auctionCategory: AuctionCategory){
-        try {
-            val currentState = _createAuctionUiState.value
-            if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                _createAuctionUiState.value = currentState.copy(
-                    auction = currentState.auction.copy(
-                        category = auctionCategory
-                    )
-                )
             }
         } catch (e: Exception){
             _createAuctionUiState.value = CreateAuctionUiState.Error

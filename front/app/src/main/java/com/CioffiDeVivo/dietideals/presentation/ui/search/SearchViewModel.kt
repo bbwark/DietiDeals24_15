@@ -1,18 +1,18 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.search
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.models.Auction
-import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application): AndroidViewModel(application) {
+class SearchViewModel(
+    private val auctionRepository: AuctionRepository
+): ViewModel() {
 
     private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
     val searchUiState: StateFlow<SearchUiState> = _searchUiState.asStateFlow()
@@ -31,11 +31,11 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             setLoadingState()
             _searchUiState.value = try {
-                val auctions = ApiService.getAuctionsByItemName(searchWord)
+                val auctions = auctionRepository.getAuctionsByItemName(searchWord)
                 if(auctions.isNotEmpty()){
                     val list: ArrayList<Auction> = arrayListOf()
                     for (auction in auctions) {
-                        list.add(auction.toDataModel())
+                        list.add(auction)
                     }
                     SearchUiState.Success(list)
                 } else{

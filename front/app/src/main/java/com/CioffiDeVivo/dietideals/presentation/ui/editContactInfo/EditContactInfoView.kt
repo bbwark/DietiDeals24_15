@@ -90,9 +90,3 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun EditContactInfoPreview(){
-    EditContactInfoView(viewModel = EditContactInfoViewModel(Application()), navController = rememberNavController())
-}

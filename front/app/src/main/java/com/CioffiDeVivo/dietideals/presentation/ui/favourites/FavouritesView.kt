@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.favourites
 
-import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,41 +9,52 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.AuctionsListFavoured
-import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
+import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
+import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun FavouritesView(viewModel: FavouritesViewModel, navController: NavHostController) {
-    var tabIndex: Int by remember { mutableStateOf(0) }
+fun FavouritesView(viewModel: FavouritesViewModel, navController: NavController) {
 
-    val userState by viewModel.userState.collectAsState()
+    var tabIndex: Int by remember { mutableIntStateOf(0) }
+    val favouritesUiState by viewModel.favouritesUiState.collectAsState()
 
-    Column(Modifier.fillMaxSize()) {
-        FavouriteTabRow(
-            selectedTabIndex = tabIndex,
-            tabs = listOf<String>("Active", "Finished"),
-            onTabChange = {
-                tabIndex = it
-            } //or onTabChange = {selectedTab -> tabIndex = selectedTab}
+    when(favouritesUiState){
+        is FavouritesUiState.Loading -> LoadingView()
+        is FavouritesUiState.Error -> RetryView(
+            onClick = {
+                navController.popBackStack()
+                navController.navigate(Screen.Favourites.route)
+            }
         )
-        when (tabIndex) {
-            //viewModel userState favoured auctions
-            0 -> AuctionsListFavoured(
-                auctions = userState.favouriteAuctions.filter { !it.expired }.toTypedArray(),
-                navController = navController
-            ) //ActiveAuctions
-            1 -> AuctionsListFavoured(
-                auctions = userState.favouriteAuctions.filter { it.expired }.toTypedArray(),
-                navController = navController
-            ) //FinishedAuctions
+        is FavouritesUiState.Success -> {
+            Column(Modifier.fillMaxSize()) {
+                FavouriteTabRow(
+                    selectedTabIndex = tabIndex,
+                    tabs = listOf("Active", "Finished"),
+                    onTabChange = {
+                        tabIndex = it
+                    }
+                )
+                when (tabIndex) {
+                    0 -> AuctionsListFavoured(
+                        auctions = (favouritesUiState as FavouritesUiState.Success).favouritesAuctions.filter { !it.expired }.toTypedArray(),
+                        navController = navController
+                    )
+                    1 -> AuctionsListFavoured(
+                        auctions = (favouritesUiState as FavouritesUiState.Success).favouritesAuctions.filter { it.expired }.toTypedArray(),
+                        navController = navController
+                    )
+                }
+            }
         }
     }
 }
@@ -57,14 +67,5 @@ fun FavouriteTabRow(selectedTabIndex: Int, tabs: List<String>, onTabChange: (Int
                 Text(modifier = Modifier.padding(vertical = 10.dp), text = title)
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun FavouritesViewPreview(){
-    DietiDealsTheme {
-        FavouritesView(viewModel = FavouritesViewModel(Application()), navController = rememberNavController())
     }
 }

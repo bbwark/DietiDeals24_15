@@ -1,45 +1,31 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.manageCards
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.data.requestModels.User
-import com.CioffiDeVivo.dietideals.data.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.services.ApiService
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
+import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.google.gson.Gson
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
 
-class ManageCardsViewModel(application: Application) : AndroidViewModel(application){
+class ManageCardsViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userRepository: UserRepository,
+    private val creditCardRepository: CreditCardRepository
+): ViewModel(){
 
     private val _manageCardsUiState = MutableStateFlow<ManageCardsUiState>(ManageCardsUiState.Loading)
     val manageCardsUiState: StateFlow<ManageCardsUiState> = _manageCardsUiState.asStateFlow()
-
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-    }
 
     fun fetchCreditCards(){
         viewModelScope.launch {
             setLoadingState()
             _manageCardsUiState.value = try {
-                val userId = sharedPreferences.getString("userId", null)
-                if(userId != null){
-                    val creditCardResponse = ApiService.getUser(userId)
-                    if(creditCardResponse.status.isSuccess()){
-                        val user = Gson().fromJson(creditCardResponse.bodyAsText(), User::class.java).toDataModel()
-                        ManageCardsUiState.Success(user.creditCards)
-                    } else{
-                        ManageCardsUiState.Error
-                    }
-                } else{
-                    ManageCardsUiState.Error
-                }
+                val userId = userPreferencesRepository.getUserIdPreference()
+                val user = userRepository.getUser(userId)
+                ManageCardsUiState.Success(user.creditCards)
             } catch (e: Exception){
                 ManageCardsUiState.Error
             }
@@ -50,14 +36,10 @@ class ManageCardsViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             setLoadingState()
             try {
-                val response = ApiService.deleteCreditCard(creditCardNumber)
-                if(response.status.isSuccess()){
-                    fetchCreditCards()
-                } else{
-                    ManageCardsUiState.Error
-                }
+                creditCardRepository.deleteCreditCard(creditCardNumber)
+                fetchCreditCards()
             } catch (e: Exception){
-                ManageCardsUiState.Error
+                _manageCardsUiState.value = ManageCardsUiState.Error
             }
 
         }

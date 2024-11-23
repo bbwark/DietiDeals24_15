@@ -3,9 +3,9 @@ package com.CioffiDeVivo.dietideals.services
 
 import android.content.Context
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.data.requestModels.Auction
-import com.CioffiDeVivo.dietideals.data.requestModels.Bid
-import com.CioffiDeVivo.dietideals.data.requestModels.CreditCard
+import com.CioffiDeVivo.dietideals.data.requestModels.AuctionRequest
+import com.CioffiDeVivo.dietideals.data.requestModels.BidRequest
+import com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest
 import com.CioffiDeVivo.dietideals.data.requestModels.Item
 import com.CioffiDeVivo.dietideals.data.requestModels.User
 import com.google.gson.Gson
@@ -159,11 +159,11 @@ object ApiService {
 
 
     //post mapping create credit card /credit_cards
-    suspend fun createCreditCard(creditCard: CreditCard): HttpResponse {
+    suspend fun createCreditCard(creditCardRequest: CreditCardRequest): HttpResponse {
         var resultResponse: HttpResponse
         HttpClient(CIO).use {
             val gson = Gson()
-            val postedCreditCard = gson.toJson(creditCard)
+            val postedCreditCard = gson.toJson(creditCardRequest)
             val response = it.post {
                 url("$URL/credit_cards")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
@@ -190,8 +190,8 @@ object ApiService {
     }
 
     //get mapping get credit cards by user id /credit_cards/user/{userId}
-    suspend fun getCreditCardsByUserId(userId: String): Array<CreditCard> {
-        var resultCreditCards: Array<CreditCard> = emptyArray()
+    suspend fun getCreditCardsByUserId(userId: String): Array<CreditCardRequest> {
+        var resultCreditCardRequests: Array<CreditCardRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
@@ -199,13 +199,13 @@ object ApiService {
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             if (response.status.isSuccess()) {
-                resultCreditCards =
-                    gson.fromJson(response.bodyAsText(), Array<CreditCard>::class.java)
+                resultCreditCardRequests =
+                    gson.fromJson(response.bodyAsText(), Array<CreditCardRequest>::class.java)
             } else {
                 throw IOException("HttpRequest Failed: $response")
             }
         }
-        return resultCreditCards
+        return resultCreditCardRequests
     }
 
 /*
@@ -215,11 +215,11 @@ object ApiService {
 
 
     //post mapping create bid /bids
-    suspend fun createBid(bid: Bid): HttpResponse {
+    suspend fun createBid(bidRequest: BidRequest): HttpResponse {
         var resultResponse: HttpResponse
         HttpClient(CIO).use {
             val gson = Gson()
-            val postedBid = gson.toJson(bid)
+            val postedBid = gson.toJson(bidRequest)
             val response = it.post {
                 url("$URL/bids")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
@@ -245,8 +245,8 @@ object ApiService {
     }
 
     //get mapping get bid by auction id /bids/auction/{auctionId}
-    suspend fun getBidsByAuctionId(auctionId: String): Array<Bid> {
-        var resultBids: Array<Bid> = emptyArray()
+    suspend fun getBidsByAuctionId(auctionId: String): Array<BidRequest> {
+        var resultBidRequests: Array<BidRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
@@ -254,20 +254,20 @@ object ApiService {
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             if (response.status.isSuccess()) {
-                resultBids = gson.fromJson(response.bodyAsText(), Array<Bid>::class.java)
+                resultBidRequests = gson.fromJson(response.bodyAsText(), Array<BidRequest>::class.java)
             } else {
                 throw IOException("HttpRequest Failed: $response")
             }
         }
-        return resultBids
+        return resultBidRequests
     }
 
     //post mapping choose winning bid /bids/chooseWinningBid
-    suspend fun chooseWinningBid(bid: Bid): HttpResponse {
+    suspend fun chooseWinningBid(bidRequest: BidRequest): HttpResponse {
         var resultResponse: HttpResponse
         HttpClient(CIO).use {
             val gson = Gson()
-            val postedBid = gson.toJson(bid)
+            val postedBid = gson.toJson(bidRequest)
             val response = it.post {
                 url("${URL}/bids/chooseWinningBid")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
@@ -287,11 +287,11 @@ object ApiService {
 
 
     //post mapping create auction /auctions
-    suspend fun createAuction(auction: Auction): HttpResponse {
+    suspend fun createAuction(auctionRequest: AuctionRequest): HttpResponse {
         var resultResponse: HttpResponse
         HttpClient(CIO).use {
             val gson = Gson()
-            val postedAuction = gson.toJson(auction)
+            val postedAuction = gson.toJson(auctionRequest)
             val response = it.post {
                 url("$URL/auctions")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
@@ -304,13 +304,13 @@ object ApiService {
     }
 
     //put mapping update auction /auctions/{id}
-    suspend fun updateAuction(auction: Auction): HttpResponse {
+    suspend fun updateAuction(auctionRequest: AuctionRequest): HttpResponse {
         var resultResponse: HttpResponse
         HttpClient(CIO).use {
             val gson = Gson()
-            val updatedAuction = gson.toJson(auction)
+            val updatedAuction = gson.toJson(auctionRequest)
             val response = it.put {
-                url("$URL/auctions/${auction.id}")
+                url("$URL/auctions/${auctionRequest.id}")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 setBody(updatedAuction)
@@ -334,8 +334,8 @@ object ApiService {
     }
 
     //get mapping get auctionsByItemName /auctions/item/{name}
-    suspend fun getAuctionsByItemName(name: String): Array<Auction> {
-        var resultAuctions: Array<Auction> = emptyArray()
+    suspend fun getAuctionsByItemName(name: String): Array<AuctionRequest> {
+        var resultAuctionRequests: Array<AuctionRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
@@ -343,17 +343,17 @@ object ApiService {
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             if (response.status.isSuccess()) {
-                resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+                resultAuctionRequests = gson.fromJson(response.bodyAsText(), Array<AuctionRequest>::class.java)
             } else {
                 throw IOException("HttpRequest Failed: $response")
             }
         }
-        return resultAuctions
+        return resultAuctionRequests
     }
 
     //get mapping get randomAuctions /auctions/owner/{id}
-    suspend fun getRandomAuctions(ownerId: String): Array<Auction> {
-        var resultAuctions: Array<Auction> = emptyArray()
+    suspend fun getRandomAuctions(ownerId: String): Array<AuctionRequest> {
+        var resultAuctionRequests: Array<AuctionRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
@@ -361,12 +361,12 @@ object ApiService {
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
             if (response.status.isSuccess()) {
-                resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+                resultAuctionRequests = gson.fromJson(response.bodyAsText(), Array<AuctionRequest>::class.java)
             } else {
                 throw IOException("HttpRequest Failed: $response")
             }
         }
-        return resultAuctions
+        return resultAuctionRequests
     }
 
     //get mapping get auction bidders /auctions/bidders/{id}
@@ -388,31 +388,31 @@ object ApiService {
     }
 
     //get mapping get endingAuctions /auctions/ending/{userId}
-    suspend fun getEndingAuctions(userId: String): Array<Auction> {
-        var resultAuctions: Array<Auction> = emptyArray()
+    suspend fun getEndingAuctions(userId: String): Array<AuctionRequest> {
+        var resultAuctionRequests: Array<AuctionRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
                 url("${URL}/auctions/ending/$userId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            resultAuctionRequests = gson.fromJson(response.bodyAsText(), Array<AuctionRequest>::class.java)
         }
-        return resultAuctions
+        return resultAuctionRequests
     }
 
     //get mapping get participatedAuctions /auctions/participated/{userId}
-    suspend fun getParticipatedAuctions(userId: String): Array<Auction> {
-        var resultAuctions: Array<Auction> = emptyArray()
+    suspend fun getParticipatedAuctions(userId: String): Array<AuctionRequest> {
+        var resultAuctionRequests: Array<AuctionRequest> = emptyArray()
         HttpClient(CIO).use {
             val gson = Gson()
             val response = it.get {
                 url("${URL}/auctions/participated/$userId")
                 header(HttpHeaders.Authorization, "Bearer $TOKEN")
             }
-            resultAuctions = gson.fromJson(response.bodyAsText(), Array<Auction>::class.java)
+            resultAuctionRequests = gson.fromJson(response.bodyAsText(), Array<AuctionRequest>::class.java)
         }
-        return resultAuctions
+        return resultAuctionRequests
     }
 
 /*

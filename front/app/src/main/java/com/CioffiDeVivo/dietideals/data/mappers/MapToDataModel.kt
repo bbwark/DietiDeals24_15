@@ -3,9 +3,9 @@ package com.CioffiDeVivo.dietideals.data.mappers
 import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.data.models.Country
-import com.CioffiDeVivo.dietideals.data.requestModels.Auction
-import com.CioffiDeVivo.dietideals.data.requestModels.Bid
-import com.CioffiDeVivo.dietideals.data.requestModels.CreditCard
+import com.CioffiDeVivo.dietideals.data.requestModels.AuctionRequest
+import com.CioffiDeVivo.dietideals.data.requestModels.BidRequest
+import com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest
 import com.CioffiDeVivo.dietideals.data.requestModels.Item
 import com.CioffiDeVivo.dietideals.data.requestModels.User
 import java.time.LocalDate
@@ -14,13 +14,13 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Auction {
+/*fun AuctionRequest.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Auction {
     return com.CioffiDeVivo.dietideals.data.models.Auction(
         id = this.id ?: "",
         ownerId = this.ownerId ?: "",
         item = this.item?.toDataModel() ?: com.CioffiDeVivo.dietideals.data.models.Item(),
         description = this.description ?: "",
-        bids = this.bids.map { it.toDataModel() }.toTypedArray(),
+        bids = this.bidRequests.map { it.toDataModel() }.toTypedArray(),
         endingDate = this.endingDate?.let { LocalDateTime.parse(it) },
         minStep = this.minStep ?: "",
         interval = this.interval ?: "",
@@ -32,7 +32,7 @@ fun Auction.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Auction {
     )
 }
 
-fun Bid.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Bid {
+fun BidRequest.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Bid {
     return com.CioffiDeVivo.dietideals.data.models.Bid(
         id = this.id ?: "",
         value = this.value ?: 0F,
@@ -45,7 +45,7 @@ fun Bid.toDataModel(): com.CioffiDeVivo.dietideals.data.models.Bid {
     )
 }
 
-fun CreditCard.toDataModel(): com.CioffiDeVivo.dietideals.data.models.CreditCard {
+fun CreditCardRequest.toDataModel(): com.CioffiDeVivo.dietideals.data.models.CreditCard {
     return com.CioffiDeVivo.dietideals.data.models.CreditCard(
         creditCardNumber = this.creditCardNumber ?: "",
         expirationDate = this.expirationDate?.let { LocalDate.parse(it) } ?: LocalDate.now(),
@@ -69,14 +69,14 @@ fun User.toDataModel(): com.CioffiDeVivo.dietideals.data.models.User {
         email = this.email ?: "",
         password = this.password ?: "",
         isSeller = this.isSeller ?: false,
-        favouriteAuctions = this.favouriteAuctions.map { it.toDataModel() }.toTypedArray(),
-        ownedAuctions = this.ownedAuctions.map { it.toDataModel() }.toTypedArray(),
+        favouriteAuctions = this.favouriteAuctionRequests.map { it.toDataModel() }.toTypedArray(),
+        ownedAuctions = this.ownedAuctionRequests.map { it.toDataModel() }.toTypedArray(),
         bio = this.bio ?: "",
         address = this.address ?: "",
         zipCode = this.zipcode ?: "",
         country = this.country ?: Country.Italy,
         phoneNumber = this.phoneNumber ?: "",
-        creditCards = this.creditCards.map { it.toDataModel() }.toTypedArray(),
+        creditCards = this.creditCardRequests.map { it.toDataModel() }.toTypedArray(),
         deviceTokens = this.deviceTokens.map { it }.toTypedArray()
     )
-}
+}*/
