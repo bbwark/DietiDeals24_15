@@ -21,7 +21,7 @@ DietiDeals is an online auction management platform. The system consists of a pe
 - Custom notification system for auction winner, participant and creator
 - Possibility to upload images for your auctions
 - Possibility to customize your profile with a description
-- Badge to show to other users if you are a verified advertiser
+- Badge to show to other users if you are a verified insertionist
 
 # Dependencies
 This is a list of technologies used for the development of the project, necessary for the correct functioning of the software produced.
