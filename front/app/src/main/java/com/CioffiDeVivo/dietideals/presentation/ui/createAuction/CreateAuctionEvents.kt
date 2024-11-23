@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
+import android.content.Context
 import android.net.Uri
 import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
@@ -19,6 +20,4 @@ sealed class CreateAuctionEvents {
     data class DescriptionDeleted(val description: String): CreateAuctionEvents()
     data class MinAcceptedChanged(val minAccepted: String): CreateAuctionEvents()
     data class MaxBidChanged(val maxBid: String): CreateAuctionEvents()
-    data class Submit(val submitted: Boolean = true) : CreateAuctionEvents()
-
 }

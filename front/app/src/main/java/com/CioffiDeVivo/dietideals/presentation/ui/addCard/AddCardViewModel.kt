@@ -7,6 +7,7 @@ import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
 import com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest
 import com.CioffiDeVivo.dietideals.data.validations.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,7 +70,7 @@ class AddCardViewModel(
             val currentState = _addCardUiState.value
             if(currentState is AddCardUiState.AddCardParams){
                 _addCardUiState.value = AddCardUiState.Loading
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     _addCardUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
                         val cardRequest = CreditCardRequest(currentState.creditCard.creditCardNumber, currentState.creditCard.expirationDate, currentState.creditCard.cvv, currentState.creditCard.iban, userId)

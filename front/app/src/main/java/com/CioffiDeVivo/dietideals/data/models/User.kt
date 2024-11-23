@@ -11,7 +11,7 @@ data class User(
     val ownedAuctions: Array<Auction> = arrayOf(),
     val bio: String = "",
     val address: String = "",
-    val zipCode: String = "",
+    val zipcode: String = "",
     val country: Country? = Country.Italy,
     val phoneNumber: String = "",
     val creditCards: Array<CreditCard> = arrayOf(),

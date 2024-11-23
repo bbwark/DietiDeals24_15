@@ -45,7 +45,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)
@@ -115,7 +115,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)
@@ -185,7 +185,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)

@@ -1,13 +1,18 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
+import com.CioffiDeVivo.dietideals.data.repositories.ImageRepository
 import com.CioffiDeVivo.dietideals.data.validations.ValidateCreateAuctionForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +25,7 @@ import java.time.ZoneId
 class CreateAuctionViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val auctionRepository: AuctionRepository,
+    private val imageRepository: ImageRepository,
     private val validateCreateAuctionForm: ValidateCreateAuctionForm = ValidateCreateAuctionForm()
 ): ViewModel() {
 
@@ -75,9 +81,6 @@ class CreateAuctionViewModel(
                     is CreateAuctionEvents.MaxBidChanged -> {
                         updateMaxBid(createAuctionEvents.maxBid)
                     }
-                    is CreateAuctionEvents.Submit -> {
-                        submitCreateAuction()
-                    }
                 }
             }
         } catch (e: Exception){
@@ -85,7 +88,7 @@ class CreateAuctionViewModel(
         }
     }
 
-    private fun submitCreateAuction() {
+    fun submitCreateAuction(context: Context) {
         if (validationBlock()) {
             val currentState = _createAuctionUiState.value
             _createAuctionUiState.value = CreateAuctionUiState.Loading
@@ -93,8 +96,20 @@ class CreateAuctionViewModel(
                 viewModelScope.launch {
                     _createAuctionUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
+                        val imageUrls = currentState.auction.item.imagesUri.map { uri ->
+                            async {
+                                imageRepository.uploadImage(
+                                    Uri.parse(uri),
+                                    "image_${System.currentTimeMillis()}.jpg",
+                                    context = context
+                                )
+                            }
+                        }.awaitAll()
                         val updatedAuction = currentState.auction.copy(
-                            ownerId = userId
+                            ownerId = userId,
+                            item = currentState.auction.item.copy(
+                                imagesUri = imageUrls
+                            )
                         )
                         auctionRepository.createAuction(updatedAuction)
                         CreateAuctionUiState.Success
@@ -115,8 +130,8 @@ class CreateAuctionViewModel(
                 val auctionTypeValidation = validateCreateAuctionForm.validateAuctionType(currentState.auction.type)
                 val intervalValidation = validateCreateAuctionForm.validateInterval(currentState.auction.interval)
                 val minStepValidation = validateCreateAuctionForm.validateMinStep(currentState.auction.minStep)
-                val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(currentState.auction.minAccepted)
-                val maxBidValidation = validateCreateAuctionForm.validateMaxBid(currentState.auction.maxBid)
+                val minAcceptedValidation = validateCreateAuctionForm.validateMinAccepted(currentState.auction.startingPrice)
+                val maxBidValidation = validateCreateAuctionForm.validateMaxBid(currentState.auction.buyoutPrice)
 
                 val hasErrorAuctionSilent = listOf(
                     itemNameValidation,
@@ -252,13 +267,13 @@ class CreateAuctionViewModel(
                 if(minAccepted.isEmpty()){
                     _createAuctionUiState.value = currentState.copy(
                         auction = currentState.auction.copy(
-                            minAccepted = "0"
+                            startingPrice = "0"
                         )
                     )
                 } else{
                     _createAuctionUiState.value = currentState.copy(
                         auction = currentState.auction.copy(
-                            minAccepted = minAccepted
+                            startingPrice = minAccepted
                         )
                     )
                 }
@@ -275,13 +290,13 @@ class CreateAuctionViewModel(
                 if(maxBid.isEmpty()){
                     _createAuctionUiState.value = currentState.copy(
                         auction = currentState.auction.copy(
-                            maxBid = "0"
+                            buyoutPrice = "0"
                         )
                     )
                 } else{
                     _createAuctionUiState.value = currentState.copy(
                         auction = currentState.auction.copy(
-                            maxBid = maxBid
+                            buyoutPrice = maxBid
                         )
                     )
                 }

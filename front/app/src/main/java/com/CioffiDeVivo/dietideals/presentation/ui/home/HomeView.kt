@@ -37,9 +37,9 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 fun HomeView(viewModel: HomeViewModel, navController: NavController){
     val homeUiState by viewModel.homeUiState.collectAsState()
 
-    LaunchedEffect(Unit){
+    /*LaunchedEffect(Unit){
         viewModel.fetchHomeAuctions()
-    }
+    }*/
     
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -66,10 +66,10 @@ class RegisterCredentialsViewModel(
                         _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(address = ""))
                     }
                     is RegistrationEvents.ZipCodeChanged -> {
-                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(zipCode = registrationEvents.zipCode))
+                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(zipcode = registrationEvents.zipCode))
                     }
                     is RegistrationEvents.ZipCodeDeleted -> {
-                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(zipCode = ""))
+                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(zipcode = ""))
                     }
                     is RegistrationEvents.CountryChanged -> {
                         _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(country = registrationEvents.country))
@@ -123,7 +123,7 @@ class RegisterCredentialsViewModel(
                     _registerCredentialsUiState.value = try {
                         val registerRequest = currentState.user.copy(creditCards = currentState.user.creditCards + currentState.creditCard)
                         val registerResponse = authRepository.registerUser(registerRequest)
-                        val logInRequest = LogInRequest(registerResponse.email, registerResponse.password)
+                        val logInRequest = LogInRequest(registerResponse.email, currentState.user.password)
                         val loginResponse = authRepository.loginUser(logInRequest)
                         userPreferencesRepository.saveUserId(loginResponse.user.id)
                         userPreferencesRepository.saveToken(loginResponse.jwt)
@@ -151,7 +151,7 @@ class RegisterCredentialsViewModel(
                 val passwordValidation = validateRegistrationForms.validatePassword(currentState.user.password)
                 val newPasswordValidation = validateRegistrationForms.validateRetypePassword(currentState.user.password, currentState.retypePassword)
                 val addressValidation = validateRegistrationForms.validateAddress(currentState.user.address)
-                val zipCodeValidation = validateRegistrationForms.validateZipCode(currentState.user.zipCode)
+                val zipCodeValidation = validateRegistrationForms.validateZipCode(currentState.user.zipcode)
                 val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(currentState.user.phoneNumber)
                 val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
                 val expirationDateValidation = validateRegistrationForms.validateExpirationDate(currentState.creditCard.expirationDate)

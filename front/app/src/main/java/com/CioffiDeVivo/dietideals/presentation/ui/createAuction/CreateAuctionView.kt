@@ -256,7 +256,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                 Button(
                     onClick = {
                         showDialog.value = true
-                        viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
+                        viewModel.submitCreateAuction(context)
                     },
                     modifier = Modifier
                         .wrapContentWidth()

@@ -4,6 +4,7 @@ import com.CioffiDeVivo.dietideals.data.network.apiServices.AuctionApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.AuthApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.BidApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.CreditCardApiService
+import com.CioffiDeVivo.dietideals.data.network.apiServices.ImageApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.ItemApiService
 import com.CioffiDeVivo.dietideals.data.network.interceptors.AuthInterceptor
 import com.CioffiDeVivo.dietideals.data.network.apiServices.UserApiService
@@ -11,11 +12,13 @@ import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.BidRepository
 import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
+import com.CioffiDeVivo.dietideals.data.repositories.ImageRepository
 import com.CioffiDeVivo.dietideals.data.repositories.ItemRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkAuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkAuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkBidRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkCreditCardRepository
+import com.CioffiDeVivo.dietideals.data.repositories.NetworkImageRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkItemRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkUserRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
@@ -31,6 +34,7 @@ interface AppContainer {
     val creditCardRepository: CreditCardRepository
     val bidRepository: BidRepository
     val auctionRepository: AuctionRepository
+    val imageRepository: ImageRepository
 }
 
 class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository): AppContainer{
@@ -77,6 +81,10 @@ class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository):
         retrofit.create(AuctionApiService::class.java)
     }
 
+    private val imageApiService: ImageApiService by lazy {
+        retrofit.create(ImageApiService::class.java)
+    }
+
     //REPOSITORIES
     override val userRepository: UserRepository by lazy {
         NetworkUserRepository(userApiService)
@@ -99,6 +107,9 @@ class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository):
     }
     override val auctionRepository: AuctionRepository by lazy {
         NetworkAuctionRepository(auctionApiService)
+    }
+    override val imageRepository: ImageRepository by lazy {
+        NetworkImageRepository(imageApiService)
     }
 
 }

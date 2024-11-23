@@ -94,6 +94,6 @@ class MakeABidViewModel(
     }
 
     private fun validateBidSilent(bid: Bid, auction: Auction) : Boolean {
-        return bid.value > auction.minAccepted.toFloat()
+        return bid.value > auction.startingPrice.toFloat()
     }
 }
