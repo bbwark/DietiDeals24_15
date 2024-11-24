@@ -108,7 +108,7 @@ class CreateAuctionViewModel(
                         val updatedAuction = currentState.auction.copy(
                             ownerId = userId,
                             item = currentState.auction.item.copy(
-                                imagesUri = imageUrls
+                                imagesUri = emptyList()
                             )
                         )
                         auctionRepository.createAuction(updatedAuction)

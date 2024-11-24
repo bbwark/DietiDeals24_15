@@ -44,12 +44,6 @@ class RegisterCredentialsViewModel(
                     is RegistrationEvents.NameDeleted -> {
                         _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(name = ""))
                     }
-                    is RegistrationEvents.SurnameChanged -> {
-                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(surname = registrationEvents.surname))
-                    }
-                    is RegistrationEvents.SurnameDeleted -> {
-                        _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(surname = ""))
-                    }
                     is RegistrationEvents.PasswordChanged -> {
                         _registerCredentialsUiState.value = currentState.copy(user = currentState.user.copy(password = registrationEvents.password))
                     }
@@ -147,7 +141,6 @@ class RegisterCredentialsViewModel(
             try {
                 val emailValidation = validateRegistrationForms.validateEmail(currentState.user.email)
                 val nameValidation = validateRegistrationForms.validateName(currentState.user.name)
-                val surnameValidation = validateRegistrationForms.validateSurname(currentState.user.surname)
                 val passwordValidation = validateRegistrationForms.validatePassword(currentState.user.password)
                 val newPasswordValidation = validateRegistrationForms.validateRetypePassword(currentState.user.password, currentState.retypePassword)
                 val addressValidation = validateRegistrationForms.validateAddress(currentState.user.address)
@@ -161,7 +154,6 @@ class RegisterCredentialsViewModel(
                 val hasErrorNotSeller = listOf(
                     emailValidation,
                     nameValidation,
-                    surnameValidation,
                     passwordValidation,
                     newPasswordValidation
                 ).any { !it.positiveResult }
@@ -169,7 +161,6 @@ class RegisterCredentialsViewModel(
                 val hasErrorSeller = listOf(
                     emailValidation,
                     nameValidation,
-                    surnameValidation,
                     passwordValidation,
                     newPasswordValidation,
                     addressValidation,
@@ -185,7 +176,6 @@ class RegisterCredentialsViewModel(
                     _registerCredentialsUiState.value = currentState.copy(
                         emailErrorMsg = emailValidation.errorMessage,
                         nameErrorMsg = nameValidation.errorMessage,
-                        surnameErrorMsg = surnameValidation.errorMessage,
                         passwordErrorMsg = passwordValidation.errorMessage,
                         retypePasswordErrorMsg = newPasswordValidation.errorMessage
                     )
@@ -195,7 +185,6 @@ class RegisterCredentialsViewModel(
                     _registerCredentialsUiState.value = currentState.copy(
                         emailErrorMsg = emailValidation.errorMessage,
                         nameErrorMsg = nameValidation.errorMessage,
-                        surnameErrorMsg = surnameValidation.errorMessage,
                         passwordErrorMsg = passwordValidation.errorMessage,
                         retypePasswordErrorMsg = newPasswordValidation.errorMessage,
                         addressErrorMsg = addressValidation.errorMessage,

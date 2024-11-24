@@ -56,12 +56,6 @@ class EditProfileViewModel(
                     is EditProfileEvent.NameDeleted -> {
                         _editUiProfileState.value = currentState.copy(user = currentState.user.copy(name = ""))
                     }
-                    is EditProfileEvent.SurnameChanged -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(surname = editProfileEvent.surname))
-                    }
-                    is EditProfileEvent.SurnameDeleted -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(surname = ""))
-                    }
                     is EditProfileEvent.DescriptionChanged -> {
                         _editUiProfileState.value = currentState.copy(user = currentState.user.copy(bio = editProfileEvent.description))
                     }
@@ -111,14 +105,12 @@ class EditProfileViewModel(
             try {
                 val emailValidation = validateEditProfileForm.validateEmail(currentState.user.email)
                 val nameValidation = validateEditProfileForm.validateName(currentState.user.name)
-                val surnameValidation = validateEditProfileForm.validateSurname(currentState.user.surname)
                 val passwordValidation = validateEditProfileForm.validatePassword(currentState.user.password)
                 val newPasswordValidation = validateEditProfileForm.validateRetypePassword(currentState.user.password, currentState.retypePassword)
 
                 val hasError = listOf(
                     emailValidation,
                     nameValidation,
-                    surnameValidation,
                     passwordValidation,
                     newPasswordValidation
                 ).any { !it.positiveResult }
@@ -127,7 +119,6 @@ class EditProfileViewModel(
                     _editUiProfileState.value = currentState.copy(
                         emailErrorMsg = emailValidation.errorMessage,
                         nameErrorMsg = nameValidation.errorMessage,
-                        surnameErrorMsg = surnameValidation.errorMessage,
                         passwordErrorMsg = passwordValidation.errorMessage,
                         retypePasswordErrorMsg = newPasswordValidation.errorMessage
                     )

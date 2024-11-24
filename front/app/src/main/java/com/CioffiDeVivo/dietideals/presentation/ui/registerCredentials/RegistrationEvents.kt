@@ -7,8 +7,6 @@ open class RegistrationEvents {
     data class EmailDeleted(val email: String): RegistrationEvents()
     data class NameChanged(val name: String): RegistrationEvents()
     data class NameDeleted(val email: String): RegistrationEvents()
-    data class SurnameChanged(val surname: String): RegistrationEvents()
-    data class SurnameDeleted(val email: String): RegistrationEvents()
     data class PasswordChanged(val password: String): RegistrationEvents()
     data class RetypePasswordChanged(val newPassword: String): RegistrationEvents()
     data class AddressChanged(val address: String): RegistrationEvents()
