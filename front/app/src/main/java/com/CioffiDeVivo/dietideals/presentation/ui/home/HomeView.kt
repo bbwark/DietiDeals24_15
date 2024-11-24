@@ -51,10 +51,13 @@ fun HomeView(viewModel: HomeViewModel, navController: NavController){
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { navController.navigate(Screen.Search.route) },
+            onClick = {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Search.route) {
+                    navController.navigate(Screen.Search.route)
+                }
+            },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
-
                 Icon(Icons.Rounded.Search, contentDescription = null)
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(

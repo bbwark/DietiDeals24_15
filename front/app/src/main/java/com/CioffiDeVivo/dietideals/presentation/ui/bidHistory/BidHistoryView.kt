@@ -71,7 +71,9 @@ fun BidHistoryView(
             }
         )
         is BidHistoryUiState.SuccessOnWinningBid -> {
-            navController.popBackStack()
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route) {
+                navController.popBackStack()
+            }
         }
     }
 

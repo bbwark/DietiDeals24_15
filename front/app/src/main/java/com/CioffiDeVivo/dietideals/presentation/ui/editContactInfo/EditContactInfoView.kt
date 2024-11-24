@@ -55,7 +55,9 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
         })
         is EditContactInfoUiState.Loading -> LoadingView()
         is EditContactInfoUiState.Success -> {
-            navController.navigate(Screen.Account.route)
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Account.route) {
+                navController.popBackStack()
+            }
         }
         is EditContactInfoUiState.EditContactInfoParams -> {
             Column(

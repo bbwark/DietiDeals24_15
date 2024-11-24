@@ -57,9 +57,13 @@ fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavControlle
                             HorizontalDivider()
                         }
                     })
-                FloatingAddButton(onClick = {
-                    navController.navigate(Screen.AddCard.route)
-                })
+                FloatingAddButton(
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.AddCard.route) {
+                            navController.navigate(Screen.AddCard.route)
+                        }
+                    }
+                )
             }
         }
     }

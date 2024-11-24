@@ -80,6 +80,7 @@ fun AuctionView(
         is AuctionUiState.Error -> RetryView(
             onClick = {
                 navController.popBackStack()
+                navController.navigate(Screen.Auction.route + "/${auctionId}")
             }
         )
     }
@@ -155,7 +156,11 @@ fun AuctionViewLayout(
         if(isOwner){
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = {
-                navController.navigate(Screen.BidHistory.route + "/${auction.id}")
+                if (navController.currentBackStackEntry?.destination?.route != Screen.BidHistory.route + "/${auction.id}") {
+                    navController.navigate(Screen.BidHistory.route + "/${auction.id}"){
+                        launchSingleTop = true
+                    }
+                }
             }) {
                 Text(text = "Bid History", fontSize = 18.sp)
             }
@@ -163,7 +168,11 @@ fun AuctionViewLayout(
         } else{
             Spacer(modifier = Modifier.size(12.dp))
             Button(onClick = {
-                navController.navigate(Screen.MakeABid.route + "/${auction.id}")
+                if (navController.currentBackStackEntry?.destination?.route != Screen.MakeABid.route + "/${auction.id}") {
+                    navController.navigate(Screen.MakeABid.route + "/${auction.id}") {
+                        launchSingleTop = true
+                    }
+                }
             }) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
             }

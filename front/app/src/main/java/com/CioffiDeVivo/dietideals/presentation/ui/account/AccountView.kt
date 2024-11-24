@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,9 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
     LaunchedEffect(Unit){
         viewModel.setUserState()
     }
+    LaunchedEffect(navController.currentBackStackEntry) {
+        Log.d("Navigation", "Navigated to: ${navController.currentBackStackEntry?.destination?.route}")
+    }
 
     when(accountUiState){
         is AccountUiState.Loading -> LoadingView()
@@ -60,8 +64,10 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
             }
         )
         is AccountUiState.SuccessLogout -> {
-            navController.navigate(Screen.Login.route){
-                popUpTo(Screen.Account.route){ inclusive = true }
+            if(navController.currentBackStackEntry?.destination?.route != Screen.Login.route){
+                navController.navigate(Screen.Login.route){
+                    popUpTo(0){ inclusive = true }
+                }
             }
         }
         is AccountUiState.Success -> {
@@ -76,28 +82,58 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
                 AccountViewButton(
                     caption = "Edit Profile",
                     icon = Icons.Default.Settings,
-                    onClick = { navController.navigate(Screen.EditProfile.route) }
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.EditProfile.route) {
+                            navController.navigate(Screen.EditProfile.route) {
+                                launchSingleTop
+                            }
+                        }
+                    }
                 )
                 AccountViewButton(
                     caption = "Change Contact Informations",
                     icon = Icons.Default.Mail,
-                    onClick = { navController.navigate(Screen.EditContactInfo.route) }
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.EditContactInfo.route) {
+                            navController.navigate(Screen.EditContactInfo.route) {
+                                launchSingleTop
+                            }
+                        }
+                    }
                 )
                 AccountViewButton(
                     caption = "Manage Cards",
                     icon = Icons.Default.CreditCard,
-                    onClick = { navController.navigate(Screen.ManageCards.route) }
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.ManageCards.route) {
+                            navController.navigate(Screen.ManageCards.route) {
+                                launchSingleTop
+                            }
+                        }
+                    }
                 )
                 AccountViewButton(
                     caption = "Favourite Auctions",
                     icon = Icons.Default.Bookmark,
-                    onClick = { navController.navigate(Screen.Favourites.route) }
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.Favourites.route) {
+                            navController.navigate(Screen.Favourites.route) {
+                                launchSingleTop
+                            }
+                        }
+                    }
                 )
                 if(accountState.isSeller){
                     AccountViewButton(
                         caption = "Your Auctions",
                         icon = Icons.Default.Sell,
-                        onClick = { navController.navigate(Screen.Sell.route) }
+                        onClick = {
+                            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
+                                navController.navigate(Screen.Sell.route) {
+                                    launchSingleTop
+                                }
+                            }
+                        }
                     )
                 }
                 AccountViewButton(
@@ -107,8 +143,10 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
                     destructiveAction = true,
                     onClick = {
                         viewModel.logOut()
-                        navController.navigate(Screen.Login.route){
-                            popUpTo(0) { inclusive = true }
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.Login.route) {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0){ inclusive = true }
+                            }
                         }
                     }
                 )

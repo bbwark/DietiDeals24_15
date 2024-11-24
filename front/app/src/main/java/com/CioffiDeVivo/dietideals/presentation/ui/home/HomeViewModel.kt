@@ -19,7 +19,7 @@ class HomeViewModel(
     private val _homeUiState = MutableStateFlow<HomeUiState>(HomeUiState.Success(arrayOf(), arrayOf(), arrayOf()))
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
-    fun fetchHomeAuctions(){
+    /*fun fetchHomeAuctions(){
         _homeUiState.value = HomeUiState.Loading
         viewModelScope.launch {
             _homeUiState.value = try {
@@ -37,5 +37,5 @@ class HomeViewModel(
                 HomeUiState.Error
             }
         }
-    }
+    }*/
 }

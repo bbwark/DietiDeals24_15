@@ -82,7 +82,13 @@ fun SellGridView(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 25.dp, end = 25.dp, bottom = 10.dp)
             )
-            Button(onClick = { navController.navigate(Screen.BecomeSeller.route) }) {
+            Button(
+                onClick = {
+                    if (navController.currentBackStackEntry?.destination?.route != Screen.BecomeSeller.route) {
+                        navController.navigate(Screen.BecomeSeller.route)
+                    }
+                }
+            ) {
                 Text(text = "Become a Seller")
             }
         }
@@ -117,7 +123,9 @@ fun SellGridView(
                 }
             }
             FloatingAddButton{
-                navController.navigate(Screen.CreateAuction.route)
+                if (navController.currentBackStackEntry?.destination?.route != Screen.CreateAuction.route) {
+                    navController.navigate(Screen.CreateAuction.route)
+                }
             }
         }
     }
