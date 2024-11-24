@@ -48,7 +48,11 @@ fun BecomeSellerView(
                 navController.navigate(Screen.BecomeSeller.route)
             }
         )}
-        is BecomeSellerUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is BecomeSellerUiState.Success -> {
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
+                navController.popBackStack()
+            }
+        }
         is BecomeSellerUiState.BecomeSellerParams -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

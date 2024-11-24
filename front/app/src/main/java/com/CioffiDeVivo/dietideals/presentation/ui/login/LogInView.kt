@@ -45,8 +45,10 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
     LaunchedEffect(isUserAuthenticated){
         if(isUserAuthenticated != null){
             if(isUserAuthenticated == true){
-                navController.navigate(Screen.Home.route){
-                    popUpTo(Screen.Login.route)
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Home.route) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    }
                 }
             }
         }
@@ -71,7 +73,11 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
                 ViewTitle(title = stringResource(id = R.string.logInAccount))
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
-                    onClick = { navController.navigate(Screen.LogInCredentials.route) },
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.LogInCredentials.route) {
+                            navController.navigate(Screen.LogInCredentials.route)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
@@ -90,7 +96,15 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
                 )
                 GoogleButton(navController = navController)
                 Spacer(modifier = Modifier.height(5.dp))
-                TextButton(onClick = { navController.navigate(Screen.Register.route) }) {
+                TextButton(
+                    onClick = {
+                        if (navController.currentBackStackEntry?.destination?.route != Screen.Register.route) {
+                            navController.navigate(Screen.Register.route){
+                                launchSingleTop = true
+                            }
+                        }
+                    }
+                ) {
                     Text(
                         "Create an Account",
                     )

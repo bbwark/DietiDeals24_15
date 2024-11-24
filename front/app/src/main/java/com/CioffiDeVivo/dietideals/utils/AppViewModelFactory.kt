@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.utils
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.CioffiDeVivo.dietideals.data.AppContainer

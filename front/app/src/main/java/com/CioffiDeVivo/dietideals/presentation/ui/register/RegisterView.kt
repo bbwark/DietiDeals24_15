@@ -50,7 +50,9 @@ fun RegisterView(navController: NavController) {
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
-                      navController.navigate(Screen.RegisterCredentials.route)
+                if (navController.currentBackStackEntry?.destination?.route != Screen.RegisterCredentials.route) {
+                    navController.navigate(Screen.RegisterCredentials.route)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,7 +70,15 @@ fun RegisterView(navController: NavController) {
         Spacer(modifier = Modifier.height(5.dp))
         GoogleButton(navController)
         Spacer(modifier = Modifier.height(5.dp))
-        TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
+        TextButton(
+            onClick = {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Login.route) {
+                    navController.navigate(Screen.Login.route) {
+                        launchSingleTop = true
+                    }
+                }
+            }
+        ) {
             Text(
                 "Log In",
             )

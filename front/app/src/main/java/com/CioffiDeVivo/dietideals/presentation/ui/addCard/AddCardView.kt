@@ -49,7 +49,9 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavController){
         is AddCardUiState.Error -> RetryView(onClick = {})
         is AddCardUiState.Loading -> LoadingView()
         is AddCardUiState.Success -> {
-            navController.popBackStack(Screen.ManageCards.route, inclusive = true)
+            if (navController.currentBackStackEntry?.destination?.route != Screen.ManageCards.route) {
+                navController.popBackStack()
+            }
         }
         is AddCardUiState.AddCardParams -> {
             Column(

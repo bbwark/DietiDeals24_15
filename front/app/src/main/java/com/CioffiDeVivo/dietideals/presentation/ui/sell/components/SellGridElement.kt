@@ -42,7 +42,11 @@ fun SellGridElement(auction: Auction, modifier: Modifier = Modifier, navControll
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .size(width = 160.dp, height = 170.dp)
-            .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") }
+            .clickable {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
+                    navController.navigate(Screen.Auction.route + "/${auction.id}")
+                }
+            }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

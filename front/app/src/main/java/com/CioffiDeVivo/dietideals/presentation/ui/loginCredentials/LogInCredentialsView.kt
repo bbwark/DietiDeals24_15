@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,13 +67,22 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
             }
         }
     }
+    LaunchedEffect(navController.currentBackStackEntry) {
+        Log.d("Navigation", "Navigated to: ${navController.currentBackStackEntry?.destination?.route}")
+    }
     when(loginUiState){
         is LogInCredentialsUiState.Loading -> LoadingView()
         is LogInCredentialsUiState.Error -> RetryView(onClick = {
             navController.popBackStack()
             navController.navigate(Screen.LogInCredentials.route)
         })
-        is LogInCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is LogInCredentialsUiState.Success -> {
+            if(navController.currentBackStackEntry?.destination?.route != Screen.Home.route){
+                navController.navigate(Screen.Home.route){
+                    popUpTo(navController.graph.startDestinationId){ inclusive = true }
+                }
+            }
+        }
         is LogInCredentialsUiState.LogInParams -> {
             Column(
                 modifier = Modifier.fillMaxSize(),

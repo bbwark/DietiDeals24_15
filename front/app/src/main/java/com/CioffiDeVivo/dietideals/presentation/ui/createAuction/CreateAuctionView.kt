@@ -121,8 +121,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         })
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
-            navController.navigate(Screen.Sell.route){
-                popUpTo(Screen.CreateAuction.route){ inclusive = true }
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
+                navController.popBackStack()
             }
         }
         is CreateAuctionUiState.CreateAuctionParams -> {

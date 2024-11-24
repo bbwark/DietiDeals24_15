@@ -55,7 +55,9 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
             }
         )
         is EditProfileUiState.Success -> {
-            navController.popBackStack()
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Account.route) {
+                navController.popBackStack()
+            }
         }
         is EditProfileUiState.EditProfileParams -> {
             Column(

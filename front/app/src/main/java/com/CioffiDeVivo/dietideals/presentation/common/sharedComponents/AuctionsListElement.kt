@@ -32,7 +32,11 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") },
+                .clickable {
+                    if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
+                        navController.navigate(Screen.Auction.route + "/${auction.id}")
+                    }
+                },
             text = auction.item.name)
     }
 }
@@ -55,7 +59,12 @@ fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
     ElevatedCard(
         modifier = Modifier
             .pulsateClick()
-            .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") }
+            .clickable {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
+                    navController.navigate(Screen.Auction.route + "/${auction.id}")
+                }
+                navController.navigate(Screen.Auction.route + "/${auction.id}")
+            }
     ) {
         Text(text = auction.item.name)
         // We have to implement an image system so we can delete this placeholder for testing

@@ -71,7 +71,13 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             navController.navigate(Screen.RegisterCredentials.route)
         })
         is RegisterCredentialsUiState.Loading -> LoadingView()
-        is RegisterCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is RegisterCredentialsUiState.Success -> {
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Home.route) {
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
+            }
+        }
         is RegisterCredentialsUiState.RegisterParams -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

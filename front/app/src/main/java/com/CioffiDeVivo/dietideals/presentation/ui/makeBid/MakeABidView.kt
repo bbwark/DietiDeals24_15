@@ -36,6 +36,7 @@ import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -56,11 +57,15 @@ fun MakeABid(
     when(makeABidUiState){
         is MakeABidUiState.Loading -> LoadingView()
         is MakeABidUiState.Success -> {
-            navController.popBackStack()
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
+                navController.popBackStack()
+            }
         }
         is MakeABidUiState.Error -> RetryView(
             onClick = {
-                navController.popBackStack()
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
+                    navController.popBackStack()
+                }
             }
         )
         is MakeABidUiState.MakeABidParams -> {
