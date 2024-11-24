@@ -86,12 +86,10 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                     userState = registerCredentialsUiState,
                     onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
                     onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
-                    onSurnameChange = { viewModel.registrationAction(RegistrationEvents.SurnameChanged(it)) },
                     onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
                     onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
                     onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) },
-                    onDeleteSurname = { viewModel.registrationAction(RegistrationEvents.SurnameDeleted(it)) }
+                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) }
                 )
                 Row(
                     modifier = Modifier

@@ -1,9 +1,10 @@
 package com.CioffiDeVivo.dietideals.data.models
 
+import kotlinx.serialization.SerialName
+
 data class User(
     val id: String = "",
     val name: String = "",
-    val surname: String = "",
     val email: String = "",
     val password: String = "",
     val isSeller: Boolean = false,

@@ -22,10 +22,14 @@ import com.CioffiDeVivo.dietideals.data.repositories.NetworkImageRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkItemRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkUserRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
+import com.CioffiDeVivo.dietideals.utils.LocalDateTimeDeserializer
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
 
 interface AppContainer {
     val userRepository: UserRepository
@@ -41,6 +45,10 @@ class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository):
 
     private val baseUrl = "http://16.171.206.112:8181"
 
+    private val customGson: Gson = GsonBuilder()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+        .create()
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -52,7 +60,7 @@ class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository):
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(customGson))
         .client(client)
         .build()
 

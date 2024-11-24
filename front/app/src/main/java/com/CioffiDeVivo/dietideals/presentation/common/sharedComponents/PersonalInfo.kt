@@ -23,12 +23,10 @@ fun PersonalInfoOnRegisterCredentials(
     userState: RegisterCredentialsUiState,
     onEmailChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
-    onSurnameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNewPasswordChange: (String) -> Unit,
     onDeleteEmail: (String) -> Unit,
     onDeleteName: (String) -> Unit,
-    onDeleteSurname: (String) -> Unit,
 ){
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -52,15 +50,6 @@ fun PersonalInfoOnRegisterCredentials(
         isError = userState.nameErrorMsg != null,
         onTrailingIconClick = { onDeleteName(it) },
         supportingText = userState.nameErrorMsg,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userState.user.surname,
-        onValueChanged = { onSurnameChange(it) },
-        label = stringResource(R.string.surname),
-        isError = userState.surnameErrorMsg != null,
-        onTrailingIconClick = { onDeleteSurname(it) },
-        supportingText = userState.surnameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
@@ -92,12 +81,10 @@ fun PersonalInfoOnEditProfile(
     userState: EditProfileUiState,
     onEmailChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
-    onSurnameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNewPasswordChange: (String) -> Unit,
     onDeleteEmail: (String) -> Unit,
     onDeleteName: (String) -> Unit,
-    onDeleteSurname: (String) -> Unit,
 ){
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -121,15 +108,6 @@ fun PersonalInfoOnEditProfile(
         isError = userState.nameErrorMsg != null,
         onTrailingIconClick = { onDeleteName(it) },
         supportingText = userState.nameErrorMsg,
-        modifier = modifierStandard
-    )
-    InputTextField(
-        value = userState.user.surname,
-        onValueChanged = { onSurnameChange(it) },
-        label = stringResource(R.string.surname),
-        isError = userState.surnameErrorMsg != null,
-        onTrailingIconClick = { onDeleteSurname(it) },
-        supportingText = userState.surnameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(

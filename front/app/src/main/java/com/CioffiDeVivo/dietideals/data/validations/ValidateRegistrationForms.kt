@@ -42,16 +42,6 @@ open class ValidateRegistrationForms {
         return ValidationResult(positiveResult = true)
     }
 
-    open fun validateSurname(surname: String): ValidationResult {
-        if (surname.isBlank()) {
-            return ValidationResult(
-                positiveResult = false,
-                errorMessage = "Field cannot be empty"
-            )
-        }
-        return ValidationResult(positiveResult = true)
-    }
-
     open fun validatePassword(password: String): ValidationResult {
         if (password.length < passwordMinimumLength) {
             return ValidationResult(

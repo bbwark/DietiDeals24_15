@@ -16,7 +16,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.addCard.AddCardUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
-import com.CioffiDeVivo.dietideals.utils.ExpirationDateTrasformation
+import com.CioffiDeVivo.dietideals.utils.ExpirationDateTransformation
 
 @Composable
 fun CreditCardComponents(
@@ -61,7 +61,7 @@ fun CreditCardComponents(
             placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = { onDeleteExpirationDate(it) },
-            visualTransformation =  ExpirationDateTrasformation(),
+            visualTransformation =  ExpirationDateTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .weight(1f)
@@ -139,7 +139,7 @@ fun CreditCardComponents(
             placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = { onDeleteExpirationDate(it) },
-            visualTransformation =  ExpirationDateTrasformation(),
+            visualTransformation =  ExpirationDateTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .weight(1f)
@@ -216,7 +216,7 @@ fun CreditCardComponents(
             placeholder = "MM/YY",
             supportingText = userState.expirationDateErrorMsg,
             onTrailingIconClick = { onDeleteExpirationDate(it) },
-            visualTransformation =  ExpirationDateTrasformation(),
+            visualTransformation =  ExpirationDateTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .weight(1f)

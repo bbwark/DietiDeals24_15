@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
-class ExpirationDateTrasformation: VisualTransformation {
+class ExpirationDateTransformation: VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmedText = text.text.take(4)
         var out = ""

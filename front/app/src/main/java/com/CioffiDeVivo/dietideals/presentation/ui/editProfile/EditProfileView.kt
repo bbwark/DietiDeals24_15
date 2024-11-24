@@ -69,12 +69,10 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
                     userState = editProfileUiState,
                     onEmailChange = { viewModel.editProfileAction(EditProfileEvent.EmailChanged(it)) },
                     onNameChange = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
-                    onSurnameChange = { viewModel.editProfileAction(EditProfileEvent.SurnameChanged(it)) },
                     onPasswordChange = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
                     onNewPasswordChange = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) },
                     onDeleteEmail = { viewModel.editProfileAction(EditProfileEvent.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) },
-                    onDeleteSurname = { viewModel.editProfileAction(EditProfileEvent.SurnameDeleted(it)) }
+                    onDeleteName = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) }
                 )
                 DescriptionTextfield(
                     description = (editProfileUiState as EditProfileUiState.EditProfileParams).user.bio,
