@@ -1,7 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
-import com.CioffiDeVivo.dietideals.domain.models.CreditCard
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.models.User
 
 sealed interface RegisterCredentialsUiState {
     object Success: RegisterCredentialsUiState
@@ -21,7 +21,6 @@ sealed interface RegisterCredentialsUiState {
         val zipCodeErrorMsg: String? = null,
         val phoneNumberErrorMsg: String? = null,
         val creditCardNumberErrorMsg: String? = null,
-        val expirationDate: String = "",
         val expirationDateErrorMsg: String? = null,
         val cvvErrorMsg: String? = null,
         val ibanErrorMsg: String? = null

@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.home
 
-import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Auction
 
 sealed interface HomeUiState {
 

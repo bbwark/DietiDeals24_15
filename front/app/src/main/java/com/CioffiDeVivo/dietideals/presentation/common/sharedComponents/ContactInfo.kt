@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.data.models.Country
 import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo.EditContactInfoUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
@@ -45,7 +45,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)
@@ -115,7 +115,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)
@@ -185,7 +185,7 @@ fun ContactInfo(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.user.zipCode,
+            value = userState.user.zipcode,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onZipCodeChange(it)

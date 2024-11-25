@@ -11,9 +11,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionUiState
 import com.CioffiDeVivo.dietideals.presentation.ui.auction.AuctionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,6 +25,7 @@ fun AuctionTopBar(
     navController: NavController,
     viewModel: AuctionViewModel
 ) {
+    val auctionUiState by viewModel.auctionUiState.collectAsState()
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
@@ -35,7 +39,7 @@ fun AuctionTopBar(
             }
         },
         actions = {
-            if (true) {
+            if (!(auctionUiState as AuctionUiState.Success).isFavoured) {
                 IconButton(onClick = {
                     viewModel.addOnFavourites()
                 }) {
@@ -56,10 +60,4 @@ fun AuctionTopBar(
             }
         }
     )
-}
-
-@Preview
-@Composable
-fun AuctionTopBarPreview() {
-    AuctionTopBar(rememberNavController(), AuctionViewModel(Application()))
 }

@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller
 
-import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -15,11 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
@@ -47,10 +45,15 @@ fun BecomeSellerView(
                 navController.navigate(Screen.BecomeSeller.route)
             }
         )}
-        is BecomeSellerUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is BecomeSellerUiState.Success -> {
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
+                navController.popBackStack()
+            }
+        }
         is BecomeSellerUiState.BecomeSellerParams -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
@@ -90,10 +93,4 @@ fun BecomeSellerView(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BecomeSellerPreview(){
-    BecomeSellerView(viewModel = BecomeSellerViewModel(Application()), navController = rememberNavController())
 }

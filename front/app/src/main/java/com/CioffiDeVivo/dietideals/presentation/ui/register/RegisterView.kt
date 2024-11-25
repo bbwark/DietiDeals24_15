@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +50,9 @@ fun RegisterView(navController: NavController) {
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
-                      navController.navigate(Screen.RegisterCredentials.route)
+                if (navController.currentBackStackEntry?.destination?.route != Screen.RegisterCredentials.route) {
+                    navController.navigate(Screen.RegisterCredentials.route)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,6 +69,20 @@ fun RegisterView(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(5.dp))
         GoogleButton(navController)
+        Spacer(modifier = Modifier.height(5.dp))
+        TextButton(
+            onClick = {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Login.route) {
+                    navController.navigate(Screen.Login.route) {
+                        launchSingleTop = true
+                    }
+                }
+            }
+        ) {
+            Text(
+                "Log In",
+            )
+        }
     }
 }
 

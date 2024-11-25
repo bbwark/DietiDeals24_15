@@ -1,49 +1,34 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.makeBid
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.google.gson.Gson
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
+import com.CioffiDeVivo.dietideals.data.repositories.BidRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MakeABidViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val _auctionState = MutableStateFlow(Auction())
-    val auctionState: StateFlow<Auction> = _auctionState.asStateFlow()
-    private val _bidState = MutableStateFlow(Bid())
-    val bidState: StateFlow<Bid> = _bidState.asStateFlow()
+class MakeABidViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val auctionRepository: AuctionRepository,
+    private val bidRepository: BidRepository
+): ViewModel() {
 
     private val _makeABidUiState = MutableStateFlow<MakeABidUiState>(MakeABidUiState.Loading)
     val makeABidUiState: StateFlow<MakeABidUiState> = _makeABidUiState.asStateFlow()
 
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-    }
-
     fun fetchAuction(auctionId: String){
+        _makeABidUiState.value = MakeABidUiState.Loading
         viewModelScope.launch {
-            setLoadingState()
             _makeABidUiState.value = try {
-                val auctionResponse = ApiService.getAuction(auctionId)
-                if(auctionResponse.status.isSuccess()){
-                    val auction = Gson().fromJson(auctionResponse.bodyAsText(), com.CioffiDeVivo.dietideals.domain.requestModels.Auction::class.java).toDataModel()
-                    MakeABidUiState.MakeABidParams(auction, Bid())
-                } else{
-                    MakeABidUiState.Error
-                }
+                val auction = auctionRepository.getAuction(auctionId)
+                MakeABidUiState.MakeABidParams(auction, MakeABidUiState.MakeABidParams().bid)
             } catch (e: Exception){
                 MakeABidUiState.Error
             }
@@ -76,7 +61,7 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
     fun submitBid(auctionId: String){
         val currentState = _makeABidUiState.value
         if(currentState is MakeABidUiState.MakeABidParams){
-            setLoadingState()
+            _makeABidUiState.value = MakeABidUiState.Loading
             viewModelScope.launch {
                 _makeABidUiState.value = try {
                     val validator: Boolean = if(currentState.auction.type == AuctionType.English){
@@ -85,18 +70,13 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
                         validateBidSilent(currentState.bid, currentState.auction)
                     }
                     if(validator){
-                        val userId = sharedPreferences.getString("userId", null)
-                        val updatedBid = currentState.bid.copy()
-                        val bidRequest = updatedBid.toRequestModel()
-                        bidRequest.userId = userId
-                        bidRequest.auctionId = auctionId
-                        val bidResponse = ApiService.createBid(bidRequest)
-                        if(bidResponse.status.isSuccess()){
-                            MakeABidUiState.Success
-                        } else{
-                            Log.e("Error", "Error: $bidResponse")
-                            MakeABidUiState.Error
-                        }
+                        val userId = userPreferencesRepository.getUserIdPreference()
+                        val updatedBid = currentState.bid.copy(
+                            userId = userId,
+                            auctionId = auctionId
+                        )
+                        bidRepository.createBid(updatedBid)
+                        MakeABidUiState.Success
                     } else{
                         Log.e("Error", "Error: Validator Error")
                         MakeABidUiState.Error
@@ -116,10 +96,6 @@ class MakeABidViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun validateBidSilent(bid: Bid, auction: Auction) : Boolean {
-        return bid.value > auction.minAccepted.toFloat()
-    }
-
-    private fun setLoadingState(){
-        _makeABidUiState.value = MakeABidUiState.Loading
+        return bid.value > auction.startingPrice.toFloat()
     }
 }

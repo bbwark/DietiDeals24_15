@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.makeBid
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,16 +28,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -59,11 +57,15 @@ fun MakeABid(
     when(makeABidUiState){
         is MakeABidUiState.Loading -> LoadingView()
         is MakeABidUiState.Success -> {
-            navController.popBackStack()
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
+                navController.popBackStack()
+            }
         }
         is MakeABidUiState.Error -> RetryView(
             onClick = {
-                navController.popBackStack()
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
+                    navController.popBackStack()
+                }
             }
         )
         is MakeABidUiState.MakeABidParams -> {
@@ -109,7 +111,7 @@ fun MakeABidLayout(
                         } else{
                             (auction.bids.last().value + auction.minStep.toFloat()).toString()
                         }
-                else auction.minAccepted,
+                else auction.startingPrice,
                 fontSize = 28.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium
@@ -154,10 +156,4 @@ fun MakeABidLayout(
             Text("Make a Bid", fontSize = 20.sp)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MakeABidSilentPreview(){
-    MakeABid(auctionId = "1", viewModel = MakeABidViewModel(Application()), navController = rememberNavController())
 }

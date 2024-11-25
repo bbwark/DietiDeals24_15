@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
-import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,11 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardComponents
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.PersonalInfoOnRegisterCredentials
@@ -45,7 +42,7 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
@@ -74,7 +71,13 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             navController.navigate(Screen.RegisterCredentials.route)
         })
         is RegisterCredentialsUiState.Loading -> LoadingView()
-        is RegisterCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is RegisterCredentialsUiState.Success -> {
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Home.route) {
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
+            }
+        }
         is RegisterCredentialsUiState.RegisterParams -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,19 +85,15 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
-                ViewTitle(title = stringResource(id = R.string.createAccount))
                 Spacer(modifier = Modifier.height(30.dp))
                 PersonalInfoOnRegisterCredentials(
                     userState = registerCredentialsUiState,
                     onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
                     onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
-                    onSurnameChange = { viewModel.registrationAction(RegistrationEvents.SurnameChanged(it)) },
                     onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
                     onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
                     onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) },
-                    onDeleteSurname = { viewModel.registrationAction(RegistrationEvents.SurnameDeleted(it)) }
+                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) }
                 )
                 Row(
                     modifier = Modifier
@@ -169,11 +168,5 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RegisterCredentialsPreview(){
-    RegisterCredentialsView(viewModel = RegisterCredentialsViewModel(application = Application()), navController = rememberNavController())
 }
 

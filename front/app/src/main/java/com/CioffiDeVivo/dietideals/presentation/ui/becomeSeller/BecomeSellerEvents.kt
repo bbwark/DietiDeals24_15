@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller
 
-import com.CioffiDeVivo.dietideals.domain.models.Country
+import com.CioffiDeVivo.dietideals.data.models.Country
 
 sealed class BecomeSellerEvents {
     data class AddressChanged(val address: String): BecomeSellerEvents()
@@ -18,6 +18,5 @@ sealed class BecomeSellerEvents {
     data class CvvDeleted(val address: String): BecomeSellerEvents()
     data class IbanChanged(val iban: String): BecomeSellerEvents()
     data class IbanDeleted(val address: String): BecomeSellerEvents()
-    data class SellerChange(val isSeller: Boolean): BecomeSellerEvents()
     data class Submit(val submitted: Boolean = true) : BecomeSellerEvents()
 }

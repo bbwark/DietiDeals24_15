@@ -1,14 +1,12 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.addCard
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toRequestModel
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateAddCardForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.services.ApiService
-import io.ktor.http.isSuccess
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
+import com.CioffiDeVivo.dietideals.data.validations.ValidateAddCardForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +14,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class AddCardViewModel(application: Application, private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm() ): AndroidViewModel(application) {
+class AddCardViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val creditCardRepository: CreditCardRepository,
+    private val validateAddCardForm: ValidateAddCardForm = ValidateAddCardForm()
+): ViewModel() {
 
     private val _addCardUiState = MutableStateFlow<AddCardUiState>(AddCardUiState.AddCardParams())
     val addCardUiState: StateFlow<AddCardUiState> = _addCardUiState.asStateFlow()
@@ -24,34 +26,41 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
     val validationAddCardEvent = validationEventChannel.receiveAsFlow()
 
     fun addCardAction(addCardEvents: AddCardEvents){
-        when(addCardEvents){
-            is AddCardEvents.CreditCardNumberChanged -> {
-                updateCreditCardNumber(addCardEvents.creditCardNumber)
+        try {
+            val currentState = _addCardUiState.value
+            if(currentState is AddCardUiState.AddCardParams){
+                when(addCardEvents){
+                    is AddCardEvents.CreditCardNumberChanged -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(creditCardNumber = addCardEvents.creditCardNumber))
+                    }
+                    is AddCardEvents.CreditCardNumberDeleted -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(creditCardNumber = ""))
+                    }
+                    is AddCardEvents.ExpirationDateChanged -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(expirationDate = addCardEvents.expirationDate))
+                    }
+                    is AddCardEvents.ExpirationDateDeleted -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(expirationDate = ""))
+                    }
+                    is AddCardEvents.CvvChanged -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(cvv = addCardEvents.cvv))
+                    }
+                    is AddCardEvents.CvvDeleted -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(cvv = ""))
+                    }
+                    is AddCardEvents.IBANChanged -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(iban = addCardEvents.iban))
+                    }
+                    is AddCardEvents.IBANDeleted -> {
+                        _addCardUiState.value = currentState.copy(creditCard = currentState.creditCard.copy(iban = ""))
+                    }
+                    is AddCardEvents.Submit -> {
+                        submitAddCard()
+                    }
+                }
             }
-            is AddCardEvents.CreditCardNumberDeleted -> {
-                deleteCreditCardNumber()
-            }
-            is AddCardEvents.ExpirationDateChanged -> {
-                updateExpirationDate(addCardEvents.expirationDate)
-            }
-            is AddCardEvents.ExpirationDateDeleted -> {
-                deleteExpirationDate()
-            }
-            is AddCardEvents.CvvChanged -> {
-                updateCvv(addCardEvents.cvv)
-            }
-            is AddCardEvents.CvvDeleted -> {
-                deleteCvv()
-            }
-            is AddCardEvents.IBANChanged -> {
-                updateIban(addCardEvents.iban)
-            }
-            is AddCardEvents.IBANDeleted -> {
-                deleteIban()
-            }
-            is AddCardEvents.Submit -> {
-                submitAddCard()
-            }
+        } catch (e: Exception){
+            _addCardUiState.value = AddCardUiState.Error
         }
     }
 
@@ -59,31 +68,21 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
         if(validationBock()) {
             val currentState = _addCardUiState.value
             if(currentState is AddCardUiState.AddCardParams){
-                val sharedPreferences = getApplication<Application>().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                val userId = sharedPreferences.getString("userId", null)
-                if(userId != null) {
-                    val cardRequest = currentState.creditCard.toRequestModel()
-                    cardRequest.ownerId = userId
-                    viewModelScope.launch {
-                        setLoadingState()
-                        _addCardUiState.value = try {
-                            val cardResponse = ApiService.createCreditCard(cardRequest)
-                            if(cardResponse.status.isSuccess()){
-                                AddCardUiState.Success
-                            } else{
-                                AddCardUiState.Error
-                            }
-                        } catch (e: Exception){
-                            AddCardUiState.Error
-                        }
+                _addCardUiState.value = AddCardUiState.Loading
+                viewModelScope.launch(Dispatchers.IO) {
+                    _addCardUiState.value = try {
+                        val userId = userPreferencesRepository.getUserIdPreference()
+                        val cardRequest = currentState.creditCard.copy(
+                            ownerId = userId
+                        )
+                        creditCardRepository.createCreditCard(cardRequest)
+                        AddCardUiState.Success
+                    } catch (e: Exception){
+                        AddCardUiState.Error
                     }
                 }
             }
         }
-    }
-
-    private fun setLoadingState(){
-        _addCardUiState.value = AddCardUiState.Loading
     }
 
     private fun validationBock() : Boolean {
@@ -91,7 +90,7 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
         if(currentState is AddCardUiState.AddCardParams){
             try {
                 val creditCardNumberValidation = validateAddCardForm.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
-                val expirationDateValidation = validateAddCardForm.validateExpirationDate(currentState.expirationDate)
+                val expirationDateValidation = validateAddCardForm.validateExpirationDate(currentState.creditCard.expirationDate)
                 val cvvValidation = validateAddCardForm.validateCvv(currentState.creditCard.cvv)
                 val ibanValidation = validateAddCardForm.validateIban(currentState.creditCard.iban)
 
@@ -122,79 +121,5 @@ class AddCardViewModel(application: Application, private val validateAddCardForm
         } else{
             return false
         }
-    }
-
-    private fun updateCreditCardNumber(creditCardNumber: String){
-        try {
-            val currentState = _addCardUiState.value
-            if(currentState is AddCardUiState.AddCardParams){
-                _addCardUiState.value = currentState.copy(
-                    creditCard = currentState.creditCard.copy(
-                        creditCardNumber = creditCardNumber
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _addCardUiState.value = AddCardUiState.Error
-        }
-    }
-
-    private fun deleteCreditCardNumber(){
-       updateCreditCardNumber("")
-    }
-
-    private fun updateExpirationDate(expirationDate: String){
-        try {
-            val currentState = _addCardUiState.value
-            if(currentState is AddCardUiState.AddCardParams){
-                _addCardUiState.value = currentState.copy(
-                    expirationDate = expirationDate
-                )
-            }
-        } catch (e: Exception){
-            _addCardUiState.value = AddCardUiState.Error
-        }
-    }
-
-    private fun deleteExpirationDate(){
-        updateExpirationDate("")
-    }
-
-    private fun updateCvv(cvv: String){
-        try {
-            val currentState = _addCardUiState.value
-            if(currentState is AddCardUiState.AddCardParams){
-                _addCardUiState.value = currentState.copy(
-                    creditCard = currentState.creditCard.copy(
-                        cvv = cvv
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _addCardUiState.value = AddCardUiState.Error
-        }
-    }
-
-    private fun deleteCvv(){
-        updateCvv("")
-    }
-
-    private fun updateIban(iban: String){
-        try {
-            val currentState = _addCardUiState.value
-            if(currentState is AddCardUiState.AddCardParams){
-                _addCardUiState.value = currentState.copy(
-                    creditCard = currentState.creditCard.copy(
-                        iban = iban
-                    )
-                )
-            }
-        } catch (e: Exception){
-            _addCardUiState.value = AddCardUiState.Error
-        }
-    }
-
-    private fun deleteIban(){
-        updateIban("")
     }
 }

@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.home
 
-import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +9,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,31 +22,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.HomeViewAuctionsList
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
-import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun HomeView(
-    viewModel: HomeViewModel,
-    navController: NavController
-){
+fun HomeView(viewModel: HomeViewModel, navController: NavController){
     val homeUiState by viewModel.homeUiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit){
         viewModel.fetchHomeAuctions()
-        viewModel.fetchTestAuctions()
-    }
+    }*/
+    
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -60,10 +51,13 @@ fun HomeView(
         ViewTitle(title = stringResource(id = R.string.dietideals))
         Spacer(modifier = Modifier.height(15.dp))
         ElevatedButton(
-            onClick = { navController.navigate(Screen.Search.route) },
+            onClick = {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Search.route) {
+                    navController.navigate(Screen.Search.route)
+                }
+            },
             modifier = Modifier.size(width = 330.dp, height = 50.dp),
             content = {
-
                 Icon(Icons.Rounded.Search, contentDescription = null)
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
@@ -144,10 +138,4 @@ fun ParticipatedAuctions(
         auctions = participatedAuctions,
         navController = navController
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeViewPreview(){
-    HomeView(viewModel = HomeViewModel(Application()), navController = rememberNavController())
 }

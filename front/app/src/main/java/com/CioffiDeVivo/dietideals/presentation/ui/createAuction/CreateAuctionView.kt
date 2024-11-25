@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -57,22 +56,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTextField
 import com.CioffiDeVivo.dietideals.presentation.ui.createAuction.components.CustomDatePickerDialog
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DropDownMenuField
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
-import com.CioffiDeVivo.dietideals.domain.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.AuctionCategory
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.models.AuctionCategory
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogAlert
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DialogInfo
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -121,8 +118,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
         })
         is CreateAuctionUiState.Loading -> LoadingView()
         is CreateAuctionUiState.Success -> {
-            navController.navigate(Screen.Sell.route){
-                popUpTo(Screen.CreateAuction.route){ inclusive = true }
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
+                navController.popBackStack()
             }
         }
         is CreateAuctionUiState.CreateAuctionParams -> {
@@ -134,7 +131,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             ) {
 
                 AddingImagesOnCreateAuction(
-                    imagesList = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri,
+                    imagesList = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.imageUrl,
                     onImageChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(it)) },
                     onDeleteImage = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesDeleted(it)) }
                 )
@@ -163,7 +160,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     ElevatedButton(
                         onClick = {
                             viewModel.removeErrorMsgAuctionType()
-                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.Silent))
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(
+                                AuctionType.Silent))
                         },
                         colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.Silent){
                             ButtonDefaults.buttonColors()
@@ -181,7 +179,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     ElevatedButton(
                         onClick = {
                             viewModel.removeErrorMsgAuctionType()
-                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(AuctionType.English))
+                            viewModel.createAuctionOnAction(CreateAuctionEvents.AuctionTypeChanged(
+                                AuctionType.English))
                         },
                         colors = if ((createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.type == AuctionType.English){
                             ButtonDefaults.buttonColors()
@@ -204,8 +203,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                             onMinBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
                             onMaxBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MaxBidChanged(it)) },
                             onInfoClick = { showMaxBidInfo.value = true },
-                            onDescriptionChange = { viewModel.updateDescriptionAuction(it) },
-                            onDeleteDescription = { viewModel.deleteDescriptionAuction() },
+                            onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
+                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
                             onCalendarClick = { showDatePicker.value = true }
                         )
                     }
@@ -254,7 +253,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                 Button(
                     onClick = {
                         showDialog.value = true
-                        viewModel.createAuctionOnAction(CreateAuctionEvents.Submit())
+                        viewModel.submitCreateAuction(context)
                     },
                     modifier = Modifier
                         .wrapContentWidth()
@@ -270,13 +269,6 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun CreateAuctionPreview(){
-    CreateAuction(viewModel = CreateAuctionViewModel(application = Application()), navController = rememberNavController())
-}
-
 
 @Composable
 fun SilentAuction(

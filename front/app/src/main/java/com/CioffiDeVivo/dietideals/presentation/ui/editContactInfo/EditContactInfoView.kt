@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.editContactInfo
 
-import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,14 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -38,6 +35,8 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
     val context = LocalContext.current
     LaunchedEffect(Unit){
         viewModel.getUserInfo()
+    }
+    LaunchedEffect(Unit){
         viewModel.validationEditContactInfoEvents.collect { event ->
             when(event){
                 is ValidationState.Success -> {
@@ -55,7 +54,9 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
         })
         is EditContactInfoUiState.Loading -> LoadingView()
         is EditContactInfoUiState.Success -> {
-            navController.navigate(Screen.Account.route)
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Account.route) {
+                navController.popBackStack()
+            }
         }
         is EditContactInfoUiState.EditContactInfoParams -> {
             Column(
@@ -89,10 +90,4 @@ fun EditContactInfoView(viewModel: EditContactInfoViewModel, navController: NavC
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EditContactInfoPreview(){
-    EditContactInfoView(viewModel = EditContactInfoViewModel(Application()), navController = rememberNavController())
 }

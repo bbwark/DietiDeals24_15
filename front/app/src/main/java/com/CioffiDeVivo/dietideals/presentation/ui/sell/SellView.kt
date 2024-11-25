@@ -27,9 +27,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.CioffiDeVivo.dietideals.domain.models.Auction
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.components.SellGridElement
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -41,8 +45,6 @@ import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
 fun SellView(viewModel: SellViewModel, navController: NavController) {
 
     val sellUiState by viewModel.sellUiState.collectAsState()
-    val encryptedSharedPreferences = EncryptedPreferencesManager.getEncryptedPreferences()
-    val isSeller = encryptedSharedPreferences.getBoolean("isSeller", false)
 
     LaunchedEffect(Unit) {
         viewModel.fetchAuctions()
@@ -53,7 +55,7 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
         is SellUiState.Success -> SellGridView(
             auctions = (sellUiState as SellUiState.Success).auctions,
             navController = navController,
-            isSeller = isSeller
+            isSeller = (sellUiState as SellUiState.Success).isSeller
         )
         is SellUiState.Error -> RetryView(onClick = {})
     }
@@ -80,7 +82,15 @@ fun SellGridView(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 25.dp, end = 25.dp, bottom = 10.dp)
             )
-            Button(onClick = { navController.navigate(Screen.BecomeSeller.route) }) {
+            Button(
+                onClick = {
+                    if (navController.currentBackStackEntry?.destination?.route != Screen.BecomeSeller.route) {
+                        navController.navigate(Screen.BecomeSeller.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
+            ) {
                 Text(text = "Become a Seller")
             }
         }
@@ -115,14 +125,12 @@ fun SellGridView(
                 }
             }
             FloatingAddButton{
-                navController.navigate(Screen.CreateAuction.route)
+                if (navController.currentBackStackEntry?.destination?.route != Screen.CreateAuction.route) {
+                    navController.navigate(Screen.CreateAuction.route){
+                        launchSingleTop = true
+                    }
+                }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SellViewPreview() {
-    SellView(viewModel = SellViewModel(Application()), rememberNavController())
 }

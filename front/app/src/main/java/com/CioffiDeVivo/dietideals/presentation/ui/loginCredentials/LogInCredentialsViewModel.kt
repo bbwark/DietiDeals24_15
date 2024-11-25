@@ -1,21 +1,13 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.domain.mappers.toDataModel
-import com.CioffiDeVivo.dietideals.domain.models.User
-import com.CioffiDeVivo.dietideals.services.ApiService
-import com.CioffiDeVivo.dietideals.services.AuthService
-import com.CioffiDeVivo.dietideals.domain.validations.ValidateLogInForm
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
-import com.CioffiDeVivo.dietideals.utils.EncryptedPreferencesManager
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.isSuccess
+import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
+import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
+import com.CioffiDeVivo.dietideals.data.validations.ValidateLogInForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,9 +16,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class LogInCredentialsViewModel(
-    application: Application,
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val authRepository: AuthRepository,
     private val validateLogInForms: ValidateLogInForm = ValidateLogInForm()
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _logInCredentialsUiState = MutableStateFlow<LogInCredentialsUiState>(LogInCredentialsUiState.LogInParams())
     val logInCredentialsUiState: StateFlow<LogInCredentialsUiState> = _logInCredentialsUiState.asStateFlow()
@@ -34,54 +27,24 @@ class LogInCredentialsViewModel(
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
 
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-    }
-
     fun loginOnAction(loginEvent: LoginEvent) {
-        when (loginEvent) {
-            is LoginEvent.EmailChanged -> {
-                updateEmail(loginEvent.email)
-            }
-
-            is LoginEvent.EmailDeleted -> {
-                deleteEmail()
-            }
-
-            is LoginEvent.PasswordChanged -> {
-                updatePassword(loginEvent.password)
-            }
-
-            is LoginEvent.Submit -> {
-                submitLogIn()
-            }
-        }
-    }
-
-    private fun updateEmail(email: String) {
         try {
             val currentState = _logInCredentialsUiState.value
             if(currentState is LogInCredentialsUiState.LogInParams){
-                _logInCredentialsUiState.value = currentState.copy(
-                    email = email
-                )
-            }
-        } catch (e: Exception){
-            _logInCredentialsUiState.value = LogInCredentialsUiState.Error
-        }
-    }
-
-    private fun deleteEmail() {
-       updateEmail("")
-    }
-
-    private fun updatePassword(password: String) {
-        try {
-            val currentState = _logInCredentialsUiState.value
-            if(currentState is LogInCredentialsUiState.LogInParams){
-                _logInCredentialsUiState.value = currentState.copy(
-                    password = password
-                )
+                when (loginEvent) {
+                    is LoginEvent.EmailChanged -> {
+                        _logInCredentialsUiState.value = currentState.copy(email = loginEvent.email)
+                    }
+                    is LoginEvent.EmailDeleted -> {
+                        _logInCredentialsUiState.value = currentState.copy(email = "")
+                    }
+                    is LoginEvent.PasswordChanged -> {
+                        _logInCredentialsUiState.value = currentState.copy(password = loginEvent.password)
+                    }
+                    is LoginEvent.Submit -> {
+                        submitLogIn()
+                    }
+                }
             }
         } catch (e: Exception){
             _logInCredentialsUiState.value = LogInCredentialsUiState.Error
@@ -95,32 +58,14 @@ class LogInCredentialsViewModel(
                 _logInCredentialsUiState.value = LogInCredentialsUiState.Loading
                 viewModelScope.launch {
                     _logInCredentialsUiState.value = try {
-                        val loginResponse = AuthService.loginUser(
-                            currentState.email,
-                            currentState.password
-                        )
-                        if (loginResponse.status.isSuccess()) {
-                            val jsonObject =
-                                Gson().fromJson(loginResponse.bodyAsText(), JsonObject::class.java)
-                            val token = jsonObject.get("jwt").asString
-                            if (token.isNotEmpty()) {
-                                val userId = jsonObject.getAsJsonObject("user").get("id").asString
-                                sharedPreferences.edit().apply {
-                                    putString("token", token)
-                                    putString("userId", userId)
-                                    apply()
-                                }
-                                ApiService.initialize(
-                                    token,
-                                    getApplication<Application>().applicationContext
-                                )
-
-                            }
-                            LogInCredentialsUiState.Success
-                        } else{
-                            Log.e("Error", "Error: $loginResponse")
-                            LogInCredentialsUiState.Error
-                        }
+                        val logInRequest = LogInRequest(currentState.email, currentState.password)
+                        val loginResponse = authRepository.loginUser(logInRequest)
+                        userPreferencesRepository.saveUserId(loginResponse.user.id)
+                        userPreferencesRepository.saveToken(loginResponse.jwt)
+                        userPreferencesRepository.saveEmail(loginResponse.user.email)
+                        userPreferencesRepository.saveName(loginResponse.user.name)
+                        userPreferencesRepository.saveIsSeller(loginResponse.user.isSeller)
+                        LogInCredentialsUiState.Success
                     } catch (e: Exception) {
                         Log.e("Error", "Error: ${e.message}")
                         LogInCredentialsUiState.Error

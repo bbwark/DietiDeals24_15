@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.editProfile
 
-import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,26 +18,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.PersonalInfoOnEditProfile
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostController){
+fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
 
     val editProfileUiState by viewModel.editUiProfileState.collectAsState()
-
     val context = LocalContext.current
     LaunchedEffect(Unit){
         viewModel.getUserInfo()
+    }
+    LaunchedEffect(Unit){
         viewModel.validationEditProfileEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {
@@ -49,10 +48,17 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
     }
 
     when(editProfileUiState){
-        is EditProfileUiState.Error -> RetryView(onClick = {})
         is EditProfileUiState.Loading -> LoadingView()
+        is EditProfileUiState.Error -> RetryView(
+            onClick = {
+                navController.popBackStack()
+                navController.navigate(Screen.EditProfile.route)
+            }
+        )
         is EditProfileUiState.Success -> {
-
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Account.route) {
+                navController.popBackStack()
+            }
         }
         is EditProfileUiState.EditProfileParams -> {
             Column(
@@ -66,12 +72,10 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
                     userState = editProfileUiState,
                     onEmailChange = { viewModel.editProfileAction(EditProfileEvent.EmailChanged(it)) },
                     onNameChange = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
-                    onSurnameChange = { viewModel.editProfileAction(EditProfileEvent.SurnameChanged(it)) },
                     onPasswordChange = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
                     onNewPasswordChange = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) },
                     onDeleteEmail = { viewModel.editProfileAction(EditProfileEvent.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) },
-                    onDeleteSurname = { viewModel.editProfileAction(EditProfileEvent.SurnameDeleted(it)) }
+                    onDeleteName = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) }
                 )
                 DescriptionTextfield(
                     description = (editProfileUiState as EditProfileUiState.EditProfileParams).user.bio,
@@ -93,11 +97,4 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavHostControlle
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun EditProfilePreview(){
-    EditProfile(viewModel = EditProfileViewModel(Application()), navController = rememberNavController())
 }

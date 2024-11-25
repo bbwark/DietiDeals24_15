@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTextField
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.validations.ValidationState
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
@@ -72,7 +73,13 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
             navController.popBackStack()
             navController.navigate(Screen.LogInCredentials.route)
         })
-        is LogInCredentialsUiState.Success -> { navController.navigate(Screen.Home.route) }
+        is LogInCredentialsUiState.Success -> {
+            if(navController.currentBackStackEntry?.destination?.route != Screen.Home.route){
+                navController.navigate(Screen.Home.route){
+                    popUpTo(navController.graph.startDestinationId){ inclusive = true }
+                }
+            }
+        }
         is LogInCredentialsUiState.LogInParams -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -147,10 +154,4 @@ fun LoginInputs(
         trailingIcon = if(passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
         modifier = modifierStandard
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LogInCredentialsPreview(){
-    LogInCredentialsView(viewModel = LogInCredentialsViewModel(application = Application()), navController = rememberNavController())
 }

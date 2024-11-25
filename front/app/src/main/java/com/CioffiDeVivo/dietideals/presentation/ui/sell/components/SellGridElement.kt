@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.Item
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable
@@ -42,7 +42,11 @@ fun SellGridElement(auction: Auction, modifier: Modifier = Modifier, navControll
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .size(width = 160.dp, height = 170.dp)
-            .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") }
+            .clickable {
+                if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
+                    navController.navigate(Screen.Auction.route + "/${auction.id}")
+                }
+            }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

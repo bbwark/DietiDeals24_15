@@ -37,7 +37,6 @@ fun BottomNavigationBar(navController: NavController){
                 onClick = {
                     navController.navigate(item.route){
                         popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
                     }
                 },
                 icon = { Icon(item.icon, null) },
@@ -45,5 +44,20 @@ fun BottomNavigationBar(navController: NavController){
             )
         }
 
+    }
+}
+
+fun shouldShowBottomBar(route: String?): Boolean{
+    return when {
+        route == null -> false
+        route.startsWith(Screen.Login.route) -> false
+        route.startsWith(Screen.Register.route) -> false
+        route.startsWith(Screen.RegisterCredentials.route) -> false
+        route.startsWith(Screen.LogInCredentials.route) -> false
+        route.startsWith(Screen.CreateAuction.route) -> false
+        route.startsWith(Screen.MakeABid.route) -> false
+        route.startsWith(Screen.BecomeSeller.route) -> false
+        route.startsWith(Screen.Auction.route) -> false
+        else -> true
     }
 }

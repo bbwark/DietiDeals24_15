@@ -34,9 +34,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.components.BidHistoryElement
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
-import com.CioffiDeVivo.dietideals.domain.models.Auction
-import com.CioffiDeVivo.dietideals.domain.models.Bid
-import com.CioffiDeVivo.dietideals.domain.models.User
+import com.CioffiDeVivo.dietideals.data.models.Auction
+import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
@@ -60,7 +60,8 @@ fun BidHistoryView(
         is BidHistoryUiState.Success -> {
             BidHistoryLayout(
                 auctionState = (bidHistoryUiState as BidHistoryUiState.Success).auction,
-                bidders = (bidHistoryUiState as BidHistoryUiState.Success).bidders
+                bidders = (bidHistoryUiState as BidHistoryUiState.Success).bidders,
+                acceptBid = { viewModel.chooseWinningBid(it) }
             )
         }
         is BidHistoryUiState.Error -> RetryView(
@@ -69,6 +70,11 @@ fun BidHistoryView(
                 navController.navigate(Screen.BidHistory.route)
             }
         )
+        is BidHistoryUiState.SuccessOnWinningBid -> {
+            if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route) {
+                navController.popBackStack()
+            }
+        }
     }
 
 
@@ -77,7 +83,8 @@ fun BidHistoryView(
 @Composable
 fun BidHistoryLayout(
     auctionState: Auction,
-    bidders: List<User>
+    bidders: Array<User>,
+    acceptBid: (Bid) -> Unit
 ){
     var showDetails by remember { mutableStateOf(false) }
     var acceptOffer by remember { mutableStateOf(false) }
@@ -149,11 +156,8 @@ fun BidHistoryLayout(
                     bidderName = bidderName,
                     onDismissRequest = { acceptOffer = false },
                     onAcceptOffer = {
+                        acceptBid(selectedBid)
                         acceptOffer = false
-                        //TODO: chooseWinningBid here - puoi metterla sia prima che dopo l'acceptOffer.
-                        //Se la metti prima, la funzione viene eseguita prima di chiudere il Dialog
-                        //Se la metti dopo, la funzione viene eseguita dopo la chiusura del Dialog
-                        //Scegli tu quale pensi sia più giusto
                     }
                 )
             }
@@ -232,10 +236,4 @@ fun AcceptOfferDialog(
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BidHistoryViewPreview() {
-    BidHistoryView(auctionId = "1" ,viewModel = BidHistoryViewModel(Application()), navController = rememberNavController())
 }
