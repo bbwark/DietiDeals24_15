@@ -51,7 +51,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 
 @Composable
-fun NavGraph(navController: NavHostController, appViewModelFactory: AppViewModelFactory, modifier: Modifier) {
+fun NavGraph(navController: NavHostController, appViewModelFactory: AppViewModelFactory) {
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route

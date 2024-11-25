@@ -85,7 +85,9 @@ fun SellGridView(
             Button(
                 onClick = {
                     if (navController.currentBackStackEntry?.destination?.route != Screen.BecomeSeller.route) {
-                        navController.navigate(Screen.BecomeSeller.route)
+                        navController.navigate(Screen.BecomeSeller.route){
+                            launchSingleTop = true
+                        }
                     }
                 }
             ) {
@@ -124,7 +126,9 @@ fun SellGridView(
             }
             FloatingAddButton{
                 if (navController.currentBackStackEntry?.destination?.route != Screen.CreateAuction.route) {
-                    navController.navigate(Screen.CreateAuction.route)
+                    navController.navigate(Screen.CreateAuction.route){
+                        launchSingleTop = true
+                    }
                 }
             }
         }

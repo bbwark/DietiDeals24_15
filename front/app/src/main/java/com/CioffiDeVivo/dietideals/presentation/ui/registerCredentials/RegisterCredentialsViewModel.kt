@@ -115,9 +115,13 @@ class RegisterCredentialsViewModel(
                 _registerCredentialsUiState.value = RegisterCredentialsUiState.Loading
                 viewModelScope.launch {
                     _registerCredentialsUiState.value = try {
-                        val registerRequest = currentState.user.copy(creditCards = currentState.user.creditCards + currentState.creditCard)
-                        val registerResponse = authRepository.registerUser(registerRequest)
-                        val logInRequest = LogInRequest(registerResponse.email, currentState.user.password)
+                        if(!currentState.user.isSeller){
+                            authRepository.registerUser(currentState.user)
+                        } else{
+                            val registerRequest = currentState.user.copy(creditCards = currentState.user.creditCards + currentState.creditCard)
+                            authRepository.registerUser(registerRequest)
+                        }
+                        val logInRequest = LogInRequest(currentState.user.email, currentState.user.password)
                         val loginResponse = authRepository.loginUser(logInRequest)
                         userPreferencesRepository.saveUserId(loginResponse.user.id)
                         userPreferencesRepository.saveToken(loginResponse.jwt)

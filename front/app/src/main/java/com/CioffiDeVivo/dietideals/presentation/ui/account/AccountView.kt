@@ -51,9 +51,6 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
     LaunchedEffect(Unit){
         viewModel.setUserState()
     }
-    LaunchedEffect(navController.currentBackStackEntry) {
-        Log.d("Navigation", "Navigated to: ${navController.currentBackStackEntry?.destination?.route}")
-    }
 
     when(accountUiState){
         is AccountUiState.Loading -> LoadingView()

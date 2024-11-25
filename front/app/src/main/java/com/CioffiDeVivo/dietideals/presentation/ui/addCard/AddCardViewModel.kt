@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
-import com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest
 import com.CioffiDeVivo.dietideals.data.validations.ValidateAddCardForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +72,9 @@ class AddCardViewModel(
                 viewModelScope.launch(Dispatchers.IO) {
                     _addCardUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
-                        val cardRequest = CreditCardRequest(currentState.creditCard.creditCardNumber, currentState.creditCard.expirationDate, currentState.creditCard.cvv, currentState.creditCard.iban, userId)
+                        val cardRequest = currentState.creditCard.copy(
+                            ownerId = userId
+                        )
                         creditCardRepository.createCreditCard(cardRequest)
                         AddCardUiState.Success
                     } catch (e: Exception){

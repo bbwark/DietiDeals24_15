@@ -85,8 +85,6 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
-                ViewTitle(title = stringResource(id = R.string.createAccount))
                 Spacer(modifier = Modifier.height(30.dp))
                 PersonalInfoOnRegisterCredentials(
                     userState = registerCredentialsUiState,

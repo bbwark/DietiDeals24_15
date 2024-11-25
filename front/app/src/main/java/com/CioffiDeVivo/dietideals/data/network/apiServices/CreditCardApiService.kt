@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.data.network.apiServices
 
 import com.CioffiDeVivo.dietideals.data.models.CreditCard
-import com.CioffiDeVivo.dietideals.data.requestModels.CreditCardRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,7 +11,7 @@ import retrofit2.http.Path
 interface CreditCardApiService {
 
     @POST("/credit_cards")
-    suspend fun createCreditCard(@Body creditCard: CreditCardRequest): Response<CreditCard>
+    suspend fun createCreditCard(@Body creditCard: CreditCard): Response<CreditCard>
 
     @DELETE("/credit_cards/{creditCardNumber}")
     suspend fun deleteCreditCard(@Path("creditCardNumber") cardNumber: String): Response<Void>

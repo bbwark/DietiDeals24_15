@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
-import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -37,13 +36,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.data.models.Auction
@@ -95,7 +91,7 @@ fun AuctionViewLayout(
     navController: NavController
 ){
     var userInfo by remember { mutableStateOf(false) }
-    val pagerState = rememberPagerState { auction.item.imagesUri.size }
+    val pagerState = rememberPagerState { auction.item.imageUrl.size }
 
     Column(
         Modifier
@@ -103,14 +99,14 @@ fun AuctionViewLayout(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (auction.item.imagesUri.isNotEmpty()) {
+        if (auction.item.imageUrl.isNotEmpty()) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
             ) { page ->
-                val imageUrl = auction.item.imagesUri[page]
+                val imageUrl = auction.item.imageUrl[page]
                 Image(
                     painter = rememberAsyncImagePainter(
                         model = imageUrl,

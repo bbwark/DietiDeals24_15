@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository

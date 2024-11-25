@@ -33,10 +33,11 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
 
     val editProfileUiState by viewModel.editUiProfileState.collectAsState()
-
     val context = LocalContext.current
-    LaunchedEffect(key1 = context){
+    LaunchedEffect(Unit){
         viewModel.getUserInfo()
+    }
+    LaunchedEffect(Unit){
         viewModel.validationEditProfileEvent.collect { event ->
             when(event){
                 is ValidationState.Success -> {

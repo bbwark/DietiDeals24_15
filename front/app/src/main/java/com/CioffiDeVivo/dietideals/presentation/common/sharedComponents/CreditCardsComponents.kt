@@ -205,7 +205,7 @@ fun CreditCardComponents(
         modifier = modifierStandard
     ){
         InputTextField(
-            value = userState.expirationDate,
+            value = userState.creditCard.expirationDate,
             onValueChanged = {
                 if(it.isEmpty() || it.matches(pattern)){
                     onDateChange(it)

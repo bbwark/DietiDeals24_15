@@ -44,6 +44,11 @@ fun shouldShowTopBar(route: String?): Boolean{
         route.startsWith(Screen.Home.route) -> false
         route.startsWith(Screen.Account.route) -> false
         route.startsWith(Screen.Auction.route) -> false
+        route.startsWith(Screen.Search.route) -> false
+        route.startsWith(Screen.Favourites.route) -> false
+        route.startsWith(Screen.Search.route) -> false
+        route.startsWith(Screen.MakeABid.route) -> false
+        route.startsWith(Screen.Sell.route) -> false
         else -> true
     }
 }

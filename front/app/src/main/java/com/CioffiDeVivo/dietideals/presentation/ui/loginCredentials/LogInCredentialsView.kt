@@ -67,9 +67,6 @@ fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: Na
             }
         }
     }
-    LaunchedEffect(navController.currentBackStackEntry) {
-        Log.d("Navigation", "Navigated to: ${navController.currentBackStackEntry?.destination?.route}")
-    }
     when(loginUiState){
         is LogInCredentialsUiState.Loading -> LoadingView()
         is LogInCredentialsUiState.Error -> RetryView(onClick = {

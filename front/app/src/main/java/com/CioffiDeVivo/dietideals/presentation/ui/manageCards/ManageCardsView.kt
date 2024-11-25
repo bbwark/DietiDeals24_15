@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.FloatingAddButton
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.components.ManageCardsElement
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -23,11 +24,11 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
 fun ManageCardsView(viewModel: ManageCardsViewModel, navController: NavController) {
-
+    val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val manageCardsUiState by viewModel.manageCardsUiState.collectAsState()
 
-    LaunchedEffect(Unit){
-        if(manageCardsUiState is ManageCardsUiState.Loading){
+    LaunchedEffect(currentBackStackEntry.value?.destination?.route){
+        if(currentBackStackEntry.value?.destination?.route == Screen.ManageCards.route){
             viewModel.fetchCreditCards()
         }
     }
