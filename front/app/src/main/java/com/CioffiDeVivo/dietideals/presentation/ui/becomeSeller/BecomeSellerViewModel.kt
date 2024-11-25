@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.CreditCard
+import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +19,7 @@ class BecomeSellerViewModel(
 
     private val _becomeSellerUiState = MutableStateFlow<BecomeSellerUiState>(BecomeSellerUiState.BecomeSellerParams())
     val becomeSellerUiState: StateFlow<BecomeSellerUiState> = _becomeSellerUiState.asStateFlow()
+    private val _creditCardOnFetchState = MutableStateFlow<CreditCard>(CreditCard())
 
     fun getUserInfo(){
         _becomeSellerUiState.value = BecomeSellerUiState.Loading
@@ -24,11 +27,7 @@ class BecomeSellerViewModel(
             _becomeSellerUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
-                if(user.creditCards[0].creditCardNumber.isBlank()){
-                    BecomeSellerUiState.BecomeSellerParams(user, user.creditCards[0])
-                } else{
-                    BecomeSellerUiState.BecomeSellerParams(user)
-                }
+                BecomeSellerUiState.BecomeSellerParams(user)
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 BecomeSellerUiState.Error
@@ -105,11 +104,19 @@ class BecomeSellerViewModel(
                 viewModelScope.launch {
                     _becomeSellerUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
-                        val updatedUser = currentState.user.copy(
-                            isSeller = true,
-                            creditCards = currentState.user.creditCards + currentState.creditCard
-                        )
-                        userRepository.updateUser(userId, updatedUser)
+                        if(currentState.user.creditCards.isNotEmpty()){
+                            val updatedUser = currentState.user.copy(
+                                isSeller = true
+                            )
+                            userRepository.updateUser(userId, updatedUser)
+                        } else{
+                            val updatedUser = currentState.user.copy(
+                                isSeller = true,
+                                creditCards = currentState.user.creditCards + currentState.creditCard
+                            )
+                            userRepository.updateUser(userId, updatedUser)
+                        }
+                        userPreferencesRepository.saveIsSeller(true)
                         BecomeSellerUiState.Success
                     } catch(e: Exception){
                         Log.e("Error", "Error: ${e.message}")

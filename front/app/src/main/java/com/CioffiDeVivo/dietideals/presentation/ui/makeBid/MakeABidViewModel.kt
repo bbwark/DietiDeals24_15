@@ -9,7 +9,6 @@ import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.data.models.Bid
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.BidRepository
-import com.CioffiDeVivo.dietideals.data.requestModels.BidRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -72,7 +71,10 @@ class MakeABidViewModel(
                     }
                     if(validator){
                         val userId = userPreferencesRepository.getUserIdPreference()
-                        val updatedBid = BidRequest(value = currentState.bid.value, userId = userId, auctionId = auctionId)
+                        val updatedBid = currentState.bid.copy(
+                            userId = userId,
+                            auctionId = auctionId
+                        )
                         bidRepository.createBid(updatedBid)
                         MakeABidUiState.Success
                     } else{

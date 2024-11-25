@@ -96,7 +96,7 @@ class CreateAuctionViewModel(
                 viewModelScope.launch {
                     _createAuctionUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
-                        val imageUrls = currentState.auction.item.imagesUri.map { uri ->
+                        val imageUrls = currentState.auction.item.imageUrl.map { uri ->
                             async {
                                 imageRepository.uploadImage(
                                     Uri.parse(uri),
@@ -108,7 +108,7 @@ class CreateAuctionViewModel(
                         val updatedAuction = currentState.auction.copy(
                             ownerId = userId,
                             item = currentState.auction.item.copy(
-                                imagesUri = emptyList()
+                                imageUrl = emptyList()
                             )
                         )
                         auctionRepository.createAuction(updatedAuction)
@@ -185,12 +185,12 @@ class CreateAuctionViewModel(
         try {
             val currentState = _createAuctionUiState.value
             if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                val updatedImagesUri = currentState.auction.item.imagesUri.toMutableList()
+                val updatedImagesUri = currentState.auction.item.imageUrl.toMutableList()
                 updatedImagesUri += imagesUri
                 _createAuctionUiState.value = currentState.copy(
                     auction = currentState.auction.copy(
                         item = currentState.auction.item.copy(
-                            imagesUri = updatedImagesUri.distinct()
+                            imageUrl = updatedImagesUri.distinct()
                         )
                     )
                 )
@@ -204,12 +204,12 @@ class CreateAuctionViewModel(
         try {
             val currentState = _createAuctionUiState.value
             if(currentState is CreateAuctionUiState.CreateAuctionParams){
-                val updatedImagesUri = currentState.auction.item.imagesUri.toMutableList()
+                val updatedImagesUri = currentState.auction.item.imageUrl.toMutableList()
                 updatedImagesUri.removeAt(index)
                 _createAuctionUiState.value = currentState.copy(
                     auction = currentState.auction.copy(
                         item = currentState.auction.item.copy(
-                            imagesUri = updatedImagesUri.distinct()
+                            imageUrl = updatedImagesUri.distinct()
                         )
                     )
                 )

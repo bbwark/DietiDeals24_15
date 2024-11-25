@@ -5,4 +5,5 @@ data class CreditCard(
     val expirationDate: String = "",
     val cvv: String = "",
     val iban: String = "",
+    val ownerId: String = ""
 )

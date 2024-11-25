@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,16 +21,19 @@ class SearchViewModel(
     private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
     val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
 
+    private var isSearching = false
+
     fun setCategoriesToHide(categoriesToHide: Set<String>) {
         _categoriesToHide.value = categoriesToHide
     }
 
     fun searchWordUpdate(searchWord: String) {
-        if(searchWord.isBlank()){
+        if(searchWord.isBlank() || isSearching){
             return
         }
         viewModelScope.launch {
-            setLoadingState()
+            isSearching = true
+            _searchUiState.value = SearchUiState.Loading
             _searchUiState.value = try {
                 val auctions = auctionRepository.getAuctionsByItemName(searchWord)
                 if(auctions.isNotEmpty()){
@@ -40,16 +44,14 @@ class SearchViewModel(
                     SearchUiState.Success(list)
                 } else{
                     Log.e("Error", "Error: REST Unsuccessful")
-                    SearchUiState.Error
+                    SearchUiState.Empty
                 }
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 SearchUiState.Error
+            } finally {
+                isSearching = false
             }
         }
-    }
-
-    private fun setLoadingState(){
-        _searchUiState.value = SearchUiState.Loading
     }
 }

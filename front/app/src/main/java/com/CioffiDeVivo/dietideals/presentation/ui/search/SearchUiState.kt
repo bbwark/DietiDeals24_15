@@ -7,4 +7,5 @@ sealed interface SearchUiState {
     object Error: SearchUiState
     object Loading: SearchUiState
     object Idle: SearchUiState
+    object Empty: SearchUiState
 }

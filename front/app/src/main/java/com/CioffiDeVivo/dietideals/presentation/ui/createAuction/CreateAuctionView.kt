@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -57,12 +56,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DescriptionTextfield
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTextField
@@ -134,7 +131,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
             ) {
 
                 AddingImagesOnCreateAuction(
-                    imagesList = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.imagesUri,
+                    imagesList = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.imageUrl,
                     onImageChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesChanged(it)) },
                     onDeleteImage = { viewModel.createAuctionOnAction(CreateAuctionEvents.ImagesDeleted(it)) }
                 )

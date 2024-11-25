@@ -18,7 +18,6 @@ sealed interface BecomeSellerUiState {
         val zipCodeErrorMsg: String? = null,
         val phoneNumberErrorMsg: String? = null,
         val creditCardNumberErrorMsg: String? = null,
-        val expirationDate: String = "",
         val expirationDateErrorMsg: String? = null,
         val cvvErrorMsg: String? = null,
         val ibanErrorMsg: String? = null

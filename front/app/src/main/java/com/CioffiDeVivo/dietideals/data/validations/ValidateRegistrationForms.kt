@@ -7,12 +7,10 @@ const val passwordMinimumLength = 8
 const val phoneNumberMinimumLength = 7
 const val phoneNumberMaximumLength = 15
 const val creditCardNumberLength = 16
-const val creditCardExpirationDateNumberLength = 5
 const val cvvLength = 3
 const val ibanLength = 27
 val currentYear = java.time.Year.now().value.toString().substring(2)
 val regexCreditCardPattern = """^(0[1-9]|1[0-2])/$currentYear|[2-9]\d$""".toRegex()
-val regexExpirationDatePattern = Regex("^(0[1-9]|1[0-2])([0-9]{2})$")
 
 open class ValidateRegistrationForms {
 
@@ -63,7 +61,6 @@ open class ValidateRegistrationForms {
             )
         }
         return ValidationResult(positiveResult = true)
-
     }
 
     open fun validateRetypePassword(password: String, newPassword: String): ValidationResult {

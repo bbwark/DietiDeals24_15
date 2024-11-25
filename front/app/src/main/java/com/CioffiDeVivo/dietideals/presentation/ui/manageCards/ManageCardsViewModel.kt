@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.manageCards
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 class ManageCardsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val userRepository: UserRepository,
-    private val creditCardRepository: CreditCardRepository
+    private val creditCardRepository: CreditCardRepository,
 ): ViewModel(){
 
     private val _manageCardsUiState = MutableStateFlow<ManageCardsUiState>(ManageCardsUiState.Loading)

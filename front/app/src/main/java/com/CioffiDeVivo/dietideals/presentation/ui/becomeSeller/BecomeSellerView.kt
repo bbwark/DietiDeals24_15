@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
@@ -71,17 +68,19 @@ fun BecomeSellerView(
                     onDeleteZipCode = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ZipCodeDeleted(it)) },
                     onDeletePhoneNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.PhoneNumberDeleted(it)) }
                 )
-                CreditCardComponents(
-                    userState = becomeSellerUiState,
-                    onNumberChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberChanged(it)) },
-                    onDateChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateChanged(it)) },
-                    onCvvChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvChanged(it)) },
-                    onIbanChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanChanged(it)) },
-                    onDeleteCardNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberDeleted(it)) },
-                    onDeleteExpirationDate = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateDeleted(it)) },
-                    onDeleteCvv = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvDeleted(it)) },
-                    onDeleteIban = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanDeleted(it)) }
-                )
+                if((becomeSellerUiState as BecomeSellerUiState.BecomeSellerParams).user.creditCards.isEmpty()){
+                    CreditCardComponents(
+                        userState = becomeSellerUiState,
+                        onNumberChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberChanged(it)) },
+                        onDateChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateChanged(it)) },
+                        onCvvChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvChanged(it)) },
+                        onIbanChange = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanChanged(it)) },
+                        onDeleteCardNumber = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CreditCardNumberDeleted(it)) },
+                        onDeleteExpirationDate = { viewModel.becomeSellerOnAction(BecomeSellerEvents.ExpirationDateDeleted(it)) },
+                        onDeleteCvv = { viewModel.becomeSellerOnAction(BecomeSellerEvents.CvvDeleted(it)) },
+                        onDeleteIban = { viewModel.becomeSellerOnAction(BecomeSellerEvents.IbanDeleted(it)) }
+                    )
+                }
                 Button(
                     onClick = { viewModel.becomeSellerOnAction(BecomeSellerEvents.Submit()) },
                     modifier = Modifier
