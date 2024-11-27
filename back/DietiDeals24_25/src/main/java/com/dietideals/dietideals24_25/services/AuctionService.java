@@ -24,7 +24,7 @@ public interface AuctionService {
 
     List<AuctionEntity> findExpiredAuctions();
 
-    Boolean exists(UUID id);
+    boolean exists(UUID id);
 
     void delete(UUID id);
 }

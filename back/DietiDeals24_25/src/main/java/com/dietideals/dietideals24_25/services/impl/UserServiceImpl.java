@@ -4,7 +4,6 @@ import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.repositories.UserRepository;
 import com.dietideals.dietideals24_25.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +18,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    @Autowired
     private UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {

@@ -54,7 +54,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public boolean exists(UUID id) {
         return auctionRepository.existsById(id);
     }
 

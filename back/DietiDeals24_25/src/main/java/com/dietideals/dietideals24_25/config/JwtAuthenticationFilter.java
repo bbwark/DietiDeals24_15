@@ -17,7 +17,6 @@ import com.dietideals.dietideals24_25.utils.UserLoaderHelper;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -51,8 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDto,
                     null,
                     roles.stream()
-                         .map(SimpleGrantedAuthority::new)
-                         .collect(Collectors.toList())
+                         .map(SimpleGrantedAuthority::new).toList()
             );
 
             SecurityContextHolder.getContext().setAuthentication(authToken);

@@ -37,7 +37,7 @@ public class AuctionController {
     private Mapper<ItemEntity, ItemDto> itemMapper;
     private Mapper<UserEntity, UserDto> userMapper;
 
-    private final int MAX_PAGE_SIZE = 5;
+    private static final int MAXPAGESIZE = 5;
 
     public AuctionController(AuctionService auctionService, UserService userService, ItemService itemService,
             Mapper<AuctionEntity, AuctionDto> auctionMapper, Mapper<ItemEntity, ItemDto> itemMapper,
@@ -161,7 +161,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDto>> listRandomAuctions(@PathVariable("id") String id) {
         try {
             UUID ownerId = UUID.fromString(id);
-            List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId, MAX_PAGE_SIZE);
+            List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))
                     .collect(Collectors.toList());
@@ -176,7 +176,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDto>> listParticipatedAuctions(@PathVariable("id") String id) {
         try {
             UUID ownerId = UUID.fromString(id);
-            List<AuctionEntity> auctions = auctionService.findParticipatedAuctions(ownerId, MAX_PAGE_SIZE);
+            List<AuctionEntity> auctions = auctionService.findParticipatedAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))
                     .collect(Collectors.toList());
@@ -191,7 +191,7 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDto>> listEndingAuctions(@PathVariable("id") String id) {
         try {
             UUID ownerId = UUID.fromString(id);
-            List<AuctionEntity> auctions = auctionService.findEndingAuctions(ownerId, MAX_PAGE_SIZE);
+            List<AuctionEntity> auctions = auctionService.findEndingAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
                     .map(auction -> auctionMapper.mapTo(auction))
                     .collect(Collectors.toList());

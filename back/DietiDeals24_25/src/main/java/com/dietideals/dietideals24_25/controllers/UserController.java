@@ -7,7 +7,6 @@ import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +25,6 @@ public class UserController {
     private UserService userService;
     private RoleService roleService;
     private Mapper<UserEntity, UserDto> userMapper;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     public UserController(UserService userService, RoleService roleService, Mapper<UserEntity, UserDto> userMapper,

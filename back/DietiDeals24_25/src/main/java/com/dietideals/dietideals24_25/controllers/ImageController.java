@@ -1,6 +1,5 @@
 package com.dietideals.dietideals24_25.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +14,12 @@ import com.dietideals.dietideals24_25.utils.S3Service;
 @RestController
 @RequestMapping("/images")
 public class ImageController {
-    @Autowired
+    
     private S3Service s3Service;
+
+    public ImageController(S3Service s3Service) {
+        this.s3Service = s3Service;
+    }
 
     @PreAuthorize("hasAuthority('SELLER')")
     @PostMapping("/upload")
