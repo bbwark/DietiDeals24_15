@@ -86,7 +86,7 @@ Run the following command to generate it:
     ```sh
     nano application-secret.properties
     ```
-
+    IMPORTANT: `application.properties` has been removed before commit `01cebbdd6fb94503f61660006e19e725b0b8112e`, so if you want to use a version older than that commit be aware to create the `application.properties` file 
 1. Fill in the file with the following fields:
 
     ```
