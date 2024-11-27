@@ -115,6 +115,43 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#userId)")
+    @PutMapping(path = "/add/favourite/{auctionId}/{userId}")
+    public ResponseEntity<Void> addFavouriteAuction(@PathVariable("auctionId") String auctionId,
+            @PathVariable("userId") String userId) {
+        try {
+            UUID auctionIdConverted = UUID.fromString(auctionId);
+            UUID userIdConverted = UUID.fromString(userId);
+
+            userService.addFavouriteAuction(userIdConverted, auctionIdConverted);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("\n======== ERROR: " + e.getMessage() + "\n");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#userId)")
+    @PutMapping(path = "/remove/favourite/{auctionId}/{userId}")
+    public ResponseEntity<Void> removeFavouriteAuction(@PathVariable("auctionId") String auctionId,
+            @PathVariable("userId") String userId) {
+        try {
+            
+            UUID auctionIdConverted = UUID.fromString(auctionId);
+            UUID userIdConverted = UUID.fromString(userId);
+
+            userService.removeFavouriteAuction(userIdConverted, auctionIdConverted);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("\n======== ERROR: " + e.getMessage() + "\n");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
