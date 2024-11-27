@@ -124,8 +124,6 @@ public class UserController {
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println("\n======== ERROR: " + e.getMessage() + "\n");
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -143,15 +141,13 @@ public class UserController {
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println("\n======== ERROR: " + e.getMessage() + "\n");
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorized(#id)")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
         try {
             UUID idConverted = UUID.fromString(id);
             userService.delete(idConverted);

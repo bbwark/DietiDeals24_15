@@ -8,6 +8,7 @@ import com.dietideals.dietideals24_25.services.AuthenticationService;
 import com.dietideals.dietideals24_25.services.JwtService;
 import com.dietideals.dietideals24_25.services.UserService;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
             UserDto userDto = userMapper.mapTo(user);
             if (!passwordEncoder.matches(password, userDto.getPassword())) {
-                throw new RuntimeException("Invalid password");
+                throw new BadCredentialsException("Invalid password");
             }
 
             String token = jwtService.generateToken(userDto.getId().toString(), userDto.getAuthorities());

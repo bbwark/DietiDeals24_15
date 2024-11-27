@@ -14,7 +14,9 @@ import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.utils.SNSService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class BidController {
     private Mapper<AuctionEntity, AuctionDto> auctionMapper;
     private Mapper<UserEntity, UserDto> userMapper;
 
+    private static final String NOTFOUND = " not found";
+
     public BidController(SNSService snsService, BidService bidService, AuctionService auctionService,
             UserService userService,
             Mapper<BidEntity, BidDto> bidMapper,
@@ -53,60 +57,78 @@ public class BidController {
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         try {
-            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss:SSS"));
-            bid.setDate(timestamp);
+            bid.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss:SSS")));
 
             AuctionEntity auctionEntity = auctionService.findById(bid.getAuctionId())
-                    .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + " not found"));
+                    .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + NOTFOUND));
             AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
 
-            if (auctionDto.getEndingDate().isBefore(LocalDateTime.now()) || auctionDto.getExpired()) {
+            if (isAuctionInvalid(auctionDto, bid.getUserId().toString())) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
 
-            if (auctionDto.getOwnerId().equals(bid.getUserId())) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-
-            // ENGLISH AUCTION HANDLING
             if (auctionDto.getType() == AuctionType.English) {
-                List<BidEntity> bidEntities = bidService.findByAuctionId(auctionDto.getId());
-                List<BidDto> bidDtos = bidEntities.stream()
-                        .map(bidEntity -> bidMapper.mapTo(bidEntity))
-                        .collect(java.util.stream.Collectors.toList());
-
-                Float minStep = (auctionDto.getMinStep() != null && !auctionDto.getMinStep().isEmpty()) ? Float.parseFloat(auctionDto.getMinStep()) : 0;
-                for (BidDto bidDto : bidDtos) {
-                    if (bid.getValue() < bidDto.getValue() + minStep) {
-                        return new ResponseEntity<>(HttpStatus.CONFLICT);
-                    }
+                if (!isEnglishBidValid(bid, auctionDto)) {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
                 }
-                auctionEntity.setEndingDate(LocalDateTime.now().plus(Long.parseLong(auctionDto.getInterval()), ChronoUnit.HOURS));
+                extendAuctionEndDate(auctionEntity, auctionDto.getInterval());
             }
 
-            // SILENT AUCTION HANDLING
-            boolean buyoutPriceReached = false;
-            if (auctionDto.getType() == AuctionType.Silent) {
-                Float buyoutPrice = null;
-                if (auctionDto.getBuyoutPrice() != null && !auctionDto.getBuyoutPrice().isEmpty()) {
-                    buyoutPrice = Float.parseFloat(auctionDto.getBuyoutPrice());
-                }
-                if (buyoutPrice != null && bid.getValue() >= buyoutPrice) {
-                    auctionEntity.setEndingDate(LocalDateTime.now().minus(1, ChronoUnit.HOURS)); // if buyout price is reached, auction ends
-                    buyoutPriceReached = true;
-                }
-            }
+            boolean buyoutPriceReached = handleSilentAuction(bid, auctionEntity, auctionDto);
 
-            BidEntity bidEntity = bidMapper.mapFrom(bid);
-            BidEntity savedBidEntity = bidService.save(bidEntity);
-            BidDto responseBid = bidMapper.mapTo(savedBidEntity);
-            if (auctionDto.getType() == AuctionType.English || buyoutPriceReached) {
-                auctionService.save(auctionEntity); //only if new bid is placed in English auction or buyout price is reached in Silent auction
-            }
+            BidDto responseBid = saveBidAndUpdateAuction(bid, auctionEntity, auctionDto, buyoutPriceReached);
+
             return new ResponseEntity<>(responseBid, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private boolean isAuctionInvalid(AuctionDto auctionDto, String userId) {
+        return auctionDto.getEndingDate().isBefore(LocalDateTime.now()) ||
+                auctionDto.getExpired() ||
+                auctionDto.getOwnerId().toString().equals(userId);
+    }
+
+    private boolean isEnglishBidValid(BidDto bid, AuctionDto auctionDto) {
+        List<BidDto> bidDtos = bidService.findByAuctionId(auctionDto.getId()).stream()
+                .map(bidMapper::mapTo)
+                .collect(Collectors.toList());
+
+        float minStep = Optional.ofNullable(auctionDto.getMinStep())
+                .filter(step -> !step.isEmpty())
+                .map(Float::parseFloat)
+                .orElse(0f);
+
+        return bidDtos.stream().noneMatch(existingBid -> bid.getValue() < existingBid.getValue() + minStep);
+    }
+
+    private void extendAuctionEndDate(AuctionEntity auctionEntity, String interval) {
+        auctionEntity.setEndingDate(LocalDateTime.now().plus(Long.parseLong(interval), ChronoUnit.HOURS));
+    }
+
+    private boolean handleSilentAuction(BidDto bid, AuctionEntity auctionEntity, AuctionDto auctionDto) {
+        Float buyoutPrice = Optional.ofNullable(auctionDto.getBuyoutPrice())
+                .filter(price -> !price.isEmpty())
+                .map(Float::parseFloat)
+                .orElse(null);
+
+        if (buyoutPrice != null && bid.getValue() >= buyoutPrice) {
+            auctionEntity.setEndingDate(LocalDateTime.now().minus(1, ChronoUnit.HOURS));
+            return true;
+        }
+        return false;
+    }
+
+    private BidDto saveBidAndUpdateAuction(BidDto bid, AuctionEntity auctionEntity, AuctionDto auctionDto,
+            boolean buyoutPriceReached) {
+        BidEntity bidEntity = bidMapper.mapFrom(bid);
+        BidEntity savedBidEntity = bidService.save(bidEntity);
+
+        if (auctionDto.getType() == AuctionType.English || buyoutPriceReached) {
+            auctionService.save(auctionEntity);
+        }
+        return bidMapper.mapTo(savedBidEntity);
     }
 
     @PreAuthorize("hasAuthority('BUYER') && @userSecurityService.isUserAuthorizedByBidId(#id)")
@@ -128,8 +150,7 @@ public class BidController {
             UUID id = UUID.fromString(auctionId);
             List<BidEntity> bidEntities = bidService.findByAuctionId(id);
             List<BidDto> result = bidEntities.stream()
-                    .map(bidEntity -> bidMapper.mapTo(bidEntity))
-                    .collect(java.util.stream.Collectors.toList());
+                    .map(bidEntity -> bidMapper.mapTo(bidEntity)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -141,11 +162,11 @@ public class BidController {
     public ResponseEntity<Void> chooseWinningBid(@RequestBody BidDto bid) {
         try {
             UserEntity winnerEntity = userService.findById(bid.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User with id " + bid.getUserId() + " not found"));
+                    .orElseThrow(() -> new RuntimeException("User with id " + bid.getUserId() + NOTFOUND));
             UserDto winner = userMapper.mapTo(winnerEntity);
 
             AuctionEntity auctionEntity = auctionService.findById(bid.getAuctionId())
-                    .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + " not found"));
+                    .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + NOTFOUND));
             AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
 
             for (String token : winner.getDeviceTokens()) {
@@ -155,8 +176,7 @@ public class BidController {
 
             List<UserEntity> biddersEntities = auctionService.findBiddersByAuctionId(auctionDto.getId());
             List<UserDto> bidders = biddersEntities.stream()
-                    .map(userEntity1 -> userMapper.mapTo(userEntity1))
-                    .collect(java.util.stream.Collectors.toList());
+                    .map(userEntity1 -> userMapper.mapTo(userEntity1)).toList();
 
             for (UserDto bidder : bidders) {
                 if (!bidder.getId().equals(winner.getId())) {

@@ -59,8 +59,7 @@ public class CreditCardController {
             UUID userId = UUID.fromString(id);
             List<CreditCardEntity> creditCardEntities = creditCardService.findByUserId(userId);
             List<CreditCardDto> result = creditCardEntities.stream()
-                    .map(creditCardEntity -> creditCardMapper.mapTo(creditCardEntity))
-                    .collect(java.util.stream.Collectors.toList());
+                    .map(creditCardEntity -> creditCardMapper.mapTo(creditCardEntity)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -1,11 +1,13 @@
 package com.dietideals.dietideals24_25.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -17,12 +19,12 @@ public class S3Service {
 
     public S3Service() {
         this.s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion("eu-north-1")
+                .withRegion(Regions.EU_WEST_1)
                 .build();
     }
 
     public String uploadFile(String bucketName, String folder, MultipartFile file) throws IOException {
-        String fileName = folder + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String fileName = folder + File.separator + UUID.randomUUID() + "_" + file.getOriginalFilename();
         
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());

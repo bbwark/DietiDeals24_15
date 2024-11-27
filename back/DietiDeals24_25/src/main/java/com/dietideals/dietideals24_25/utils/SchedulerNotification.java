@@ -32,6 +32,8 @@ public class SchedulerNotification {
     private final Mapper<AuctionEntity, AuctionDto> auctionMapper;
     private final Mapper<UserEntity, UserDto> userMapper;
 
+    private static final String AUCTIONHEADER = "L'asta di ";
+
     @Autowired
     public SchedulerNotification(SNSService snsService, AuctionService auctionService, UserService userService,
             Mapper<AuctionEntity, AuctionDto> auctionMapper, Mapper<UserEntity, UserDto> userMapper) {
@@ -45,51 +47,43 @@ public class SchedulerNotification {
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void pollAndNotify() {
-        try {
-            System.out.println("\nPolling and notifying at: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS")));
-            List<AuctionEntity> expiredAuctionsEntities = auctionService.findExpiredAuctions();
-            System.out.println("Number of expired auctions found: " + expiredAuctionsEntities.size() + "\n");
-            
-            for (AuctionEntity auctionEntity : expiredAuctionsEntities) {
-                AuctionDto auction = auctionMapper.mapTo(auctionEntity);
-                if (auction.getId() == null) {
-                    continue;
-                }
+        List<AuctionEntity> expiredAuctionsEntities = auctionService.findExpiredAuctions();
 
-                Set<UUID> usersInvolvedInAuction = new HashSet<>();
-                Set<String> deviceTokensForOwner = new HashSet<>();
-                Set<String> deviceTokensForWinner = new HashSet<>();
-                Set<String> deviceTokensForUsersInvolved = new HashSet<>();
-
-                // Add owner ID only if not null
-                if (auction.getOwnerId() != null) {
-                    usersInvolvedInAuction.add(auction.getOwnerId());
-                }
-
-                // Add users with favorite auctions
-                usersInvolvedInAuction.addAll(
-                        userService.findUserIdsByFavouriteAuctionId(auction.getId()).stream()
-                                .filter(Objects::nonNull)
-                                .collect(Collectors.toSet()));
-
-                AtomicBoolean wrapperBuyoutPriceReached = new AtomicBoolean(false);
-                BidDto highestBid = findHighestBid(auction, wrapperBuyoutPriceReached);
-                boolean buyoutPriceReached = wrapperBuyoutPriceReached.get();
-
-
-                collectUserTokens(auction, usersInvolvedInAuction, deviceTokensForOwner,
-                        deviceTokensForWinner, deviceTokensForUsersInvolved,
-                        highestBid, buyoutPriceReached);
-
-                notifyOwner(deviceTokensForOwner, auction, highestBid, buyoutPriceReached);
-                notifyWinner(deviceTokensForWinner, auction);
-                notifyParticipants(deviceTokensForUsersInvolved, auction, buyoutPriceReached);
-
-                auctionEntity.setExpired(true);
-                auctionService.save(auctionEntity);
+        for (AuctionEntity auctionEntity : expiredAuctionsEntities) {
+            AuctionDto auction = auctionMapper.mapTo(auctionEntity);
+            if (auction.getId() == null) {
+                continue;
             }
-        } catch (Exception e) {
-            throw e; // Rethrow to trigger transaction rollback
+
+            Set<UUID> usersInvolvedInAuction = new HashSet<>();
+            Set<String> deviceTokensForOwner = new HashSet<>();
+            Set<String> deviceTokensForWinner = new HashSet<>();
+            Set<String> deviceTokensForUsersInvolved = new HashSet<>();
+
+            // Add owner ID only if not null
+            if (auction.getOwnerId() != null) {
+                usersInvolvedInAuction.add(auction.getOwnerId());
+            }
+
+            // Add users with favorite auctions
+            usersInvolvedInAuction.addAll(
+                    userService.findUserIdsByFavouriteAuctionId(auction.getId()).stream()
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toSet()));
+
+            AtomicBoolean wrapperBuyoutPriceReached = new AtomicBoolean(false);
+            BidDto highestBid = findHighestBid(auction, wrapperBuyoutPriceReached);
+            boolean buyoutPriceReached = wrapperBuyoutPriceReached.get();
+
+            collectUserTokens(auction, usersInvolvedInAuction, deviceTokensForOwner,
+                    deviceTokensForWinner, deviceTokensForUsersInvolved, highestBid);
+
+            notifyOwner(deviceTokensForOwner, auction, highestBid, buyoutPriceReached);
+            notifyWinner(deviceTokensForWinner, auction);
+            notifyParticipants(deviceTokensForUsersInvolved, auction, buyoutPriceReached);
+
+            auctionEntity.setExpired(true);
+            auctionService.save(auctionEntity);
         }
     }
 
@@ -99,10 +93,10 @@ public class SchedulerNotification {
             String message;
             if (auction.getType().compareTo(AuctionType.English) == 0 ||
                     (auction.getType().compareTo(AuctionType.Silent) == 0 && buyoutPriceReached)) {
-                message = "L'asta di " + auction.getItem().getName() + " è terminata!\nL'offerta vincente è di "
+                message = AUCTIONHEADER + auction.getItem().getName() + " è terminata!\nL'offerta vincente è di "
                         + highestBid.getValue();
             } else {
-                message = "L'asta di " + auction.getItem().getName() + " è terminata!\nControlla subito i risultati!";
+                message = AUCTIONHEADER + auction.getItem().getName() + " è terminata!\nControlla subito i risultati!";
             }
             snsService.sendNotification(token, message);
         }
@@ -118,17 +112,17 @@ public class SchedulerNotification {
     private void notifyParticipants(Set<String> deviceTokensForUsersInvolved, AuctionDto auction,
             boolean buyoutPriceReached) {
         for (String token : deviceTokensForUsersInvolved) {
-            String message = "L'asta di " + auction.getItem().getName() + " è terminata!\nPresto saprai se hai vinto";
+            String message = AUCTIONHEADER + auction.getItem().getName() + " è terminata!\nPresto saprai se hai vinto";
             if (auction.getType().compareTo(AuctionType.English) == 0 ||
                     (auction.getType().compareTo(AuctionType.Silent) == 0 && buyoutPriceReached)) {
-                message = "L'asta di " + auction.getItem().getName()
+                message = AUCTIONHEADER + auction.getItem().getName()
                         + " è terminata!\nPurtroppo questa volta non hai vinto";
             }
             snsService.sendNotification(token, message);
         }
     }
 
-    //Protected access for testing
+    // Protected access for testing
     BidDto findHighestBid(AuctionDto auction, AtomicBoolean buyoutPriceReached) {
         BidDto highestBid = new BidDto();
         highestBid.setValue(0f);
@@ -137,46 +131,42 @@ public class SchedulerNotification {
                 highestBid = bid;
             }
             if (auction.getBuyoutPrice() != null && bid.getValue() >= Float.parseFloat(auction.getBuyoutPrice())) {
-                buyoutPriceReached.set(true);;
+                buyoutPriceReached.set(true);
             }
         }
         return highestBid;
     }
 
-    private void collectUserTokens(AuctionDto auction, Set<UUID> usersInvolvedInAuction,
-            Set<String> deviceTokensForOwner, Set<String> deviceTokensForWinner,
-            Set<String> deviceTokensForUsersInvolved, BidDto highestBid, boolean buyoutPriceReached) {
+    private void collectUserTokens(
+            AuctionDto auction,
+            Set<UUID> usersInvolvedInAuction,
+            Set<String> deviceTokensForOwner,
+            Set<String> deviceTokensForWinner,
+            Set<String> deviceTokensForUsersInvolved,
+            BidDto highestBid) {
 
-        if (auction.getOwnerId() != null) {
-            UserDto owner = userService.findById(auction.getOwnerId())
-                    .map(userMapper::mapTo)
-                    .orElse(null);
-            if (owner != null && owner.getDeviceTokens() != null) {
-                deviceTokensForOwner.addAll(owner.getDeviceTokens());
-            }
+        addUserDeviceTokens(auction.getOwnerId(), deviceTokensForOwner);
+
+        if (highestBid != null) {
+            addUserDeviceTokens(highestBid.getUserId(), deviceTokensForWinner);
         }
 
-        if (highestBid != null && highestBid.getUserId() != null) {
-            UserDto winner = userService.findById(highestBid.getUserId())
-                    .map(userMapper::mapTo)
-                    .orElse(null);
-            if (winner != null && winner.getDeviceTokens() != null) {
-                deviceTokensForWinner.addAll(winner.getDeviceTokens());
-            }
+        usersInvolvedInAuction.stream()
+                .filter(userId -> userId != null &&
+                        !userId.equals(auction.getOwnerId()) &&
+                        (highestBid == null || !userId.equals(highestBid.getUserId())))
+                .forEach(userId -> addUserDeviceTokens(userId, deviceTokensForUsersInvolved));
+    }
+
+    private void addUserDeviceTokens(UUID userId, Set<String> deviceTokens) {
+        if (userId == null) {
+            return;
         }
 
-        for (UUID userId : usersInvolvedInAuction) {
-            if (userId != null && !userId.equals(auction.getOwnerId()) &&
-                    (highestBid == null || !userId.equals(highestBid.getUserId()))) {
-
-                UserDto user = userService.findById(userId)
-                        .map(userMapper::mapTo)
-                        .orElse(null);
-                if (user != null && user.getDeviceTokens() != null) {
-                    deviceTokensForUsersInvolved.addAll(user.getDeviceTokens());
-                }
-            }
-        }
+        userService.findById(userId)
+                .map(userMapper::mapTo)
+                .map(UserDto::getDeviceTokens)
+                .ifPresent(deviceTokens::addAll);
     }
 
 }

@@ -8,6 +8,9 @@ class DietiDeals2425ApplicationTests {
 
     @Test
     void contextLoads() {
+        /*
+         * This test should be empty. It is used to check if the Spring context is loaded
+         */
     }
 
 }

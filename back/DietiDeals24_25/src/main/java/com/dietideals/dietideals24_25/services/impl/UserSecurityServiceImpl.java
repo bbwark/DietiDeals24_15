@@ -55,8 +55,7 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     public boolean isUserAuthorized(String targetUserId) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getPrincipal() instanceof UserDto) {
-                UserDto user = (UserDto) auth.getPrincipal();
+            if (auth != null && auth.getPrincipal() instanceof UserDto user) {
                 return user.getId().equals(UUID.fromString(targetUserId));
             }
             return false;
@@ -69,11 +68,11 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     public boolean isUserAuthorizedByAuctionId(String auctionId) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getPrincipal() instanceof UserDto) {
+            if (auth != null && auth.getPrincipal() instanceof UserDto user) {
                 AuctionEntity auctionEntity = auctionService.findById(UUID.fromString(auctionId)).orElse(null);
                 if (auctionEntity != null) {
                     AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
-                    return auctionDto.getOwnerId().equals(((UserDto) auth.getPrincipal()).getId());
+                    return auctionDto.getOwnerId().equals(user.getId());
                 }
             }
 
@@ -87,11 +86,11 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     public boolean isUserAuthorizedByBidId(String bidId) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getPrincipal() instanceof UserDto) {
+            if (auth != null && auth.getPrincipal() instanceof UserDto user) {
                 BidEntity bidEntity = bidService.findById(UUID.fromString(bidId)).orElse(null);
                 if (bidEntity != null) {
                     BidDto bidDto = bidMapper.mapTo(bidEntity);
-                    return bidDto.getUserId().equals(((UserDto) auth.getPrincipal()).getId());
+                    return bidDto.getUserId().equals(user.getId());
                 }
             }
             return false;
@@ -105,14 +104,14 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     public boolean isUserAuthorizedByItemId(String itemId) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getPrincipal() instanceof UserDto) {
+            if (auth != null && auth.getPrincipal() instanceof UserDto user) {
                 ItemEntity itemEntity = itemService.findById(UUID.fromString(itemId)).orElse(null);
                 if (itemEntity != null) {
                     ItemDto itemDto = itemMapper.mapTo(itemEntity);
                     AuctionEntity auctionEntity = auctionService.findById(itemDto.getAuctionId()).orElse(null);
                     if (auctionEntity != null) {
                         AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
-                        return auctionDto.getOwnerId().equals(((UserDto) auth.getPrincipal()).getId());
+                        return auctionDto.getOwnerId().equals(user.getId());
                     }
                 }
             }
@@ -126,11 +125,11 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     public boolean isUserAuthorizedByCardNumber(String cardNumber) {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getPrincipal() instanceof UserDto) {
+            if (auth != null && auth.getPrincipal() instanceof UserDto user) {
                 CreditCardEntity creditCardEntity = creditCardService.findByCardNumber(cardNumber).orElse(null);
                 if (creditCardEntity != null) {
                     CreditCardDto creditCardDto = creditCardMapper.mapTo(creditCardEntity);
-                    return creditCardDto.getOwnerId().equals(((UserDto) auth.getPrincipal()).getId());
+                    return creditCardDto.getOwnerId().equals(user.getId());
                 }
             }
             return false;

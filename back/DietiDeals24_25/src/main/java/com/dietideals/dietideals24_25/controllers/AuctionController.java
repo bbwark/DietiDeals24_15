@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auctions")
@@ -109,11 +108,9 @@ public class AuctionController {
                 AuctionDto auctionDto = auctionMapper.mapTo(auctionEntity);
                 if (auctionDto.getType() == AuctionType.Silent) {
                     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                    if (auth != null && auth.getPrincipal() instanceof UserDto) {
-                        UserDto user = (UserDto) auth.getPrincipal();
-                        if (!user.getId().equals(auctionDto.getOwnerId())) {
-                            auctionDto.getBids().clear(); //if the user who's making the request is not the owner, he can't see the bids
-                        }
+                    if (auth != null && auth.getPrincipal() instanceof UserDto user
+                            && !user.getId().equals(auctionDto.getOwnerId())) {
+                        auctionDto.getBids().clear(); // if the user who's making the request is not the owner, he can't see the bids
                     }
                 }
                 return new ResponseEntity<>(auctionDto, HttpStatus.OK);
@@ -130,12 +127,11 @@ public class AuctionController {
             UUID idConverted = UUID.fromString(id);
             List<UserEntity> bidders = auctionService.findBiddersByAuctionId(idConverted);
             List<UserDto> result = bidders.stream()
-                    .map(bidder -> userMapper.mapTo(bidder))
-                    .collect(Collectors.toList());
+                    .map(bidder -> userMapper.mapTo(bidder)).toList();
             result = result.stream()
                     .map(userDto -> new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(),
                             userDto.getBio()))
-                    .collect(Collectors.toList());
+                    .toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -148,8 +144,7 @@ public class AuctionController {
         try {
             List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
             List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction))
-                    .collect(Collectors.toList());
+                    .map(auction -> auctionMapper.mapTo(auction)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -163,8 +158,7 @@ public class AuctionController {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction))
-                    .collect(Collectors.toList());
+                    .map(auction -> auctionMapper.mapTo(auction)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -178,8 +172,7 @@ public class AuctionController {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findParticipatedAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction))
-                    .collect(Collectors.toList());
+                    .map(auction -> auctionMapper.mapTo(auction)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -193,8 +186,7 @@ public class AuctionController {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findEndingAuctions(ownerId, MAXPAGESIZE);
             List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction))
-                    .collect(Collectors.toList());
+                    .map(auction -> auctionMapper.mapTo(auction)).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -18,7 +18,7 @@ public interface UserService {
 
     int removeFavouriteAuction(UUID userId, UUID auctionId);
 
-    Boolean exists(UUID id);
+    boolean exists(UUID id);
 
     Optional<UserEntity> findUserByEmail(String email) ;
 

@@ -112,7 +112,7 @@ class UserControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(false, response.getBody().getIsSeller());
-        assertEquals(userEntity.getAuthorities().stream()
-                .anyMatch(role -> "SELLER".equals(role.getAuthority())), false);
+        assertEquals(false, userEntity.getAuthorities().stream()
+                .anyMatch(role -> "SELLER".equals(role.getAuthority())));
     }
 }

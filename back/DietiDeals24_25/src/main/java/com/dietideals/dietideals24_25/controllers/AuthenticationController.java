@@ -56,10 +56,7 @@ public class AuthenticationController {
             List<CreditCardDto> creditCardDtos = null;
             if (userHasCreditCards) {
                 creditCardDtos = user.getCreditCards().stream()
-                        .map(creditCard -> {
-                            CreditCardDto creditCardDto = new CreditCardDto(creditCard);
-                            return creditCardDto;
-                        })
+                        .map(creditCard -> new CreditCardDto(creditCard))
                         .collect(Collectors.toList());
 
                 user.getCreditCards().clear();
