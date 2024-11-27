@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
@@ -17,7 +18,8 @@ public class ItemDto {
 
     private String name;
 
-    private String imageUrl;
+    @Builder.Default
+    private ArrayList<String> imageUrl = new ArrayList<>();
 
     private UUID auctionId;
 }
