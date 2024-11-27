@@ -1,6 +1,6 @@
 package com.CioffiDeVivo.dietideals.data.validations
 
-class ValidateEditProfileForm: ValidateRegistrationForms() {
+class ValidateEditProfileForm: ValidateUserForms() {
     override fun validatePassword(password: String): ValidationResult {
         if(password.isNotBlank()){
             if (password.length < passwordMinimumLength) {

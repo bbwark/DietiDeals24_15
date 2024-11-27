@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BidHistoryViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository,
     private val auctionRepository: AuctionRepository,
     private val bidRepository: BidRepository
 ): ViewModel() {

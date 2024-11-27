@@ -19,7 +19,6 @@ class BecomeSellerViewModel(
 
     private val _becomeSellerUiState = MutableStateFlow<BecomeSellerUiState>(BecomeSellerUiState.BecomeSellerParams())
     val becomeSellerUiState: StateFlow<BecomeSellerUiState> = _becomeSellerUiState.asStateFlow()
-    private val _creditCardOnFetchState = MutableStateFlow<CreditCard>(CreditCard())
 
     fun getUserInfo(){
         _becomeSellerUiState.value = BecomeSellerUiState.Loading

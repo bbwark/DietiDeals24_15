@@ -2,7 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials
 
 import com.CioffiDeVivo.dietideals.data.models.Country
 
-open class RegistrationEvents {
+sealed class RegistrationEvents {
     data class EmailChanged(val email: String): RegistrationEvents()
     data class EmailDeleted(val email: String): RegistrationEvents()
     data class NameChanged(val name: String): RegistrationEvents()

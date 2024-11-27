@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 class UserPreferencesRepository(
     private val dataStore: DataStore<Preferences>
 ) {
-    private companion object{
+    private companion object UserPreferences{
         val USER_ID = stringPreferencesKey("user_id")
         val TOKEN = stringPreferencesKey("token")
         val NAME = stringPreferencesKey("name")

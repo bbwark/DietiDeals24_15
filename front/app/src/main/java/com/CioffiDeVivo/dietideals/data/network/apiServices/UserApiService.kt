@@ -24,10 +24,10 @@ interface UserApiService{
     @DELETE("/users/{id}")
     suspend fun deleteUser(@Path("id") userId: String): Response<Void>
 
-    @PUT("/users/favourites/{id}")
-    suspend fun addFavourite(@Path("id") userId: String, @Body auction: Auction): Response<User>
+    @PUT("/users/add/favourite/{auctionId}/{id}")
+    suspend fun addFavourite(@Path("auctionId") auctionId: String, @Path("id") userId: String): Response<User>
 
-    @PUT("/users/favourites/{id}")
-    suspend fun removeFavourite(@Path("id") userId: String, @Body auction: Auction): Response<User>
+    @PUT("/users/remove/favourite/{auctionId}/{userId}")
+    suspend fun removeFavourite(@Path("auctionId") auctionId: String, @Path("id") userId: String): Response<User>
 
 }

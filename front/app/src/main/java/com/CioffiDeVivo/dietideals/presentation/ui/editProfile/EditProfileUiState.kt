@@ -9,7 +9,6 @@ sealed interface EditProfileUiState {
     data class EditProfileParams(
         val emailErrorMsg: String? = null,
         val nameErrorMsg: String? = null,
-        val surnameErrorMsg: String? = null,
         val passwordErrorMsg: String? = null,
         val retypePasswordErrorMsg: String? = null,
         val retypePassword: String = "",

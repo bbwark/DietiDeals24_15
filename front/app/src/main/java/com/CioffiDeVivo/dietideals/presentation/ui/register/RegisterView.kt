@@ -37,7 +37,6 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 
-
  @Composable
 fun RegisterView(navController: NavController) {
     Column(

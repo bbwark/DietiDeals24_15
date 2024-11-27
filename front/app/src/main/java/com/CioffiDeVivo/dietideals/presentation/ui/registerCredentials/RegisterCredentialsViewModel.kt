@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
-import com.CioffiDeVivo.dietideals.data.validations.ValidateRegistrationForms
+import com.CioffiDeVivo.dietideals.data.validations.ValidateUserForms
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class RegisterCredentialsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val authRepository: AuthRepository,
-    private val validateRegistrationForms: ValidateRegistrationForms = ValidateRegistrationForms()
+    private val validateUserForms: ValidateUserForms = ValidateUserForms()
 ): ViewModel() {
 
     private val _registerCredentialsUiState = MutableStateFlow<RegisterCredentialsUiState>(RegisterCredentialsUiState.RegisterParams())
@@ -143,17 +143,17 @@ class RegisterCredentialsViewModel(
         val currentState = _registerCredentialsUiState.value
         if(currentState is RegisterCredentialsUiState.RegisterParams){
             try {
-                val emailValidation = validateRegistrationForms.validateEmail(currentState.user.email)
-                val nameValidation = validateRegistrationForms.validateName(currentState.user.name)
-                val passwordValidation = validateRegistrationForms.validatePassword(currentState.user.password)
-                val newPasswordValidation = validateRegistrationForms.validateRetypePassword(currentState.user.password, currentState.retypePassword)
-                val addressValidation = validateRegistrationForms.validateAddress(currentState.user.address)
-                val zipCodeValidation = validateRegistrationForms.validateZipCode(currentState.user.zipcode)
-                val phoneNumberValidation = validateRegistrationForms.validatePhoneNumber(currentState.user.phoneNumber)
-                val creditCardNumberValidation = validateRegistrationForms.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
-                val expirationDateValidation = validateRegistrationForms.validateExpirationDate(currentState.creditCard.expirationDate)
-                val cvvValidation = validateRegistrationForms.validateCvv(currentState.creditCard.cvv)
-                val ibanValidation = validateRegistrationForms.validateIban(currentState.creditCard.iban)
+                val emailValidation = validateUserForms.validateEmail(currentState.user.email)
+                val nameValidation = validateUserForms.validateName(currentState.user.name)
+                val passwordValidation = validateUserForms.validatePassword(currentState.user.password)
+                val newPasswordValidation = validateUserForms.validateRetypePassword(currentState.user.password, currentState.retypePassword)
+                val addressValidation = validateUserForms.validateAddress(currentState.user.address)
+                val zipCodeValidation = validateUserForms.validateZipCode(currentState.user.zipcode)
+                val phoneNumberValidation = validateUserForms.validatePhoneNumber(currentState.user.phoneNumber)
+                val creditCardNumberValidation = validateUserForms.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
+                val expirationDateValidation = validateUserForms.validateExpirationDate(currentState.creditCard.expirationDate)
+                val cvvValidation = validateUserForms.validateCvv(currentState.creditCard.cvv)
+                val ibanValidation = validateUserForms.validateIban(currentState.creditCard.iban)
 
                 val hasErrorNotSeller = listOf(
                     emailValidation,

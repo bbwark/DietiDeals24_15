@@ -15,8 +15,8 @@ interface UserRepository {
     suspend fun getUserInfo(userId: String): User
     suspend fun updateUser(userId: String, user: User): User
     suspend fun deleteUser(userId: String)
-    suspend fun addFavourite(userId: String, auction: Auction): User
-    suspend fun removeFavourite(userId: String, auction: Auction): User
+    suspend fun addFavourite(auctionId: String, userId: String): User
+    suspend fun removeFavourite(auctionId: String, userId: String): User
 }
 
 class NetworkUserRepository(private val userApiService: UserApiService): UserRepository {
@@ -54,8 +54,8 @@ class NetworkUserRepository(private val userApiService: UserApiService): UserRep
         }
     }
 
-    override suspend fun addFavourite(userId: String, auction: Auction): User {
-        val response = userApiService.addFavourite(userId, auction)
+    override suspend fun addFavourite(auctionId: String, userId: String): User {
+        val response = userApiService.addFavourite(auctionId, userId)
         if(response.isSuccessful){
             return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
         } else{
@@ -63,8 +63,8 @@ class NetworkUserRepository(private val userApiService: UserApiService): UserRep
         }
     }
 
-    override suspend fun removeFavourite(userId: String, auction: Auction): User {
-        val response = userApiService.removeFavourite(userId, auction)
+    override suspend fun removeFavourite(auctionId: String, userId: String): User {
+        val response = userApiService.removeFavourite(auctionId, userId)
         if(response.isSuccessful){
             return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
         } else{

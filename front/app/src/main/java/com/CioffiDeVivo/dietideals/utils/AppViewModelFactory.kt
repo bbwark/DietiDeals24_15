@@ -47,7 +47,7 @@ class AppViewModelFactory(
                 MakeABidViewModel(userPreferencesRepository, appContainer.auctionRepository, appContainer.bidRepository) as T
 
             modelClass.isAssignableFrom(BidHistoryViewModel::class.java) ->
-                BidHistoryViewModel(userPreferencesRepository, appContainer.auctionRepository, appContainer.bidRepository) as T
+                BidHistoryViewModel(appContainer.auctionRepository, appContainer.bidRepository) as T
 
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) ->
                 EditProfileViewModel(userPreferencesRepository, appContainer.userRepository) as T

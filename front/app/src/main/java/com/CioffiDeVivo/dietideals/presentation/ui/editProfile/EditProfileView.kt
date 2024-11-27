@@ -32,7 +32,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 @Composable
 fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
 
-    val editProfileUiState by viewModel.editUiProfileState.collectAsState()
+    val editProfileUiState by viewModel.editProfileUiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(Unit){
         viewModel.getUserInfo()

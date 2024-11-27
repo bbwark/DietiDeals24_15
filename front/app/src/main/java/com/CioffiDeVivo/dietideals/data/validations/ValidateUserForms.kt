@@ -12,7 +12,7 @@ const val ibanLength = 27
 val currentYear = java.time.Year.now().value.toString().substring(2)
 val regexCreditCardPattern = """^(0[1-9]|1[0-2])/$currentYear|[2-9]\d$""".toRegex()
 
-open class ValidateRegistrationForms {
+open class ValidateUserForms {
 
     open fun validateEmail(email: String): ValidationResult {
         if (email.isBlank()) {

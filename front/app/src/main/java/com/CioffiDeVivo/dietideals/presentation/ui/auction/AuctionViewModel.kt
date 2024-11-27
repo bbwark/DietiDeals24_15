@@ -39,13 +39,13 @@ class AuctionViewModel(
         }
     }
 
-    fun addOnFavourites(){
+    fun addOnFavourites(auctionId: String){
         val currentState = _auctionUiState.value
         if(currentState is AuctionUiState.Success){
             viewModelScope.launch {
                 try {
                     val userId = userPreferencesRepository.getUserIdPreference()
-                    userRepository.addFavourite(userId, currentState.auction)
+                    userRepository.addFavourite(auctionId, userId)
                     _auctionUiState.value = currentState.copy(isFavoured = true)
                 } catch (e: Exception){
                     _auctionUiState.value = AuctionUiState.Error
@@ -54,13 +54,13 @@ class AuctionViewModel(
         }
     }
 
-    fun removeFromFavourites(){
+    fun removeFromFavourites(auctionId: String){
         val currentState = _auctionUiState.value
         if(currentState is AuctionUiState.Success){
             viewModelScope.launch {
                 try {
                     val userId = userPreferencesRepository.getUserIdPreference()
-                    userRepository.removeFavourite(userId, currentState.auction)
+                    userRepository.removeFavourite(auctionId, userId)
                     _auctionUiState.value = currentState.copy(isFavoured = false)
                 } catch (e: Exception){
                     _auctionUiState.value = AuctionUiState.Error

@@ -13,7 +13,6 @@ sealed interface RegisterCredentialsUiState {
         val creditCard: CreditCard = CreditCard(),
         val emailErrorMsg: String? = null,
         val nameErrorMsg: String? = null,
-        val surnameErrorMsg: String? = null,
         val passwordErrorMsg: String? = null,
         val retypePassword: String = "",
         val retypePasswordErrorMsg: String? = null,

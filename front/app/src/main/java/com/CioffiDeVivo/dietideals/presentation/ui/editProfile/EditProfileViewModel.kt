@@ -20,15 +20,15 @@ class EditProfileViewModel(
     private val validateEditProfileForm: ValidateEditProfileForm = ValidateEditProfileForm()
 ): ViewModel() {
 
-    private val _editUiProfileState = MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
-    val editUiProfileState: StateFlow<EditProfileUiState> = _editUiProfileState.asStateFlow()
+    private val _editProfileUiState = MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
+    val editProfileUiState: StateFlow<EditProfileUiState> = _editProfileUiState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationEditProfileEvent = validationEventChannel.receiveAsFlow()
 
     fun getUserInfo(){
-        _editUiProfileState.value = EditProfileUiState.Loading
+        _editProfileUiState.value = EditProfileUiState.Loading
         viewModelScope.launch {
-            _editUiProfileState.value = try {
+            _editProfileUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
                 EditProfileUiState.EditProfileParams(user = user)
@@ -41,32 +41,32 @@ class EditProfileViewModel(
 
     fun editProfileAction(editProfileEvent: EditProfileEvent){
         try {
-            val currentState = _editUiProfileState.value
+            val currentState = _editProfileUiState.value
             if(currentState is EditProfileUiState.EditProfileParams){
                 when(editProfileEvent){
                     is EditProfileEvent.EmailChanged -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(email = editProfileEvent.email))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(email = editProfileEvent.email))
                     }
                     is EditProfileEvent.EmailDeleted -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(email = ""))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(email = ""))
                     }
                     is EditProfileEvent.NameChanged -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(name = editProfileEvent.name))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(name = editProfileEvent.name))
                     }
                     is EditProfileEvent.NameDeleted -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(name = ""))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(name = ""))
                     }
                     is EditProfileEvent.DescriptionChanged -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(bio = editProfileEvent.description))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(bio = editProfileEvent.description))
                     }
                     is EditProfileEvent.DescriptionDeleted -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(bio = ""))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(bio = ""))
                     }
                     is EditProfileEvent.PasswordChanged -> {
-                        _editUiProfileState.value = currentState.copy(user = currentState.user.copy(password = editProfileEvent.password))
+                        _editProfileUiState.value = currentState.copy(user = currentState.user.copy(password = editProfileEvent.password))
                     }
                     is EditProfileEvent.NewPasswordChanged -> {
-                        _editUiProfileState.value = currentState.copy(retypePassword = editProfileEvent.newPassword)
+                        _editProfileUiState.value = currentState.copy(retypePassword = editProfileEvent.newPassword)
                     }
                     is EditProfileEvent.Submit -> {
                         submitEditProfile()
@@ -74,17 +74,17 @@ class EditProfileViewModel(
                 }
             }
         } catch (e: Exception){
-            _editUiProfileState.value = EditProfileUiState.Error
+            _editProfileUiState.value = EditProfileUiState.Error
         }
     }
 
     private fun submitEditProfile(){
         if (validationBlock()) {
-            val currentState = _editUiProfileState.value
+            val currentState = _editProfileUiState.value
             if(currentState is EditProfileUiState.EditProfileParams){
-                _editUiProfileState.value = EditProfileUiState.Loading
+                _editProfileUiState.value = EditProfileUiState.Loading
                 viewModelScope.launch {
-                    _editUiProfileState.value = try {
+                    _editProfileUiState.value = try {
                         val updatedUser = currentState.user
                         val userId = userPreferencesRepository.getUserIdPreference()
                         val updatedUserResponse = userRepository.updateUser(userId ,updatedUser)
@@ -100,7 +100,7 @@ class EditProfileViewModel(
     }
 
     private fun validationBlock(): Boolean {
-        val currentState = _editUiProfileState.value
+        val currentState = _editProfileUiState.value
         if(currentState is EditProfileUiState.EditProfileParams){
             try {
                 val emailValidation = validateEditProfileForm.validateEmail(currentState.user.email)
@@ -116,7 +116,7 @@ class EditProfileViewModel(
                 ).any { !it.positiveResult }
 
                 if(hasError){
-                    _editUiProfileState.value = currentState.copy(
+                    _editProfileUiState.value = currentState.copy(
                         emailErrorMsg = emailValidation.errorMessage,
                         nameErrorMsg = nameValidation.errorMessage,
                         passwordErrorMsg = passwordValidation.errorMessage,
@@ -129,7 +129,7 @@ class EditProfileViewModel(
                 }
                 return true
             } catch (e: Exception){
-                _editUiProfileState.value = EditProfileUiState.Error
+                _editProfileUiState.value = EditProfileUiState.Error
                 return false
             }
         } else{
