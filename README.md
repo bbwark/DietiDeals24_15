@@ -216,16 +216,12 @@ Since these services are constantly evolving, it is recommended to do research o
     Then uncomment the line 7 and comment the line 6. This is because on that line is defined the path to where the database is located, the standard setting is local with the standard PostgreSQL settings, but in this case it is in another docker container.
 
 1. Run the following build command:
-
-    ```sh
-    mvn clean install
-    ```
-
-    If the tests are blocking you can try to skip them, the application may still mostly work correctly:
+   
     ```sh
     mvn clean install -DskipTests
     ```
-
+    We're skipping tests since the database can't be reached from here and the clean install would fail untruthfully.
+    
 1. Now everything is ready, we need to create the docker image to run:
 
     ```sh
