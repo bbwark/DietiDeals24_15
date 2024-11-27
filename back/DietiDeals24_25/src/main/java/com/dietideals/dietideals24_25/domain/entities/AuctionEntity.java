@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(exclude = {"item", "bids", "favouritedByUsers"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
