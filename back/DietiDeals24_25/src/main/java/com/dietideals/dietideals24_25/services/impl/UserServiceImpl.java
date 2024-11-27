@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+    }
+
+    @Override
+    @Transactional
+    public int addFavouriteAuction(UUID userId, UUID auctionId) {
+        return userRepository.addFavouriteAuction(userId, auctionId);
+    }
+
+    @Override
+    @Transactional
+    public int removeFavouriteAuction(UUID userId, UUID auctionId) {
+        return userRepository.removeFavouriteAuction(userId, auctionId);
     }
 
 }

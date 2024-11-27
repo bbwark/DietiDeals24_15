@@ -14,6 +14,10 @@ public interface UserService {
 
     List<UUID> findUserIdsByFavouriteAuctionId(UUID auctionId);
 
+    int addFavouriteAuction(UUID userId, UUID auctionId);
+
+    int removeFavouriteAuction(UUID userId, UUID auctionId);
+
     Boolean exists(UUID id);
 
     Optional<UserEntity> findUserByEmail(String email) ;
