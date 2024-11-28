@@ -1,6 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
-import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -141,7 +140,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     value = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).auction.item.name,
                     onValueChanged = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameChanged(it)) },
                     label = stringResource(R.string.itemName),
-                    onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted(it)) },
+                    onTrailingIconClick = { viewModel.createAuctionOnAction(CreateAuctionEvents.ItemNameDeleted) },
                     isError = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).itemNameErrorMsg != null,
                     supportingText = (createAuctionUiState as CreateAuctionUiState.CreateAuctionParams).itemNameErrorMsg,
                     modifier = modifierStandard
@@ -204,7 +203,7 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                             onMaxBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MaxBidChanged(it)) },
                             onInfoClick = { showMaxBidInfo.value = true },
                             onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
-                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
+                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted) },
                             onCalendarClick = { showDatePicker.value = true }
                         )
                     }
@@ -214,8 +213,8 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                             onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it)) },
                             onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
                             onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
-                            onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted(it)) },
-                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted(it)) },
+                            onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted) },
+                            onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted) },
                             onCalendarClick = { showDatePicker.value = true }
                         )
                     }
@@ -359,7 +358,7 @@ fun SilentAuction(
         )
     }
     InputTextField(
-        value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        value = auctionState.auction.endingDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
         onValueChanged = { },
         label = stringResource(R.string.endingDate),
         onTrailingIconClick = { onCalendarClick() },
@@ -443,7 +442,7 @@ fun EnglishAuction(
         )
     }
     InputTextField(
-        value = auctionState.auction.endingDate!!.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        value = auctionState.auction.endingDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
         onValueChanged = {  },
         label = stringResource(R.string.endingDate),
         trailingIcon = Icons.Filled.CalendarMonth,
@@ -463,7 +462,6 @@ fun EnglishAuction(
 fun ImageItem(
     uri: String,
     onClick: () -> Unit,
-    context: Context,
     iconButton: ImageVector = Icons.Filled.BrokenImage,
     modifier: Modifier
 ){
@@ -531,8 +529,7 @@ fun AddingImagesOnCreateAuction(
                 onClick = {
                     onDeleteImage(index)
                     Toast.makeText(context, "Image Removed", Toast.LENGTH_SHORT).show()
-                          },
-                context = context,
+                },
                 modifier = Modifier
                     .size(width = 80.dp, height = 80.dp)
                     .clip(RoundedCornerShape(10.dp))
@@ -567,7 +564,6 @@ fun DialogImage(
         ImageItem(
             uri = uri,
             onClick = { onDismissRequest() },
-            context = LocalContext.current,
             modifier = Modifier
                 .size(width = 200.dp, height = 200.dp)
                 .clip(RoundedCornerShape(10.dp)),

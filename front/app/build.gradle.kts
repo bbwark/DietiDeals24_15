@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.CioffiDeVivo.dietideals"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.CioffiDeVivo.dietideals"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -82,6 +82,7 @@ dependencies {
     implementation ("androidx.credentials:credentials-play-services-auth:<latest version>")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.foundation:foundation-layout:1.7.5")
+    implementation("androidx.compose.runtime:runtime:1.7.5")
 
     implementation("com.google.accompanist:accompanist-permissions:0.24.11-rc")
 

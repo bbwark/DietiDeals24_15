@@ -2,15 +2,11 @@
     <string name="app_name">DietiDeals</string>
     <string name="continuewithEmail">Continue with Email</string>
     <string name="continuewithGoogle">Continue with Google</string>
-    <string name="continuewithGit">Continue with Git</string>
-    <string name="continuewithFacebook">Continue with Facebook</string>
     <string name="createAccount">Create Account</string>
     <string name="logIn">Log In</string>
     <string name="createAuction">Create Auction</string>
     <string name="dietideals">DietiDeals</string>
-    <string name="welcome">Welcome</string>
     <string name="logInAccount">Log into an Account</string>
-    <string name="lastBid">Last Bid</string>
     <string name="minimumBid">Min.Bid</string>
     <string name="maxBid">Max.Bid</string>
     <string name="contactInfo">Contact Info</string>
@@ -18,10 +14,8 @@
     <string name="saveChanges">Save Changes</string>
     <string name="saveCard">Save Card</string>
     <string name="manageCards">Manage Cards</string>
-    <string name="sellView">My Auctions</string>
     <string name="email">Email</string>
     <string name="name">Name</string>
-    <string name="surname">Surname</string>
     <string name="password">Password</string>
     <string name="rewritepassword">Re-Write Password</string>
     <string name="address">Address</string>
@@ -32,7 +26,6 @@
     <string name="expirationdate">E. Date</string>
     <string name="cvv">CVV</string>
     <string name="phonenumber">Phone Number</string>
-    <string name="passcharacters">8-16 Characters</string>
     <string name="areYouSeller">Are you a Seller?</string>
     <string name="itemName">Item Name</string>
     <string name="minStep">Min.Step</string>
@@ -42,11 +35,7 @@
     <string name="bidHistory">Bid History</string>
     <string name="iban">IBAN</string>
     <string name="addCard">Add a Card</string>
-    <string name="error_fieldEmpty">The field cannot be empty</string>
     <string name="emailExample">Example@Example.com</string>
-    <string name="web_client_id">754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com</string>
-    <string name="base_url">http://16.171.206.112</string>
-    <string name="port">8181</string>
     <string name="alert">Alert</string>
     <string name="info">Information</string>
     <string name="maxBidInfo">It is the Maximum Bid, beyond that input, the Auction is automatically accepted!</string>

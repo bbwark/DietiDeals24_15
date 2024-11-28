@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,10 +36,6 @@ import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
-import com.example.compose.inversePrimaryLight
-import com.example.compose.inversePrimaryLightMediumContrast
-import com.example.compose.primaryContainerLight
-import com.example.compose.surfaceDimLight
 
 @Composable
 fun AccountView(viewModel: AccountViewModel, navController: NavController) {
@@ -88,7 +82,7 @@ fun AccountView(viewModel: AccountViewModel, navController: NavController) {
                     }
                 )
                 AccountViewButton(
-                    caption = "Change Contact Informations",
+                    caption = "Change Contact Information",
                     icon = Icons.Default.Mail,
                     onClick = {
                         if (navController.currentBackStackEntry?.destination?.route != Screen.EditContactInfo.route) {

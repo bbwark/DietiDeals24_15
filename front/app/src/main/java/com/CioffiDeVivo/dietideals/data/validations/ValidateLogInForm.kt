@@ -1,8 +1,6 @@
 package com.CioffiDeVivo.dietideals.data.validations
 
-class ValidateLogInForm(): ValidateUserForms() {
-
-    //Aggiungere Errors per email o password errate
+class ValidateLogInForm: ValidateUserForms() {
     override fun validateEmail(email: String): ValidationResult {
         if (email.isBlank()) {
             return ValidationResult(

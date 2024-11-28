@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep class androidx.compose.runtime.snapshots.SnapshotStateList { *; }
+
 -if class androidx.credentials.CredentialManager
 -keep class androidx.credentials.playservices.**{
     *;

@@ -98,6 +98,6 @@ fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
 @Composable
 fun HomeViewAuctionListElementPreview(){
     HomeViewAuctionListElement(
-        auction = Auction("", "", Item("", "TESTNAME")),
+        auction = Auction("", "", Item("", "TEST NAME")),
         navController = rememberNavController())
 }

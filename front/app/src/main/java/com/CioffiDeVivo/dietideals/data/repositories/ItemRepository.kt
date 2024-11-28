@@ -3,7 +3,6 @@ package com.CioffiDeVivo.dietideals.data.repositories
 import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.data.network.apiServices.ItemApiService
 import retrofit2.HttpException
-import retrofit2.Response
 
 interface ItemRepository {
     suspend fun createItem(item: Item): Item

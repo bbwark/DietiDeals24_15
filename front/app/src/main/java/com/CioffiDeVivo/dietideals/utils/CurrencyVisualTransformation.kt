@@ -8,10 +8,8 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.core.text.isDigitsOnly
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Currency
-import kotlin.math.max
 
 class CurrencyVisualTransformation(currencyCode: String): VisualTransformation {
 

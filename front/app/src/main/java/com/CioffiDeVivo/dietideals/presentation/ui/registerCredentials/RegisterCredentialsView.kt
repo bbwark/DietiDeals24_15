@@ -39,7 +39,6 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactI
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardComponents
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.PersonalInfoOnRegisterCredentials
 import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ViewTitle
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
@@ -88,12 +87,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 Spacer(modifier = Modifier.height(30.dp))
                 PersonalInfoOnRegisterCredentials(
                     userState = registerCredentialsUiState,
-                    onEmailChange = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
-                    onNameChange = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
-                    onPasswordChange = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
-                    onNewPasswordChange = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
-                    onDeleteEmail = { viewModel.registrationAction(RegistrationEvents.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.registrationAction(RegistrationEvents.NameDeleted(it)) }
+                    viewModel = viewModel
                 )
                 Row(
                     modifier = Modifier
@@ -126,29 +120,16 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                 if(isSeller){
                     ContactInfo(
                         userState = registerCredentialsUiState,
-                        onAddressChange = { viewModel.registrationAction(RegistrationEvents.AddressChanged(it)) },
-                        onCountryChange = { viewModel.registrationAction(RegistrationEvents.CountryChanged(it)) },
-                        onZipCodeChange = { viewModel.registrationAction(RegistrationEvents.ZipCodeChanged(it)) },
-                        onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvents.PhoneNumberChanged(it)) },
-                        onDeleteAddress = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                        onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.ZipCodeDeleted(it)) },
-                        onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.PhoneNumberDeleted(it)) }
+                        viewModel = viewModel
                     )
                     CreditCardComponents(
                         userState = registerCredentialsUiState,
-                        onNumberChange = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberChanged(it)) },
-                        onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },
-                        onCvvChange = { viewModel.registrationAction(RegistrationEvents.CvvChanged(it)) },
-                        onIbanChange = { viewModel.registrationAction(RegistrationEvents.IbanChanged(it)) },
-                        onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberDeleted(it)) },
-                        onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvents.ExpirationDateDeleted(it)) },
-                        onDeleteCvv = { viewModel.registrationAction(RegistrationEvents.CvvDeleted(it)) },
-                        onDeleteIban = { viewModel.registrationAction(RegistrationEvents.IbanDeleted(it)) }
+                        viewModel = viewModel
                     )
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
-                    onClick = { viewModel.registrationAction(RegistrationEvents.Submit()) },
+                    onClick = { viewModel.registrationAction(RegistrationEvents.Submit) },
                     modifier = Modifier
                         .size(width = 330.dp, height = 50.dp)
                         .pulsateClick(),

@@ -16,7 +16,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 )
 
 class DietiDealsApplication: Application() {
-    lateinit var appContainer: AppContainer
+    private lateinit var appContainer: AppContainer
     lateinit var userPreferencesRepository: UserPreferencesRepository
     lateinit var appViewModelFactory: AppViewModelFactory
     override fun onCreate() {

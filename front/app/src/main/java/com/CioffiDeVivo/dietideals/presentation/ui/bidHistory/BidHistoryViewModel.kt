@@ -2,7 +2,6 @@ package com.CioffiDeVivo.dietideals.presentation.ui.bidHistory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.models.Bid
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.BidRepository

@@ -60,7 +60,7 @@ fun UserInfoBottomSheet(user: User, onDismissRequest: () -> Unit) {
                     fontSize = 20.sp,
                     fontWeight = FontWeight(600)
                 )
-                user.bio?.let { Text(text = it, fontSize = 12.sp) }
+                Text(text = user.bio, fontSize = 12.sp)
             }
         }
     }

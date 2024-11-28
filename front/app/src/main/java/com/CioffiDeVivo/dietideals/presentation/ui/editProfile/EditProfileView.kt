@@ -70,22 +70,17 @@ fun EditProfile(viewModel: EditProfileViewModel, navController: NavController){
             ) {
                 PersonalInfoOnEditProfile(
                     userState = editProfileUiState,
-                    onEmailChange = { viewModel.editProfileAction(EditProfileEvent.EmailChanged(it)) },
-                    onNameChange = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
-                    onPasswordChange = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
-                    onNewPasswordChange = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) },
-                    onDeleteEmail = { viewModel.editProfileAction(EditProfileEvent.EmailDeleted(it)) },
-                    onDeleteName = { viewModel.editProfileAction(EditProfileEvent.NameDeleted(it)) }
+                    viewModel = viewModel
                 )
                 DescriptionTextfield(
                     description = (editProfileUiState as EditProfileUiState.EditProfileParams).user.bio,
                     onDescriptionChange = { viewModel.editProfileAction(EditProfileEvent.DescriptionChanged(it)) },
                     maxDescriptionCharacters = 300,
-                    onDeleteDescription = { viewModel.editProfileAction(EditProfileEvent.DescriptionDeleted(it)) }
+                    onDeleteDescription = { viewModel.editProfileAction(EditProfileEvent.DescriptionDeleted) }
                 )
                 Button(
                     onClick = {
-                        viewModel.editProfileAction(EditProfileEvent.Submit())
+                        viewModel.editProfileAction(EditProfileEvent.Submit)
                     },
                     modifier = Modifier
                         .wrapContentWidth()

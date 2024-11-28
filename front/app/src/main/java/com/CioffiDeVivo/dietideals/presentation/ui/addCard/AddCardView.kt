@@ -63,18 +63,11 @@ fun AddCardView(viewModel: AddCardViewModel, navController: NavController){
             ){
                 CreditCardComponents(
                     userState = addCardUiState,
-                    onNumberChange = { viewModel.addCardAction(AddCardEvents.CreditCardNumberChanged(it)) },
-                    onDateChange = { viewModel.addCardAction(AddCardEvents.ExpirationDateChanged(it)) },
-                    onCvvChange = { viewModel.addCardAction(AddCardEvents.CvvChanged(it)) },
-                    onIbanChange = { viewModel.addCardAction(AddCardEvents.IBANChanged(it)) },
-                    onDeleteCardNumber = { viewModel.addCardAction(AddCardEvents.CreditCardNumberDeleted(it)) },
-                    onDeleteExpirationDate = { viewModel.addCardAction(AddCardEvents.ExpirationDateDeleted(it)) },
-                    onDeleteCvv = { viewModel.addCardAction(AddCardEvents.CvvDeleted(it)) },
-                    onDeleteIban = { viewModel.addCardAction(AddCardEvents.IBANDeleted(it)) }
+                    viewModel = viewModel
                 )
                 Button(
                     onClick = {
-                        viewModel.addCardAction(AddCardEvents.Submit())
+                        viewModel.addCardAction(AddCardEvents.Submit)
                     },
                     modifier = Modifier
                         .wrapContentWidth()

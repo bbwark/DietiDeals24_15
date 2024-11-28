@@ -5,7 +5,6 @@ import com.CioffiDeVivo.dietideals.data.network.apiServices.AuthApiService
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
 import com.CioffiDeVivo.dietideals.data.responseModels.LogInResponse
 import retrofit2.HttpException
-import retrofit2.Response
 
 interface AuthRepository {
     suspend fun registerUser(user: User): User

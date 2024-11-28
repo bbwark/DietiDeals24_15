@@ -143,7 +143,7 @@ fun AuctionViewLayout(
         ) {
             when (auction.type) {
                 AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
-                AuctionType.Silent -> auction.endingDate?.let { SilentAuctionBody(endingDate = it) }
+                AuctionType.Silent -> auction.endingDate.let { SilentAuctionBody(endingDate = it) }
                 else ->{
 
                 }
@@ -186,7 +186,6 @@ fun AuctionViewLayout(
 
 @Composable
 fun AuctionHeader(
-    modifier: Modifier = Modifier,
     itemName: String,
     ownerName: String,
     type: AuctionType,

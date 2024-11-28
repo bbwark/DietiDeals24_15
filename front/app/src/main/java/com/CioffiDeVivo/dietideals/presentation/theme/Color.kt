@@ -1,4 +1,4 @@
-package com.example.compose
+package com.CioffiDeVivo.dietideals.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF6D5E0F)

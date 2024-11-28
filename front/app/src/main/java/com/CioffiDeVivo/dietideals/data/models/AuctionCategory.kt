@@ -1,4 +1,4 @@
-package com.CioffiDeVivo.dietideals.data.models;
+package com.CioffiDeVivo.dietideals.data.models
 
 enum class AuctionCategory{
     Electronic,

@@ -1,7 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.createAuction
 
 import com.CioffiDeVivo.dietideals.data.models.Auction
-import com.CioffiDeVivo.dietideals.data.models.CreditCard
 
 sealed interface CreateAuctionUiState {
     object Success: CreateAuctionUiState

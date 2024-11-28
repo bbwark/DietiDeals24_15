@@ -7,16 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.AuctionsListElement
 import com.CioffiDeVivo.dietideals.data.models.Auction
-import com.CioffiDeVivo.dietideals.data.models.AuctionType
-import com.CioffiDeVivo.dietideals.data.models.Item
-import com.CioffiDeVivo.dietideals.presentation.theme.DietiDealsTheme
-import java.time.LocalDate
 
 
 @Composable

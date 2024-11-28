@@ -14,19 +14,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileEvent
 import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.editProfile.EditProfileViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsUiState
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegistrationEvents
 
 @Composable
 fun PersonalInfoOnRegisterCredentials(
     userState: RegisterCredentialsUiState,
-    onEmailChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onNewPasswordChange: (String) -> Unit,
-    onDeleteEmail: (String) -> Unit,
-    onDeleteName: (String) -> Unit,
+    viewModel: RegisterCredentialsViewModel
 ){
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -34,27 +33,27 @@ fun PersonalInfoOnRegisterCredentials(
 
     InputTextField(
         value = (userState as RegisterCredentialsUiState.RegisterParams).user.email,
-        onValueChanged = { onEmailChange(it) },
+        onValueChanged = { viewModel.registrationAction(RegistrationEvents.EmailChanged(it)) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         isError = userState.emailErrorMsg != null,
-        onTrailingIconClick = { onDeleteEmail(it) },
+        onTrailingIconClick = { viewModel.registrationAction(RegistrationEvents.EmailDeleted) },
         supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userState.user.name,
-        onValueChanged = { onNameChange(it) },
+        onValueChanged = { viewModel.registrationAction(RegistrationEvents.NameChanged(it)) },
         label = stringResource(R.string.name),
         isError = userState.nameErrorMsg != null,
-        onTrailingIconClick = { onDeleteName(it) },
+        onTrailingIconClick = { viewModel.registrationAction(RegistrationEvents.NameDeleted) },
         supportingText = userState.nameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userState.user.password,
-        onValueChanged = { onPasswordChange(it) },
+        onValueChanged = { viewModel.registrationAction(RegistrationEvents.PasswordChanged(it)) },
         label = stringResource(R.string.password),
         isError = userState.passwordErrorMsg != null,
         onTrailingIconClick = { passwordVisible = !passwordVisible },
@@ -65,7 +64,7 @@ fun PersonalInfoOnRegisterCredentials(
     )
     InputTextField(
         value = userState.retypePassword,
-        onValueChanged = { onNewPasswordChange(it) },
+        onValueChanged = { viewModel.registrationAction(RegistrationEvents.RetypePasswordChanged(it)) },
         label = stringResource(R.string.rewritepassword),
         isError = userState.retypePasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },
@@ -79,12 +78,7 @@ fun PersonalInfoOnRegisterCredentials(
 @Composable
 fun PersonalInfoOnEditProfile(
     userState: EditProfileUiState,
-    onEmailChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onNewPasswordChange: (String) -> Unit,
-    onDeleteEmail: (String) -> Unit,
-    onDeleteName: (String) -> Unit,
+    viewModel: EditProfileViewModel
 ){
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -92,27 +86,27 @@ fun PersonalInfoOnEditProfile(
 
     InputTextField(
         value = (userState as EditProfileUiState.EditProfileParams).user.email,
-        onValueChanged = { onEmailChange(it) },
+        onValueChanged = { viewModel.editProfileAction(EditProfileEvent.EmailChanged(it)) },
         label = stringResource(R.string.email),
         placeholder = stringResource(R.string.emailExample),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         isError = userState.emailErrorMsg != null,
-        onTrailingIconClick = { onDeleteEmail(it) },
+        onTrailingIconClick = { viewModel.editProfileAction(EditProfileEvent.EmailDeleted) },
         supportingText = userState.emailErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userState.user.name,
-        onValueChanged = { onNameChange(it) },
+        onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NameChanged(it)) },
         label = stringResource(R.string.name),
         isError = userState.nameErrorMsg != null,
-        onTrailingIconClick = { onDeleteName(it) },
+        onTrailingIconClick = { viewModel.editProfileAction(EditProfileEvent.NameDeleted) },
         supportingText = userState.nameErrorMsg,
         modifier = modifierStandard
     )
     InputTextField(
         value = userState.user.password,
-        onValueChanged = { onPasswordChange(it) },
+        onValueChanged = { viewModel.editProfileAction(EditProfileEvent.PasswordChanged(it)) },
         label = stringResource(R.string.password),
         isError = userState.passwordErrorMsg != null,
         onTrailingIconClick = { passwordVisible = !passwordVisible },
@@ -123,7 +117,7 @@ fun PersonalInfoOnEditProfile(
     )
     InputTextField(
         value = userState.retypePassword,
-        onValueChanged = { onNewPasswordChange(it) },
+        onValueChanged = { viewModel.editProfileAction(EditProfileEvent.NewPasswordChanged(it)) },
         label = stringResource(R.string.rewritepassword),
         isError = userState.retypePasswordErrorMsg != null,
         onTrailingIconClick = { newPasswordVisible = !newPasswordVisible },

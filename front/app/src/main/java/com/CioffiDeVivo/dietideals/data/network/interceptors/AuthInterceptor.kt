@@ -2,7 +2,6 @@ package com.CioffiDeVivo.dietideals.data.network.interceptors
 
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import io.ktor.http.HttpHeaders
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response

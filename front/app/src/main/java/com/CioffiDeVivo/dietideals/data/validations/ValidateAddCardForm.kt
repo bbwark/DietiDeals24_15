@@ -1,4 +1,3 @@
 package com.CioffiDeVivo.dietideals.data.validations
 
-class ValidateAddCardForm: ValidateUserForms() {
-}
+class ValidateAddCardForm: ValidateUserForms()

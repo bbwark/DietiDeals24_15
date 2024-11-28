@@ -1,14 +1,8 @@
 package com.CioffiDeVivo.dietideals.data.repositories
 
-import android.util.Log
-import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.User
-import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
-import com.CioffiDeVivo.dietideals.data.responseModels.LogInResponse
 import com.CioffiDeVivo.dietideals.data.network.apiServices.UserApiService
-import io.ktor.client.statement.HttpResponse
 import retrofit2.HttpException
-import retrofit2.Response
 
 interface UserRepository {
     suspend fun getUser(userId: String): User

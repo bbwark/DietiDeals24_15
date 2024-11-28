@@ -1,8 +1,8 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials
 
 sealed class LoginEvent {
-    data class EmailChanged(val email: String) : LoginEvent()
-    data class EmailDeleted(val email: String) : LoginEvent()
-    data class PasswordChanged(val password: String) : LoginEvent()
-    data class Submit(val submitted: Boolean = true) : LoginEvent()
+    data class EmailChanged(val email: String): LoginEvent()
+    object EmailDeleted: LoginEvent()
+    data class PasswordChanged(val password: String): LoginEvent()
+    object Submit: LoginEvent()
 }

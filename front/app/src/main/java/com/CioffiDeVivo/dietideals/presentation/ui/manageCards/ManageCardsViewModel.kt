@@ -1,11 +1,8 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.manageCards
 
-import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
-import com.CioffiDeVivo.dietideals.data.models.CreditCard
 import com.CioffiDeVivo.dietideals.data.repositories.CreditCardRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers

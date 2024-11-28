@@ -4,7 +4,6 @@ import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.data.network.apiServices.AuctionApiService
 import retrofit2.HttpException
-import retrofit2.Response
 
 interface AuctionRepository {
     suspend fun createAuction(auction: Auction): Auction

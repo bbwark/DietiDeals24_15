@@ -31,7 +31,7 @@ import com.CioffiDeVivo.dietideals.R
 @Composable
 fun ManageCardsElement(modifier: Modifier = Modifier, cardNumber: String, clickOnDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val circuit = CardCircuit(cardNumber)
+    val circuit = cardCircuit(cardNumber)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -77,7 +77,7 @@ fun ManageCardsElement(modifier: Modifier = Modifier, cardNumber: String, clickO
     }
 }
 
-fun CardCircuit(cardNumber: String): Int {
+fun cardCircuit(cardNumber: String): Int {
     if (cardNumber.first() == '4') {
         return R.drawable.visa
     }
