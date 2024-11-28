@@ -15,7 +15,7 @@ interface UserApiService{
     @GET("/users/{id}")
     suspend fun getUser(@Path("id") userId: String): Response<User>
 
-    @GET("/users/{id}")
+    @GET("/users/info/{id}")
     suspend fun getUserInfo(@Path("id") userId: String): Response<User>
 
     @PUT("/users/{id}")
@@ -24,10 +24,10 @@ interface UserApiService{
     @DELETE("/users/{id}")
     suspend fun deleteUser(@Path("id") userId: String): Response<Void>
 
-    @PUT("/users/add/favourite/{auctionId}/{id}")
-    suspend fun addFavourite(@Path("auctionId") auctionId: String, @Path("id") userId: String): Response<User>
+    @PUT("/users/add/favourite/{auctionId}/{userId}")
+    suspend fun addFavourite(@Path("auctionId") auctionId: String, @Path("userId") userId: String): Response<Void>
 
     @PUT("/users/remove/favourite/{auctionId}/{userId}")
-    suspend fun removeFavourite(@Path("auctionId") auctionId: String, @Path("id") userId: String): Response<User>
+    suspend fun removeFavourite(@Path("auctionId") auctionId: String, @Path("userId") userId: String): Response<Void>
 
 }

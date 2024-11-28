@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
@@ -48,6 +49,7 @@ class AuctionViewModel(
                     userRepository.addFavourite(auctionId, userId)
                     _auctionUiState.value = currentState.copy(isFavoured = true)
                 } catch (e: Exception){
+                    Log.e("Error", "ERROR: ${e.message}")
                     _auctionUiState.value = AuctionUiState.Error
                 }
             }
@@ -63,6 +65,7 @@ class AuctionViewModel(
                     userRepository.removeFavourite(auctionId, userId)
                     _auctionUiState.value = currentState.copy(isFavoured = false)
                 } catch (e: Exception){
+                    Log.e("Error", "ERROR: ${e.message}")
                     _auctionUiState.value = AuctionUiState.Error
                 }
             }

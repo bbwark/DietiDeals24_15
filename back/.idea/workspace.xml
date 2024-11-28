@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
+    <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d52395b7-dffb-43d7-8c72-f08c8a3cf22b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/requestModels/BidRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/utils/ZonedDateTimeDeserializer.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../front/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules/app/DietiDeals.app.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/mappers/MapToDataModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/mappers/MapToDataModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/AuctionCategory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/AuctionCategory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/models/User.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/requestModels/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/requestModels/User.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/validations/ValidateRegistrationForms.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/domain/validations/ValidateRegistrationForms.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/ContactInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/ContactInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/DropDownMenuField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedComponents/DropDownMenuField.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/common/sharedViewmodels/MainViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionEvents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/createAuction/CreateAuctionViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoEvents.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/editContactInfo/EditContactInfoViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/controllers/BidController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DietiDeals24_25/src/main/java/com/dietideals/dietideals24_25/controllers/BidController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/DietiDealsApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/DietiDealsApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/AppContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/AppContainer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/network/apiServices/BidApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/network/apiServices/BidApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/network/apiServices/UserApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/network/apiServices/UserApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/repositories/BidRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/repositories/BidRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/repositories/UserRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/data/repositories/UserRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/AuctionViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/components/AuctionTopBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/auction/components/AuctionTopBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/login/LogInUiState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/login/LogInUiState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/login/LogInViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/login/LogInViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/makeBid/MakeABidViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/makeBid/MakeABidViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegisterCredentialsViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/registerCredentials/RegistrationEvents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/search/SearchViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../front/app/src/main/java/com/CioffiDeVivo/dietideals/presentation/ui/search/SearchViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -52,9 +57,13 @@
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
     "Spring Boot.DietiDeals2425Application.executor": "Run",
-    "git-widget-placeholder": "Enums-Change",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/PC/Desktop/Informatica",
     "node.js.detected.package.eslint": "true",
@@ -83,11 +92,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Spring Boot.DietiDeals2425Application" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

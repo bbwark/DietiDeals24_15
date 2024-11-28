@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.data
 
+import android.content.Context
+import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.data.network.apiServices.AuctionApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.AuthApiService
 import com.CioffiDeVivo.dietideals.data.network.apiServices.BidApiService
@@ -23,13 +25,22 @@ import com.CioffiDeVivo.dietideals.data.repositories.NetworkItemRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkUserRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.utils.LocalDateTimeDeserializer
+import com.CioffiDeVivo.dietideals.utils.ZonedDateTimeDeserializer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.KeyStore
+import java.security.cert.CertificateFactory
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 interface AppContainer {
     val userRepository: UserRepository
@@ -41,21 +52,33 @@ interface AppContainer {
     val imageRepository: ImageRepository
 }
 
-class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository): AppContainer{
+class DefaultAppContainer(
+    userPreferencesRepository: UserPreferencesRepository,
+    private val context: Context
+): AppContainer{
 
-    private val baseUrl = "http://16.171.206.112:8181"
+    private val baseUrl = "https://16.171.206.112:8181"
 
     private val customGson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+        .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
         .create()
+
+    private val sslSocketFactory = createSSLSocketFactory()
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val client = OkHttpClient.Builder()
+        .sslSocketFactory(sslSocketFactory.first, sslSocketFactory.second)
+        .hostnameVerifier { hostname, _ ->
+            hostname == "16.171.206.112"
+        }
         .addInterceptor(AuthInterceptor(userPreferencesRepository))
         .addInterceptor(loggingInterceptor)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
     private val retrofit = Retrofit.Builder()
@@ -118,6 +141,25 @@ class DefaultAppContainer(userPreferencesRepository: UserPreferencesRepository):
     }
     override val imageRepository: ImageRepository by lazy {
         NetworkImageRepository(imageApiService)
+    }
+
+    private fun createSSLSocketFactory(): Pair<SSLSocketFactory, X509TrustManager> {
+        val certificateFactory = CertificateFactory.getInstance("X.509")
+        context.resources.openRawResource(R.raw.dieti_deals).use { certificateInput ->
+            val certificate = certificateFactory.generateCertificate(certificateInput)
+            val keyStore = KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                load(null, null)
+                setCertificateEntry("dieti_deals", certificate)
+            }
+            val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+                init(keyStore)
+            }
+            val trustManager = trustManagerFactory.trustManagers[0] as X509TrustManager
+            val sslContext = SSLContext.getInstance("TLS").apply {
+                init(null, arrayOf(trustManager), null)
+            }
+            return Pair(sslContext.socketFactory, trustManager)
+        }
     }
 
 }

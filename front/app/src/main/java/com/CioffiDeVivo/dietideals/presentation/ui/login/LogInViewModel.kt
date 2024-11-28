@@ -12,10 +12,11 @@ class LogInViewModel(private val userPreferencesRepository: UserPreferencesRepos
 
     private val _isUserAuthenticated = MutableStateFlow<Boolean?>(null)
     val isUserAuthenticated: StateFlow<Boolean?> = _isUserAuthenticated.asStateFlow()
-    private val _logInUiState = MutableStateFlow<LogInUiState>(LogInUiState.Success)
+    private val _logInUiState = MutableStateFlow<LogInUiState>(LogInUiState.Loading)
     val logInUiState: StateFlow<LogInUiState> = _logInUiState.asStateFlow()
 
     init {
+        _logInUiState.value = LogInUiState.Loading
         checkUserAuthentication()
     }
 
@@ -25,8 +26,9 @@ class LogInViewModel(private val userPreferencesRepository: UserPreferencesRepos
             try {
                 if(userPreferencesRepository.getTokenPreference().isNotEmpty()){
                     _isUserAuthenticated.value = true
+                } else{
+                    _logInUiState.value = LogInUiState.Success
                 }
-                _logInUiState.value = LogInUiState.Success
             } catch (e: Exception){
                 _logInUiState.value = LogInUiState.Error
             }

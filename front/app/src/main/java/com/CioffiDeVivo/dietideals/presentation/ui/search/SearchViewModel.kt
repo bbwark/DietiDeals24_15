@@ -21,19 +21,16 @@ class SearchViewModel(
     private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
     val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
 
-    private var isSearching = false
-
     fun setCategoriesToHide(categoriesToHide: Set<String>) {
         _categoriesToHide.value = categoriesToHide
     }
 
     fun searchWordUpdate(searchWord: String) {
-        if(searchWord.isBlank() || isSearching){
+        if(searchWord.isBlank()){
             return
         }
+        _searchUiState.value = SearchUiState.Loading
         viewModelScope.launch {
-            isSearching = true
-            _searchUiState.value = SearchUiState.Loading
             _searchUiState.value = try {
                 val auctions = auctionRepository.getAuctionsByItemName(searchWord)
                 if(auctions.isNotEmpty()){
@@ -49,8 +46,6 @@ class SearchViewModel(
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 SearchUiState.Error
-            } finally {
-                isSearching = false
             }
         }
     }

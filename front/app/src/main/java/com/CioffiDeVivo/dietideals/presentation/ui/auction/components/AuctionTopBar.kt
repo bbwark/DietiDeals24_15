@@ -26,38 +26,40 @@ fun AuctionTopBar(
     viewModel: AuctionViewModel
 ) {
     val auctionUiState by viewModel.auctionUiState.collectAsState()
-    TopAppBar(
-        title = { Text(text = "") },
-        navigationIcon = {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    Icons.Default.ArrowBack,
-                    contentDescription = ""
-                )
-            }
-        },
-        actions = {
-            if (!(auctionUiState as AuctionUiState.Success).isFavoured) {
+    if(auctionUiState is AuctionUiState.Success){
+        TopAppBar(
+            title = { Text(text = "") },
+            navigationIcon = {
                 IconButton(onClick = {
-                    viewModel.addOnFavourites()
+                    navController.popBackStack()
                 }) {
                     Icon(
-                        Icons.Default.Bookmark,
+                        Icons.Default.ArrowBack,
                         contentDescription = ""
                     )
                 }
-            } else {
-                IconButton(onClick = {
-                    viewModel.removeFromFavourites()
-                }) {
-                    Icon(
-                        Icons.Default.BookmarkBorder,
-                        contentDescription = ""
-                    )
+            },
+            actions = {
+                if ((auctionUiState as AuctionUiState.Success).isFavoured) {
+                    IconButton(onClick = {
+                        viewModel.removeFromFavourites((auctionUiState as AuctionUiState.Success).auction.id)
+                    }) {
+                        Icon(
+                            Icons.Default.Bookmark,
+                            contentDescription = ""
+                        )
+                    }
+                } else {
+                    IconButton(onClick = {
+                        viewModel.addOnFavourites((auctionUiState as AuctionUiState.Success).auction.id)
+                    }) {
+                        Icon(
+                            Icons.Default.BookmarkBorder,
+                            contentDescription = ""
+                        )
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 }

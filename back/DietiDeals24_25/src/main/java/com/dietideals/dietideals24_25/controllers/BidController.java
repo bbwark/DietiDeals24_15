@@ -57,7 +57,7 @@ public class BidController {
     @PostMapping
     public ResponseEntity<BidDto> createBid(@RequestBody BidDto bid) {
         try {
-            bid.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss:SSS")));
+            bid.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             AuctionEntity auctionEntity = auctionService.findById(bid.getAuctionId())
                     .orElseThrow(() -> new RuntimeException("Auction with id " + bid.getAuctionId() + NOTFOUND));

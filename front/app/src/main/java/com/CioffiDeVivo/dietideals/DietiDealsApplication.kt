@@ -10,9 +10,9 @@ import com.CioffiDeVivo.dietideals.data.DefaultAppContainer
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 
-private const val USER_ID_PREFERENCE_NAME = "user_preferences"
+private const val USER_PREFERENCES_NAME = "user_preferences"
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
-    name = USER_ID_PREFERENCE_NAME
+    name = USER_PREFERENCES_NAME
 )
 
 class DietiDealsApplication: Application() {
@@ -22,7 +22,7 @@ class DietiDealsApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         userPreferencesRepository = UserPreferencesRepository(dataStore)
-        appContainer = DefaultAppContainer(userPreferencesRepository)
+        appContainer = DefaultAppContainer(userPreferencesRepository, this)
         appViewModelFactory = AppViewModelFactory(userPreferencesRepository, appContainer)
     }
 }

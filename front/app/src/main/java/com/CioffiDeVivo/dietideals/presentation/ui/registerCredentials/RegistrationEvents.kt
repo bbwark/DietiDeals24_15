@@ -15,7 +15,7 @@ sealed class RegistrationEvents {
     data class ZipCodeChanged(val zipCode: String): RegistrationEvents()
     data class ZipCodeDeleted(val address: String): RegistrationEvents()
     data class PhoneNumberChanged(val phoneNumber: String): RegistrationEvents()
-    data class PhoneNumberDeleted(val address: String): RegistrationEvents()
+    data class PhoneNumberDeleted(val phoneNumber: String): RegistrationEvents()
     data class CreditCardNumberChanged(val creditCardNumber: String): RegistrationEvents()
     data class CreditCardNumberDeleted(val address: String): RegistrationEvents()
     data class ExpirationDateChanged(val expirationDate: String): RegistrationEvents()

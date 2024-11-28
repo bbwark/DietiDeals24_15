@@ -131,8 +131,8 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                         onZipCodeChange = { viewModel.registrationAction(RegistrationEvents.ZipCodeChanged(it)) },
                         onPhoneNumberChange = { viewModel.registrationAction(RegistrationEvents.PhoneNumberChanged(it)) },
                         onDeleteAddress = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                        onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
-                        onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
+                        onDeleteZipCode = { viewModel.registrationAction(RegistrationEvents.ZipCodeDeleted(it)) },
+                        onDeletePhoneNumber = { viewModel.registrationAction(RegistrationEvents.PhoneNumberDeleted(it)) }
                     )
                     CreditCardComponents(
                         userState = registerCredentialsUiState,
@@ -140,10 +140,10 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                         onDateChange = { viewModel.registrationAction(RegistrationEvents.ExpirationDateChanged(it)) },
                         onCvvChange = { viewModel.registrationAction(RegistrationEvents.CvvChanged(it)) },
                         onIbanChange = { viewModel.registrationAction(RegistrationEvents.IbanChanged(it)) },
-                        onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) },
+                        onDeleteCardNumber = { viewModel.registrationAction(RegistrationEvents.CreditCardNumberDeleted(it)) },
                         onDeleteExpirationDate = { viewModel.registrationAction(RegistrationEvents.ExpirationDateDeleted(it)) },
                         onDeleteCvv = { viewModel.registrationAction(RegistrationEvents.CvvDeleted(it)) },
-                        onDeleteIban = { viewModel.registrationAction(RegistrationEvents.AddressDeleted(it)) }
+                        onDeleteIban = { viewModel.registrationAction(RegistrationEvents.IbanDeleted(it)) }
                     )
                 }
                 Spacer(modifier = Modifier.height(30.dp))
