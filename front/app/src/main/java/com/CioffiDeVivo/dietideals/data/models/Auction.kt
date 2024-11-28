@@ -16,17 +16,4 @@ data class Auction (
     val buyoutPrice: String = "",
     val type: AuctionType = AuctionType.None,
     val category: AuctionCategory = AuctionCategory.Other,
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Auction
-
-        return bids.contentEquals(other.bids)
-    }
-
-    override fun hashCode(): Int {
-        return bids.contentHashCode()
-    }
-}
+)
