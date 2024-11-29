@@ -19,7 +19,7 @@ public class S3Service {
 
     public S3Service() {
         this.s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(Regions.EU_WEST_1)
+                .withRegion(Regions.EU_NORTH_1)
                 .build();
     }
 
