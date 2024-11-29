@@ -9,7 +9,7 @@ interface BidRepository {
     suspend fun createBid(bid: BidRequest): Bid
     suspend fun deleteBid(bidId: String)
     suspend fun getBidsByAuctionId(auctionId: String): Array<Bid>
-    suspend fun chooseWinningBid(bid: Bid): Bid
+    suspend fun chooseWinningBid(bid: BidRequest)
 }
 
 class NetworkBidRepository(private val bidApiService: BidApiService): BidRepository{
@@ -38,11 +38,9 @@ class NetworkBidRepository(private val bidApiService: BidApiService): BidReposit
         }
     }
 
-    override suspend fun chooseWinningBid(bid: Bid): Bid {
+    override suspend fun chooseWinningBid(bid: BidRequest) {
         val response = bidApiService.chooseWinningBid(bid)
-        if(response.isSuccessful){
-            return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
-        } else{
+        if(!response.isSuccessful){
             throw HttpException(response)
         }
     }

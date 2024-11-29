@@ -211,12 +211,12 @@ fun AcceptOfferDialog(
                 onAcceptOffer()
                 onDismissRequest()
             }) {
-                Text(text = "Accept", color = Color(0xFFB60202))
+                Text(text = "Accept")
             }
         },
         dismissButton = {
             TextButton(onClick = { onDismissRequest() }) {
-                Text(text = "Cancel")
+                Text(text = "Cancel", color = Color(0xFFB60202))
             }
         },
         title = {

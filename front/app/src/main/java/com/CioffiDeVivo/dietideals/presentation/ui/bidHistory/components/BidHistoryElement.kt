@@ -69,7 +69,7 @@ fun BidHistoryElement(
                     expanded = false
                     onShowDetails()
                 })
-                if (auctionExpired && auctionType != AuctionType.English) {
+                if (auctionType != AuctionType.English) {
                     DropdownMenuItem(text = { Text(text = "Accept This Offer") }, onClick = {
                         expanded = false
                         onAcceptOffer()

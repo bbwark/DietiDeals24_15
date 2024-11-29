@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.models.Bid
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
 import com.CioffiDeVivo.dietideals.data.repositories.BidRepository
+import com.CioffiDeVivo.dietideals.data.requestModels.BidRequest
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +39,8 @@ class BidHistoryViewModel(
         _bidHistoryUiState.value = BidHistoryUiState.Loading
         viewModelScope.launch {
             _bidHistoryUiState.value = try {
-                bidRepository.chooseWinningBid(bid)
+                val bidRequest = BidRequest(bid.id, bid.value, bid.userId, bid.date.toString(), bid.auctionId)
+                bidRepository.chooseWinningBid(bidRequest)
                 BidHistoryUiState.SuccessOnWinningBid
             } catch (e: Exception) {
                 BidHistoryUiState.Error

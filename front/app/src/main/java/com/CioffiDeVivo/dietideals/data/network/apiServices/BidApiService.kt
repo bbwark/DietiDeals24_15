@@ -21,6 +21,6 @@ interface BidApiService {
     suspend fun getBidsByAuctionId(@Path("id") auctionId: String): Response<Array<Bid>>
 
     @POST("/bids/chooseWinningBid")
-    suspend fun chooseWinningBid(@Body bid: Bid): Response<Bid>
+    suspend fun chooseWinningBid(@Body bid: BidRequest): Response<Void>
 
 }
