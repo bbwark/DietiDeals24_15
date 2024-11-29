@@ -9,19 +9,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuctionMapperImpl implements Mapper<AuctionEntity, AuctionDto> {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final ItemMapperImpl itemMapper;
 
-    public AuctionMapperImpl(ModelMapper modelMapper) {
+    public AuctionMapperImpl(ModelMapper modelMapper, ItemMapperImpl itemMapper) {
         this.modelMapper = modelMapper;
+        this.itemMapper = itemMapper;
     }
 
     @Override
     public AuctionDto mapTo(AuctionEntity auctionEntity) {
-        return modelMapper.map(auctionEntity, AuctionDto.class);
+        AuctionDto auctionDto = modelMapper.map(auctionEntity, AuctionDto.class);
+        if (auctionEntity.getItem() != null) {
+            auctionDto.setItem(itemMapper.mapTo(auctionEntity.getItem()));
+        }
+        return auctionDto;
     }
 
     @Override
     public AuctionEntity mapFrom(AuctionDto auctionDto) {
-        return modelMapper.map(auctionDto, AuctionEntity.class);
+        AuctionEntity auctionEntity = modelMapper.map(auctionDto, AuctionEntity.class);
+        if (auctionDto.getItem() != null) {
+            auctionEntity.setItem(itemMapper.mapFrom(auctionDto.getItem()));
+            auctionEntity.getItem().setAuction(auctionEntity); // Set bidirectional relationship
+        }
+        return auctionEntity;
     }
 }
