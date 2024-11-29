@@ -11,6 +11,6 @@ interface ImageApiService {
 
     @Multipart
     @POST("/images/upload")
-    suspend fun uploadImage(@Part file: MultipartBody.Part, @Part("fileName") fileName: RequestBody): Response<String>
+    suspend fun uploadImage(@Part file: MultipartBody.Part): Response<String>
 
 }

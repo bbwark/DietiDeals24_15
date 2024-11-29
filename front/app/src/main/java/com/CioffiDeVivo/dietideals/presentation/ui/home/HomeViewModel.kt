@@ -1,11 +1,15 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuctionRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -15,7 +19,7 @@ class HomeViewModel(
     private val _homeUiState = MutableStateFlow<HomeUiState>(HomeUiState.Success(arrayOf(), arrayOf(), arrayOf()))
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
-    /*fun fetchHomeAuctions(){
+    fun fetchHomeAuctions(){
         _homeUiState.value = HomeUiState.Loading
         viewModelScope.launch {
             _homeUiState.value = try {
@@ -33,5 +37,5 @@ class HomeViewModel(
                 HomeUiState.Error
             }
         }
-    }*/
+    }
 }

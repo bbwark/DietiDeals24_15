@@ -29,6 +29,7 @@ class AuctionViewModel(
                 val auction = auctionRepository.getAuction(auctionId)
                 val owner = userRepository.getUserInfo(auction.ownerId)
                 val isFavoured = user.favouriteAuctions.any { it.id == auctionId }
+                Log.d("INFO", "IMAGE URLS: ${auction.item.imageUrl}")
                 if(owner.id == userId){
                     AuctionUiState.Success(auction, owner, true, isFavoured)
                 } else{

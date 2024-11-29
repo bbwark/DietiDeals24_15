@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -104,7 +105,6 @@ fun AuctionViewLayout(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
             ) { page ->
                 val imageUrl = auction.item.imageUrl[page]
                 Image(
@@ -113,21 +113,29 @@ fun AuctionViewLayout(
                         placeholder = rememberVectorPainter(image = Icons.Default.Image),
                         error = rememberVectorPainter(image = Icons.Default.BrokenImage)
                     ),
-                    contentDescription = null,
+                    contentDescription = "Auction Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(25.dp)
                         .clip(RoundedCornerShape(10.dp))
+                        .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
                 )
             }
         } else {
             Image(
-                painter = rememberVectorPainter(image = Icons.Default.BrokenImage),
+                painter = rememberAsyncImagePainter(
+                    model = "https://dietidealsbucket.s3.eu-north-1.amazonaws.com/images/87ed0fea-405c-4f34-9047-8edf905ebb2a_cane-1.jpg",
+                    placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                    error = rememberVectorPainter(image = Icons.Default.BrokenImage)
+                ),
                 contentDescription = null,
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(200.dp)
+                    .padding(25.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
             )
         }
         AuctionHeader(

@@ -117,6 +117,7 @@ fun RegisterCredentialsView(viewModel: RegisterCredentialsViewModel, navControll
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(stringResource(R.string.areYouSeller))
                 }
+                Spacer(modifier = Modifier.height(8.dp))
                 if(isSeller){
                     ContactInfo(
                         userState = registerCredentialsUiState,

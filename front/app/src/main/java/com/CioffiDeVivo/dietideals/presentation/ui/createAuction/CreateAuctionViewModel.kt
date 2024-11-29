@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 
@@ -98,17 +100,13 @@ class CreateAuctionViewModel(
                         val userId = userPreferencesRepository.getUserIdPreference()
                         val imageUrls = currentState.auction.item.imageUrl.map { uri ->
                             async {
-                                imageRepository.uploadImage(
-                                    Uri.parse(uri),
-                                    "image_${System.currentTimeMillis()}.jpg",
-                                    context = context
-                                )
+                                imageRepository.uploadImage(uri, context)
                             }
                         }.awaitAll()
                         val updatedAuction = currentState.auction.copy(
                             ownerId = userId,
                             item = currentState.auction.item.copy(
-                                imageUrl = emptyList()
+                                imageUrl = imageUrls
                             )
                         )
                         auctionRepository.createAuction(updatedAuction)
@@ -121,6 +119,7 @@ class CreateAuctionViewModel(
             }
         }
     }
+
 
     private fun validationBlock(): Boolean {
         val currentState = _createAuctionUiState.value

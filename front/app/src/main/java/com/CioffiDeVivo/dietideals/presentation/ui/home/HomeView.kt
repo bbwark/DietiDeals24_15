@@ -14,6 +14,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -93,16 +94,18 @@ fun LatestAuctions(
     latestAuctions: Array<Auction>,
     navController: NavController,
 ){
-    Text(
-        "Latest Auctions",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(
-        auctions = latestAuctions,
-        navController = navController
-    )
+    if(latestAuctions.isNotEmpty()){
+        Text(
+            "Latest Auctions",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        HomeViewAuctionsList(
+            auctions = latestAuctions,
+            navController = navController
+        )
+    }
 }
 
 @Composable
@@ -110,16 +113,18 @@ fun EndingAuctions(
     endingAuctions: Array<Auction>,
     navController: NavController,
 ) {
-    Text(
-        "Ending Auctions",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(
-        auctions = endingAuctions,
-        navController = navController
-    )
+    if(endingAuctions.isNotEmpty()){
+        Text(
+            "Ending Auctions",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        HomeViewAuctionsList(
+            auctions = endingAuctions,
+            navController = navController
+        )
+    }
 }
 
 @Composable
@@ -127,14 +132,16 @@ fun ParticipatedAuctions(
     participatedAuctions: Array<Auction>,
     navController: NavController,
 ){
-    Text(
-        "Participated Auctions",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    HomeViewAuctionsList(
-        auctions = participatedAuctions,
-        navController = navController
-    )
+    if(participatedAuctions.isNotEmpty()){
+        Text(
+            "Participated Auctions",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        HomeViewAuctionsList(
+            auctions = participatedAuctions,
+            navController = navController
+        )
+    }
 }
