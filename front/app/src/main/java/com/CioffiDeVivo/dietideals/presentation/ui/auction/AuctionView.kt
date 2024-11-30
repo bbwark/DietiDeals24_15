@@ -100,36 +100,19 @@ fun AuctionViewLayout(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (auction.item.imageUrl.isNotEmpty()) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) { page ->
-                val imageUrl = auction.item.imageUrl[page]
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = imageUrl,
-                        placeholder = rememberVectorPainter(image = Icons.Default.Image),
-                        error = rememberVectorPainter(image = Icons.Default.BrokenImage)
-                    ),
-                    contentDescription = "Auction Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(25.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
-                )
-            }
-        } else {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) { page ->
+            val imageUrl = auction.item.imageUrl[page]
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = "https://dietidealsbucket.s3.eu-north-1.amazonaws.com/images/87ed0fea-405c-4f34-9047-8edf905ebb2a_cane-1.jpg",
+                    model = imageUrl,
                     placeholder = rememberVectorPainter(image = Icons.Default.Image),
-                    error = rememberVectorPainter(image = Icons.Default.BrokenImage)
+                    error = rememberVectorPainter(image = Icons.Default.Image)
                 ),
-                contentDescription = null,
+                contentDescription = "Auction Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()

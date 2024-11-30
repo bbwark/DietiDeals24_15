@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -448,7 +449,10 @@ fun EnglishAuction(
         trailingIcon = Icons.Filled.CalendarMonth,
         onTrailingIconClick = { onCalendarClick() },
         readOnly = true,
-        modifier = modifierStandard
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
+            .clickable { onCalendarClick() }
     )
     DescriptionTextfield(
         description = auctionState.auction.description,

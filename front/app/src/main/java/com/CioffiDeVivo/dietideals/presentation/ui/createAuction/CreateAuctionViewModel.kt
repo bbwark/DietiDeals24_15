@@ -98,11 +98,14 @@ class CreateAuctionViewModel(
                 viewModelScope.launch {
                     _createAuctionUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
-                        val imageUrls = currentState.auction.item.imageUrl.map { uri ->
-                            async {
-                                imageRepository.uploadImage(uri, context)
-                            }
-                        }.awaitAll()
+                        var imageUrls: List<String> = emptyList()
+                        if(currentState.auction.item.imageUrl.isNotEmpty()){
+                            imageUrls = currentState.auction.item.imageUrl.map { uri ->
+                                async {
+                                    imageRepository.uploadImage(uri, context)
+                                }
+                            }.awaitAll()
+                        }
                         val updatedAuction = currentState.auction.copy(
                             ownerId = userId,
                             item = currentState.auction.item.copy(
