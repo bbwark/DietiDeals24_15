@@ -6,3 +6,5 @@ front/app/src/main/res/raw/dieti_deals.pem
 *.pem
 *.log
 Documents/dietidealsdatabase_reset.sql
+/back/.idea
+/.idea
