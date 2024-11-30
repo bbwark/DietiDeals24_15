@@ -10,18 +10,18 @@
     <img src="/Documents/Logo%20DietiDeals.png" width="25%" alt="DietiDeals">
 </div>
 
-DietiDeals is an online auction management platform. The system consists of a performant and reliable mobile application through which users can access the system's functionalities in an intuitive, quick, and enjoyable way.
+DietiDeals is an **online auction management platform**. The system consists of a performant and reliable mobile application through which users can access the system's functionalities in an intuitive, quick, and enjoyable way.
 
 # Features
-- Advanced system for creating auctions of different types
-- Possibility to bid on auctions
-- Secure authentication system with JWT
-- Encrypted traffic with HTTPs
-- Access with OAuth2
-- Custom notification system for auction winner, participant and creator
-- Possibility to upload images for your auctions
-- Possibility to customize your profile with a description
-- Badge to show to other users if you are a verified insertionist
+- Advanced system for **creating auctions** of different types
+- Possibility to **bid on auctions**
+- Secure authentication system with **JWT**
+- Encrypted traffic with **HTTPs**
+- Access with **OAuth2**
+- Custom **notification system** for auction winner, participant and creator
+- Possibility to **upload images** for your auctions
+- Possibility to **customize your profile** with a description
+- Badge to show to other users if you are a **verified insertionist**
 
 # Dependencies
 This is a list of technologies used for the development of the project, necessary for the correct functioning of the software produced.
@@ -52,7 +52,7 @@ This is a list of technologies used for the development of the project, necessar
 
 # Getting Started
 
-Obviously the Local Installation will lack the image loading and reading functionality, and the platform user notification functionality, since they depend from AWS, furthermore it is not possible to use a mobile device that connects to the endpoint of the application launched locally, unless the port where the application connects locally is made reachable on the internet [The instructions for performing this operation will not be provided in this guide and can be found in other sources if necessary].
+Obviously the **Local Installation will lack the image loading and reading functionality, and the platform user notification functionality**, since they depend from AWS, furthermore it is not possible to use a mobile device that connects to the endpoint of the application launched locally, unless the port where the application connects locally is made reachable on the internet [The instructions for performing this operation will not be provided in this guide and can be found in other sources if necessary].
 
 1. This is a common step. Clone the repository:
     ```sh
@@ -86,7 +86,7 @@ Run the following command to generate it:
     ```sh
     nano application-secret.properties
     ```
-    IMPORTANT: `application.properties` has been removed before commit `01cebbdd6fb94503f61660006e19e725b0b8112e`, so if you want to use a version older than that commit be aware to create the `application.properties` file 
+    **IMPORTANT**: `application.properties` has been removed before commit `01cebbdd6fb94503f61660006e19e725b0b8112e`, so if you want to use a version older than that commit be aware to create the `application.properties` file 
 1. Fill in the file with the following fields:
 
     ```
@@ -121,20 +121,26 @@ Run the following command to generate it:
 The application is now reachable at port https://localhost:8181, using the exposed endpoints and the correct self-signed certificate.
 
 ## Installation on AWS EC2 Instance
-Precise guidance for AWS Console will not be provided as the service is continually being updated and the interface may change over time.
+Precise guidance for AWS Console **will not be provided** as the service is continually being updated and the interface may change over time.
 
 1. Perform steps from 2 to 7 of the local installation guide. 
 
-1. Create an account on the AWS Console, then configure the EC2 instance to your liking. It is important that the instance is accessible, so make sure to make SSH requests accessible only from your IP address, while all other requests need global access to work properly.
+1. Create an account on the AWS Console, then configure the EC2 instance to your liking. It is important that the instance is accessible, so make sure to make SSH requests accessible only from your IP address, while all other **requests need global access to work properly**.
 
 1. After creating the EC2 instance create an S3 bucket, access to this bucket can be set as you like but it is important that the URLs can be visible to your users, since Coil (in Front-End) will take care of showing the images by loading them from the S3 URL.  
-As a minimum security suggestion, the upload to the bucket must be accessible only from the EC2 instance.
+As a minimum security suggestion, **the upload to the bucket must be accessible only from the EC2 instance**.
 
 1. The use of the SNS service is necessary for the correct functioning of the notification system.  
 At the time of the development of the project it was necessary to obtain permissions from the FireBase console by registering the Android Studio project and then configuring a Topic on SNS.  
-Since these services are constantly evolving, it is recommended to do research outside of this guide to complete this step.
+Since these services are constantly evolving, it is recommended to do **research outside of this guide to complete this step**.
 
-1. Once SNS and S3 are configured, you need to create a new IAM role for the EC2 instance that gives the correct permissions to interact with SNS and S3. At the time of the project development, the AmazonS3FullAccess and AmazonSNSFullAccess permissions were provided for development purposes.
+1. Once SNS and S3 are configured, you need to create a new IAM role for the EC2 instance that gives the correct permissions to interact with SNS and S3. At the time of the project development, the `AmazonS3FullAccess` and `AmazonSNSFullAccess` permissions were provided for development purposes.
+
+### Automatic Installation
+
+In the Documents folder there is an automatic build file to perform the manual installation steps safely. Before running it, however, the `BuildConfig.cfg` file **must be configured**, the configuration file is pre-compiled with common settings that can be changed at will, the information needed to set are the first three, **otherwise the installation will fail**.
+
+### Manual Installation
 
 1. While still in the `DietiDeals24_15/back/DietiDeals24_25` folder you need to create the Dockerfile:
 
@@ -242,7 +248,7 @@ Since these services are constantly evolving, it is recommended to do research o
 
     This will run the container in detached mode instead of simply as a background process.
 
-1. The application setup and its deployment on an EC2 instance is complete, the next step is the installation of the application frontend through Android Studio, this can be done in various ways, also the Android Studio tool, like other tools used, is continuously updated and the interfaces may change over time, it is recommended a personal research to perform the installation of a project in Android Studio on your device or the use through the IDE simulator.
+1. The application setup and its deployment on an EC2 instance is **complete**, the next step is the installation of the application frontend through Android Studio, this can be done in various ways, also the Android Studio tool, like other tools used, is continuously updated and the interfaces may change over time, **it is recommended a personal research to perform the installation of a project in Android Studio** on your device or the use through the IDE simulator.
 
 In the documentation folder inside the repository there is a mock data generator in Python that can be used on your database to verify that it works correctly, it also has a small user guide attached.
 
