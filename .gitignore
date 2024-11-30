@@ -3,3 +3,4 @@ Documents/Database MockDataGenerator/mock_data.sql
 back/DietiDeals24_25/src/main/resources/application-secret.properties
 back/DietiDeals24_25/src/main/resources/keystore.p12
 front/app/src/main/res/raw/dieti_deals.pem
+*.pem
