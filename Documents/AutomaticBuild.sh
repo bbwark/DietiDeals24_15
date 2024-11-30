@@ -65,8 +65,16 @@ scp_transfer "$CONFIG_FILE" "$distribution@$ip_address:/home/$distribution" || e
 
 # Creazione pacchetto
 log "Zipping package..."
-zip -r "${folder_name}.zip" "../back/${folder_name}.zip" || {
+cd ../back || {
+    log "ERROR: Impossible to access directory ../back"
+    exit 1
+}
+zip -r "${folder_name}.zip" "${folder_name}" || {
     log "ERROR: during zipping files"
+    exit 1
+}
+cd ../Documents || {
+    log "ERROR: Impossible to access directory ../Documents"
     exit 1
 }
 log "ZIP package ${folder_name}.zip successfully created."
@@ -83,9 +91,11 @@ EOF
 
 # Trasferimento pacchetto ZIP
 scp_transfer "../back/${folder_name}.zip" "$distribution@$ip_address:/home/$distribution" || exit 1
+rm "../back/${folder_name}.zip"
 
 # Trasferimento script SQL
 scp_transfer "$SQL_FILE" "$distribution@$ip_address:/home/$distribution" || exit 1
+rm "$SQL_FILE"
 
 # Esecuzione script remoto
 log "Starting RemoteScript.sh on remote server..."

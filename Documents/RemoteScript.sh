@@ -126,4 +126,12 @@ sudo docker run --network="$network_name" --name="$image_name" -p8181:8181 -d "$
     exit 1
 }
 
+# Pulizia file temporanei
+rm -rf "$folder_name"
+rm "${folder_name}.zip"
+rm "dietidealsdatabase_reset.sql"
+rm "$CONFIG_FILE"
+
 log "--- End Deploy process ---"
+
+rm "$0"
