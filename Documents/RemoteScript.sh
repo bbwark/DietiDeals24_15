@@ -46,6 +46,8 @@ cd "$folder_name" || {
 
 log "Modifying application.properties..."
 FILE_TO_MODIFY="src/main/resources/application.properties"
+sed -i '6s/^/#/' "$FILE_TO_MODIFY"
+sed -i '7s/^#//' "$FILE_TO_MODIFY"
 
 log "Building project with Maven..."
 mvn clean install -DskipTests || {
