@@ -12,7 +12,7 @@ public interface AuctionService {
 
     Optional<AuctionEntity> findById(UUID id);
 
-    List<AuctionEntity> findByItemName(String itemName, int numberOfAuctionsPerPage, int pageNumber);
+    List<AuctionEntity> findByItemNameAndCategories(String itemName, List<String> categories, int numberOfAuctionsPerPage, int pageNumber);
 
     List<AuctionEntity> findRandomAuctions(UUID ownerId, int maxNumberOfAuctions);
 

@@ -3,6 +3,7 @@ package com.dietideals.dietideals24_25.services.impl;
 import com.dietideals.dietideals24_25.domain.entities.AuctionEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.repositories.AuctionRepository;
+import com.dietideals.dietideals24_25.repositories.CustomAuctionRepository;
 import com.dietideals.dietideals24_25.services.AuctionService;
 
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +18,11 @@ import java.util.UUID;
 public class AuctionServiceImpl implements AuctionService {
 
     private AuctionRepository auctionRepository;
+    private CustomAuctionRepository customAuctionRepository;
 
-    public AuctionServiceImpl(AuctionRepository auctionRepository) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, CustomAuctionRepository customAuctionRepository) {
         this.auctionRepository = auctionRepository;
+        this.customAuctionRepository = customAuctionRepository;
     }
 
     @Override
@@ -33,9 +36,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<AuctionEntity> findByItemName(String itemName, int numberOfAuctionsPerPage, int pageNumber) {
+    public List<AuctionEntity> findByItemNameAndCategories(String itemName, List<String> categories, int numberOfAuctionsPerPage, int pageNumber) {
         PageRequest pageRequest = PageRequest.of(pageNumber, numberOfAuctionsPerPage, Sort.by("id"));
-        return auctionRepository.findByItemName(itemName, pageRequest);
+        return customAuctionRepository.findByItemNameAndCategories(itemName, categories, pageRequest);
     }
 
     @Override

@@ -139,9 +139,9 @@ public class AuctionController {
 
     @PreAuthorize("hasAuthority('BUYER')")
     @GetMapping(path = "/item/{name}/{pageNumber}")
-    public ResponseEntity<List<AuctionDto>> listAuctionsByItemName(@PathVariable("name") String itemName, @PathVariable("pageNumber") int pageNumber) {
+    public ResponseEntity<List<AuctionDto>> listAuctionsByItemName(@PathVariable("name") String itemName, @PathVariable("pageNumber") int pageNumber, @RequestBody List<String> categories) {
         try {
-            List<AuctionEntity> auctions = auctionService.findByItemName(itemName, 10, pageNumber);
+            List<AuctionEntity> auctions = auctionService.findByItemNameAndCategories(itemName, categories, 10, pageNumber);
             List<AuctionDto> mappedAuctions = auctions.stream()
                     .map(auction -> {
                         AuctionDto dto = auctionMapper.mapTo(auction);
