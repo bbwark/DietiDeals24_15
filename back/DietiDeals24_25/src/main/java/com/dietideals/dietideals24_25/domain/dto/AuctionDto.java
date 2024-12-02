@@ -49,4 +49,11 @@ public class AuctionDto {
         this.item = itemDto;
         this.expired = expired;
     }
+
+    public AuctionDto(UUID id, ItemDto itemDto, Boolean expired, AuctionCategory category) {
+        this.id = id;
+        this.item = itemDto;
+        this.expired = expired;
+        this.category = category;
+    }
 }

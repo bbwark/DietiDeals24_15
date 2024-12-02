@@ -145,7 +145,7 @@ public class AuctionController {
             List<AuctionDto> mappedAuctions = auctions.stream()
                     .map(auction -> {
                         AuctionDto dto = auctionMapper.mapTo(auction);
-                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired());
+                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired(), dto.getCategory());
                     })
                     .toList();
             return new ResponseEntity<>(mappedAuctions, HttpStatus.OK);
