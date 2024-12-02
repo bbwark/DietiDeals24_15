@@ -110,7 +110,8 @@ public class AuctionController {
                     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
                     if (auth != null && auth.getPrincipal() instanceof UserDto user
                             && !user.getId().equals(auctionDto.getOwnerId())) {
-                        auctionDto.getBids().clear(); // if the user who's making the request is not the owner, he can't see the bids
+                        auctionDto.getBids().clear(); // if the user who's making the request is not the owner, he can't
+                                                      // see the bids
                     }
                 }
                 return new ResponseEntity<>(auctionDto, HttpStatus.OK);
@@ -126,12 +127,10 @@ public class AuctionController {
         try {
             UUID idConverted = UUID.fromString(id);
             List<UserEntity> bidders = auctionService.findBiddersByAuctionId(idConverted);
-            List<UserDto> result = bidders.stream()
-                    .map(bidder -> userMapper.mapTo(bidder)).toList();
-            result = result.stream()
-                    .map(userDto -> new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(),
-                            userDto.getBio()))
-                    .toList();
+            List<UserDto> result = bidders.stream().map(bidder -> {
+                UserDto userDto = userMapper.mapTo(bidder);
+                return new UserDto(userDto.getId(), userDto.getName(), userDto.getIsSeller(), userDto.getBio());
+            }).toList();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -143,9 +142,13 @@ public class AuctionController {
     public ResponseEntity<List<AuctionDto>> listAuctionsByItemName(@PathVariable("name") String itemName) {
         try {
             List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
-            List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction)).toList();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<AuctionDto> mappedAuctions = auctions.stream()
+                    .map(auction -> {
+                        AuctionDto dto = auctionMapper.mapTo(auction);
+                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired());
+                    })
+                    .toList();
+            return new ResponseEntity<>(mappedAuctions, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -157,9 +160,13 @@ public class AuctionController {
         try {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findRandomAuctions(ownerId, MAXPAGESIZE);
-            List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction)).toList();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<AuctionDto> mappedAuctions = auctions.stream()
+                    .map(auction -> {
+                        AuctionDto dto = auctionMapper.mapTo(auction);
+                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired());
+                    })
+                    .toList();
+            return new ResponseEntity<>(mappedAuctions, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -171,9 +178,13 @@ public class AuctionController {
         try {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findParticipatedAuctions(ownerId, MAXPAGESIZE);
-            List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction)).toList();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<AuctionDto> mappedAuctions = auctions.stream()
+                    .map(auction -> {
+                        AuctionDto dto = auctionMapper.mapTo(auction);
+                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired());
+                    })
+                    .toList();
+            return new ResponseEntity<>(mappedAuctions, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -185,9 +196,13 @@ public class AuctionController {
         try {
             UUID ownerId = UUID.fromString(id);
             List<AuctionEntity> auctions = auctionService.findEndingAuctions(ownerId, MAXPAGESIZE);
-            List<AuctionDto> result = auctions.stream()
-                    .map(auction -> auctionMapper.mapTo(auction)).toList();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<AuctionDto> mappedAuctions = auctions.stream()
+                    .map(auction -> {
+                        AuctionDto dto = auctionMapper.mapTo(auction);
+                        return new AuctionDto(dto.getId(), dto.getItem(), dto.getExpired());
+                    })
+                    .toList();
+            return new ResponseEntity<>(mappedAuctions, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

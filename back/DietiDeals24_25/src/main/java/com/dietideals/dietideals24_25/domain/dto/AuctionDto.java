@@ -43,4 +43,10 @@ public class AuctionDto {
     private String buyoutPrice;
 
     private AuctionCategory category;
+
+    public AuctionDto(UUID id, ItemDto itemDto, Boolean expired) {
+        this.id = id;
+        this.item = itemDto;
+        this.expired = expired;
+    }
 }
