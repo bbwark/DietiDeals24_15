@@ -1,4 +1,3 @@
-
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a remote_script.log
 }
