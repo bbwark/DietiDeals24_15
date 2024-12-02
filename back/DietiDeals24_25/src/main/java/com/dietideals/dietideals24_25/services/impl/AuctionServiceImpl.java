@@ -33,8 +33,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<AuctionEntity> findByItemName(String itemName) {
-        return auctionRepository.findByItemName(itemName);
+    public List<AuctionEntity> findByItemName(String itemName, int maxNumberOfAuctions) {
+        PageRequest pageRequest = PageRequest.of(0, maxNumberOfAuctions, Sort.by("id"));
+        return auctionRepository.findByItemName(itemName, pageRequest);
     }
 
     @Override

@@ -141,7 +141,7 @@ public class AuctionController {
     @GetMapping(path = "/item/{name}")
     public ResponseEntity<List<AuctionDto>> listAuctionsByItemName(@PathVariable("name") String itemName) {
         try {
-            List<AuctionEntity> auctions = auctionService.findByItemName(itemName);
+            List<AuctionEntity> auctions = auctionService.findByItemName(itemName, MAXPAGESIZE*2);
             List<AuctionDto> mappedAuctions = auctions.stream()
                     .map(auction -> {
                         AuctionDto dto = auctionMapper.mapTo(auction);
