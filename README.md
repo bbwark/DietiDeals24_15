@@ -138,7 +138,8 @@ Since these services are constantly evolving, it is recommended to do **research
 
 ### Automatic Installation
 
-In the Documents folder there is an automatic build file to perform the manual installation steps safely. Before running it, however, the `BuildConfig.cfg` file **must be configured**, the configuration file is pre-compiled with common settings that can be changed at will, the information needed to set are the first three, **otherwise the installation will fail**.
+In the Documents folder there is an automatic build file to perform the manual installation steps safely. Before running it, however, the `BuildConfig.cfg` file **must be configured**, the configuration file is pre-compiled with common settings that can be changed at will, the information needed to set are the first three, **otherwise the installation will fail**.  
+If you're facing syntax errors, try to use `dos2unix` command on executed files.
 
 ### Manual Installation
 
