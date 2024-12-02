@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.InputTextField
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
@@ -43,21 +43,27 @@ import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierS
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 
 @Composable
-fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavHostController) {
+fun LogInCredentialsView(viewModel: LogInCredentialsViewModel, navController: NavController) {
 
     val loginUiState by viewModel.logInCredentialsUiState.collectAsState()
     val context = LocalContext.current
-    LaunchedEffect(key1 = context) {
+
+    LaunchedEffect(Unit){
+        viewModel.setUiEmailState()
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.validationLogInEvent.collect { event ->
             when (event) {
                 is ValidationState.Success -> {
                 }
                 else -> {
-                    Toast.makeText(context, "Invalid Field!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
     when(loginUiState){
         is LogInCredentialsUiState.Loading -> LoadingView()
         is LogInCredentialsUiState.Error -> RetryView(onClick = {

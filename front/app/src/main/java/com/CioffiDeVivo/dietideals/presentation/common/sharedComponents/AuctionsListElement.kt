@@ -2,6 +2,7 @@ package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,17 +14,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.R
@@ -43,7 +51,20 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
         verticalAlignment = Alignment.CenterVertically)
     {
         Spacer(modifier = Modifier.width(10.dp))
-        IconPlaceholder()
+        Image(
+            painter = rememberAsyncImagePainter(
+                model = auction.item.imageUrl[0],
+                placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                error = rememberVectorPainter(image = Icons.Default.Image)
+            ),
+            contentDescription = "Auction Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+        )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             modifier = Modifier
@@ -52,7 +73,6 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
     }
 }
 
-//Waiting for image system to implement images
 @Composable
 fun IconPlaceholder() {
     Box(
@@ -61,7 +81,10 @@ fun IconPlaceholder() {
             .background(Color.Red),
         contentAlignment = Alignment.Center
     ) {
-
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = null
+        )
     }
 }
 
@@ -85,10 +108,19 @@ fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
                 text = auction.item.name,
                 modifier = Modifier.padding(5.dp)
             )
-            // We have to implement an image system so we can delete this placeholder for testing
             Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null
+                painter = rememberAsyncImagePainter(
+                    model = auction.item.imageUrl[0],
+                    placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                    error = rememberVectorPainter(image = Icons.Default.Image)
+                ),
+                contentDescription = "Auction Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
             )
         }
     }

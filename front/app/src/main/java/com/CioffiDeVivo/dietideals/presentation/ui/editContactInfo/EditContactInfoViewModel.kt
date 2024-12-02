@@ -20,7 +20,7 @@ class EditContactInfoViewModel(
     private val validateEditContactInfoForm: ValidateEditContactInfoForm = ValidateEditContactInfoForm()
 ): ViewModel() {
 
-    private val _editContactInfoUiState = MutableStateFlow<EditContactInfoUiState>(EditContactInfoUiState.EditContactInfoParams())
+    private val _editContactInfoUiState = MutableStateFlow<EditContactInfoUiState>(EditContactInfoUiState.Loading)
     val editContactInfoUiState: StateFlow<EditContactInfoUiState> = _editContactInfoUiState.asStateFlow()
     private val validationEventChannel = Channel<ValidationState>()
     val validationEditContactInfoEvents = validationEventChannel.receiveAsFlow()
@@ -107,7 +107,7 @@ class EditContactInfoViewModel(
                     addressValidation,
                     zipCodeValidation,
                     phoneNumberValidation
-                ).any { it.positiveResult }
+                ).any { !it.positiveResult }
 
                 if(hasError){
                     _editContactInfoUiState.value = currentState.copy(

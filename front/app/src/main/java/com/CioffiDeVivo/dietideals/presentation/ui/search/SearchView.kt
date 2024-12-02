@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +32,11 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
 
     val searchUiState by viewModel.searchUiState.collectAsState()
     val categoriesToHide by viewModel.categoriesToHide.collectAsState()
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit){
+        focusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -37,7 +45,8 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
             categoriesToHide = categoriesToHide,
             updateCategories = { viewModel.setCategoriesToHide(it) },
             updateSearchWord = { viewModel.searchWordUpdate(it) },
-            navController = navController
+            navController = navController,
+            focusRequester = focusRequester,
         )
         when(searchUiState){
             is SearchUiState.Loading -> {
@@ -47,7 +56,8 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
                 SearchAuctionsListView(
                     auctions = (searchUiState as SearchUiState.Success).auctions,
                     navController = navController,
-                    categoriesToHide = categoriesToHide
+                    categoriesToHide = categoriesToHide,
+                    onLoadMore = { viewModel.searchWordUpdate((searchUiState as SearchUiState.Success).searchWord) }
                 )
             }
             is SearchUiState.Error -> RetryView(
@@ -94,11 +104,13 @@ fun SearchView(viewModel: SearchViewModel, navController: NavHostController) {
 fun SearchAuctionsListView(
     auctions: ArrayList<Auction>,
     navController: NavController,
-    categoriesToHide: Set<String>
+    categoriesToHide: Set<String>,
+    onLoadMore: () -> Unit
 ){
     SearchAuctionsList(
         auctions = auctions,
         categoriesToHide = categoriesToHide,
-        navController = navController
+        navController = navController,
+        onLoadMore = { onLoadMore() }
     )
 }

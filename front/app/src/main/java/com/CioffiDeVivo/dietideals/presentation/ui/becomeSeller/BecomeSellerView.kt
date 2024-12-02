@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +15,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.ContactInfo
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.CreditCardComponents
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -32,9 +35,19 @@ fun BecomeSellerView(
     navController: NavController
 ){
     val becomeSellerUiState by viewModel.becomeSellerUiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit){
         viewModel.getUserInfo()
+    }
+    LaunchedEffect(Unit){
+        viewModel.validationBecomeSellerEvents.collect { event ->
+            when(event){
+                is ValidationState.Success -> {
+                }
+                else -> { Toast.makeText(context, "Invalid Field", Toast.LENGTH_SHORT).show() }
+            }
+        }
     }
 
     when(becomeSellerUiState){
@@ -46,8 +59,11 @@ fun BecomeSellerView(
             }
         )}
         is BecomeSellerUiState.Success -> {
-            if (navController.currentBackStackEntry?.destination?.route != Screen.Sell.route) {
-                navController.popBackStack()
+            Toast.makeText(context, "For safety Log In Again", Toast.LENGTH_LONG).show()
+            if (navController.currentBackStackEntry?.destination?.route != Screen.LogInCredentials.route) {
+                navController.navigate(Screen.LogInCredentials.route) {
+                    popUpTo(0){ inclusive = true }
+                }
             }
         }
         is BecomeSellerUiState.BecomeSellerParams -> {

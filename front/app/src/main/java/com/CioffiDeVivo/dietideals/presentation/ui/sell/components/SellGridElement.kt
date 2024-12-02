@@ -1,6 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.sell.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -19,6 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,13 +34,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable
-fun SellGridElement(auction: Auction, modifier: Modifier = Modifier, navController: NavController) {
+fun SellGridElement(
+    auction: Auction,
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    onDelete: (String) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -54,21 +66,29 @@ fun SellGridElement(auction: Auction, modifier: Modifier = Modifier, navControll
         ) {
             CardHeader(
                 auction = auction,
-                navController = navController
+                navController = navController,
+                onDelete = { onDelete(auction.id) }
             )
             Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null,
+                painter = rememberAsyncImagePainter(
+                    model = auction.item.imageUrl[0],
+                    placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                    error = rememberVectorPainter(image = Icons.Default.Image)
+                ),
+                contentDescription = "Auction Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .weight(1f),
-                contentScale = ContentScale.Fit
+                    .fillMaxWidth()
+                    .padding(25.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
             )
         }
     }
 }
 
 @Composable
-fun CardHeader(auction: Auction, navController: NavController) {
+fun CardHeader(auction: Auction, navController: NavController, onDelete: () -> Unit) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -82,7 +102,7 @@ fun CardHeader(auction: Auction, navController: NavController) {
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
-        IconButton(onClick = { /*restapi to make delete of the auction*/ }, modifier = Modifier.size(20.dp)) {
+        IconButton(onClick = { onDelete() }, modifier = Modifier.size(20.dp)) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = "")
         }
     }
@@ -93,6 +113,7 @@ fun CardHeader(auction: Auction, navController: NavController) {
 fun SellGridElementPreview() {
     SellGridElement(
         auction = Auction(item = Item(name = "Auction Test")),
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        onDelete = {}
     )
 }

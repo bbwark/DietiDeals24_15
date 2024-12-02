@@ -20,31 +20,41 @@ class SearchViewModel(
     private val _categoriesToHide = MutableStateFlow<Set<String>>(mutableSetOf())
     val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
 
+    private var currentPage = 0
+    private var isLoadingMore = false
+
     fun setCategoriesToHide(categoriesToHide: Set<String>) {
         _categoriesToHide.value = categoriesToHide
     }
 
-    fun searchWordUpdate(searchWord: String) {
-        if(searchWord.isBlank()){
+    fun searchWordUpdate(searchWord: String, resetPage: Boolean = false) {
+        if(searchWord.isBlank() || isLoadingMore){
             return
         }
-        _searchUiState.value = SearchUiState.Loading
+        if(resetPage){
+            currentPage = 0
+            _searchUiState.value = SearchUiState.Loading
+        }
         viewModelScope.launch {
-            _searchUiState.value = try {
-                val auctions = auctionRepository.getAuctionsByItemName(searchWord)
+            try {
+                val auctions = auctionRepository.getAuctionsByItemName(searchWord, currentPage, categoriesToHide.value)
                 if(auctions.isNotEmpty()){
-                    val list: ArrayList<Auction> = arrayListOf()
+                    val currentList = (_searchUiState.value as? SearchUiState.Success)?.auctions ?: arrayListOf()
                     for (auction in auctions) {
-                        list.add(auction)
+                        currentList.add(auction)
                     }
-                    SearchUiState.Success(list)
+                    currentPage++
+                    _searchUiState.value = SearchUiState.Success(currentList, searchWord)
                 } else{
-                    Log.e("Error", "Error: REST Unsuccessful")
-                    SearchUiState.Empty
+                    if(currentPage == 0){
+                        _searchUiState.value = SearchUiState.Empty
+                    }
                 }
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
-                SearchUiState.Error
+                _searchUiState.value = SearchUiState.Error
+            } finally {
+                isLoadingMore = false
             }
         }
     }

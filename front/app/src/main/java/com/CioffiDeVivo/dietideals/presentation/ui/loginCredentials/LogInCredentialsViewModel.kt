@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class LogInCredentialsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -21,11 +22,23 @@ class LogInCredentialsViewModel(
     private val validateLogInForms: ValidateLogInForm = ValidateLogInForm()
 ) : ViewModel() {
 
-    private val _logInCredentialsUiState = MutableStateFlow<LogInCredentialsUiState>(LogInCredentialsUiState.LogInParams())
+    private val _logInCredentialsUiState = MutableStateFlow<LogInCredentialsUiState>(LogInCredentialsUiState.Loading)
     val logInCredentialsUiState: StateFlow<LogInCredentialsUiState> = _logInCredentialsUiState.asStateFlow()
 
     private val validationEventChannel = Channel<ValidationState>()
     val validationLogInEvent = validationEventChannel.receiveAsFlow()
+
+    fun setUiEmailState(){
+        _logInCredentialsUiState.value = LogInCredentialsUiState.Loading
+        viewModelScope.launch {
+            _logInCredentialsUiState.value = try {
+                val email = userPreferencesRepository.getEmailPreference()
+                LogInCredentialsUiState.LogInParams(email = email)
+            } catch (e: Exception){
+                LogInCredentialsUiState.Error
+            }
+        }
+    }
 
     fun loginOnAction(loginEvent: LoginEvent) {
         try {
@@ -66,7 +79,12 @@ class LogInCredentialsViewModel(
                         userPreferencesRepository.saveName(loginResponse.user.name)
                         userPreferencesRepository.saveIsSeller(loginResponse.user.isSeller)
                         LogInCredentialsUiState.Success
-                    } catch (e: Exception) {
+
+                    }
+                    catch (e: HttpException){
+                        currentState.copy(emailErrorMsg = "Invalid Credential", passwordErrorMsg = "Invalid Credential")
+                    }
+                    catch (e: Exception) {
                         Log.e("Error", "Error: ${e.message}")
                         LogInCredentialsUiState.Error
                     }
@@ -106,4 +124,5 @@ class LogInCredentialsViewModel(
             return false
         }
     }
+
 }

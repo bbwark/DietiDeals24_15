@@ -5,7 +5,7 @@ sealed interface LogInCredentialsUiState {
         val email:  String  = "",
         val emailErrorMsg: String? = null,
         val password: String = "",
-        val passwordErrorMsg: String? = null
+        val passwordErrorMsg: String? = null,
     ): LogInCredentialsUiState
     object Success: LogInCredentialsUiState
     object Error: LogInCredentialsUiState

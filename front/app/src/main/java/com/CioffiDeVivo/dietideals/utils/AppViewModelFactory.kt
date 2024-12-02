@@ -71,7 +71,7 @@ class AppViewModelFactory(
                 SearchViewModel(appContainer.auctionRepository) as T
 
             modelClass.isAssignableFrom(SellViewModel::class.java) ->
-                SellViewModel(userPreferencesRepository, appContainer.userRepository) as T
+                SellViewModel(userPreferencesRepository, appContainer.userRepository, appContainer.auctionRepository) as T
 
             modelClass.isAssignableFrom(AccountViewModel::class.java) ->
                 AccountViewModel(userPreferencesRepository) as T

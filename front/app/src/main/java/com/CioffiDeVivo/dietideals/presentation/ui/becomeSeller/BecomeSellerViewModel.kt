@@ -5,18 +5,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
+import com.CioffiDeVivo.dietideals.data.validations.ValidateBecomeSellerForm
+import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class BecomeSellerViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val validateBecomeSellerForm: ValidateBecomeSellerForm = ValidateBecomeSellerForm()
 ): ViewModel() {
 
     private val _becomeSellerUiState = MutableStateFlow<BecomeSellerUiState>(BecomeSellerUiState.BecomeSellerParams())
     val becomeSellerUiState: StateFlow<BecomeSellerUiState> = _becomeSellerUiState.asStateFlow()
+    private val validationEventChannel = Channel<ValidationState>()
+    val validationBecomeSellerEvents = validationEventChannel.receiveAsFlow()
 
     fun getUserInfo(){
         _becomeSellerUiState.value = BecomeSellerUiState.Loading
@@ -106,14 +113,20 @@ class BecomeSellerViewModel(
                                 isSeller = true
                             )
                             userRepository.updateUser(userId, updatedUser)
+                            userPreferencesRepository.clearPreferences()
+                            userPreferencesRepository.saveEmail(currentState.user.email)
                         } else{
+                            val creditCard = currentState.creditCard.copy(
+                                ownerId = userId
+                            )
                             val updatedUser = currentState.user.copy(
                                 isSeller = true,
-                                creditCards = currentState.user.creditCards + currentState.creditCard
+                                creditCards = currentState.user.creditCards + creditCard
                             )
                             userRepository.updateUser(userId, updatedUser)
+                            userPreferencesRepository.clearPreferences()
+                            userPreferencesRepository.saveEmail(currentState.user.email)
                         }
-                        userPreferencesRepository.saveIsSeller(true)
                         BecomeSellerUiState.Success
                     } catch(e: Exception){
                         Log.e("Error", "Error: ${e.message}")
@@ -125,7 +138,64 @@ class BecomeSellerViewModel(
     }
 
     private fun validationBlock(): Boolean{
-        return true
+        val currentState = _becomeSellerUiState.value
+        if(currentState is BecomeSellerUiState.BecomeSellerParams){
+            try {
+                val addressValidation = validateBecomeSellerForm.validateAddress(currentState.user.address)
+                val zipCodeValidation = validateBecomeSellerForm.validateZipCode(currentState.user.zipcode)
+                val phoneNumberValidation = validateBecomeSellerForm.validatePhoneNumber(currentState.user.phoneNumber)
+                val creditCardNumberValidation = validateBecomeSellerForm.validateCreditCardNumber(currentState.creditCard.creditCardNumber)
+                val expirationDateValidation = validateBecomeSellerForm.validateExpirationDate(currentState.creditCard.expirationDate)
+                val cvvValidation = validateBecomeSellerForm.validateCvv(currentState.creditCard.cvv)
+                val ibanValidation = validateBecomeSellerForm.validateIban(currentState.creditCard.iban)
+
+                val hasErrorWithCreditCard = listOf(
+                    addressValidation,
+                    zipCodeValidation,
+                    phoneNumberValidation,
+                    creditCardNumberValidation,
+                    expirationDateValidation,
+                    cvvValidation,
+                    ibanValidation
+                ).any { !it.positiveResult }
+
+                val hasErrorWithoutCreditCard = listOf(
+                    addressValidation,
+                    zipCodeValidation,
+                    phoneNumberValidation
+                ).any { !it.positiveResult }
+
+                if(hasErrorWithCreditCard && currentState.user.creditCards.isEmpty()){
+                    _becomeSellerUiState.value = currentState.copy(
+                        addressErrorMsg = addressValidation.errorMessage,
+                        zipCodeErrorMsg = zipCodeValidation.errorMessage,
+                        phoneNumberErrorMsg = phoneNumberValidation.errorMessage,
+                        creditCardNumberErrorMsg = creditCardNumberValidation.errorMessage,
+                        expirationDateErrorMsg = expirationDateValidation.errorMessage,
+                        cvvErrorMsg = cvvValidation.errorMessage,
+                        ibanErrorMsg = ibanValidation.errorMessage
+                    )
+                    return false
+                }
+                if(hasErrorWithoutCreditCard && currentState.user.creditCards.isNotEmpty()){
+                    _becomeSellerUiState.value = currentState.copy(
+                        addressErrorMsg = addressValidation.errorMessage,
+                        zipCodeErrorMsg = zipCodeValidation.errorMessage,
+                        phoneNumberErrorMsg = phoneNumberValidation.errorMessage
+                    )
+                    return false
+                }
+                viewModelScope.launch {
+                    validationEventChannel.send(ValidationState.Success)
+                }
+                return true
+            } catch (e: Exception){
+                _becomeSellerUiState.value = BecomeSellerUiState.Error
+                return false
+            }
+        } else{
+            return false
+        }
     }
 
 }

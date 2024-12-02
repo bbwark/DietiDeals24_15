@@ -9,11 +9,12 @@ interface AuctionRepository {
     suspend fun createAuction(auction: Auction): Auction
     suspend fun updateAuction(auctionId: String, updatedAuction: Auction): Auction
     suspend fun getAuction(auctionId: String): Auction
-    suspend fun getAuctionsByItemName(itemName: String): Array<Auction>
+    suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: Set<String>): Array<Auction>
     suspend fun getRandomAuctions(ownerId: String): Array<Auction>
     suspend fun getAuctionBidders(auctionId: String): Array<User>
     suspend fun getEndingAuctions(userId: String): Array<Auction>
     suspend fun getParticipatedAuctions(userId: String): Array<Auction>
+    suspend fun deleteAuction(auctionId: String)
 }
 
 class NetworkAuctionRepository(private val auctionApiService: AuctionApiService): AuctionRepository{
@@ -44,8 +45,8 @@ class NetworkAuctionRepository(private val auctionApiService: AuctionApiService)
         }
     }
 
-    override suspend fun getAuctionsByItemName(itemName: String): Array<Auction> {
-        val response = auctionApiService.getAuctionsByItemName(itemName)
+    override suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: Set<String>): Array<Auction> {
+        val response = auctionApiService.getAuctionsByItemName(itemName, pageNumber, categories)
         if(response.isSuccessful){
             return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
         } else{
@@ -85,6 +86,13 @@ class NetworkAuctionRepository(private val auctionApiService: AuctionApiService)
         if(response.isSuccessful){
             return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
         } else{
+            throw HttpException(response)
+        }
+    }
+
+    override suspend fun deleteAuction(auctionId: String) {
+        val response = auctionApiService.deleteAuction(auctionId)
+        if(!response.isSuccessful){
             throw HttpException(response)
         }
     }

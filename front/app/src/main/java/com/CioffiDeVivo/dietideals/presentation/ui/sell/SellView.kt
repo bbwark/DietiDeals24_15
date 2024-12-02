@@ -44,7 +44,8 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
         is SellUiState.Success -> SellGridView(
             auctions = (sellUiState as SellUiState.Success).auctions,
             navController = navController,
-            isSeller = (sellUiState as SellUiState.Success).isSeller
+            isSeller = (sellUiState as SellUiState.Success).isSeller,
+            onDelete = { viewModel.deleteAuction(it) }
         )
         is SellUiState.Error -> RetryView(onClick = {})
     }
@@ -55,7 +56,8 @@ fun SellView(viewModel: SellViewModel, navController: NavController) {
 fun SellGridView(
     auctions: ArrayList<Auction>,
     navController: NavController,
-    isSeller: Boolean
+    isSeller: Boolean,
+    onDelete: (String) -> Unit
 ){
     if(!isSeller){
         Column(
@@ -94,7 +96,8 @@ fun SellGridView(
                         itemsIndexed(auctions) { index, item ->
                             SellGridElement(
                                 auction = item,
-                                navController = navController
+                                navController = navController,
+                                onDelete = { onDelete(it) }
                             )
                         }
                     })

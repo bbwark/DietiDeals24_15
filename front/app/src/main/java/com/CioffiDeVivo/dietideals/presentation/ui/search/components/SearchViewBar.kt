@@ -15,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -27,7 +29,8 @@ fun SearchViewBar(
     categoriesToHide: Set<String>,
     updateCategories: (Set<String>) -> (Unit),
     updateSearchWord: (String) -> (Unit),
-    navController: NavController
+    navController: NavController,
+    focusRequester: FocusRequester
 ) {
     var state by remember { mutableStateOf("") }
 
@@ -38,7 +41,9 @@ fun SearchViewBar(
             updateSearchWord(state)
             //it is possible to use a debounce modifier to delay the request of a fixed amount of time to optimize the number of the requests
         },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         leadingIcon = {
             IconButton(onClick = {
                 navController.navigate(Screen.Home.route)
@@ -70,11 +75,4 @@ fun SearchViewBar(
         singleLine = true,
         shape = RectangleShape
     )
-}
-
-@SuppressLint("MutableCollectionMutableState")
-@Preview
-@Composable
-fun SearchViewBarPreview() {
-    SearchViewBar(categoriesToHide = mutableSetOf(), updateSearchWord = {}, updateCategories = {}, navController = rememberNavController())
 }
