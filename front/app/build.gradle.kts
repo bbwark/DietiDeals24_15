@@ -94,7 +94,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation ("androidx.security:security-crypto:1.1.0-alpha06")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation(platform("com.google.firebase:firebase-analytics-ktx:22.1.2"))
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
