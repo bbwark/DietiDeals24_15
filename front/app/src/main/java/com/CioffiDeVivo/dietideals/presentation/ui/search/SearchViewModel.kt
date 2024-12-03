@@ -37,7 +37,8 @@ class SearchViewModel(
         }
         viewModelScope.launch {
             try {
-                val auctions = auctionRepository.getAuctionsByItemName(searchWord, currentPage, categoriesToHide.value)
+                val categoryList: List<String> = _categoriesToHide.value.toMutableList()
+                val auctions = auctionRepository.getAuctionsByItemName(searchWord, currentPage, categoryList)
                 if(auctions.isNotEmpty()){
                     val currentList = (_searchUiState.value as? SearchUiState.Success)?.auctions ?: arrayListOf()
                     for (auction in auctions) {

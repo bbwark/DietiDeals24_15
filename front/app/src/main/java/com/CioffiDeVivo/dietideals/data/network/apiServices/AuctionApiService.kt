@@ -23,7 +23,7 @@ interface AuctionApiService {
     suspend fun getAuction(@Path("id") auctionId: String): Response<Auction>
 
     @GET("/auctions/item/{name}/{pageNumber}")
-    suspend fun getAuctionsByItemName(@Path("name") itemName: String, @Path("pageNumber") pageNumber: Int, @Query("categories") categories: Set<String>): Response<Array<Auction>>
+    suspend fun getAuctionsByItemName(@Path("name") itemName: String, @Path("pageNumber") pageNumber: Int, @Query("categories") categories: List<String>): Response<Array<Auction>>
 
     @GET("/auctions/owner/{id}")
     suspend fun getRandomAuctions(@Path("id") ownerId: String): Response<Array<Auction>>

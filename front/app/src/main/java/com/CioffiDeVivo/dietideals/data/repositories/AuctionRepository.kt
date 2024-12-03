@@ -9,7 +9,7 @@ interface AuctionRepository {
     suspend fun createAuction(auction: Auction): Auction
     suspend fun updateAuction(auctionId: String, updatedAuction: Auction): Auction
     suspend fun getAuction(auctionId: String): Auction
-    suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: Set<String>): Array<Auction>
+    suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: List<String>): Array<Auction>
     suspend fun getRandomAuctions(ownerId: String): Array<Auction>
     suspend fun getAuctionBidders(auctionId: String): Array<User>
     suspend fun getEndingAuctions(userId: String): Array<Auction>
@@ -45,7 +45,7 @@ class NetworkAuctionRepository(private val auctionApiService: AuctionApiService)
         }
     }
 
-    override suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: Set<String>): Array<Auction> {
+    override suspend fun getAuctionsByItemName(itemName: String, pageNumber: Int, categories: List<String>): Array<Auction> {
         val response = auctionApiService.getAuctionsByItemName(itemName, pageNumber, categories)
         if(response.isSuccessful){
             return response.body() ?: throw IllegalStateException("Response BODY is NULL!")
