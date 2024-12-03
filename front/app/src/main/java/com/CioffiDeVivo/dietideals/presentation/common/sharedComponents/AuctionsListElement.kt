@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -51,40 +52,29 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
         verticalAlignment = Alignment.CenterVertically)
     {
         Spacer(modifier = Modifier.width(10.dp))
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = auction.item.imageUrl[0],
-                placeholder = rememberVectorPainter(image = Icons.Default.Image),
-                error = rememberVectorPainter(image = Icons.Default.Image)
-            ),
-            contentDescription = "Auction Image",
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
-        )
+                .size(60.dp)
+        ){
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = auction.item.imageUrl[0],
+                    placeholder = rememberVectorPainter(image = Icons.Default.Image),
+                    error = rememberVectorPainter(image = Icons.Default.Image)
+                ),
+                contentDescription = "Auction Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            )
+        }
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
             text = auction.item.name)
-    }
-}
-
-@Composable
-fun IconPlaceholder() {
-    Box(
-        modifier = Modifier
-            .size(60.dp)
-            .background(Color.Red),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = null
-        )
     }
 }
 

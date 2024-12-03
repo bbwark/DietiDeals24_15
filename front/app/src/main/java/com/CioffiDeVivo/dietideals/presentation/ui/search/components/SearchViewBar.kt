@@ -30,7 +30,8 @@ fun SearchViewBar(
     updateCategories: (Set<String>) -> (Unit),
     updateSearchWord: (String) -> (Unit),
     navController: NavController,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
+    resetPagination: () -> Unit
 ) {
     var state by remember { mutableStateOf("") }
 
@@ -39,6 +40,7 @@ fun SearchViewBar(
         onValueChange = {
             state = it
             updateSearchWord(state)
+            resetPagination()
             //it is possible to use a debounce modifier to delay the request of a fixed amount of time to optimize the number of the requests
         },
         modifier = modifier

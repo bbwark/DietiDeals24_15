@@ -41,7 +41,7 @@ fun FilterButton(selectedOptions: Set<String>, updateCategories: (MutableSet<Str
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Checkbox(
-                                checked = !isChecked.value,
+                                checked = isChecked.value,
                                 onCheckedChange = null
                             )
                             Spacer(modifier = Modifier.size(4.dp))

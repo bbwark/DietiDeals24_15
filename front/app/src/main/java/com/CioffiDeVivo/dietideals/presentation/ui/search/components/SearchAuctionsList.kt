@@ -1,58 +1,42 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.search.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.AuctionsListElement
 import com.CioffiDeVivo.dietideals.data.models.Auction
-import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 
 
 @Composable
 fun SearchAuctionsList(
     auctions: ArrayList<Auction>,
     categoriesToHide: Set<String>,
-    onLoadMore: () -> Unit,
-    navController: NavController
+    navController: NavController,
+    onSearchMore: () -> Unit
 ) {
-    LazyColumn {
-        itemsIndexed(auctions) { index, auction ->
-            Column {
-                if (index == 0) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    /*This Spacer was added to create a small offset to start the list a little below
-                      the top of the Composable, this way the list will have a small transparent offset
-                      that disappears when you scroll down the list*/
-                }
-                if (!categoriesToHide.contains(auction.category.name)) {
-                    AuctionsListElement(auction = auction, navController = navController)
-                    Spacer(modifier = Modifier.height(5.dp))
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(auctions) { auction ->
+            AuctionsListElement(auction = auction, navController = navController)
+        }
+    }
+    LaunchedEffect(listState){
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastVisibleItemIndex ->
+                if(lastVisibleItemIndex == auctions.size - 1){
+                    onSearchMore()
                 }
             }
-        }
-        itemsIndexed(auctions) {index, auction ->
-            if(auctions.isNotEmpty()){
-                LaunchedEffect(Unit){
-                    onLoadMore()
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                ){
-                    LoadingView()
-                }
-            }
-        }
     }
 }

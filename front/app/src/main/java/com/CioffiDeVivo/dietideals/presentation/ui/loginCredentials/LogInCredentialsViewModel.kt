@@ -5,20 +5,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
+import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.data.requestModels.LogInRequest
 import com.CioffiDeVivo.dietideals.data.validations.ValidateLogInForm
 import com.CioffiDeVivo.dietideals.data.validations.ValidationState
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import retrofit2.HttpException
 
 class LogInCredentialsViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val validateLogInForms: ValidateLogInForm = ValidateLogInForm()
 ) : ViewModel() {
 
@@ -78,6 +82,10 @@ class LogInCredentialsViewModel(
                         userPreferencesRepository.saveEmail(loginResponse.user.email)
                         userPreferencesRepository.saveName(loginResponse.user.name)
                         userPreferencesRepository.saveIsSeller(loginResponse.user.isSeller)
+                        val firebase = FirebaseMessaging.getInstance().token.await()
+                        val deviceTokenArray = loginResponse.user.deviceTokens.plus(firebase)
+                        userRepository.updateUser(loginResponse.user.id, loginResponse.user.copy(deviceTokens = deviceTokenArray))
+                        userPreferencesRepository.saveDeviceToken(firebase)
                         LogInCredentialsUiState.Success
 
                     }

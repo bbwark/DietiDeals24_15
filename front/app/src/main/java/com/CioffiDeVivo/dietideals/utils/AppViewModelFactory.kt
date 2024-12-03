@@ -32,13 +32,13 @@ class AppViewModelFactory(
                 LogInViewModel(userPreferencesRepository) as T
 
             modelClass.isAssignableFrom(LogInCredentialsViewModel::class.java) ->
-                LogInCredentialsViewModel(userPreferencesRepository, appContainer.authRepository) as T
+                LogInCredentialsViewModel(userPreferencesRepository, appContainer.authRepository, appContainer.userRepository) as T
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) ->
                 HomeViewModel(userPreferencesRepository, appContainer.auctionRepository) as T
 
             modelClass.isAssignableFrom(RegisterCredentialsViewModel::class.java) ->
-                RegisterCredentialsViewModel(userPreferencesRepository, appContainer.authRepository) as T
+                RegisterCredentialsViewModel(userPreferencesRepository, appContainer.authRepository, appContainer.userRepository) as T
 
             modelClass.isAssignableFrom(CreateAuctionViewModel::class.java) ->
                 CreateAuctionViewModel(userPreferencesRepository, appContainer.auctionRepository, appContainer.imageRepository) as T
@@ -74,7 +74,7 @@ class AppViewModelFactory(
                 SellViewModel(userPreferencesRepository, appContainer.userRepository, appContainer.auctionRepository) as T
 
             modelClass.isAssignableFrom(AccountViewModel::class.java) ->
-                AccountViewModel(userPreferencesRepository) as T
+                AccountViewModel(userPreferencesRepository, appContainer.userRepository) as T
 
             modelClass.isAssignableFrom(BecomeSellerViewModel::class.java) ->
                 BecomeSellerViewModel(userPreferencesRepository, appContainer.userRepository) as T

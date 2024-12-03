@@ -22,6 +22,7 @@ class UserPreferencesRepository(
         val NAME = stringPreferencesKey("name")
         val EMAIL = stringPreferencesKey("email")
         val IS_SELLER = booleanPreferencesKey("is_seller")
+        val DEVICE_TOKEN = stringPreferencesKey("device_token")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -53,6 +54,12 @@ class UserPreferencesRepository(
     suspend fun saveIsSeller(isSeller: Boolean){
         dataStore.edit { preferences ->
             preferences[IS_SELLER] = isSeller
+        }
+    }
+
+    suspend fun saveDeviceToken(deviceToken: String){
+        dataStore.edit { preferences ->
+            preferences[DEVICE_TOKEN] = deviceToken
         }
     }
 
@@ -121,6 +128,19 @@ class UserPreferencesRepository(
             preferences[IS_SELLER] ?: false
         }
 
+    val deviceToken: Flow<String> = dataStore.data
+        .catch {
+            if(it is IOException){
+                Log.e(TAG, "Error Reading Preferences")
+                emit(emptyPreferences())
+            } else{
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[DEVICE_TOKEN] ?: ""
+        }
+
     //Save Data Preferences
     suspend fun getUserIdPreference(): String {
         return userId.first()
@@ -140,6 +160,10 @@ class UserPreferencesRepository(
 
     suspend fun getIsSellerPreference(): Boolean {
         return isSeller.first()
+    }
+
+    suspend fun getDeviceToken(): String {
+        return deviceToken.first()
     }
 
     suspend fun clearPreferences() {

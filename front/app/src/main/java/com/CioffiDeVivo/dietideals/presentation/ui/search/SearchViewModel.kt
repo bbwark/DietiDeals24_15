@@ -21,18 +21,19 @@ class SearchViewModel(
     val categoriesToHide: StateFlow<Set<String>> = _categoriesToHide.asStateFlow()
 
     private var currentPage = 0
-    private var isLoadingMore = false
+    var isLoadingMore = false
+    var isLastPage = false
 
     fun setCategoriesToHide(categoriesToHide: Set<String>) {
         _categoriesToHide.value = categoriesToHide
     }
 
-    fun searchWordUpdate(searchWord: String, resetPage: Boolean = false) {
-        if(searchWord.isBlank() || isLoadingMore){
+    fun searchWordUpdate(searchWord: String) {
+        if(searchWord.isBlank() || isLoadingMore || isLastPage){
             return
         }
-        if(resetPage){
-            currentPage = 0
+        val currentList = (_searchUiState.value as? SearchUiState.Success)?.auctions ?: arrayListOf()
+        if(currentPage == 0){
             _searchUiState.value = SearchUiState.Loading
         }
         viewModelScope.launch {
@@ -40,13 +41,17 @@ class SearchViewModel(
                 val categoryList: List<String> = _categoriesToHide.value.toMutableList()
                 val auctions = auctionRepository.getAuctionsByItemName(searchWord, currentPage, categoryList)
                 if(auctions.isNotEmpty()){
-                    val currentList = (_searchUiState.value as? SearchUiState.Success)?.auctions ?: arrayListOf()
-                    for (auction in auctions) {
-                        currentList.add(auction)
+                    val updatedList = ArrayList(currentList).apply {
+                        addAll(auctions)
                     }
-                    currentPage++
-                    _searchUiState.value = SearchUiState.Success(currentList, searchWord)
+                    _searchUiState.value = SearchUiState.Success(updatedList, searchWord)
+                    if(auctions.size < 10){
+                        isLastPage = true
+                    } else{
+                        currentPage++
+                    }
                 } else{
+                    isLastPage = true
                     if(currentPage == 0){
                         _searchUiState.value = SearchUiState.Empty
                     }
@@ -58,5 +63,11 @@ class SearchViewModel(
                 isLoadingMore = false
             }
         }
+    }
+
+    fun resetPagination(){
+        currentPage = 0
+        isLastPage = false
+        isLoadingMore = false
     }
 }

@@ -108,11 +108,18 @@ class BecomeSellerViewModel(
                 viewModelScope.launch {
                     _becomeSellerUiState.value = try {
                         val userId = userPreferencesRepository.getUserIdPreference()
+                        val deviceToken = userPreferencesRepository.getDeviceToken()
                         if(currentState.user.creditCards.isNotEmpty()){
                             val updatedUser = currentState.user.copy(
                                 isSeller = true
                             )
-                            userRepository.updateUser(userId, updatedUser)
+                            if(currentState.user.deviceTokens.contains(deviceToken)){
+                                val mutableList = updatedUser.deviceTokens.toMutableList()
+                                mutableList.remove(deviceToken)
+                                val updatedArray = mutableList.toTypedArray()
+                                val updatedUserNoToken = updatedUser.copy(deviceTokens = updatedArray)
+                                userRepository.updateUser(userId, updatedUserNoToken)
+                            }
                             userPreferencesRepository.clearPreferences()
                             userPreferencesRepository.saveEmail(currentState.user.email)
                         } else{
@@ -123,7 +130,13 @@ class BecomeSellerViewModel(
                                 isSeller = true,
                                 creditCards = currentState.user.creditCards + creditCard
                             )
-                            userRepository.updateUser(userId, updatedUser)
+                            if(currentState.user.deviceTokens.contains(deviceToken)){
+                                val mutableList = updatedUser.deviceTokens.toMutableList()
+                                mutableList.remove(deviceToken)
+                                val updatedArray = mutableList.toTypedArray()
+                                val updatedUserNoToken = updatedUser.copy(deviceTokens = updatedArray)
+                                userRepository.updateUser(userId, updatedUserNoToken)
+                            }
                             userPreferencesRepository.clearPreferences()
                             userPreferencesRepository.saveEmail(currentState.user.email)
                         }
