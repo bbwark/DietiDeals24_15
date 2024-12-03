@@ -213,4 +213,16 @@ public class AuctionController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PreAuthorize("hasAuthority('SELLER') && @userSecurityService.isUserAuthorizedByAuctionId(#id)")
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteAuction(@PathVariable("id") String id) {
+        try {
+            UUID idConverted = UUID.fromString(id);
+            auctionService.delete(idConverted);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
