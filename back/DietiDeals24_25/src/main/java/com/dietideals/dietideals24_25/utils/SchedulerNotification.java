@@ -71,6 +71,13 @@ public class SchedulerNotification {
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet()));
 
+            // Add users who bid to auction
+            usersInvolvedInAuction.addAll(
+                    auctionService.findBiddersByAuctionId(auction.getId()).stream()
+                            .filter(Objects::nonNull)
+                            .map(UserEntity::getId)
+                            .collect(Collectors.toSet()));
+
             AtomicBoolean wrapperBuyoutPriceReached = new AtomicBoolean(false);
             BidDto highestBid = findHighestBid(auction, wrapperBuyoutPriceReached);
             boolean buyoutPriceReached = wrapperBuyoutPriceReached.get();
@@ -98,14 +105,14 @@ public class SchedulerNotification {
             } else {
                 message = AUCTIONHEADER + auction.getItem().getName() + " è terminata!\nControlla subito i risultati!";
             }
-            snsService.sendNotification(token, message);
+            snsService.sendNotification(message, token);
         }
     }
 
     private void notifyWinner(Set<String> deviceTokensForWinner, AuctionDto auction) {
         for (String token : deviceTokensForWinner) {
             String message = "Congratulazioni! Hai vinto l'asta di " + auction.getItem().getName() + "!";
-            snsService.sendNotification(token, message);
+            snsService.sendNotification(message, token);
         }
     }
 
@@ -118,7 +125,7 @@ public class SchedulerNotification {
                 message = AUCTIONHEADER + auction.getItem().getName()
                         + " è terminata!\nPurtroppo questa volta non hai vinto";
             }
-            snsService.sendNotification(token, message);
+            snsService.sendNotification(message, token);
         }
     }
 
