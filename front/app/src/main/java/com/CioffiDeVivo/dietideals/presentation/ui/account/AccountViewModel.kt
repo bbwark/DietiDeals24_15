@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.account
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 class AccountViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val userRepository: UserRepository,
-) : ViewModel() {
+): ViewModel() {
 
     private val _accountUiState = MutableStateFlow<AccountUiState>(AccountUiState.Loading)
     val accountUiState: StateFlow<AccountUiState> = _accountUiState.asStateFlow()
@@ -43,7 +44,7 @@ class AccountViewModel(
                     val mutableList = user.deviceTokens.toMutableList()
                     mutableList.remove(deviceToken)
                     val updatedArray = mutableList.toTypedArray()
-                    val updatedUser = user.copy(deviceTokens = updatedArray)
+                    val updatedUser = User(user.id, user.name, user.email, "", user.isSeller, user.favouriteAuctions, user.ownedAuctions, user.bio, user.address, user.zipcode, user.country, user.phoneNumber, user.creditCards, updatedArray)
                     userRepository.updateUser(userId, updatedUser)
                 }
                 userPreferencesRepository.clearPreferences()
@@ -53,7 +54,5 @@ class AccountViewModel(
             }
         }
     }
-
-
 
 }
