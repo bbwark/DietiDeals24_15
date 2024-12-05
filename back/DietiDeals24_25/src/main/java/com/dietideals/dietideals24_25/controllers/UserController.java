@@ -40,6 +40,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         try {
             UUID idConverted = UUID.fromString(id);
+            
             if (!userService.exists(idConverted)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -64,6 +65,7 @@ public class UserController {
             Set<RoleEntity> authorities = new HashSet<>();
             RoleEntity buyerRole = roleService.findByAuthority("BUYER")
                     .orElseThrow(() -> new RuntimeException("BUYER role not found"));
+                    
             if (userDto.getIsSeller() != null && userDto.getIsSeller()) {
                 RoleEntity sellerRole = roleService.findByAuthority("SELLER")
                         .orElseThrow(() -> new RuntimeException("SELLER role not found"));
@@ -88,7 +90,7 @@ public class UserController {
             Optional<UserEntity> foundUser = userService.findById(idConverted);
             return foundUser.map(userEntity -> {
                 UserDto userDto = userMapper.mapTo(userEntity);
-                userDto.setPassword("");
+                userDto.setPassword(null);
                 return new ResponseEntity<>(userDto, HttpStatus.OK);
             }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {

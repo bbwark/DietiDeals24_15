@@ -22,6 +22,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements JwtService {
     private final String jwtSecret;
+    @SuppressWarnings("deprecation")
     private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     public JwtServiceImpl() {

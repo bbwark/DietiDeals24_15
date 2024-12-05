@@ -171,7 +171,8 @@ public class BidController {
 
             for (String token : winner.getDeviceTokens()) {
                 String message = "Congratulazioni! Hai vinto l'asta di " + auctionDto.getItem().getName() + "!";
-                snsService.sendNotification(token, message);
+                String title = "Hai vinto un'asta!";
+                snsService.sendNotification(token, title, message);
             }
 
             List<UserEntity> biddersEntities = auctionService.findBiddersByAuctionId(auctionDto.getId());
@@ -183,7 +184,8 @@ public class BidController {
                     for (String token : bidder.getDeviceTokens()) {
                         String message = "Il vincitore dell'asta di " + auctionDto.getItem().getName()
                                 + " è stato scelto!\nPurtroppo non hai vinto";
-                        snsService.sendNotification(token, message);
+                        String title = "Questa volta non hai vinto";
+                        snsService.sendNotification(token, title, message);
                     }
                 }
             }
