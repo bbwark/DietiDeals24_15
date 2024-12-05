@@ -73,6 +73,7 @@ SQL_FILE="dietidealsdatabase_reset.sql"
 log "Creating file SQL to reset database..."
 cat > "$SQL_FILE" <<EOF
 \c postgres
+SET timezone = 'Europe/Rome';
 DROP DATABASE IF EXISTS dietidealsdatabase;
 CREATE DATABASE dietidealsdatabase;
 EOF
