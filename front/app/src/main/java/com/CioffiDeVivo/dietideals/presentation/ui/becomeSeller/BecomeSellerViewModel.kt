@@ -117,7 +117,10 @@ class BecomeSellerViewModel(
                                 val mutableList = updatedUser.deviceTokens.toMutableList()
                                 mutableList.remove(deviceToken)
                                 val updatedArray = mutableList.toTypedArray()
-                                val updatedUserNoToken = updatedUser.copy(deviceTokens = updatedArray)
+                                val updatedUserNoToken = updatedUser.copy(
+                                    password = "",
+                                    deviceTokens = updatedArray
+                                )
                                 userRepository.updateUser(userId, updatedUserNoToken)
                             }
                             userPreferencesRepository.clearPreferences()
@@ -134,7 +137,10 @@ class BecomeSellerViewModel(
                                 val mutableList = updatedUser.deviceTokens.toMutableList()
                                 mutableList.remove(deviceToken)
                                 val updatedArray = mutableList.toTypedArray()
-                                val updatedUserNoToken = updatedUser.copy(deviceTokens = updatedArray)
+                                val updatedUserNoToken = updatedUser.copy(
+                                    password = "",
+                                    deviceTokens = updatedArray
+                                )
                                 userRepository.updateUser(userId, updatedUserNoToken)
                             }
                             userPreferencesRepository.clearPreferences()

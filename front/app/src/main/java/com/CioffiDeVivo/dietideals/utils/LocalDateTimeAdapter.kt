@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class LocalDateTimeDeserializer: JsonDeserializer<LocalDateTime>, JsonSerializer<LocalDateTime> {
+class LocalDateTimeAdapter: JsonDeserializer<LocalDateTime>, JsonSerializer<LocalDateTime> {
     private val formatter = DateTimeFormatter.ISO_DATE_TIME
 
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LocalDateTime {

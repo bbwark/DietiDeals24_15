@@ -84,7 +84,10 @@ class LogInCredentialsViewModel(
                         userPreferencesRepository.saveIsSeller(loginResponse.user.isSeller)
                         val firebase = FirebaseMessaging.getInstance().token.await()
                         val deviceTokenArray = loginResponse.user.deviceTokens.plus(firebase)
-                        userRepository.updateUser(loginResponse.user.id, loginResponse.user.copy(deviceTokens = deviceTokenArray))
+                        userRepository.updateUser(loginResponse.user.id, loginResponse.user.copy(
+                            password = "",
+                            deviceTokens = deviceTokenArray)
+                        )
                         userPreferencesRepository.saveDeviceToken(firebase)
                         LogInCredentialsUiState.Success
 
