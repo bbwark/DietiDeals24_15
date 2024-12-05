@@ -8,6 +8,8 @@ import java.util.*;
 import javax.crypto.SecretKey;
 
 import com.google.api.client.json.jackson2.JacksonFactory;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.dietideals.dietideals24_25.services.JwtService;
@@ -24,6 +26,10 @@ public class JwtServiceImpl implements JwtService {
     private final String jwtSecret;
     @SuppressWarnings("deprecation")
     private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String CLIENT_ID;
+
 
     public JwtServiceImpl() {
         try {
@@ -78,7 +84,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public GoogleIdToken.Payload verifyGoogleIdToken(String googleIdToken) throws GeneralSecurityException, IOException{
         GoogleIdTokenVerifier googleVerifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JSON_FACTORY)
-                .setAudience(Collections.singletonList("CLIENT_ID"))
+                .setAudience(Collections.singletonList(CLIENT_ID))
                 .build();
         GoogleIdToken idToken = googleVerifier.verify(googleIdToken);
         if(idToken != null) {

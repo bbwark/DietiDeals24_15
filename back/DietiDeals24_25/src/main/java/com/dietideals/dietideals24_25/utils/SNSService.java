@@ -75,7 +75,6 @@ public class SNSService {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // Costruisci la parte GCM
             Map<String, String> notification = new HashMap<>();
             notification.put("title", title);
             notification.put("body", body);
@@ -83,12 +82,10 @@ public class SNSService {
             Map<String, Object> gcm = new HashMap<>();
             gcm.put("notification", notification);
 
-            // Costruisci il payload principale
             Map<String, Object> payload = new HashMap<>();
             payload.put("default", "Notification");
             payload.put("GCM", objectMapper.writeValueAsString(gcm));
 
-            // Serializza l'intero payload
             return objectMapper.writeValueAsString(payload);
         } catch (Exception e) {
             throw new RuntimeException("Errore nella costruzione del payload JSON", e);
