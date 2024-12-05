@@ -44,12 +44,16 @@ class AccountViewModel(
                     val mutableList = user.deviceTokens.toMutableList()
                     mutableList.remove(deviceToken)
                     val updatedArray = mutableList.toTypedArray()
-                    val updatedUser = User(user.id, user.name, user.email, "", user.isSeller, user.favouriteAuctions, user.ownedAuctions, user.bio, user.address, user.zipcode, user.country, user.phoneNumber, user.creditCards, updatedArray)
+                    val updatedUser = user.copy(
+                        password = "",
+                        deviceTokens = updatedArray
+                    )
                     userRepository.updateUser(userId, updatedUser)
                 }
                 userPreferencesRepository.clearPreferences()
                 AccountUiState.SuccessLogout
             } catch (e: Exception){
+                Log.e("ERROR", "ERROR: ${e.message}")
                 AccountUiState.Error
             }
         }

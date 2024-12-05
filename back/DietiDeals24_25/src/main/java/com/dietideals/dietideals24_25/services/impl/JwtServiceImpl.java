@@ -1,18 +1,19 @@
 package com.dietideals.dietideals24_25.services.impl;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import javax.crypto.SecretKey;
 
+import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.stereotype.Service;
 
 import com.dietideals.dietideals24_25.services.JwtService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -21,6 +22,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements JwtService {
     private final String jwtSecret;
+    private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     public JwtServiceImpl() {
         try {
@@ -70,5 +72,18 @@ public class JwtServiceImpl implements JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .get("roles", List.class);
+    }
+
+    @Override
+    public GoogleIdToken.Payload verifyGoogleIdToken(String googleIdToken) throws GeneralSecurityException, IOException{
+        GoogleIdTokenVerifier googleVerifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JSON_FACTORY)
+                .setAudience(Collections.singletonList("CLIENT_ID"))
+                .build();
+        GoogleIdToken idToken = googleVerifier.verify(googleIdToken);
+        if(idToken != null) {
+            return idToken.getPayload();
+        } else {
+            throw new GeneralSecurityException("Failed to verify google id token");
+        }
     }
 }

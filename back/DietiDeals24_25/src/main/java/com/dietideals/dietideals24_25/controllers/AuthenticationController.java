@@ -9,9 +9,11 @@ import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 import com.dietideals.dietideals24_25.services.CreditCardService;
+import com.dietideals.dietideals24_25.services.JwtService;
 import com.dietideals.dietideals24_25.services.RoleService;
 import com.dietideals.dietideals24_25.services.UserService;
 import com.dietideals.dietideals24_25.services.impl.AuthenticationServiceImpl;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    private JwtService jwtService;
     private UserService userService;
     private CreditCardService creditCardService;
     private Mapper<CreditCardEntity, CreditCardDto> creditCardMapper;
@@ -36,10 +39,10 @@ public class AuthenticationController {
     private PasswordEncoder passwordEncoder;
 
     public AuthenticationController(UserService userService, CreditCardService creditCardService,
-            Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
-            Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService,
-            RoleService roleService,
-            PasswordEncoder passwordEncoder) {
+                                    Mapper<CreditCardEntity, CreditCardDto> creditCardMapper,
+                                    Mapper<UserEntity, UserDto> userMapper, AuthenticationServiceImpl authenticationService,
+                                    RoleService roleService,
+                                    PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userService = userService;
         this.creditCardService = creditCardService;
         this.creditCardMapper = creditCardMapper;
@@ -47,6 +50,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/registerUser")
@@ -107,6 +111,19 @@ public class AuthenticationController {
     public ResponseEntity<LoginDto> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
             LoginDto login = authenticationService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+            return new ResponseEntity<>(login, login.getJwt().isEmpty() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new LoginDto(null, ""), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/loginGoogle")
+    public ResponseEntity<LoginDto> loginWithGoogle(@RequestParam("googleIdToken") String token) {
+        try {
+            GoogleIdToken.Payload payload = jwtService.verifyGoogleIdToken(token);
+            String email = payload.getEmail();
+            String name = (String) payload.get("name");
+            LoginDto login = authenticationService.loginWithGoogle(email, name);
             return new ResponseEntity<>(login, login.getJwt().isEmpty() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new LoginDto(null, ""), HttpStatus.INTERNAL_SERVER_ERROR);

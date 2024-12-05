@@ -24,8 +24,8 @@ import com.CioffiDeVivo.dietideals.data.repositories.NetworkImageRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkItemRepository
 import com.CioffiDeVivo.dietideals.data.repositories.NetworkUserRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
-import com.CioffiDeVivo.dietideals.utils.LocalDateTimeDeserializer
-import com.CioffiDeVivo.dietideals.utils.ZonedDateTimeDeserializer
+import com.CioffiDeVivo.dietideals.utils.LocalDateTimeAdapter
+import com.CioffiDeVivo.dietideals.utils.ZonedDateTimeAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -61,8 +61,8 @@ class DefaultAppContainer(
     private val baseUrl = "https://16.171.206.112:8181"
 
     private val customGson: Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-        .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeAdapter())
         .create()
 
     private val sslSocketFactory = createSSLSocketFactory()

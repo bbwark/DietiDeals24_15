@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class Auction (
     val id: String = "",
     val ownerId: String = "",
-    val item: Item = Item(name = ""),
+    val item: Item = Item(),
     val description: String = "",
     val bids: Array<Bid> = arrayOf(),
     val endingDate: LocalDateTime = LocalDateTime.now(),
