@@ -57,7 +57,7 @@ fun RegisterView(navController: NavController) {
             fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.height(5.dp))
-        GoogleButton(navController)
+        GoogleButton()
         Spacer(modifier = Modifier.height(5.dp))
         TextButton(
             onClick = {

@@ -87,7 +87,7 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
                     fontSize = 20.sp,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                GoogleButton(navController = navController)
+                GoogleButton()
                 Spacer(modifier = Modifier.height(5.dp))
                 TextButton(
                     onClick = {

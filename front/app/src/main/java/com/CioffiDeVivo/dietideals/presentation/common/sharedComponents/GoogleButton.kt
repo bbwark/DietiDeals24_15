@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.navigation.NavController
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -34,7 +33,9 @@ import kotlinx.coroutines.launch
 //private lateinit var auth: FirebaseAuth
 
 @Composable
-fun GoogleButton(navController: NavController){
+fun GoogleButton(
+
+){
     //auth = Firebase.auth
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -61,7 +62,7 @@ fun GoogleButton(navController: NavController){
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
                 Log.i(TAG, googleIdToken)
-                Toast.makeText(context, "You Signed In", Toast.LENGTH_SHORT).show()
+
                 /*val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
                 auth.signInWithCredential(firebaseCredential)
                     .addOnCompleteListener{ task ->
