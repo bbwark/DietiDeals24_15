@@ -62,12 +62,15 @@ sudo docker build -t "$image_name" . || {
 
 cd .. || exit
 
-if ! sudo docker images -q "postgres:latest" > /dev/null; then
-    log "Pull PostgreSQL 14 image..."
-    sudo docker pull "postgres:14" || log "WARNING: Pull PostgreSQL image failed"
+outputPostgresImage=$(sudo docker images -q "postgres:latest")
+databaseVersion=14
+if [ ! -n "$outputPostgresImage" ]; then
+    log "Pull PostgreSQL "$databaseVersion" image..."
+    sudo docker pull "postgres:"$databaseVersion"" || log "WARNING: Pull PostgreSQL image failed"
 fi
 
-if ! sudo docker network ls --filter name="^${network_name}$" -q > /dev/null; then
+outputNetwork=$(sudo docker network ls --filter name="^${network_name}$" -q)
+if [ ! -n "$outputNetwork" ]; then
     log "Creating Docker network $network_name..."
     sudo docker network create "$network_name" || {
         log "ERROR: Creating Docker network failed"
@@ -75,13 +78,14 @@ if ! sudo docker network ls --filter name="^${network_name}$" -q > /dev/null; th
     }
 fi
 
-if ! sudo docker ps --filter "name=^dietideals_ps_database" --filter "status=running" -q > /dev/null; then
+outputPostgresContainer=$(sudo docker ps --filter "name=^dietideals_ps_database" --filter "status=running" -q)
+if [ ! -n "$outputPostgresContainer" ]; then
     log "Starting PostgreSQL container..."
     sudo docker run --network="$network_name" --name dietideals_ps_database \
         -e POSTGRES_USER="$postgres_username" \
         -e POSTGRES_PASSWORD="$postgres_password" \
         -e POSTGRES_DB=postgres \
-        -p 5432:5432 -d postgres || {
+        -p 5432:5432 -d postgres:"$databaseVersion" || {
         log "ERROR: Starting PostgreSQL container failed"
         exit 1
     }
@@ -90,13 +94,11 @@ fi
 log "Copying SQL script to reset database..."
 sudo docker cp "/home/$distribution/dietidealsdatabase_reset.sql" dietideals_ps_database:/dietidealsdatabase_reset.sql || {
     log "ERROR: Copying SQL script failed"
-    exit 1
 }
 
 log "Executing SQL script to reset database..."
-sudo docker exec -i dietideals_ps_database psql -U postgres -d dietidealsdatabase -f /dietidealsdatabase_reset.sql || {
+sudo docker exec -i dietideals_ps_database psql -U postgres -f /dietidealsdatabase_reset.sql || {
     log "ERROR: Executing SQL script failed"
-    exit 1
 }
 
 log "Starting application container $image_name..."
