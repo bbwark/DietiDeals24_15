@@ -62,8 +62,9 @@ sudo docker build -t "$image_name" . || {
 
 cd .. || exit
 
-outputPostgresImage=$(sudo docker images -q "postgres:latest")
+
 databaseVersion=14
+outputPostgresImage=$(sudo docker images -q "postgres:"$databaseVersion"")
 if [ ! -n "$outputPostgresImage" ]; then
     log "Pull PostgreSQL "$databaseVersion" image..."
     sudo docker pull "postgres:"$databaseVersion"" || log "WARNING: Pull PostgreSQL image failed"
