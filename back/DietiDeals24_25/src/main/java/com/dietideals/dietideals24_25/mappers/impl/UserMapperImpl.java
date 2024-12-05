@@ -4,6 +4,8 @@ import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.UserEntity;
 import com.dietideals.dietideals24_25.mappers.Mapper;
 
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +38,20 @@ public class UserMapperImpl implements Mapper<UserEntity, UserDto> {
 
     @Override
     public UserEntity mapFrom(UserDto userDto) {
-        return modelMapper.map(userDto, UserEntity.class);
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
+        if (userDto.getOwnedAuctions() != null) {
+            userEntity.setOwnedAuctions(
+                    userDto.getOwnedAuctions().stream()
+                            .map(auctionMapper::mapFrom).toList());
+        }
+
+        if (userDto.getFavouriteAuctions() != null) {
+            userEntity.setFavouriteAuctions(
+                    userDto.getFavouriteAuctions().stream()
+                            .map(auctionMapper::mapFrom)
+                            .collect(Collectors.toSet()));
+        }
+
+        return userEntity;
     }
 }
