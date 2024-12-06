@@ -69,6 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 userDto.setEmail(email);
                 userDto.setName(name);
                 userDto.setPassword("");
+                userDto.setIsSeller(false);
                 Set<RoleEntity> authorities = new HashSet<>();
                 RoleEntity buyerRole = roleService.findByAuthority("BUYER")
                         .orElseThrow(() -> new RuntimeException("BUYER role not found"));
