@@ -1,10 +1,11 @@
-package com.CioffiDeVivo.dietideals.presentation.ui.login
+package com.CioffiDeVivo.dietideals.presentation.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
+import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInUiState
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,39 +13,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class LogInViewModel(
+class RegisterViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ): ViewModel() {
 
-    private val _isUserAuthenticated = MutableStateFlow<Boolean?>(null)
-    val isUserAuthenticated: StateFlow<Boolean?> = _isUserAuthenticated.asStateFlow()
-    private val _logInUiState = MutableStateFlow<LogInUiState>(LogInUiState.Loading)
-    val logInUiState: StateFlow<LogInUiState> = _logInUiState.asStateFlow()
-
-    init {
-        _logInUiState.value = LogInUiState.Loading
-        checkUserAuthentication()
-    }
-
-    private fun checkUserAuthentication(){
-        _logInUiState.value = LogInUiState.Loading
-        viewModelScope.launch {
-            try {
-                if(userPreferencesRepository.getTokenPreference().isNotEmpty()){
-                    _isUserAuthenticated.value = true
-                } else{
-                    _logInUiState.value = LogInUiState.Success
-                }
-            } catch (e: Exception){
-                _logInUiState.value = LogInUiState.Error
-            }
-        }
-    }
+    private val _registerUiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Success)
+    val registerUiState: StateFlow<RegisterUiState> = _registerUiState.asStateFlow()
 
     fun loginWithGoogle(googleIdToken: String){
-        _logInUiState.value = LogInUiState.Loading
+        _registerUiState.value = RegisterUiState.Loading
         viewModelScope.launch {
             try {
 
@@ -63,7 +42,7 @@ class LogInViewModel(
                 userPreferencesRepository.saveDeviceToken(firebase)
                 LogInUiState.SuccessWithGoogle
             } catch (e: Exception){
-                _logInUiState.value = LogInUiState.Error
+                _registerUiState.value = RegisterUiState.Error
             }
         }
     }

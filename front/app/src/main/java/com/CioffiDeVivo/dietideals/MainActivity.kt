@@ -1,5 +1,6 @@
 package com.CioffiDeVivo.dietideals
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,7 +12,6 @@ import com.google.firebase.initialize
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Firebase.initialize(this) //For Analytics
 
         val application = application as DietiDealsApplication
         val appViewModelFactory = application.appViewModelFactory

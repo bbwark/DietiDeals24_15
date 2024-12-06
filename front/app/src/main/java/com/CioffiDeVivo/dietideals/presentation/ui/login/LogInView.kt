@@ -55,6 +55,13 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
                 navController.navigate(Screen.Login.route)
             }
         )
+        is LogInUiState.SuccessWithGoogle -> {
+            if(navController.currentBackStackEntry?.destination?.route != Screen.Home.route){
+                navController.navigate(Screen.Home.route){
+                    popUpTo(navController.graph.startDestinationId){ inclusive = true }
+                }
+            }
+        }
         is LogInUiState.Success -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,7 +94,7 @@ fun LoginView(viewModel: LogInViewModel ,navController: NavController) {
                     fontSize = 20.sp,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                GoogleButton()
+                GoogleButton(loginWithGoogle = { viewModel.loginWithGoogle(it) })
                 Spacer(modifier = Modifier.height(5.dp))
                 TextButton(
                     onClick = {

@@ -18,6 +18,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.loginCredentials.LogInCredentialsViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.manageCards.ManageCardsViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.register.RegisterViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.RegisterCredentialsViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.search.SearchViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.sell.SellViewModel
@@ -28,8 +29,11 @@ class AppViewModelFactory(
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) ->
+                RegisterViewModel(userPreferencesRepository, appContainer.authRepository, appContainer.userRepository) as T
+
             modelClass.isAssignableFrom(LogInViewModel::class.java) ->
-                LogInViewModel(userPreferencesRepository) as T
+                LogInViewModel(userPreferencesRepository, appContainer.authRepository, appContainer.userRepository) as T
 
             modelClass.isAssignableFrom(LogInCredentialsViewModel::class.java) ->
                 LogInCredentialsViewModel(userPreferencesRepository, appContainer.authRepository, appContainer.userRepository) as T

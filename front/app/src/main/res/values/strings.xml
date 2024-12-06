@@ -40,4 +40,5 @@
     <string name="info">Information</string>
     <string name="maxBidInfo">It is the Maximum Bid, beyond that input, the Auction is automatically accepted!</string>
     <string name="becomeSeller">Become a Seller</string>
+    <string name="clientId">679886350477-bsa4n140osioubn00cfvm15e05n6bi09.apps.googleusercontent.com</string>
 </resources>

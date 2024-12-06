@@ -48,6 +48,7 @@ import com.CioffiDeVivo.dietideals.presentation.ui.becomeSeller.BecomeSellerView
 import com.CioffiDeVivo.dietideals.presentation.ui.bidHistory.BidHistoryViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
+import com.CioffiDeVivo.dietideals.presentation.ui.register.RegisterViewModel
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 
 @Composable
@@ -71,7 +72,8 @@ fun NavGraph(navController: NavHostController, appViewModelFactory: AppViewModel
         composable(
             route = Screen.Register.route
         ) {
-            RegisterView(navController = navController)
+            val viewModel: RegisterViewModel = viewModel(factory = appViewModelFactory)
+            RegisterView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.RegisterCredentials.route

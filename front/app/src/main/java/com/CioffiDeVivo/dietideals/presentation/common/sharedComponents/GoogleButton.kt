@@ -30,22 +30,19 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 
-//private lateinit var auth: FirebaseAuth
-
 @Composable
 fun GoogleButton(
-
+    loginWithGoogle: (String) -> Unit
 ){
-    //auth = Firebase.auth
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val credentialManager = CredentialManager.create(context)
 
 
     val onClick: () -> Unit = {
-        val googleIdOption = GetGoogleIdOption.Builder()
+        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId("754156422030-qiheipearrtvon541iab5ogtniefvnth.apps.googleusercontent.com")
+            .setServerClientId(context.getString(R.string.clientId))
             .build()
 
         val request: GetCredentialRequest = GetCredentialRequest.Builder()
@@ -61,15 +58,7 @@ fun GoogleButton(
                 val credential = result.credential
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
-                Log.i(TAG, googleIdToken)
-
-                /*val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-                auth.signInWithCredential(firebaseCredential)
-                    .addOnCompleteListener{ task ->
-                        if(task.isSuccessful){
-                            Toast.makeText(context, "You Signed In", Toast.LENGTH_SHORT).show()
-                        }
-                    }*/
+                loginWithGoogle(googleIdToken)
             } catch (e: Exception){
                 Log.e(TAG, e.toString())
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
