@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.BottomNavigationBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.DetailsViewTopBar
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.GlobalNotificationObserver
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.shouldShowBottomBar
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.shouldShowTopBar
 import com.CioffiDeVivo.dietideals.presentation.navigation.NavGraph
@@ -66,6 +67,7 @@ fun MainActivityContent(navController: NavHostController, appViewModelFactory: A
             }
         }
     ) { innerPadding ->
+        GlobalNotificationObserver()
         Box(modifier = Modifier.padding(innerPadding)){
             NavGraph(
                 navController = navController,
