@@ -14,4 +14,13 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>("Errore nel caricamento del file: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGlobalException(Exception ex) {
+        System.out.println("======== PRE STACK === Si è verificato un errore: " + ex.getMessage());
+        ex.printStackTrace();
+        System.out.println("======== POST STACK === Si è verificato un errore: " + ex.getMessage());
+
+        return new ResponseEntity<>("Si è verificato un errore: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

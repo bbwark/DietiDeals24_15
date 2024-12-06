@@ -118,14 +118,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/loginGoogle")
-    public ResponseEntity<LoginDto> loginWithGoogle(@RequestParam("googleIdToken") String token) {
+    public ResponseEntity<LoginDto> loginWithGoogle(@RequestBody String token) {
         try {
             GoogleIdToken.Payload payload = jwtService.verifyGoogleIdToken(token);
             String email = payload.getEmail();
             String name = (String) payload.get("name");
+            
             LoginDto login = authenticationService.loginWithGoogle(email, name);
-            return new ResponseEntity<>(login, login.getJwt().isEmpty() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK);
+            HttpStatus status = login.getJwt().isEmpty() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK;
+            
+            return new ResponseEntity<>(login, status);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(new LoginDto(null, ""), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

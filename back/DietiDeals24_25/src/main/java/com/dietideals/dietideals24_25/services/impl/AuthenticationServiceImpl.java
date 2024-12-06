@@ -1,5 +1,6 @@
 package com.dietideals.dietideals24_25.services.impl;
 
+import com.dietideals.dietideals24_25.domain.Country;
 import com.dietideals.dietideals24_25.domain.dto.LoginDto;
 import com.dietideals.dietideals24_25.domain.dto.UserDto;
 import com.dietideals.dietideals24_25.domain.entities.RoleEntity;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -65,10 +67,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 String token = jwtService.generateToken(userDto.getId().toString(), userDto.getAuthorities());
                 return new LoginDto(userDto, token);
             } else{
+                String emptyString = "";
                 UserDto userDto = new UserDto();
                 userDto.setEmail(email);
                 userDto.setName(name);
-                userDto.setPassword("");
+                userDto.setPassword(emptyString);
+                userDto.setIsSeller(false);
+                
+                userDto.setBio(Optional.of(emptyString));
+                userDto.setAddress(Optional.of(emptyString));
+                userDto.setZipcode(Optional.of(emptyString));
+                userDto.setCountry(Optional.of(Country.Italy));
+                userDto.setPhoneNumber(Optional.of(emptyString));
+
                 Set<RoleEntity> authorities = new HashSet<>();
                 RoleEntity buyerRole = roleService.findByAuthority("BUYER")
                         .orElseThrow(() -> new RuntimeException("BUYER role not found"));
