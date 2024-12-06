@@ -24,9 +24,10 @@ import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.shouldSh
 import com.CioffiDeVivo.dietideals.presentation.navigation.NavGraph
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
+import com.google.firebase.analytics.FirebaseAnalytics
 
 @Composable
-fun MainActivityContent(navController: NavHostController, appViewModelFactory: AppViewModelFactory){
+fun MainActivityContent(navController: NavHostController, appViewModelFactory: AppViewModelFactory, firebaseAnalytics: FirebaseAnalytics){
     val routeForTopBarMap = mapOf(
         Screen.EditProfile.route to stringResource(R.string.editProfile),
         Screen.EditContactInfo.route to stringResource(R.string.contactInfo),
@@ -71,7 +72,8 @@ fun MainActivityContent(navController: NavHostController, appViewModelFactory: A
         Box(modifier = Modifier.padding(innerPadding)){
             NavGraph(
                 navController = navController,
-                appViewModelFactory = appViewModelFactory
+                appViewModelFactory = appViewModelFactory,
+                firebaseAnalytics = firebaseAnalytics
             )
         }
     }

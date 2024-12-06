@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -50,9 +51,15 @@ import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.makeBid.MakeABidViewModel
 import com.CioffiDeVivo.dietideals.presentation.ui.register.RegisterViewModel
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
+import com.CioffiDeVivo.dietideals.utils.trackScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 
 @Composable
-fun NavGraph(navController: NavHostController, appViewModelFactory: AppViewModelFactory) {
+fun NavGraph(
+    navController: NavHostController,
+    appViewModelFactory: AppViewModelFactory,
+    firebaseAnalytics: FirebaseAnalytics
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route
@@ -84,6 +91,9 @@ fun NavGraph(navController: NavHostController, appViewModelFactory: AppViewModel
         composable(
             route = Screen.Home.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "HomeView")
+            }
             val viewModel : HomeViewModel = viewModel(factory = appViewModelFactory)
             HomeView(viewModel = viewModel, navController = navController)
         }

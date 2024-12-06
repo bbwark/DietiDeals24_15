@@ -15,11 +15,12 @@ class MainActivity : ComponentActivity() {
 
         val application = application as DietiDealsApplication
         val appViewModelFactory = application.appViewModelFactory
+        val firebaseAnalytics = application.firebaseAnalytics
 
         setContent {
             DietiDealsTheme {
                 val navController = rememberNavController()
-                MainActivityContent(navController = navController, appViewModelFactory = appViewModelFactory)
+                MainActivityContent(navController = navController, appViewModelFactory = appViewModelFactory, firebaseAnalytics = firebaseAnalytics)
             }
         }
     }

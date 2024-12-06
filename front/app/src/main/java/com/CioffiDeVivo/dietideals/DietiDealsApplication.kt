@@ -10,6 +10,7 @@ import com.CioffiDeVivo.dietideals.data.DefaultAppContainer
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
 import com.CioffiDeVivo.dietideals.utils.AppViewModelFactory
 import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.initialize
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
@@ -19,6 +20,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 
 class DietiDealsApplication: Application() {
     private lateinit var appContainer: AppContainer
+    lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var userPreferencesRepository: UserPreferencesRepository
     lateinit var appViewModelFactory: AppViewModelFactory
     override fun onCreate() {
@@ -27,5 +29,7 @@ class DietiDealsApplication: Application() {
         userPreferencesRepository = UserPreferencesRepository(dataStore)
         appContainer = DefaultAppContainer(userPreferencesRepository, this)
         appViewModelFactory = AppViewModelFactory(userPreferencesRepository, appContainer)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
     }
 }

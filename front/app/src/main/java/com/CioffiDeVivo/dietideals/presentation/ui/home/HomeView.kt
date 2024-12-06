@@ -32,6 +32,7 @@ import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import com.CioffiDeVivo.dietideals.utils.trackScreen
 
 @Composable
 fun HomeView(viewModel: HomeViewModel, navController: NavController){
