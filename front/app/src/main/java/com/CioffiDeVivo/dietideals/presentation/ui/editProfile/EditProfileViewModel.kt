@@ -31,7 +31,8 @@ class EditProfileViewModel(
             _editProfileUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
-                EditProfileUiState.EditProfileParams(user = user)
+                val updatedUser = user.copy(password = "")
+                EditProfileUiState.EditProfileParams(user = updatedUser)
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 EditProfileUiState.Error

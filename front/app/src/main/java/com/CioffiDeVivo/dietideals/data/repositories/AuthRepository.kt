@@ -9,7 +9,6 @@ import retrofit2.HttpException
 interface AuthRepository {
     suspend fun registerUser(user: User): User
     suspend fun loginUser(logInRequest: LogInRequest): LogInResponse
-
     suspend fun loginWithGoogle(googleIdToken: String): LogInResponse
 }
 

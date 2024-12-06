@@ -31,7 +31,8 @@ class EditContactInfoViewModel(
             _editContactInfoUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
-                EditContactInfoUiState.EditContactInfoParams(user = user)
+                val updatedUser = user.copy(password = "")
+                EditContactInfoUiState.EditContactInfoParams(user = updatedUser)
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 EditContactInfoUiState.Error

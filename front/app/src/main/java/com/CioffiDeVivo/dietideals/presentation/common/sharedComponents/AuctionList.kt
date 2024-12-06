@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -42,14 +41,11 @@ fun HomeViewAuctionsList(
     LazyRow{
         itemsIndexed(auctions){index, item->
             Row {
-                if(index == 0){
-                    Spacer(modifier = Modifier.width(20.dp))
-                }
                 HomeViewAuctionListElement(
                     auction = item,
                     navController = navController
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+
             }
         }
     }

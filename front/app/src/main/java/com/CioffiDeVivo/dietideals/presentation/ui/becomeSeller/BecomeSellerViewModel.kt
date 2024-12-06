@@ -31,7 +31,8 @@ class BecomeSellerViewModel(
             _becomeSellerUiState.value = try {
                 val userId = userPreferencesRepository.getUserIdPreference()
                 val user = userRepository.getUser(userId)
-                BecomeSellerUiState.BecomeSellerParams(user)
+                val updatedUser = user.copy(password = "")
+                BecomeSellerUiState.BecomeSellerParams(updatedUser)
             } catch (e: Exception){
                 Log.e("Error", "Error: ${e.message}")
                 BecomeSellerUiState.Error
@@ -96,6 +97,7 @@ class BecomeSellerViewModel(
                 }
             }
         } catch (e: Exception){
+            Log.e("Error", "Error: ${e.message}")
             _becomeSellerUiState.value = BecomeSellerUiState.Error
         }
     }

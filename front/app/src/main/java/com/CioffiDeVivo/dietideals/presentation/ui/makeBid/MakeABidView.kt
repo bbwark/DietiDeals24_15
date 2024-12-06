@@ -58,7 +58,9 @@ fun MakeABid(
         is MakeABidUiState.Loading -> LoadingView()
         is MakeABidUiState.Success -> {
             if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
-                navController.popBackStack()
+                navController.navigate(Screen.Auction.route + "/${auctionId}"){
+                    launchSingleTop = true
+                }
             }
         }
         is MakeABidUiState.Error -> RetryView(

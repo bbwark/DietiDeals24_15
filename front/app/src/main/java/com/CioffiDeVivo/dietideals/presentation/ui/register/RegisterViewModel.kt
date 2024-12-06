@@ -3,6 +3,7 @@ package com.CioffiDeVivo.dietideals.presentation.ui.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.Country
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.CioffiDeVivo.dietideals.presentation.ui.login.LogInUiState
@@ -40,7 +41,7 @@ class RegisterViewModel(
                     deviceTokens = deviceTokenArray
                 ))
                 userPreferencesRepository.saveDeviceToken(firebase)
-                LogInUiState.SuccessWithGoogle
+                _registerUiState.value = RegisterUiState.SuccessWithGoogle
             } catch (e: Exception){
                 _registerUiState.value = RegisterUiState.Error
             }

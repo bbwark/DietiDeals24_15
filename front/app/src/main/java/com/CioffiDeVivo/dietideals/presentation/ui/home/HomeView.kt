@@ -37,9 +37,9 @@ import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 fun HomeView(viewModel: HomeViewModel, navController: NavController){
     val homeUiState by viewModel.homeUiState.collectAsState()
 
-    /*LaunchedEffect(Unit){
+    LaunchedEffect(Unit){
         viewModel.fetchHomeAuctions()
-    }*/
+    }
     
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,7 +73,7 @@ fun HomeView(viewModel: HomeViewModel, navController: NavController){
         when(homeUiState){
             is HomeUiState.Loading -> LoadingView()
             is HomeUiState.Success -> {
-                LatestAuctions((homeUiState as HomeUiState.Success).latestAuctions, navController)
+                RandomAuctions((homeUiState as HomeUiState.Success).randomAuction, navController)
                 Spacer(modifier = Modifier.height(35.dp))
                 EndingAuctions((homeUiState as HomeUiState.Success).endingAuction, navController)
                 Spacer(modifier = Modifier.height(35.dp))
@@ -90,19 +90,19 @@ fun HomeView(viewModel: HomeViewModel, navController: NavController){
 }
 
 @Composable
-fun LatestAuctions(
-    latestAuctions: Array<Auction>,
+fun RandomAuctions(
+    randomAuctions: Array<Auction>,
     navController: NavController,
 ){
-    if(latestAuctions.isNotEmpty()){
+    if(randomAuctions.isNotEmpty()){
         Text(
-            "Latest Auctions",
+            "Random Auctions",
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = Modifier.height(10.dp))
         HomeViewAuctionsList(
-            auctions = latestAuctions,
+            auctions = randomAuctions,
             navController = navController
         )
     }

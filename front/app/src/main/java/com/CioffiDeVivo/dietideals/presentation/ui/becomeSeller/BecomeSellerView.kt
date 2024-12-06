@@ -59,7 +59,7 @@ fun BecomeSellerView(
             }
         )}
         is BecomeSellerUiState.Success -> {
-            Toast.makeText(context, "For safety Log In Again", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "For safety Log In Again", Toast.LENGTH_SHORT).show()
             if (navController.currentBackStackEntry?.destination?.route != Screen.LogInCredentials.route) {
                 navController.navigate(Screen.LogInCredentials.route) {
                     popUpTo(0){ inclusive = true }

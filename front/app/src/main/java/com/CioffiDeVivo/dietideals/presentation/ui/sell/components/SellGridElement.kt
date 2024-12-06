@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.R
+import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
@@ -54,6 +55,7 @@ fun SellGridElement(
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .size(width = 160.dp, height = 170.dp)
+            .pulsateClick()
             .clickable {
                 if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
                     navController.navigate(Screen.Auction.route + "/${auction.id}")

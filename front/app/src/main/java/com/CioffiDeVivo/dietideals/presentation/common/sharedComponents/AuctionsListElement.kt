@@ -1,10 +1,8 @@
 package com.CioffiDeVivo.dietideals.presentation.common.sharedComponents
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,16 +25,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.data.models.Auction
-import com.CioffiDeVivo.dietideals.R
-import com.CioffiDeVivo.dietideals.data.models.Item
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 
 @Composable
@@ -79,24 +75,29 @@ fun AuctionsListElement(auction: Auction, navController: NavController) {
 }
 
 @Composable
-fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
+fun HomeViewAuctionListElement(
+    auction: Auction,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+){
     ElevatedCard(
-        modifier = Modifier
+        modifier = modifier
+            .padding(horizontal = 8.dp, vertical = 12.dp)
+            .size(width = 160.dp, height = 170.dp)
             .pulsateClick()
             .clickable {
                 if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auction.id}") {
                     navController.navigate(Screen.Auction.route + "/${auction.id}")
                 }
-                navController.navigate(Screen.Auction.route + "/${auction.id}")
             }
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = auction.item.name,
-                modifier = Modifier.padding(5.dp)
+            HomeCardHeader(
+                auction = auction,
+                navController = navController,
             )
             Image(
                 painter = rememberAsyncImagePainter(
@@ -116,10 +117,20 @@ fun HomeViewAuctionListElement(auction: Auction, navController: NavController){
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun HomeViewAuctionListElementPreview(){
-    HomeViewAuctionListElement(
-        auction = Auction("", "", Item("", "TEST NAME")),
-        navController = rememberNavController())
+fun HomeCardHeader(auction: Auction, navController: NavController) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = auction.item.name,
+            modifier = Modifier
+                .weight(1f)
+                .clickable { navController.navigate(Screen.Auction.route + "/${auction.id}") },
+            fontSize = 14.sp,
+            fontWeight = FontWeight(500),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+    }
 }

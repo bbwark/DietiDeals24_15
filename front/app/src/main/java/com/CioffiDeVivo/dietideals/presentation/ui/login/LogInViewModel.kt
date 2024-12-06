@@ -1,8 +1,10 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.CioffiDeVivo.dietideals.data.UserPreferencesRepository
+import com.CioffiDeVivo.dietideals.data.models.Country
 import com.CioffiDeVivo.dietideals.data.repositories.AuthRepository
 import com.CioffiDeVivo.dietideals.data.repositories.UserRepository
 import com.google.firebase.messaging.FirebaseMessaging
@@ -61,8 +63,9 @@ class LogInViewModel(
                     deviceTokens = deviceTokenArray
                 ))
                 userPreferencesRepository.saveDeviceToken(firebase)
-                LogInUiState.SuccessWithGoogle
+                _logInUiState.value = LogInUiState.SuccessWithGoogle
             } catch (e: Exception){
+                Log.d("ERROR", "${e.message}")
                 _logInUiState.value = LogInUiState.Error
             }
         }

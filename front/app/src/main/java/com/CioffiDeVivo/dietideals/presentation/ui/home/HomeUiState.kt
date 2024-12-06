@@ -4,7 +4,7 @@ import com.CioffiDeVivo.dietideals.data.models.Auction
 
 sealed interface HomeUiState {
 
-    data class Success(val latestAuctions: Array<Auction>, val endingAuction: Array<Auction>, val participatedAuction: Array<Auction>): HomeUiState
+    data class Success(val randomAuction: Array<Auction>, val endingAuction: Array<Auction>, val participatedAuction: Array<Auction>): HomeUiState
     object Error: HomeUiState
     object Loading: HomeUiState
 
