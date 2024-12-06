@@ -1,5 +1,7 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -50,7 +52,10 @@ import com.CioffiDeVivo.dietideals.data.models.User
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
+import kotlinx.coroutines.delay
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun AuctionView(
@@ -133,8 +138,8 @@ fun AuctionViewLayout(
             verticalAlignment = Alignment.Top
         ) {
             when (auction.type) {
-                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull())
-                AuctionType.Silent -> auction.endingDate.let { SilentAuctionBody(endingDate = it) }
+                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull(), interval = auction.interval)
+                AuctionType.Silent -> SilentAuctionBody(endingDate = auction.endingDate)
                 else ->{
 
                 }
@@ -213,7 +218,7 @@ fun AuctionHeader(
 }
 
 @Composable
-fun EnglishAuctionBody(lastBid: Bid?) {
+fun EnglishAuctionBody(lastBid: Bid?, interval: String) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         if (lastBid != null) {
             Text(
@@ -236,26 +241,49 @@ fun EnglishAuctionBody(lastBid: Bid?) {
                 color = Color.Red,
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500)
-            ) //TODO a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
+            )
         }
     }
 }
 
 @Composable
 fun SilentAuctionBody(endingDate: LocalDateTime) {
+    val formattedDate = remember(endingDate){
+        endingDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    }
+    val remainingTime = remember { mutableStateOf("") }
+
+    LaunchedEffect(endingDate){
+        while(true){
+            val now = LocalDateTime.now()
+            val endOfDay = endingDate.toLocalDate().atTime(23, 59)
+            if(now.isBefore(endOfDay)){
+                val duration = Duration.between(now, endOfDay)
+                val hours = duration.toHours()
+                val minutes = duration.toMinutes() % 60
+                val seconds = duration.seconds % 60
+                remainingTime.value = String.format("%02dh %02dm %02ds", hours, minutes, seconds)
+            } else{
+                remainingTime.value = "Ended"
+                break
+            }
+            delay(1000L)
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         Row(verticalAlignment = Alignment.Bottom){
             Text(text = "Ending Date: ", fontSize = 12.sp)
-            Text(text = endingDate.toString(), fontWeight = FontWeight(500))
+            Text(text = formattedDate, fontWeight = FontWeight(500))
         }
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = "Remaining Time: ", fontSize = 12.sp)
             Text(
-                text = "50m",
+                text = remainingTime.value,
                 color = Color.Red,
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500)
-            ) //TODO a function that calculates how much time has passed since the last bid, checks the auction interval, and put the remaining time
+            )
         }
     }
 }
