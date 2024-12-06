@@ -38,9 +38,9 @@ fun SearchViewBar(
     TextField(
         value = state,
         onValueChange = {
+            resetPagination()
             state = it
             updateSearchWord(state)
-            resetPagination()
             //it is possible to use a debounce modifier to delay the request of a fixed amount of time to optimize the number of the requests
         },
         modifier = modifier

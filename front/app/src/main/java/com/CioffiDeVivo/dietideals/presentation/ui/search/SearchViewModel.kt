@@ -69,5 +69,6 @@ class SearchViewModel(
         currentPage = 0
         isLastPage = false
         isLoadingMore = false
+        _searchUiState.value = SearchUiState.Loading
     }
 }
