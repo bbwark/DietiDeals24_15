@@ -211,12 +211,12 @@ fun CreateAuction(viewModel: CreateAuctionViewModel, navController: NavHostContr
                     AuctionType.English -> {
                         EnglishAuction(
                             auctionState = createAuctionUiState,
+                            onMinBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinAcceptedChanged(it)) },
                             onBidChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.MinStepChanged(it)) },
                             onIntervalChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalChanged(it)) },
                             onDescriptionChange = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionChanged(it)) },
                             onDeleteInterval = { viewModel.createAuctionOnAction(CreateAuctionEvents.IntervalDeleted) },
                             onDeleteDescription = { viewModel.createAuctionOnAction(CreateAuctionEvents.DescriptionDeleted) },
-                            onCalendarClick = { showDatePicker.value = true }
                         )
                     }
                     else -> {
@@ -379,16 +379,49 @@ fun SilentAuction(
 @Composable
 fun EnglishAuction(
     auctionState: CreateAuctionUiState,
+    onMinBidChange: (String) -> Unit,
     onBidChange: (String) -> Unit,
     onIntervalChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDeleteInterval: (String) -> Unit,
     onDeleteDescription: (String) -> Unit,
-    onCalendarClick: () -> Unit
 ){
     var minStep by rememberSaveable { mutableStateOf("") }
+    var minAccepted by remember { mutableStateOf("") }
     val currencyVisualTransformation = rememberCurrencyVisualTransformation(currency = "EUR")
     (auctionState as CreateAuctionUiState.CreateAuctionParams)
+    OutlinedTextField(
+        value = minAccepted,
+        onValueChange = { newBid ->
+            val trimmed = newBid.trimStart('0').trim { it.isDigit().not() }
+            if(trimmed.isEmpty() || trimmed.toInt() < 10000) {
+                minAccepted = trimmed
+            }
+            onMinBidChange(minAccepted)
+        },
+        singleLine = true,
+        trailingIcon = {
+            Icon(
+                Icons.Filled.Euro,
+                contentDescription = null,
+            )
+        },
+        visualTransformation = currencyVisualTransformation,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        label = {
+            Text(
+                stringResource(R.string.minimumBid),
+                fontSize = 14.sp
+            )
+        },
+        isError = auctionState.minAcceptedErrorMsg != null,
+        supportingText = {
+            if(auctionState.minAcceptedErrorMsg != null){
+                Text(text = auctionState.minAcceptedErrorMsg, color = Color.Red)
+            }
+        },
+        modifier = modifierStandard
+    )
     Row(
         modifier = modifierStandard
     ) {
@@ -442,18 +475,6 @@ fun EnglishAuction(
                 .padding(start = 4.dp)
         )
     }
-    InputTextField(
-        value = auctionState.auction.endingDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-        onValueChanged = {  },
-        label = stringResource(R.string.endingDate),
-        trailingIcon = Icons.Filled.CalendarMonth,
-        onTrailingIconClick = { onCalendarClick() },
-        readOnly = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 25.dp, end = 25.dp, bottom = 8.dp)
-            .clickable { onCalendarClick() }
-    )
     DescriptionTextfield(
         description = auctionState.auction.description,
         onDescriptionChange = { onDescriptionChange(it) },

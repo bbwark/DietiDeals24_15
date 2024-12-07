@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +37,7 @@ import com.CioffiDeVivo.dietideals.animations.pulsateClick
 import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
+import com.CioffiDeVivo.dietideals.data.models.Bid
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
@@ -73,6 +75,7 @@ fun MakeABid(
         is MakeABidUiState.MakeABidParams -> {
             MakeABidLayout(
                 auction = (makeABidUiState as MakeABidUiState.MakeABidParams).auction,
+                bidErrorMsg = (makeABidUiState as MakeABidUiState.MakeABidParams).bidErrorMsg,
                 onBidChange = { viewModel.updateBidValue(it) },
                 onSubmitBid = { viewModel.submitBid(auctionId) }
             )
@@ -84,6 +87,7 @@ fun MakeABid(
 @Composable
 fun MakeABidLayout(
     auction: Auction,
+    bidErrorMsg: String?,
     onBidChange: (String) -> Unit,
     onSubmitBid: (String) -> Unit
 ){
@@ -109,7 +113,7 @@ fun MakeABidLayout(
             Text(
                 if (auction.type == AuctionType.English)
                         if(auction.bids.isEmpty()){
-                            auction.minStep
+                            auction.startingPrice
                         } else{
                             (auction.bids.last().value + auction.minStep.toFloat()).toString()
                         }
@@ -143,6 +147,12 @@ fun MakeABidLayout(
             },
             visualTransformation = currencyVisualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            isError = bidErrorMsg != null,
+            supportingText = {
+                if(bidErrorMsg != null){
+                    Text(text = bidErrorMsg, color = Color.Red)
+                }
+            },
             modifier = modifierStandard,
             label = { Text("Your Bid") },
         )

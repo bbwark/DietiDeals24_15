@@ -138,7 +138,11 @@ fun AuctionViewLayout(
             verticalAlignment = Alignment.Top
         ) {
             when (auction.type) {
-                AuctionType.English -> EnglishAuctionBody(lastBid = auction.bids.lastOrNull(), interval = auction.interval)
+                AuctionType.English -> EnglishAuctionBody(
+                    lastBid = auction.bids.lastOrNull(),
+                    endingDate = auction.endingDate,
+                    minAccepted = auction.startingPrice
+                )
                 AuctionType.Silent -> SilentAuctionBody(endingDate = auction.endingDate)
                 else ->{
 
@@ -159,13 +163,16 @@ fun AuctionViewLayout(
             Spacer(modifier = Modifier.size(12.dp))
         } else{
             Spacer(modifier = Modifier.size(12.dp))
-            Button(onClick = {
-                if (navController.currentBackStackEntry?.destination?.route != Screen.MakeABid.route + "/${auction.id}") {
-                    navController.navigate(Screen.MakeABid.route + "/${auction.id}") {
-                        launchSingleTop = true
+            Button(
+                onClick = {
+                    if (navController.currentBackStackEntry?.destination?.route != Screen.MakeABid.route + "/${auction.id}") {
+                        navController.navigate(Screen.MakeABid.route + "/${auction.id}") {
+                            launchSingleTop = true
+                        }
                     }
-                }
-            }) {
+                },
+                enabled = !auction.expired
+            ) {
                 Text(text = "Make a Bid", fontSize = 18.sp)
             }
             Spacer(modifier = Modifier.size(12.dp))
@@ -218,15 +225,23 @@ fun AuctionHeader(
 }
 
 @Composable
-fun EnglishAuctionBody(lastBid: Bid?, interval: String) {
-    var remainingTime by remember { mutableStateOf(formatMMSS(interval)) }
-    var totalSeconds by remember { mutableStateOf(parseMMSS(interval)) }
+fun EnglishAuctionBody(lastBid: Bid?, endingDate: LocalDateTime, minAccepted: String) {
+    val remainingTime = remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        while (totalSeconds > 0){
+        while(true){
+            val now = LocalDateTime.now()
+            if(now.isBefore(endingDate)){
+                val duration = Duration.between(now, endingDate)
+                val hours = duration.toHours()
+                val minutes = duration.toMinutes() % 60
+                val seconds = duration.seconds % 60
+                remainingTime.value = String.format("%02dh %02dm %02ds", hours, minutes, seconds)
+            } else{
+                remainingTime.value = "Ended"
+                break
+            }
             delay(1000L)
-            totalSeconds -= 1
-            remainingTime = formatMMSSFromSeconds(totalSeconds)
         }
     }
 
@@ -239,7 +254,7 @@ fun EnglishAuctionBody(lastBid: Bid?, interval: String) {
             )
         } else {
             Text(
-                text = "0 EUR",
+                text = minAccepted,
                 fontSize = 32.sp,
                 fontWeight = FontWeight(700)
             )
@@ -248,7 +263,7 @@ fun EnglishAuctionBody(lastBid: Bid?, interval: String) {
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = "Remaining Time: ", fontSize = 12.sp)
             Text(
-                text = remainingTime,
+                text = remainingTime.value,
                 color = Color.Red,
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500)
@@ -306,26 +321,4 @@ fun DescriptionAuctionItem(description: String) {
     Spacer(modifier = Modifier.size(3.dp))
     Text(text = description, fontSize = 12.sp)
 
-}
-
-fun parseMMSS(mmss: String): Int {
-    val minutes = mmss.substring(0, 2).toIntOrNull() ?: 0
-    val seconds = mmss.substring(2, 4).toIntOrNull() ?: 0
-    return (minutes * 60) + seconds
-}
-
-fun formatMMSSFromSeconds(totalSeconds: Int): String {
-    val minutes = totalSeconds / 60
-    val seconds = totalSeconds % 60
-    return "%02d:%02d".format(minutes, seconds)
-}
-
-fun formatMMSS(mmss: String): String {
-    return try {
-        val minutes = mmss.substring(0, 2).toInt()
-        val seconds = mmss.substring(2, 4).toInt()
-        "%02d:%02d".format(minutes, seconds)
-    } catch (e: Exception) {
-        "00:00"
-    }
 }

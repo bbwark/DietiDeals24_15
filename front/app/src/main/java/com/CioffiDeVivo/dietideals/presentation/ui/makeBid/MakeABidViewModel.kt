@@ -77,7 +77,7 @@ class MakeABidViewModel(
                         MakeABidUiState.Success
                     } else{
                         Log.e("Error", "Error: Validator Error")
-                        MakeABidUiState.Error
+                        MakeABidUiState.MakeABidParams(auction = currentState.auction, bid = currentState.bid, bidErrorMsg = "Bid Value too low")
                     }
                 } catch (e: Exception){
                     Log.e("Error", "Error: ${e.message}")
@@ -90,7 +90,11 @@ class MakeABidViewModel(
     }
 
     private fun validateBidEnglish(bid: Bid, auction: Auction) : Boolean {
-        return bid.value > (auction.bids.last().value + auction.minStep.toFloat())
+        if(auction.bids.isEmpty()){
+            return bid.value >= auction.startingPrice.toFloat()
+        } else{
+            return bid.value > (auction.bids.last().value + auction.minStep.toFloat())
+        }
     }
 
     private fun validateBidSilent(bid: Bid, auction: Auction) : Boolean {

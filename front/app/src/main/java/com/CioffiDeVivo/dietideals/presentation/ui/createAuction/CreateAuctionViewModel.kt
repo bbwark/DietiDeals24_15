@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.io.File
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 class CreateAuctionViewModel(
@@ -106,8 +107,10 @@ class CreateAuctionViewModel(
                                 }
                             }.awaitAll()
                         }
+                        val intervalInSeconds = convertsToSeconds(currentState.auction.interval)
                         val updatedAuction = currentState.auction.copy(
                             ownerId = userId,
+                            endingDate = LocalDateTime.now().plusSeconds(intervalInSeconds),
                             item = currentState.auction.item.copy(
                                 imageUrl = imageUrls
                             )
@@ -315,6 +318,18 @@ class CreateAuctionViewModel(
                 auctionTypeErrorMsg = null
             )
         }
+    }
+
+    private fun convertsToSeconds(time: String): Long {
+        if(time.length != 4){
+            throw IllegalStateException("Invalid Time Format!")
+        }
+        val minutes = time.substring(0,2).toIntOrNull() ?: throw IllegalStateException("Invalid Minutes value")
+        val seconds = time.substring(2,4).toIntOrNull() ?: throw IllegalStateException("Invalid Seconds value")
+        if(minutes < 0 || seconds < 0 || seconds >= 60){
+            throw IllegalStateException("Minutes or Seconds values are out of range")
+        }
+        return (minutes * 60 + seconds).toLong()
     }
 
 }

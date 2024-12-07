@@ -10,6 +10,7 @@ sealed interface MakeABidUiState {
 
     data class MakeABidParams(
         val auction: Auction = Auction(),
-        val bid: Bid = Bid()
+        val bid: Bid = Bid(),
+        val bidErrorMsg: String? = null
     ): MakeABidUiState
 }
