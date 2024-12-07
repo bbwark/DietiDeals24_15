@@ -26,10 +26,10 @@ class DietiDealsApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         Firebase.initialize(this) //For Analytics
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
         userPreferencesRepository = UserPreferencesRepository(dataStore)
         appContainer = DefaultAppContainer(userPreferencesRepository, this)
         appViewModelFactory = AppViewModelFactory(userPreferencesRepository, appContainer)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
     }
 }

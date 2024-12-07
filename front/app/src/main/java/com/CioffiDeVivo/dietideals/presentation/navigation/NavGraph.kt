@@ -67,24 +67,36 @@ fun NavGraph(
         composable(
             route = Screen.Login.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "LogInView")
+            }
             val viewModel : LogInViewModel = viewModel(factory = appViewModelFactory)
             LoginView(viewModel = viewModel ,navController = navController)
         }
         composable(
             route = Screen.LogInCredentials.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "LogInCredentialsView")
+            }
             val viewModel: LogInCredentialsViewModel = viewModel(factory = appViewModelFactory)
             LogInCredentialsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Register.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "RegisterView")
+            }
             val viewModel: RegisterViewModel = viewModel(factory = appViewModelFactory)
             RegisterView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.RegisterCredentials.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "RegisterCredentialsView")
+            }
             val viewModel: RegisterCredentialsViewModel = viewModel(factory = appViewModelFactory)
             RegisterCredentialsView(viewModel = viewModel, navController = navController)
         }
@@ -100,54 +112,81 @@ fun NavGraph(
         composable(
             route = Screen.Search.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "SearchView")
+            }
             val viewModel: SearchViewModel = viewModel(factory = appViewModelFactory)
             SearchView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Sell.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "SellView")
+            }
             val viewModel: SellViewModel = viewModel(factory = appViewModelFactory)
             SellView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.BecomeSeller.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "BecomeSellerView")
+            }
             val viewModel : BecomeSellerViewModel = viewModel(factory = appViewModelFactory)
             BecomeSellerView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.CreateAuction.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "CreateAuctionView")
+            }
             val viewModel: CreateAuctionViewModel = viewModel(factory = appViewModelFactory)
             CreateAuction(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Account.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "AccountView")
+            }
             val viewModel: AccountViewModel = viewModel(factory = appViewModelFactory)
             AccountView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.EditProfile.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "EditProfileView")
+            }
             val viewModel: EditProfileViewModel = viewModel(factory = appViewModelFactory)
             EditProfile(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.EditContactInfo.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "EditContactInfoView")
+            }
             val viewModel: EditContactInfoViewModel = viewModel(factory = appViewModelFactory)
             EditContactInfoView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.ManageCards.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "ManageCardsView")
+            }
             val viewModel: ManageCardsViewModel = viewModel(factory = appViewModelFactory)
             ManageCardsView(viewModel = viewModel, navController = navController)
         }
         composable(
             route = Screen.Favourites.route
         ) {
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "FavouritesView")
+            }
             val viewModel: FavouritesViewModel = viewModel(factory = appViewModelFactory)
             FavouritesView(viewModel = viewModel, navController = navController)
         }
@@ -159,6 +198,9 @@ fun NavGraph(
                 }
             )
         ) { entry ->
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "AuctionView")
+            }
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
             val viewModel: AuctionViewModel = viewModel(factory = appViewModelFactory)
             Scaffold(topBar = {
@@ -187,6 +229,9 @@ fun NavGraph(
                 }
             )
         ) { entry ->
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "MakeABidView")
+            }
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
             val viewModel: MakeABidViewModel = viewModel(factory = appViewModelFactory)
             MakeABid(auctionId = auctionId, viewModel = viewModel, navController = navController)
@@ -199,6 +244,9 @@ fun NavGraph(
                 }
             )
         ) {entry ->
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "BidHistoryView")
+            }
             val auctionId = entry.arguments?.getString("auctionId") ?: ""
             val viewModel: BidHistoryViewModel = viewModel(factory = appViewModelFactory)
             BidHistoryView(auctionId = auctionId ,viewModel = viewModel, navController = navController)
@@ -206,6 +254,9 @@ fun NavGraph(
         composable(
             route = Screen.AddCard.route
         ){
+            LaunchedEffect(Unit){
+                trackScreen(firebaseAnalytics, "AddCardView")
+            }
             val viewModel : AddCardViewModel = viewModel(factory = appViewModelFactory)
             AddCardView(viewModel = viewModel, navController = navController)
         }
