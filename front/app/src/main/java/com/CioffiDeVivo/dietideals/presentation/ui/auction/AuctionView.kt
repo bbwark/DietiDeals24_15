@@ -1,7 +1,5 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.auction
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -20,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -43,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberAsyncImagePainter
 import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.UserInfoBottomSheet
 import com.CioffiDeVivo.dietideals.data.models.Auction
@@ -61,11 +58,12 @@ import java.time.format.DateTimeFormatter
 fun AuctionView(
     auctionId: String,
     viewModel: AuctionViewModel,
-    navController: NavHostController
+    navController: NavController
 ) {
+    val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val auctionUiState by viewModel.auctionUiState.collectAsState()
 
-    LaunchedEffect(key1 = auctionId) {
+    LaunchedEffect(Unit){
         viewModel.fetchAuctionUiState(auctionId)
     }
 
@@ -254,7 +252,7 @@ fun EnglishAuctionBody(lastBid: Bid?, endingDate: LocalDateTime, minAccepted: St
             )
         } else {
             Text(
-                text = minAccepted,
+                text = "$minAccepted EUR",
                 fontSize = 32.sp,
                 fontWeight = FontWeight(700)
             )

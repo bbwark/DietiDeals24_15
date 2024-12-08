@@ -93,7 +93,7 @@ class MakeABidViewModel(
         if(auction.bids.isEmpty()){
             return bid.value >= auction.startingPrice.toFloat()
         } else{
-            return bid.value > (auction.bids.last().value + auction.minStep.toFloat())
+            return bid.value >= (auction.bids.last().value + auction.minStep.toFloat())
         }
     }
 

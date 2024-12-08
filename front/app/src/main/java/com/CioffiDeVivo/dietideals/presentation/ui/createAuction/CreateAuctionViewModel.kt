@@ -107,16 +107,27 @@ class CreateAuctionViewModel(
                                 }
                             }.awaitAll()
                         }
-                        val intervalInSeconds = convertsToSeconds(currentState.auction.interval)
-                        val updatedAuction = currentState.auction.copy(
-                            ownerId = userId,
-                            endingDate = LocalDateTime.now().plusSeconds(intervalInSeconds),
-                            item = currentState.auction.item.copy(
-                                imageUrl = imageUrls
+                        if(currentState.auction.type == AuctionType.English){
+                            val intervalInSeconds = convertsToSeconds(currentState.auction.interval)
+                            val updatedAuction = currentState.auction.copy(
+                                ownerId = userId,
+                                endingDate = LocalDateTime.now().plusSeconds(intervalInSeconds),
+                                item = currentState.auction.item.copy(
+                                    imageUrl = imageUrls
+                                )
                             )
-                        )
-                        auctionRepository.createAuction(updatedAuction)
-                        CreateAuctionUiState.Success
+                            auctionRepository.createAuction(updatedAuction)
+                            CreateAuctionUiState.Success
+                        } else{
+                            val updatedAuction = currentState.auction.copy(
+                                ownerId = userId,
+                                item = currentState.auction.item.copy(
+                                    imageUrl = imageUrls
+                                )
+                            )
+                            auctionRepository.createAuction(updatedAuction)
+                            CreateAuctionUiState.Success
+                        }
                     } catch (e: Exception){
                         Log.e("Error", "Error: ${e.message}")
                         CreateAuctionUiState.Error

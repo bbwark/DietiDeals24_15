@@ -1,5 +1,12 @@
 package com.CioffiDeVivo.dietideals.presentation.ui.makeBid
 
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,11 +27,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -38,11 +47,13 @@ import com.CioffiDeVivo.dietideals.R
 import com.CioffiDeVivo.dietideals.data.models.Auction
 import com.CioffiDeVivo.dietideals.data.models.AuctionType
 import com.CioffiDeVivo.dietideals.data.models.Bid
+import com.CioffiDeVivo.dietideals.presentation.common.sharedComponents.SuccessDialog
 import com.CioffiDeVivo.dietideals.presentation.navigation.Screen
 import com.CioffiDeVivo.dietideals.presentation.ui.loading.LoadingView
 import com.CioffiDeVivo.dietideals.presentation.ui.registerCredentials.modifierStandard
 import com.CioffiDeVivo.dietideals.presentation.ui.retry.RetryView
 import com.CioffiDeVivo.dietideals.utils.rememberCurrencyVisualTransformation
+import kotlinx.coroutines.delay
 
 @Composable
 fun MakeABid(
@@ -51,6 +62,7 @@ fun MakeABid(
     navController: NavController,
 ){
     val makeABidUiState by viewModel.makeABidUiState.collectAsState()
+    var showSuccessDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit){
         viewModel.fetchAuction(auctionId)
@@ -59,11 +71,7 @@ fun MakeABid(
     when(makeABidUiState){
         is MakeABidUiState.Loading -> LoadingView()
         is MakeABidUiState.Success -> {
-            if (navController.currentBackStackEntry?.destination?.route != Screen.Auction.route + "/${auctionId}") {
-                navController.navigate(Screen.Auction.route + "/${auctionId}"){
-                    launchSingleTop = true
-                }
-            }
+            showSuccessDialog = true
         }
         is MakeABidUiState.Error -> RetryView(
             onClick = {
@@ -81,7 +89,26 @@ fun MakeABid(
             )
         }
     }
-
+    if(showSuccessDialog){
+        LaunchedEffect(Unit){
+            delay(1000)
+            showSuccessDialog = false
+            navController.navigate(Screen.Home.route){
+                popUpTo(Screen.Home.route) { inclusive = false }
+            }
+        }
+    }
+        AnimatedVisibility(
+            visible = showSuccessDialog,
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut()
+        ) {
+            SuccessDialog(
+                title = "Bid Successful",
+                text = "Your bid has been placed successfully!",
+                onDismiss = { showSuccessDialog = false }
+            )
+        }
 }
 
 @Composable
@@ -100,7 +127,7 @@ fun MakeABidLayout(
         modifier = Modifier.fillMaxSize()
     ) {
         if(auction.type == AuctionType.English){
-            ViewTitle(title = stringResource(R.string.minStep))
+            ViewTitle(title = stringResource(R.string.minimumBid))
         } else{
             ViewTitle(title = stringResource(R.string.minimumBid))
         }

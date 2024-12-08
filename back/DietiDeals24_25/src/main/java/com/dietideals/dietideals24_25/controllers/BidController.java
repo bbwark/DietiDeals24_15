@@ -104,7 +104,13 @@ public class BidController {
     }
 
     private void extendAuctionEndDate(AuctionEntity auctionEntity, String interval) {
-        auctionEntity.setEndingDate(LocalDateTime.now().plus(Long.parseLong(interval), ChronoUnit.HOURS));
+        auctionEntity.setEndingDate(LocalDateTime.now().plusSeconds(convertIntervalToSeconds(interval)));
+    }
+
+    private long convertIntervalToSeconds(String interval) {
+        int minutes = Integer.parseInt(interval.substring(0,2));
+        int seconds = Integer.parseInt(interval.substring(2,4));
+        return (minutes * 60L) + seconds;
     }
 
     private boolean handleSilentAuction(BidDto bid, AuctionEntity auctionEntity, AuctionDto auctionDto) {
