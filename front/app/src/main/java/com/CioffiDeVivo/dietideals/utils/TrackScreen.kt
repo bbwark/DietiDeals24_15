@@ -6,7 +6,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 fun trackScreen(firebaseAnalytics: FirebaseAnalytics, screenName: String){
     val bundle = Bundle().apply {
         putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-        putString(FirebaseAnalytics.Param.SCREEN_CLASS, "Compose")
+        putString(FirebaseAnalytics.Param.SCREEN_CLASS, "Compose $screenName")
     }
     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 }
