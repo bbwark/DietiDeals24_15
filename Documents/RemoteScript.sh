@@ -103,7 +103,7 @@ sudo docker exec -i dietideals_ps_database psql -U postgres -f /dietidealsdataba
 }
 
 log "Starting application container $image_name..."
-sudo docker run --network="$network_name" --name="$image_name" -p8181:8181 -d "$image_name":latest || {
+sudo docker run --network="$network_name" --name="$image_name" -v /etc/localtime:/etc/localtime:ro -p8181:8181 -d "$image_name":latest || {
     log "ERROR: Starting application container failed"
     exit 1
 }
